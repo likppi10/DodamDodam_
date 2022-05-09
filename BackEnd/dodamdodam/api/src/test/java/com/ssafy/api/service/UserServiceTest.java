@@ -3,7 +3,6 @@ package com.ssafy.api.service;
 import com.ssafy.core.dto.req.SignUpReqDto;
 import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.CustomException;
-import com.ssafy.core.exception.ErrorCode;
 import com.ssafy.core.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
+@TestPropertySource(locations = "classpath:/application-test.yml")
 class UserServiceTest {
 
     @MockBean
@@ -94,7 +95,7 @@ class UserServiceTest {
         //then
         verify(userRepository).save(captor.capture());
         User savedUser = captor.getValue();
-        Boolean isMatch = passwordEncoder.matches("password1!",savedUser.getPassword());
+        Boolean isMatch = passwordEncoder.matches("password1!", savedUser.getPassword());
 
         then(savedUser.getUserId()).isEqualTo("test");
         then(isMatch).isTrue();
