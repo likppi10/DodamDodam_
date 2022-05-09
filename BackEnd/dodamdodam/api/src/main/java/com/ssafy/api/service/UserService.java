@@ -44,6 +44,8 @@ public class UserService {
     @Transactional()
     public void signUp(SignUpReqDto singUpRequest) {
 
+        this.checkExistId(singUpRequest.getUserId());
+
         userRepository.save(User.builder()
                 .userId(singUpRequest.getUserId())
                 .name(singUpRequest.getName())
