@@ -24,7 +24,6 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @Transactional
-@TestPropertySource(locations = "classpath:/application-test.yml")
 class UserServiceTest {
 
     @MockBean

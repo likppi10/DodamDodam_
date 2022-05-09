@@ -26,7 +26,6 @@ import java.nio.charset.StandardCharsets;
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
 @Import(RestDocsConfiguration.class)
-@TestPropertySource(locations = "classpath:/application-test.yml")
 @Transactional
 public class ControllerTestSupport {
 
