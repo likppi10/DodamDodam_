@@ -31,13 +31,14 @@ subprojects {
     }
 
     task initSourceFolders {
-        sourceSets *.java.srcDirs *.each {
-            if (!it.exists()) {
+        sourceSets*.java.srcDirs*.each {
+            if( !it.exists() ) {
                 it.mkdirs()
             }
         }
-        sourceSets *.resources.srcDirs *.each {
-            if (!it.exists()) {
+
+        sourceSets*.resources.srcDirs*.each {
+            if( !it.exists() ) {
                 it.mkdirs()
             }
         }
