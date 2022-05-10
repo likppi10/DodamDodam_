@@ -83,7 +83,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    getFCM()
                 }
             }
         }

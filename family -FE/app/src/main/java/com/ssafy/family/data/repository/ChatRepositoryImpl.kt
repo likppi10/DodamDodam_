@@ -45,7 +45,7 @@ class ChatRepositoryImpl (
 
     override suspend fun sendChattingFCM(text: String): Resource<BaseResponse> = withContext(ioDispatcher){
         try {
-            val response = api.getMember()
+            val response = api.sendChattingFCM(text)
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
