@@ -47,7 +47,7 @@ class FcmService: FirebaseMessagingService() {
             Log.d("dddd", "Message data payload: ${remoteMessage.data}")
             sendDataMessage(remoteMessage.data)
 
-            if(remoteMessage.data["body"]?.contains("채팅") == true&&ApplicationClass.isChatting.value!=true){
+            if(remoteMessage.data["title"]?.contains("채팅") == true&&ApplicationClass.isChatting.value!=true){
                 fcmList = readSharedPreference("fcm")
                 fcmList.add(remoteMessage.data["body"].toString())
                 writeSharedPreference("fcm", fcmList)

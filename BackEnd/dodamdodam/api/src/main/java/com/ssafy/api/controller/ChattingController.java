@@ -41,6 +41,11 @@ public class ChattingController {
 
         return responseService.getListResult(profileService.getProfileListByUserPk(userPk));
     }
+
+    @Operation(summary = "채팅 맴버들 프로필 조회", description = "<strong>채팅 맴버들<strong>의 프로필을 조회한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
     @PostMapping(value = "/send")
     public CommonResult send(@RequestParam String text, Authentication authentication) throws  IOException {
         Long userPk = Long.parseLong(authentication.getName());
