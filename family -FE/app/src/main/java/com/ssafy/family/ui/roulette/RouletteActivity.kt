@@ -6,26 +6,53 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jhdroid.view.RotateListener
 import com.ssafy.family.ui.Adapter.RouletteFamilyAdapter
 import com.ssafy.family.R
+import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.ActivityRouletteBinding
+import com.ssafy.family.ui.Adapter.ChattingAdapter
+import com.ssafy.family.ui.main.bottomFragment.ChatViewModel
+import com.ssafy.family.util.LoginUtil
+import com.ssafy.family.util.Status
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class RouletteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRouletteBinding
-    val rouletteData = mutableListOf<String>()
+    private val viewModel by viewModels<ChatViewModel>()
+    var rouletteData = mutableListOf<String>()
+    var memberList = listOf<MemberInfo>()
+    var check = hashMapOf<MemberInfo, Boolean>()
+    var iterData = check.iterator()
     private lateinit var familyAdapter: RouletteFamilyAdapter
     lateinit var winDialog: Dialog
+    lateinit var selectDialog: Dialog
     private fun setRecyclerViewClickListener(){
         familyAdapter.itemClickListener = object : RouletteFamilyAdapter.ItemClickListener{
-            override fun onClick(item: String) {
+            override fun onClick(item: MemberInfo) {
                 if(familyAdapter.datas.size>2){
-                    rouletteData.remove(item)
+//                    rouletteData.remove(item.nickname)
+                    check[item] = false
+                    rouletteData.clear()
+
+                    while(iterData.hasNext()){
+                        var result = iterData.next()
+                        if(result.value){
+                            rouletteData.add(result.key.nickname)
+                        }
+                    }
+
                     binding.roulette.apply {
                         familyAdapter.notifyDataSetChanged()
                         setRouletteSize(rouletteData.size)
@@ -51,10 +78,34 @@ class RouletteActivity : AppCompatActivity() {
         winDialog.setContentView(R.layout.win_dialog)
         winDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
+
+        familyAdapter = RouletteFamilyAdapter(this)
+
+        viewModel.getMember()
+        viewModel.getMemberRequestLiveData.observe(this){
+            when (it.status) {
+                Status.SUCCESS -> {
+                    memberList = it.data!!.memberList
+                    for(a in it.data.memberList){
+                        check[a] = true
+                        rouletteData.add(a.nickname)
+                    }
+                    dismissLoading()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.message!!, Toast.LENGTH_SHORT).show()
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
+                }
+            }
+        }
+
         rouletteData.add("아빠")
         rouletteData.add("엄마")
-        familyAdapter = RouletteFamilyAdapter(this)
-        familyAdapter.datas = rouletteData
+
+//        familyAdapter.datas = rouletteData
         binding.rouletteFamilyRecycler.apply {
             layoutManager = LinearLayoutManager(this@RouletteActivity,
                 LinearLayoutManager.HORIZONTAL,false)
@@ -97,5 +148,13 @@ class RouletteActivity : AppCompatActivity() {
         // random degrees (options)
         val toDegrees = (2000..10000).random().toFloat()
         binding.roulette.rotateRoulette(toDegrees, 4000, rouletteListener)
+    }
+
+    //월 단위 일정 로딩바
+    private fun setLoading() {
+        binding.progressBarLoading.visibility = View.VISIBLE
+    }
+    private fun dismissLoading() {
+        binding.progressBarLoading.visibility = View.GONE
     }
 }
