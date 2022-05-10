@@ -3,7 +3,6 @@ package com.ssafy.api.controller;
 import com.ssafy.core.dto.req.*;
 import com.ssafy.core.dto.res.ReIssueTokenResDto;
 import com.ssafy.core.dto.res.SignInResDto;
-import com.ssafy.api.config.jwt.JwtProvider;
 import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.CustomException;
 import com.ssafy.api.service.UserService;
@@ -18,10 +17,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.ssafy.core.exception.ErrorCode.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
@@ -34,23 +35,25 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 public class UserController {
 
     private final UserService userService;
-    private final JwtProvider jwtProvider;
     private final ResponseService responseService;
-    private final PasswordEncoder passwordEncoder;
+
+    final int USER_ID_MAX = 20;
+    final int USER_ID_MIN = 4;
 
     @GetMapping(value = "{userId}")
     @Operation(summary = "ID 중복체크", description = "<strong>아이디</strong>의 사용여부를 확인한다.")
     public CommonResult idCheck(@PathVariable String userId) {
 
-        //공백과 특수문자가 안들어 있는상태에서 받았다고 치고 length만 유효성 검사함.
-        if (userService.idValidate(userId)) {
-            userService.checkId(userId);
+        if (this.idValidate(userId)) {
+            userService.checkExistId(userId);
         } else {
-            throw new CustomException(INVALID_REQUEST, "아이디는 4자 이상, 20자 이하여야 합니다.");
+            throw new CustomException(INVALID_REQUEST,
+                    String.format("아이디는 영문,숫자만 사용가능하며, %d자 이상, %d자 이하여야 합니다.", USER_ID_MIN, USER_ID_MAX));
         }
 
         return responseService.getSuccessResult("사용 가능한 아이디입니다.");
     }
+
 
     @PostMapping(value = "signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 가입", description = "<strong>아이디, 패스워드, 이름</strong> 정보를 받아 회원가입 한다.")
@@ -59,7 +62,7 @@ public class UserController {
              @io.swagger.v3.oas.annotations.parameters.RequestBody
              @Valid SignUpReqDto singUpRequest) {
 
-        userService.userSignUp(singUpRequest);
+        userService.signUp(singUpRequest);
 
         return responseService.getSuccessResult("회원가입 성공");
     }
@@ -69,30 +72,9 @@ public class UserController {
     public SingleResult<SignInResDto> userSignIn
             (@RequestBody
              @io.swagger.v3.oas.annotations.parameters.RequestBody
-             @Valid SignInReqDto signInRequest) {
+             @Valid UserInfoReqDto signInRequest) {
 
-        User user = userService.findByUserId(signInRequest.getUserId());
-
-        if (!passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())) {
-            throw new CustomException(INVALID_REQUEST, "비밀번호를 잘못 입력하셨습니다.");
-        }
-        String token = jwtProvider.createAccessToken(user);
-        String refreshToken = jwtProvider.createRefreshToken();
-
-        user.setRefreshToken(refreshToken);
-        userService.saveUser(user);
-
-        SignInResDto userInfo = userService.findProfileIdAndFamilyId(user.getUserPk());
-
-        if (userInfo == null) {
-            userInfo = new SignInResDto();
-        }
-
-        userInfo.setJwtToken(token);
-        userInfo.setRefreshToken(refreshToken);
-        userInfo.setName(user.getName());
-
-        return responseService.getSingleResult(userInfo);
+        return responseService.getSingleResult(userService.signIn(signInRequest));
     }
 
     @PostMapping(value = "refresh")
@@ -104,26 +86,7 @@ public class UserController {
     public SingleResult<ReIssueTokenResDto> reissueAccessToken(@RequestHeader(value = "X-AUTH-TOKEN") String token,
                                                                @RequestHeader(value = "X-AUTH-REFRESH-TOKEN") String refreshToken) {
 
-        Long userPk = jwtProvider.getUserPkFromExpiredToken(token);
-
-        if (userPk == null || !jwtProvider.validateToken(refreshToken)) {
-            throw new CustomException(INVALID_TOKEN);
-        }
-
-        User user = userService.findByUserPk(userPk);
-
-        token = jwtProvider.createAccessToken(user);
-        refreshToken = jwtProvider.createRefreshToken();
-
-        user.setRefreshToken(refreshToken);
-        userService.saveUser(user);
-
-        ReIssueTokenResDto res = ReIssueTokenResDto.builder()
-                .jwtToken(token)
-                .refreshToken(refreshToken)
-                .build();
-
-        return responseService.getSingleResult(res);
+        return responseService.getSingleResult(userService.reissueAccessToken(token, refreshToken));
     }
 
     @PostMapping(value = "findId", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -133,9 +96,7 @@ public class UserController {
              @io.swagger.v3.oas.annotations.parameters.RequestBody
              @Valid FindIdReqDto request) {
 
-        String userId = userService.findUserIdWithUserInfo(request);
-
-        return responseService.getSuccessResult(userId);
+        return responseService.getSuccessResult(userService.findUserIdWithUserInfo(request));
     }
 
     @PostMapping(value = "newpassword", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -143,16 +104,9 @@ public class UserController {
     public CommonResult updatePassword
             (@RequestBody
              @io.swagger.v3.oas.annotations.parameters.RequestBody
-             @Valid UpdatePasswordReqDto request) {
+             @Valid UserInfoReqDto request) {
 
-        User user = userService.findByUserId(request.getUserId());
-
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new CustomException(INVALID_REQUEST, "재설정 비밀번호가 기존 비밀번호와 같습니다!");
-        }
-        user.updatePassword(passwordEncoder.encode(request.getPassword()));
-
-        userService.saveUser(user);
+        userService.updatePassword(request);
 
         return responseService.getSuccessResult("비밀번호가 성공적으로 재설정 되었습니다.");
     }
@@ -173,5 +127,14 @@ public class UserController {
         User user = userService.findByUserPk(userPk);
         userService.updateFcmToken(user, fcmReq);
         return responseService.getSuccessResult("성공적으로 저장되었습니다.");
+    }
+
+
+    private boolean idValidate(String userId) {
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]+");
+        Matcher matcher = pattern.matcher(userId);
+
+        return !(userId.isBlank() || !matcher.matches() ||
+                userId.length() < USER_ID_MIN || userId.length() > USER_ID_MAX);
     }
 }

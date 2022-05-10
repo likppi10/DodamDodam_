@@ -19,18 +19,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/save_info_profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="25dp"
-            android:src="@drawable/hushed" />
+            android:layout_marginStart="25dp"
+            android:src="@drawable/default_profile" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="25dp"
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -44,30 +44,58 @@
 
             <Spinner
                 android:id="@+id/save_info_spinner"
-                android:layout_width="140dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:background="@drawable/box_spinner"
                 android:spinnerMode="dialog"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/save_info_double_spinner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center">
+
+                <Spinner
+                    android:id="@+id/save_info_spinner_number"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/box_spinner"
+                    android:spinnerMode="dialog"
+                    android:textAlignment="center" />
+
+                <Spinner
+                    android:id="@+id/save_info_spinner_role"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/box_spinner"
+                    android:spinnerMode="dialog"
+                    android:textAlignment="center" />
+            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginTop="80dp"
                 android:fontFamily="@font/spoqahansans"
                 android:text="(이)에요!"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </FrameLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linear_layout_input_nickname_birthday"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/box_white_button"
@@ -79,7 +107,7 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -109,13 +137,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@color/white"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:maxLength="10" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -145,7 +174,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:background="@color/white"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:maxLength="8" />
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>

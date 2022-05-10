@@ -1,7 +1,6 @@
 package com.ssafy.api.config;
 
 import com.ssafy.api.config.jwt.JwtProvider;
-import com.ssafy.api.config.jwt.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/actuator/health",
                         "/swagger-ui/index.html",
                         "/api/file/**",
-                        "/api-doc/**"
+                        "/api-doc/**",
+                        "/docs/**"
                 ).permitAll()
                 .anyRequest().authenticated();
     }
@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**","/docs/**");
         web.ignoring().antMatchers("/api-docs/**", "/swagger-resources/**",
                 "/swagger-ui/**", "/webjars/**", "/swagger/**");
         web.ignoring().antMatchers("/api/user/social", "/api/user/refresh");

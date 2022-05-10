@@ -1,4 +1,4 @@
-package com.ssafy.core.validation;
+package com.ssafy.core.validator;
 
 
 import javax.validation.Constraint;

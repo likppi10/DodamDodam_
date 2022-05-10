@@ -1,0 +1,293 @@
+= Rest Docs Sample API Document
+Dodamdodam Project by hanjibung team
+:snippets: build/generated-snippets
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[introduction]]
+== 소개
+
+Dodamdodam Project Spring Rest Docs API
+
+[[common]]
+== 공통 사항
+
+API에 관계없이 아래 사항을 지켜주셔야 합니다.
+
+=== Domain
+
+|===
+| 환경 | domain
+
+| 개발서버
+| `localhost:8080.com`
+
+| 운영서버
+| `happydodam.com`
+|===
+
+
+=== Header
+
+|===
+| name | 설명
+
+| `Authorization`
+| API를 사용하기 위한 인증 키
+|===
+
+=== 공통 Response Body
+
+|===
+| field | 설명
+
+| `code`
+| 응답 코드
+
+| `message`
+| 예외사항 내용 등 응답 메세지
+
+| `data`
+| 실제 반환될 데이터
+|===
+
+[[UserController]]
+== UserController
+
+[[userId-중복-검사]]
+=== userId 중복 검사
+==== success (사용가능한 아이디)
+CURL:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/httpie-request.adoc[]
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/response-body.adoc[]
+
+==== fail (아이디 공백포함)
+CURL:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/response-body.adoc[]
+
+==== fail (아이디 특수문자 포함)
+CURL:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/response-body.adoc[]
+
+
+[[회원가입]]
+=== 회원가입
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_정상입력/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/response-body.adoc[]
+
+==== fail (특수문자 입력안함)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/response-body.adoc[]
+
+==== fail (이름 입력안함)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/response-body.adoc[]
+
+==== fail (한글 아이디 사용)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/response-body.adoc[]
+
+[[로그인]]
+=== 로그인
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-in_정상입력/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/response-body.adoc[]
+
+==== fail (비밀번호 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/response-body.adoc[]
+
+==== fail (아이디 공백)
+CURL:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/response-body.adoc[]
+
+[[토큰_재발급]]
+=== 토큰 재발급
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/response-body.adoc[]
+
+[[아이디_찾기]]
+=== 아이디 찾기
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/response-body.adoc[]
+
+==== fail (날짜 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/response-body.adoc[]
+
+==== fail (가족코드 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/response-body.adoc[]
+
+[[비밀번호_변경]]
+=== 비밀번호 변경
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/update-password_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/update-password_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/update-password_정상입력/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/update-password_정상입력/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/update-password_정상입력/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/update-password_정상입력/response-body.adoc[]
+
+==== fail (아이디 공백)
+CURL:
+include::{snippets}/user-controller-test/update-password_아이디_공백/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/update-password_아이디_공백/httpie-request.adoc[]
+include::{snippets}/user-controller-test/update-password_아이디_공백/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/update-password_아이디_공백/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/update-password_아이디_공백/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/update-password_아이디_공백/response-body.adoc[]
+
+==== fail (비밀번호 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/http-request.adoc[]
+Request HTTP Example:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/request-body.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/http-response.adoc[]
+Response HTTP Example:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/response-body.adoc[]

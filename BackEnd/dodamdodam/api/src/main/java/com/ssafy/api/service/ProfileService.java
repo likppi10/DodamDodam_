@@ -102,7 +102,7 @@ public class ProfileService {
             //미션 대상에 맞는 미션 선정
             String[] missions = missionList.get(
                     missionTarget.length() > 2 ? missionTarget.split(" ")[1] : missionTarget);
-            String missionContent = missionTarget + missions[random.nextInt(missions.length)];
+            String missionContent = missions[random.nextInt(missions.length)];
             profile.updateMissionContent(missionContent);
 
         }

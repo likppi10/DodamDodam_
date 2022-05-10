@@ -8,6 +8,8 @@ import com.ssafy.core.entity.QUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+
 @Repository
 @RequiredArgsConstructor
 public class UserRepoCustomImpl implements UserRepoCustom {
@@ -17,16 +19,16 @@ public class UserRepoCustomImpl implements UserRepoCustom {
     QUser user = QUser.user;
     QProfile profile = QProfile.profile;
 
-    @Override
-    public String findUserIdByUserInfo(FindIdReqDto request) {
 
+    @Override
+    public String findUserIdByUserInfo(String name, LocalDate birthday, String familyCode) {
         return jpaQueryFactory.select(user.userId)
                 .from(user)
                 .join(profile)
                 .on(user.userPk.eq(profile.user.userPk))
-                .where(user.name.eq(request.getName())
-                        .and(user.birthday.eq(request.getBirthday()))
-                        .and(profile.family.code.eq(request.getFamilyCode())))
+                .where(user.name.eq(name)
+                        .and(user.birthday.eq(birthday))
+                        .and(profile.family.code.eq(familyCode)))
                 .fetchFirst();
     }
 

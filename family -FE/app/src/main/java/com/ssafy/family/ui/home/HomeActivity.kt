@@ -21,6 +21,7 @@ import com.ssafy.family.data.remote.req.AddFcmReq
 import com.ssafy.family.databinding.ActivityHomeBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.schedule.AddScheduleFragment
+import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.PermissionUtil
 import com.ssafy.family.util.SharedPreferencesUtil
@@ -118,13 +119,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setLoading() {
         binding.progressBarLoginFLoading.visibility = View.VISIBLE
-        binding.homePageLogo.visibility = View.VISIBLE
+//        binding.homePageLogo.visibility = View.VISIBLE
         binding.homePageAppName.visibility = View.VISIBLE
     }
 
     private fun dismissLoading() {
         binding.progressBarLoginFLoading.visibility = View.GONE
-        binding.homePageLogo.visibility = View.GONE
+//        binding.homePageLogo.visibility = View.GONE
         binding.homePageAppName.visibility = View.GONE
     }
 

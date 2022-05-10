@@ -97,12 +97,12 @@ public class MainController {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
     @PostMapping(value = "suggestion/reaction", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public SingleResult<SuggestionReactionResDto> manageSuggestionReaction(
+    public ListResult<SuggestionResDto> manageSuggestionReaction(
             @RequestBody SuggestionReactionReqDto request,
             Authentication authentication
     ) {
 
-        return responseService.getSingleResult(
+        return responseService.getListResult(
                 mainService.manageSuggestionReaction(request, Long.parseLong(authentication.getName()))
         );
     }
