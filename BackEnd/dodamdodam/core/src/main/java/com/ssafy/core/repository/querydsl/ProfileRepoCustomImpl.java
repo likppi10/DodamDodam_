@@ -46,7 +46,7 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
                         profile.role,
                         profile.emotion,
                         profile.comment,
-                        profile.user.userPk))
+                        profile.id.as("profileId")))
                 .from(profile)
                 .where(profile.family.id.eq(familyId))
                 .fetch();
