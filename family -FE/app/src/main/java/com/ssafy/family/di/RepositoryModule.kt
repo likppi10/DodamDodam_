@@ -3,6 +3,13 @@ package com.ssafy.family.di
 import com.google.firebase.database.FirebaseDatabase
 import com.ssafy.family.data.remote.api.*
 import com.ssafy.family.data.repository.*
+import com.ssafy.family.data.remote.api.AccountAPI
+import com.ssafy.family.data.remote.api.FamilyAPI
+import com.ssafy.family.data.remote.api.CalendarAPI
+import com.ssafy.family.data.remote.api.MainFamilyAPI
+import com.ssafy.family.data.remote.api.AlbumAPI
+import com.ssafy.family.data.remote.api.MainEventAPI
+import com.ssafy.family.data.remote.api.ChattingAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,10 +42,12 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideChatRepository(
+        chatAPI: ChattingAPI,
         @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
         @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
     ): ChatRepository
-            = ChatRepositoryImpl(ioDispatcher,mainDispatcher)
+            = ChatRepositoryImpl(chatAPI, ioDispatcher,mainDispatcher)
+
     @Singleton
     @Provides
     fun provideAlbumRepository(
@@ -65,6 +74,24 @@ object RepositoryModule {
         @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
     ): StatusRepository
             = StatusRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
+
+    @Singleton
+    @Provides
+    fun provideMainFamilyRepository(
+        mainFamilyAPI: MainFamilyAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): MainFamilyRepository
+            = MainFamilyRepositoryImpl(mainFamilyAPI,ioDispatcher,mainDispatcher)
+
+    @Singleton
+    @Provides
+    fun provideMainEventRepository(
+        apiAPI: MainEventAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): MainEventRepository
+            = MainEventRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
 
 //    @Singleton
 //    @Provides

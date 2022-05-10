@@ -5,10 +5,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -37,29 +41,39 @@ class FcmService: FirebaseMessagingService() {
 
         // 메시지 유형이 데이터 메시지일 경우
         // Check if message contains a data payload.
-        var fcmBody: String = ""
+
+        Log.d("dddd", "onMessageReceived: "+remoteMessage.data)
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-            fcmBody = remoteMessage.data.get("Body").toString()
+            Log.d("dddd", "Message data payload: ${remoteMessage.data}")
+            sendDataMessage(remoteMessage.data)
+
+            if(remoteMessage.data["title"]?.contains("채팅") == true&&ApplicationClass.isChatting.value!=true){
+                fcmList = readSharedPreference("fcm")
+                fcmList.add(remoteMessage.data["body"].toString())
+                writeSharedPreference("fcm", fcmList)
+                Log.d("tetete", "onMessageReceived: "+readSharedPreference("fcm").size)
+                ApplicationClass.livePush.postValue(readSharedPreference("fcm").size)
+            }
         }
 
         // 메시지 유형이 알림 메시지일 경우
         // Check if message contains a notification payload.
         // Set FCM title, body to android notification
         var notificationInfo: Map<String, String> = mapOf()
-        remoteMessage.notification?.let {
-            notificationInfo = mapOf(
-                "title" to it.title.toString(),
-                "body" to it.body.toString()
-            )
-            fcmList = readSharedPreference("fcm")
-            fcmList.add(it.body.toString())
-            writeSharedPreference("fcm", fcmList)
-            Log.d("tetete", "onMessageReceived: "+readSharedPreference("fcm").size)
-            ApplicationClass.livePush.postValue(readSharedPreference("fcm").size)
-            sendNotification(notificationInfo)
-
-        }
+//        remoteMessage.notification?.let {
+//            notificationInfo = mapOf(
+//                "title" to it.title.toString(),
+//                "body" to it.body.toString()
+//            )
+//            if(notificationInfo["body"]?.contains("채팅") == true){
+//                fcmList = readSharedPreference("fcm")
+//                fcmList.add(it.body.toString())
+//                writeSharedPreference("fcm", fcmList)
+//                Log.d("tetete", "onMessageReceived: "+readSharedPreference("fcm").size)
+//                ApplicationClass.livePush.postValue(readSharedPreference("fcm").size)
+//            }
+//            sendNotification(notificationInfo)
+//        }
     }
     override fun onDeletedMessages() {
         super.onDeletedMessages()
@@ -81,7 +95,38 @@ class FcmService: FirebaseMessagingService() {
         })
     }
 
+    private fun sendDataMessage(data: MutableMap<String, String>) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
 
+        val channelId = "FAMILY"
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        notificationBuilder.setContentTitle(data["title"])
+            .setSmallIcon(R.drawable.main_logo)
+            .setContentText(data["body"])
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        notificationManager.notify(100, notificationBuilder.build() )
+
+    }
 
     /**
      * 푸시 메시지의 세부 설정을 하고, 안드로이드 앱에 푸시 메시지를 보내는 메소드
@@ -104,7 +149,7 @@ class FcmService: FirebaseMessagingService() {
         // icon, color는 메타 데이터에서 설정한 것으로 설정해주면 된다.
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             // TODO: 로고 박아주기
-            .setSmallIcon(R.drawable.amusing)
+            .setSmallIcon(R.drawable.main_logo)
             .setColor(resources.getColor(R.color.black))
             .setContentTitle(messageBody["title"])
             .setContentText(messageBody["body"])

@@ -12,13 +12,13 @@
         >
 
         <TextView
-            android:id="@+id/boxtext_textView"
+            android:id="@+id/schedule_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="엄마랑 데이트/쿠우쿠우/아들"
             android:textColor="@color/pink02"
             android:textStyle="bold"
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

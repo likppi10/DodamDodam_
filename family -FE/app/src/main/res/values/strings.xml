@@ -84,6 +84,17 @@
     <string name="please_input_family_code">가족 코드를 입력해주세요!</string>
     <string name="nickname">나의 애칭</string>
 
+    <string name="statusisnull">아직 오늘의 상태를 등록하지 않았어요</string>
+    <string-array name="expression">
+        <item>표현1</item>
+        <item>표현2</item>
+        <item>표현3</item>
+        <item>표현4</item>
+        <item>표현5</item>
+        <item>표현6</item>
+        <item>표현7</item>
+        <item>표현8</item>
+    </string-array>
     <string-array name="emoticon">
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/worried_1651796157938.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/tongue_1651796200157.png</item>

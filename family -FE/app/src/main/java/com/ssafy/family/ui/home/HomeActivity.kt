@@ -11,10 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.remote.req.AddFcmReq
@@ -30,6 +34,7 @@ import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val loginViewModel by viewModels<LoginViewModel>()
@@ -40,18 +45,29 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         permissionUtil = PermissionUtil(this)
+        Log.d("dddd", "onMessageReceived: "+readSharedPreference("fcm").size)
         permissionUtil.permissionListener = object : PermissionUtil.PermissionListener {
             override fun run() {
                 init()
             }
         }
     }
+    val SP_NAME = "fcm_message"
+     private fun readSharedPreference(key:String): ArrayList<String>{
+        val sp = getSharedPreferences(SP_NAME, MODE_PRIVATE)
+        val gson = Gson()
+        val json = sp.getString(key, "") ?: ""
+        val type = object : TypeToken<ArrayList<String>>() {}.type
+        val obj: ArrayList<String> = gson.fromJson(json, type) ?: ArrayList()
+        return obj
+    }
+
     fun init(){
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
             // TODO: 첫 접속일시 분기 만들어야함
             // TODO: 토큰 만료됐을시 분기 만들어야함
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-            getFCM()
+
 
         } else {
             supportFragmentManager.beginTransaction()
@@ -61,15 +77,30 @@ class HomeActivity : AppCompatActivity() {
         loginViewModel.makeRefreshLiveData.observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    dismissLoading()
-                    startActivity(Intent(this, StatusActivity::class.java))
+                    getFCM()
                 }
                 Status.LOADING -> {
                     setLoading()
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    startActivity(Intent(this, StatusActivity::class.java))
+                    getFCM()
+                }
+            }
+        }
+        loginViewModel.baseResponse.observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    dismissLoading()
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                        .show()
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
                 }
             }
         }
@@ -100,6 +131,7 @@ class HomeActivity : AppCompatActivity() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
+            Log.d("dddd", "getFCM: "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
         createNotificationChannel(MainActivity.channel_id, "ssafy")

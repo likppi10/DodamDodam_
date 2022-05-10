@@ -5,6 +5,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/status_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/box_text"
@@ -16,7 +17,7 @@
             android:layout_height="80dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/box_text_alarm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,10 +39,10 @@
         <ImageView
             android:id="@+id/family_status_image"
             android:layout_width="80dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="32dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/box_text_alarm"
             app:layout_constraintStart_toEndOf="@+id/family_profile_image"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,8 +52,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginTop="32dp"
             android:ellipsize="end"
             android:fontFamily="@font/spoqahansans"
             android:maxLines="2"
@@ -62,21 +63,20 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/family_status_image"
-            app:layout_constraintTop_toTopOf="@+id/family_status_image" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/family_message_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:fontFamily="@font/spoqahansans"
             android:maxLines="2"
             android:text="알림 보내기"
             android:textColor="@color/pink01"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/family_status"
-            app:layout_constraintTop_toBottomOf="@+id/family_status" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/family_status" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/alarm_recycler"

@@ -34,7 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // authorization
         http.authorizeRequests()
-                // /와 /home, /room의 참가, 닉네임 중복확인은 모두에게 허용
                 .antMatchers("/server",
                         "/api/user/{userId}",
                         "/api/user/newpassword",

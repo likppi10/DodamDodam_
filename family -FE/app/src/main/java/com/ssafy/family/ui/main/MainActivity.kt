@@ -1,8 +1,10 @@
 package com.ssafy.family.ui.main
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -19,6 +21,7 @@ import com.ssafy.family.util.LoginUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val SP_NAME = "fcm_message"

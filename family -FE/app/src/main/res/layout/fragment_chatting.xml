@@ -78,4 +78,14 @@
         app:layout_constraintEnd_toEndOf="@+id/chatting"
         app:layout_constraintTop_toTopOf="@+id/chatting" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

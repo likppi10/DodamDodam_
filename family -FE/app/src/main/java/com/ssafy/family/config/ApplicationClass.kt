@@ -27,18 +27,13 @@ class ApplicationClass: Application() {
         const val AUTO_LOGIN = "auto_login_flag"
         const val JWT = "JWT"
 
-//        const val Id = "100"
-//        const val Name = "엄마"
-
-        const val Id = "101"
-        const val Name = "아빠"
-
         //        lateinit var sRetrofit: Retrofit
         lateinit var sSharedPreferences: SharedPreferencesUtil
         lateinit var sContentResolver: ContentResolver
 
         //badge
         lateinit var livePush: MutableLiveData<Int>
+        lateinit var isChatting:MutableLiveData<Boolean>
     }
 
     override fun onCreate() {
@@ -49,6 +44,7 @@ class ApplicationClass: Application() {
 
         //badge
         livePush= MutableLiveData(readSharedPreference("fcm").size)
+        isChatting=MutableLiveData(false)
     }
 
     // 레트로핏 인스턴스를 생성하고, 레트로핏에 각종 설정값들을 지정해줍니다.

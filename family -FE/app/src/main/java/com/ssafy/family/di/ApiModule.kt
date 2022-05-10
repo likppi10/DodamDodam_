@@ -7,6 +7,13 @@ import com.ssafy.family.config.AddCookiesInterceptor
 import com.ssafy.family.config.ReceivedCookiesInterceptor
 import com.ssafy.family.config.XAccessTokenInterceptor
 import com.ssafy.family.data.remote.api.*
+import com.ssafy.family.data.remote.api.AccountAPI
+import com.ssafy.family.data.remote.api.FamilyAPI
+import com.ssafy.family.data.remote.api.CalendarAPI
+import com.ssafy.family.data.remote.api.AlbumAPI
+import com.ssafy.family.data.remote.api.MainEventAPI
+import com.ssafy.family.data.remote.api.ChattingAPI
+import com.ssafy.family.data.remote.api.MainFamilyAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -100,6 +107,24 @@ object ApiModule {
     @Provides
     fun provideStatusApiService(retrofit: Retrofit): StatusAPI {
         return retrofit.create(StatusAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainEventApiService(retrofit: Retrofit): MainEventAPI {
+        return retrofit.create(MainEventAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideChatApiService(retrofit: Retrofit): ChattingAPI {
+        return retrofit.create(ChattingAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainFamilyApiService(retrofit: Retrofit): MainFamilyAPI {
+        return retrofit.create(MainFamilyAPI::class.java)
     }
 //    fun initRetrofit() {
 //        val client: OkHttpClient = OkHttpClient.Builder()

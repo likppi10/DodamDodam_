@@ -1,16 +1,16 @@
 package com.ssafy.family.ui.Adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.ssafy.family.data.remote.res.Opinion
 import com.ssafy.family.databinding.ItemOpinionBinding
 
 // mainactivity - familyfragment : 우리가족(상태)
-class OpinionAdapter(private val context: Context) : RecyclerView.Adapter<OpinionAdapter.ViewHolder>() {
+class OpinionAdapter() : RecyclerView.Adapter<OpinionAdapter.ViewHolder>() {
 
-    private var datas = mutableListOf<Int>(1,2)
+    var opinionList = mutableListOf<Opinion>()
+    lateinit var itemClickListener:ItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -18,30 +18,34 @@ class OpinionAdapter(private val context: Context) : RecyclerView.Adapter<Opinio
             return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = datas.size
+    override fun getItemCount(): Int = opinionList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(datas[position])
-//        val currentBook = getItemId(position)
-
-//        val itemBinding = holder.binding as ItemFamilyStatusBinding
-//        itemBinding.familyMessageButton.setOnClickListener {
-//            if(itemBinding.alarmRecycler.visibility == VISIBLE){
-//                Log.d("log닷", "onBindViewHolder: 1")
-//                itemBinding.alarmRecycler.visibility = GONE
-//            }else{
-//                Log.d("log닷", "onBindViewHolder: 2")
-//
-//                itemBinding.alarmRecycler.visibility = VISIBLE
-//                val adapter = AlarmAdapter(context)
-//                val gridLayoutManager = GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
-//                itemBinding.alarmRecycler.layoutManager = gridLayoutManager
-//                itemBinding.alarmRecycler.adapter = adapter
-//            }
-//        }
-//
-//        itemBinding.executePendingBindings()
+        holder.bind(opinionList[position])
     }
 
-    inner class ViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {}
+    inner class ViewHolder(val binding: ItemOpinionBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.closeButton.close.setOnClickListener {
+                itemClickListener.deleteClick(opinionList[bindingAdapterPosition])
+            }
+            binding.likeUnlike.likeIcon.setOnClickListener {
+                itemClickListener.likeClick(opinionList[bindingAdapterPosition])
+            }
+            binding.likeUnlike.unlikeIcon.setOnClickListener {
+                itemClickListener.unlikeClick(opinionList[bindingAdapterPosition])
+            }
+        }
+
+        fun bind(opinion: Opinion) {
+            binding.opinionText.setText(opinion.text)
+            binding.likeUnlike.likeCnt.text = opinion.likeCount.toString()
+            binding.likeUnlike.unlikeCnt.text = opinion.dislikeCount.toString()
+        }
+    }
+    interface ItemClickListener {
+        fun deleteClick(opinion: Opinion)
+        fun likeClick(opinion: Opinion)
+        fun unlikeClick(opinion: Opinion)
+    }
 }

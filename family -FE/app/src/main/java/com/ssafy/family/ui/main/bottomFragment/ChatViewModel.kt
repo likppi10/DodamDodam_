@@ -3,6 +3,7 @@ package com.ssafy.family.ui.main.bottomFragment
 import androidx.lifecycle.*
 import com.google.firebase.database.*
 import com.ssafy.family.data.ChatData
+import com.ssafy.family.data.remote.res.ChattingRes
 import com.ssafy.family.data.repository.ChatRepository
 import com.ssafy.family.util.Resource
 import dagger.assisted.Assisted
@@ -16,19 +17,25 @@ class ChatViewModel @AssistedInject constructor(
 ): ViewModel() {
 
     var database = FirebaseDatabase.getInstance()
-    var myRef = database!!.getReference("message" + familyCode)
+    var myRef = database!!.getReference("message_" + familyCode)
     var datas = mutableListOf<ChatData>()
 
     private val _chatLiveData = MutableLiveData<Resource<MutableList<ChatData>>>()
     val chatLiveData : LiveData<Resource<MutableList<ChatData>>>
         get() = _chatLiveData
 
+    private val _getMemberRequestLiveData = MutableLiveData<Resource<ChattingRes>>()
+    val getMemberRequestLiveData: LiveData<Resource<ChattingRes>>
+        get() = _getMemberRequestLiveData
+
     fun send(data: ChatData) = viewModelScope.launch {
         chatRepository.send(data, myRef)
+        chatRepository.sendChattingFCM(data.message.toString())
     }
     fun initViewModel() = viewModelScope.launch {
         val childEventListener: ChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
                 val data = snapshot.getValue(ChatData::class.java)
                 datas.add(data!!)
                 _chatLiveData.postValue(Resource.success(datas))
@@ -41,6 +48,11 @@ class ChatViewModel @AssistedInject constructor(
         }
 
         myRef.addChildEventListener(childEventListener)
+    }
+
+    fun getMember() = viewModelScope.launch {
+        _getMemberRequestLiveData.postValue(Resource.loading(null))
+        _getMemberRequestLiveData.postValue(chatRepository.getMember())
     }
 
     @AssistedFactory

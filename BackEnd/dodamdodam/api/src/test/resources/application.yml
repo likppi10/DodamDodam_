@@ -1,0 +1,114 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+  # JPA 기본 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties.hibernate:
+      # 재시작 시 JPA Entity(DB 테이블 데이터)를 새로 생성할지 여부 (create:기존데이터 삭제 후 신규 생성, udpate:신규 데이터만 업데이트, none:아무 실행도 하지 않음)
+      hbm2ddl.auto: update
+      format_sql: true
+      show_sql: true
+      use_sql_comments: true
+      default_batch_fetch_size: 100
+
+    generate-ddl: true
+    open-in-view: false
+
+  datasource:
+    url: jdbc:mysql://dodamdodam-database.ck7amfqzdm1n.ap-northeast-2.rds.amazonaws.com:3306/dodamdodam
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ssafy
+    password: Ssafy61!
+    flyway:
+      enabled: false
+    config:
+      activate:
+        on-profile: alpha
+
+        # 프로젝트 환경의 upload 파일을 저장할 경로
+        #                  location: ./upload
+springdoc:
+  version: '1.00v'
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    #알파벳 오름차순 정렬, method -> http method순 정렬
+    operations-sorter: alpha
+    #태그정렬 기준
+    tags-sorter: alpha
+    #html 주소
+    path: /swagger-ui.html
+    #swagger-ui default url인 petstore html 문서 비활성화 여부
+    disable-swagger-default-url: true
+    #json화 된 config파일 대신 파라미터를 이용하여 swagger-ui에 접근하도록 합니다.
+    display-query-params-without-oauth2: true
+    #tag와 operation을 펼치는 방식에 대한 설정
+    #String=["list", "full", "none"]
+    #none으로 설정할 경우, tag 및 operation이 모두 닫힌채로 문서가 열립니다
+    doc-expansion: none
+  paths-to-match:
+    - /api/**
+  #업로드 파일 용량 제한.
+  servlet:
+    multipart:
+      file-size-threshold: 15MB
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+server:
+  error:
+    include-stacktrace: on_param
+    include-exception: false
+  servlet:
+    session:
+      timeout: 1440m
+  max-http-header-size: 3145728
+  port: 8080
+
+#fcm 설정
+fcm:
+  key:
+    path: dodam-dodam-firebase-adminsdk-2fnrz-20e1d63679.json
+    scope: https://fcm.googleapis.com/v1/projects/dodam-dodam/messages:send
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "health"
+
+# AWS S3 설정.
+cloud:
+  aws:
+    s3:
+      bucket: s3-dodamdodam
+    credentials:
+      access-key: AKIAYRR6D6BOCQJBOWFS
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+#ec2 warn 로그 무시
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: ERROR
+# 개발용 로그 설정
+#logging:
+#  level:
+#    root: debug
+#    com.ssafy.api: debug
+#    org.hibernate.type.descriptor.sql: warn  # trace
+
+

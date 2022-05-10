@@ -32,9 +32,10 @@ public class MainService {
 
     public List<MainProfileResDto> getProfileList(Long userPk) {
         long familyId = familyRepository.findFamilyIdByUserPk(userPk);
+        long profileId = profileRepository.findProfileIdByUserPk(userPk);
 
         return profileRepository.findProfileListByFamilyId(familyId).stream()
-                .filter(profile -> !profile.getUserPk().equals(userPk))
+                .filter(profile -> !profile.getProfileId().equals(profileId))
                 .collect(Collectors.toList());
     }
 
@@ -80,7 +81,7 @@ public class MainService {
     }
 
     @Transactional
-    public SuggestionReactionResDto manageSuggestionReaction(SuggestionReactionReqDto request, Long userPk) {
+    public List<SuggestionResDto> manageSuggestionReaction(SuggestionReactionReqDto request, Long userPk) {
         //step 0. 본인의 프로필을 찾아온다.
         Profile profile = profileRepository.findProfileByUserPk(userPk);
 
@@ -120,7 +121,7 @@ public class MainService {
                 suggestion.updateDislikeCount(1);
             }
 
-            suggestion = suggestionRepository.save(suggestion);
+            suggestionRepository.save(suggestion);
 
         } else if (suggestionReaction.getIsLike() != request.isLike()) {
             suggestionReaction.setIsLike(request.isLike());
@@ -130,7 +131,7 @@ public class MainService {
             suggestion.updateLikeCount(updateCount);
             suggestion.updateDislikeCount(updateCount * -1);
 
-            suggestion = suggestionRepository.save(suggestion);
+            suggestionRepository.save(suggestion);
         } else {
             suggestionReactionRepository.delete(suggestionReaction);
             if (request.isLike()) {
@@ -139,14 +140,15 @@ public class MainService {
                 suggestion.updateDislikeCount(-1);
             }
 
-            suggestion = suggestionRepository.save(suggestion);
+            suggestionRepository.save(suggestion);
         }
 
-        return SuggestionReactionResDto.builder()
-                .suggestionId(request.getSuggestionId())
-                .like(suggestion.getLikeCount())
-                .dislike(suggestion.getDislikeCount())
-                .build();
+        return suggestionRepository.getSuggestionListByFamilyId(familyId)
+                .stream().peek(suggestionItem -> {
+                    if (suggestionItem.getSuggestionReactions().stream().allMatch(dto -> dto.getProfileId() == null)) {
+                        suggestionItem.setSuggestionReactions(null);
+                    }
+                }).collect(Collectors.toList());
     }
 
 
