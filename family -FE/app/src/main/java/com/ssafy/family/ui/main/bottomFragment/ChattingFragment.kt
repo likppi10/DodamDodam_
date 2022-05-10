@@ -1,7 +1,9 @@
 package com.ssafy.family.ui.main.bottomFragment
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentChattingBinding
@@ -38,6 +41,17 @@ class ChattingFragment : Fragment() {
     var myProfile = ""
     var memberList = listOf<MemberInfo>()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        ApplicationClass.isChatting.postValue(true)
+        Log.d("dddd", "onAttach: "+ ApplicationClass.isChatting.value)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        ApplicationClass.isChatting.postValue(false)
+        Log.d("dddd", "onDetach: "+ ApplicationClass.isChatting.value)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
