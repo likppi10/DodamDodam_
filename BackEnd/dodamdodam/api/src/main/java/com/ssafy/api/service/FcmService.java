@@ -63,7 +63,7 @@ public class FcmService {
             throws JsonProcessingException {
        Message message =  Message.builder()
                 .setToken(token)
-                .setNotification(Notification.builder().setTitle(title).setBody(body).build())
+                //.setNotification(Notification.builder().setTitle(title).setBody(body).build())
                 .putData("title",title)
                 .putData("body",body)
                 .build();
