@@ -141,7 +141,7 @@ public class ProfileController {
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
-    @GetMapping(value = "/image")
+    @GetMapping(value = "/comment")
     public SingleResult<String> getComment(Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
