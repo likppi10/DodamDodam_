@@ -107,8 +107,8 @@ class LoginFragment : Fragment() {
                     // TODO: 에러나는지 확인 attach
                     dismissLoading()
                     getFCM()
-                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
-                    requireActivity().finish()
+//                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
+//                    requireActivity().finish()
 
                 }
                 Status.EXPIRED->{
