@@ -70,9 +70,9 @@ public class FcmService {
                                 .image(null)
                                 .build()
                         )
+                        .data(FcmMessageResDto.data.builder().body(body).title(title).build())
                         .build()
-                )
-                .data(FcmMessageResDto.data.builder().body(body).title(title).build()).build();
+                ).build();
 
         return objectMapper.writeValueAsString(fcmMessage);
     }

@@ -10,13 +10,14 @@ import lombok.Getter;
 public class FcmMessageResDto {
     private boolean validate_only;
     private Message message;
-    private data data;
+
 
     @Builder
     @AllArgsConstructor
     @Getter
     public static class Message {
         private Notification notification;
+        private data data;
         private  String token;
     }
 
