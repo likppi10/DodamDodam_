@@ -1,5 +1,6 @@
 package com.ssafy.family.ui.status
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,11 +31,21 @@ class StatusViewModel @Inject constructor(private val statusRepository: StatusRe
     private val _editStatusResponse = MutableLiveData<Resource<BaseResponse>>()
     val editStatusResponse: LiveData<Resource<BaseResponse>>
         get() = _editStatusResponse
+    // 가족사진 선택 페이지 선택된 가족사진 URI
+    private val _selectedImgUri = MutableLiveData<Uri?>()
+    val selectedImgUri: LiveData<Uri?>
+        get() = _selectedImgUri
 
     fun getFamilyPicture() = viewModelScope.launch {
         _familyPicture.postValue(Resource.loading(null))
-        _familyPicture.postValue(statusRepository.getFamilyPicture())
-        Log.d(TAG, "StatusViewModel - getFamilyPicture() called ${_familyPicture.value?.data?.dataset}")
+        val familyPictureRes = statusRepository.getFamilyPicture()
+        _familyPicture.postValue(familyPictureRes)
+        if (familyPictureRes.data?.dataset?.familyPicture != null) {
+            setImgUri(Uri.parse(familyPictureRes.data.dataset.familyPicture))
+        } else {
+            setImgUri(null)
+        }
+        Log.d(TAG, "StatusViewModel - getFamilyPicture() called ${_familyPicture.value?.data?.dataset?.familyPicture}")
     }
 
     fun getMyStatus() = viewModelScope.launch {
@@ -47,5 +58,14 @@ class StatusViewModel @Inject constructor(private val statusRepository: StatusRe
     fun editMyStatus(emotion: String, comment: String) = viewModelScope.launch {
         _editStatusResponse.postValue(Resource.loading(null))
         _editStatusResponse.postValue(statusRepository.editMyStatus(emotion = emotion, comment = comment))
+    }
+
+    // 선택된 가족사진 uri 제거
+    fun deleteImgUri() {
+        _selectedImgUri.postValue(null)
+    }
+    // 가족사진 선택
+    fun setImgUri(uri: Uri?) {
+        _selectedImgUri.postValue(uri)
     }
 }

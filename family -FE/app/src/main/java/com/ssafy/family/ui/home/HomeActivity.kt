@@ -92,7 +92,7 @@ class HomeActivity : AppCompatActivity() {
             when (it.status) {
                 Status.SUCCESS -> {
                     dismissLoading()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, StatusActivity::class.java))
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)

@@ -1,5 +1,6 @@
 package com.ssafy.family.ui.status
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentEditStatusBinding
 import com.ssafy.family.ui.Adapter.StatusEmojiAdapter
@@ -40,15 +42,12 @@ class EditStatusFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // 가족사진 조회
-        statusViewModel.familyPicture.observe(requireActivity()) {
-            if (it.data?.dataset?.familyPicture == null){
-                Log.d(TAG, "EditStatusFragment - onViewCreated() status : ${it.status}")
-                binding.editStatusFamilyImage.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.image_fail))
+        statusViewModel.selectedImgUri.observe(requireActivity()) {
+            val imageView = binding.editStatusFamilyImage
+            if (it == null){
+                imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.image_fail))
             } else {
-                // TODO: 가족사진 설정 시 조회되는지 확인
-//                Glide 활용
-                Log.d(TAG, "EditStatusFragment - onViewCreated() status : ${it.status}")
-                Log.d(TAG, "EditStatusFragment - onViewCreated() familyPicture : ${it.data.dataset.familyPicture}")
+                Glide.with(imageView).load(it).into(imageView)
             }
         }
         // 이모지 어댑터 설정

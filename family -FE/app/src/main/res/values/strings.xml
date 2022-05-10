@@ -75,6 +75,7 @@
     <string name="familyCodeErrorMessage">가족코드는 알파벳과 숫자 15자리로 구성되어 있습니다.</string>
 
     <string name="edit_status_guide">오늘 가족들에게\n 보여줄 내용을 적어주세요.</string>
+    <string name="select_family_picture_guide">변경할 가족 사진을 선택해주세요.</string>
     <string name="todays_condition">오늘 기분</string>
     <string name="todays_message">오늘 한마디</string>
     <string name="confirm">확인</string>
