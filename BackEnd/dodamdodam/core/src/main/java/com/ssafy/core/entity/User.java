@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -38,6 +39,24 @@ public class User extends BaseEntity implements UserDetails {
     @Nullable
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthday;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (!userId.equals(user.userId)) return false;
+        return name.equals(user.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
 
     @Setter
     @Nullable

@@ -96,7 +96,7 @@ public class UserController {
              @io.swagger.v3.oas.annotations.parameters.RequestBody
              @Valid FindIdReqDto request) {
 
-        return responseService.getSuccessResult(userService.findUserIdWithUserInfo(request));
+        return responseService.getSuccessResult(userService.getUserIdWithUserInfo(request));
     }
 
     @PostMapping(value = "newpassword", consumes = MediaType.APPLICATION_JSON_VALUE)
