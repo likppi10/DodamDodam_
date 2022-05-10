@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -29,6 +31,7 @@ import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val loginViewModel by viewModels<LoginViewModel>()
@@ -45,12 +48,13 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
+
     fun init(){
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
             // TODO: 첫 접속일시 분기 만들어야함
             // TODO: 토큰 만료됐을시 분기 만들어야함
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-            getFCM()
+
 
         } else {
             supportFragmentManager.beginTransaction()
@@ -60,8 +64,7 @@ class HomeActivity : AppCompatActivity() {
         loginViewModel.makeRefreshLiveData.observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    dismissLoading()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    getFCM()
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -69,6 +72,22 @@ class HomeActivity : AppCompatActivity() {
                 Status.ERROR -> {
                     dismissLoading()
                     startActivity(Intent(this, MainActivity::class.java))
+                }
+            }
+        }
+        loginViewModel.baseResponse.observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    dismissLoading()
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                Status.ERROR -> {
+                    Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                        .show()
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
                 }
             }
         }
