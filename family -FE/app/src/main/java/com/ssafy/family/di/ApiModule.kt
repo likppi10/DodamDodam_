@@ -10,6 +10,7 @@ import com.ssafy.family.data.remote.api.AccountAPI
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.api.CalendarAPI
 import com.ssafy.family.data.remote.api.AlbumAPI
+import com.ssafy.family.data.remote.api.MainEventAPI
 import com.ssafy.family.data.remote.api.ChattingAPI
 import com.ssafy.family.data.remote.api.MainFamilyAPI
 import dagger.Module
@@ -99,6 +100,12 @@ object ApiModule {
     @Provides
     fun provideAlbumApiService(retrofit: Retrofit): AlbumAPI {
         return retrofit.create(AlbumAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMainEventApiService(retrofit: Retrofit): MainEventAPI {
+        return retrofit.create(MainEventAPI::class.java)
     }
 
     @Singleton
