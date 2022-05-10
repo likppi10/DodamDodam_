@@ -27,12 +27,6 @@ class ApplicationClass: Application() {
         const val AUTO_LOGIN = "auto_login_flag"
         const val JWT = "JWT"
 
-//        const val Id = "100"
-//        const val Name = "엄마"
-
-        const val Id = "101"
-        const val Name = "아빠"
-
         //        lateinit var sRetrofit: Retrofit
         lateinit var sSharedPreferences: SharedPreferencesUtil
         lateinit var sContentResolver: ContentResolver
