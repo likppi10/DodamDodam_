@@ -11,11 +11,13 @@ public class FcmMessageResDto {
     private boolean validate_only;
     private Message message;
 
+
     @Builder
     @AllArgsConstructor
     @Getter
     public static class Message {
         private Notification notification;
+        private data data;
         private  String token;
     }
 
@@ -26,5 +28,14 @@ public class FcmMessageResDto {
         private String title;
         private String body;
         private String image;
+    }
+
+
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    public static class data {
+        private String title;
+        private String body;
     }
 }

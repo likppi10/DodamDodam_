@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.net.HttpHeaders;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.Message;
 import com.ssafy.core.dto.res.FcmMessageResDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,14 +62,20 @@ public class FcmService {
 
     private String makeMessage(String token, String title, String body)
             throws JsonProcessingException {
+        FcmMessageResDto fcmMessage = FcmMessageResDto.builder()
+                .message(FcmMessageResDto.Message.builder()
+                        .token(token)
+//                        .notification(FcmMessageResDto.Notification.builder()
+//                                .title(title)
+//                                .body(body)
+//                                .image(null)
+//                                .build()
+//                        )
+                        .data(FcmMessageResDto.data.builder().body(body).title(title).build())
+                        .build()
+                ).build();
 
-       Message message =  Message.builder()
-                .setToken(token)
-                //.setNotification(Notification.builder().setTitle(title).setBody(body).build())
-                .putData("title",title)
-                .putData("body",body)
-                .build();
-        return objectMapper.writeValueAsString(message);
+        return objectMapper.writeValueAsString(fcmMessage);
     }
     private String getAccessToken() throws IOException {
 

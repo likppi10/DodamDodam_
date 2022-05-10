@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
@@ -87,7 +89,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginResult.observe(requireActivity()) {
             when (it) {
                 UiMode.SUCCESS -> {
-                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
                     requireActivity().finish()
                 }
                 else -> {
@@ -104,16 +106,32 @@ class LoginFragment : Fragment() {
                     Log.d("dddd", "initView: " + LoginUtil.getUserInfo())
                     // TODO: 에러나는지 확인 attach
                     dismissLoading()
-                    val context = requireActivity()
                     getFCM()
-                    startActivity(Intent(context, StartSettingActivity::class.java))
-                    requireActivity().finish()
+//                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
+//                    requireActivity().finish()
 
                 }
                 Status.EXPIRED->{
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
                     login()
                     dismissLoading()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                        .show()
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
+                }
+            }
+
+        }
+        loginViewModel.baseResponse.observe(requireActivity()) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
+                    requireActivity().finish()
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)

@@ -16,7 +16,6 @@ import lombok.*;
 public class SignUpReqDto {
 
     @UserId
-    @UserIdUnique
     @Schema(description = "아이디", required = true, example = "ssafy")
     private String userId;
 

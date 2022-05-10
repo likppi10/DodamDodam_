@@ -15,8 +15,10 @@ import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.config.ApplicationClass.Companion.Id
 import com.ssafy.family.config.ApplicationClass.Companion.Name
 import com.ssafy.family.data.ChatData
+import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentChattingBinding
 import com.ssafy.family.ui.Adapter.ChattingAdapter
+import com.ssafy.family.util.LoginUtil.getUserInfo
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
@@ -32,13 +34,14 @@ class ChattingFragment : Fragment() {
 
     @Inject
     lateinit var chatViewModelFactory: ChatViewModel.FamilyCodeAssistedFactory
-
     private val viewModel by viewModels<ChatViewModel> {
         ChatViewModel.provideFactory(chatViewModelFactory, familyCode)
     }
 
     lateinit var chattingAdapter:ChattingAdapter
-    val familyCode = "fam_code"
+    val familyCode = getUserInfo()!!.familyId.toString()
+    var myProfile = ""
+    var memberList = listOf<MemberInfo>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,11 +71,32 @@ class ChattingFragment : Fragment() {
         initView()
     }
 
-
     private fun initView(){
-        val context = requireContext()
-        chattingAdapter = ChattingAdapter(context, mutableListOf())
-        viewModel.initViewModel()
+
+        viewModel.getMember()
+        viewModel.getMemberRequestLiveData.observe(requireActivity()){
+            when (it.status) {
+                Status.SUCCESS -> {
+                    memberList = it.data!!.memberList
+                    for(a in it.data.memberList){
+                        if(a.profileId == getUserInfo()!!.profileId){
+                            myProfile = a.profileImage
+                            break
+                        }
+                    }
+                    chattingAdapter = ChattingAdapter(memberList, mutableListOf())
+                    viewModel.initViewModel()
+                    dismissLoading()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
+                }
+            }
+        }
 
         viewModel.chatLiveData.observe(requireActivity()) {
             when (it.status) {
@@ -82,7 +106,7 @@ class ChattingFragment : Fragment() {
                     binding.chattingRecyclerView.smoothScrollToPosition(chattingAdapter.itemCount)
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(),it.message!!, Toast.LENGTH_SHORT)
+                    Toast.makeText(requireActivity(),it.message!!, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -94,10 +118,18 @@ class ChattingFragment : Fragment() {
                 val nowTime = now.format(
                     DateTimeFormatter.ofPattern("a h시 mm분").withLocale(Locale.forLanguageTag("ko"))
                 )
-                val data = ChatData(Id, Name, message, nowTime)
+                val data = ChatData(getUserInfo()!!.profileId, getUserInfo()!!.name, message, myProfile, nowTime)
                 viewModel.send(data)
                 binding.chattingText.setText("")
             }
         }
+    }
+
+    //월 단위 일정 로딩바
+    private fun setLoading() {
+        binding.progressBarLoading.visibility = View.VISIBLE
+    }
+    private fun dismissLoading() {
+        binding.progressBarLoading.visibility = View.GONE
     }
 }
