@@ -11,8 +11,8 @@ import lombok.*;
 @Schema(name = "Main Profile Response")
 public class MainProfileResDto {
 
-    @Schema(description = "유저Pk", example = "1")
-    private Long userPk;
+    @Schema(description = "프로필 Id", example = "1")
+    private Long profileId;
 
     @Schema(description = "프로필 이미지 경로", example = "example/example1.png")
     private String imagePath;

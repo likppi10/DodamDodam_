@@ -32,9 +32,10 @@ public class MainService {
 
     public List<MainProfileResDto> getProfileList(Long userPk) {
         long familyId = familyRepository.findFamilyIdByUserPk(userPk);
+        long profileId = profileRepository.findProfileIdByUserPk(userPk);
 
         return profileRepository.findProfileListByFamilyId(familyId).stream()
-                .filter(profile -> !profile.getUserPk().equals(userPk))
+                .filter(profile -> !profile.getProfileId().equals(profileId))
                 .collect(Collectors.toList());
     }
 
