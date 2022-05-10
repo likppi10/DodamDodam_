@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "suggestionReaction")
+@Table(name = "suggestion_reaction")
 public class SuggestionReaction extends BaseEntity {
 
     @Id

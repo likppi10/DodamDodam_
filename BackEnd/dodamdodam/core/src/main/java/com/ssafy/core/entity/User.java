@@ -35,7 +35,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Setter
     @Nullable
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthday;
@@ -44,7 +43,6 @@ public class User extends BaseEntity implements UserDetails {
     @Nullable
     private String fcmToken;
 
-    @Setter
     @Nullable
     private String refreshToken;
 
@@ -52,13 +50,21 @@ public class User extends BaseEntity implements UserDetails {
     private String authority;
 
     @PrePersist
-    public void setAuthority(){
+    public void setAuthority() {
         this.authority = "ROLE_USE";
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
     @Builder
     public User(String userId, String name, String password,
-                @Nullable LocalDate birthday, @Nullable String fcmToken, @Nullable String refreshToken) {
+                @Nullable LocalDate birthday, @Nullable String fcmToken) {
         Assert.hasText(userId, "userId must be not null");
         Assert.hasText(name, "name must be not null");
         Assert.hasText(password, "password must be not null");
@@ -66,9 +72,9 @@ public class User extends BaseEntity implements UserDetails {
         this.userId = userId;
         this.name = name;
         this.password = password;
+
         this.birthday = birthday;
         this.fcmToken = fcmToken;
-        this.refreshToken = refreshToken;
     }
 
     @Override

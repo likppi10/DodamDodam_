@@ -12,8 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AskFamilyCodeFragment : Fragment() {
-    val TAG: String = "로그"
-
     private lateinit var binding: FragmentAskFamilyCodeBinding
 
     override fun onCreateView(
@@ -33,13 +31,11 @@ class AskFamilyCodeFragment : Fragment() {
         binding.askFamilyCodeAnswerYesBtn.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_in_start_setting, WriteFamilyCodeFragment())
-                .addToBackStack(null)
                 .commit()
         }
         binding.askFamilyCodeAnswerNoBtn.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_in_start_setting, SaveInfoFragment())
-                .addToBackStack(null)
                 .commit()
         }
     } //onViewCreated

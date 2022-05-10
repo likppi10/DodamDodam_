@@ -1,4 +1,4 @@
-package com.ssafy.core.validation;
+package com.ssafy.core.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,7 +8,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = UserIdDuplicationValidator.class)
+@Constraint(validatedBy = UserIdUniqueValidator.class)
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface UserIdUnique {

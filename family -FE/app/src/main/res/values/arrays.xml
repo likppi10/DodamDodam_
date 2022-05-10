@@ -8,4 +8,12 @@
         <item>딸</item>
     </string-array>
 
+    <string-array name="family_number">
+        <item> </item>
+        <item>첫째</item>
+        <item>둘째</item>
+        <item>셋째</item>
+        <item>넷째</item>
+    </string-array>
+
 </resources>

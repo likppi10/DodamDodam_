@@ -29,7 +29,6 @@ public class Suggestion extends BaseEntity {
     private Long dislikeCount;
 
     @OneToMany(mappedBy = "suggestion", cascade = CascadeType.ALL)
-    @Column(name = "suggestion_reaction_id")
     private List<SuggestionReaction> suggestionReaction;
 
     @PrePersist

@@ -1,12 +1,10 @@
 package com.ssafy.core.dto.req;
 
+import com.ssafy.core.validator.FamilyCode;
+import com.ssafy.core.validator.LocalDate;
+import com.ssafy.core.validator.UserName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
 
 @Builder
 @Getter
@@ -16,16 +14,14 @@ import java.time.LocalDate;
 @Schema(description = "DTO Model : FindIdReqDto")
 public class FindIdReqDto {
 
-    @NotBlank
-    @Size(max = 10, min = 1)
+    @UserName
     @Schema(description = "이름", required = true, example = "싸피")
     private String name;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
+    @LocalDate
+    private String birthday;
 
-    @NotBlank
-    @Size(max = 15, min = 15)
+    @FamilyCode
     @Schema(description = "가족 코드", required = true, example = "SSAFYFINALPROJE")
     private String familyCode;
 }

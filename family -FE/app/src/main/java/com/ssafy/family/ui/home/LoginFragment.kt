@@ -23,9 +23,11 @@ import com.ssafy.family.data.remote.req.LoginReq
 import com.ssafy.family.databinding.FragmentLoginBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.main.MainActivity.Companion.channel_id
+import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.util.InputValidUtil
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
+import com.ssafy.family.util.UiMode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -82,18 +84,31 @@ class LoginFragment : Fragment() {
             parentFragmentManager.beginTransaction().replace(R.id.home_frame, SignFragment())
                 .commit()
         }
+        loginViewModel.loginResult.observe(requireActivity()) {
+            when (it) {
+                UiMode.SUCCESS -> {
+                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
+                    requireActivity().finish()
+                }
+                else -> {
+                    Toast.makeText(requireContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         loginViewModel.loginRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
+
                     LoginUtil.setAutoLogin(loginViewModel.isAutoLogin)
                     LoginUtil.saveUserInfo(it.data!!.dataSet!!)
                     Log.d("dddd", "initView: " + LoginUtil.getUserInfo())
-                    // TODO: 에러나는지 확인 attach 
+                    // TODO: 에러나는지 확인 attach
+                    dismissLoading()
                     val context = requireActivity()
                     getFCM()
-                    startActivity(Intent(context, MainActivity::class.java))
+                    startActivity(Intent(context, StartSettingActivity::class.java))
                     requireActivity().finish()
-                    dismissLoading()
+
                 }
                 Status.EXPIRED->{
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)

@@ -1,14 +1,11 @@
 package com.ssafy.core.dto.req;
 
-import com.ssafy.core.validation.Password;
-import com.ssafy.core.validation.UserId;
-import com.ssafy.core.validation.UserIdUnique;
-import com.ssafy.core.validation.UserName;
+import com.ssafy.core.validator.Password;
+import com.ssafy.core.validator.UserId;
+import com.ssafy.core.validator.UserIdUnique;
+import com.ssafy.core.validator.UserName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Builder
 @Getter
@@ -19,7 +16,6 @@ import javax.validation.constraints.Size;
 public class SignUpReqDto {
 
     @UserId
-    @UserIdUnique
     @Schema(description = "아이디", required = true, example = "ssafy")
     private String userId;
 

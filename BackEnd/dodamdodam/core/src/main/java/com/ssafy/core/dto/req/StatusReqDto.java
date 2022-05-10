@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 public class StatusReqDto {
 
     @NotBlank
-    @Size(max = 10, min = 1)
     @Schema(description = "상태", required = true, example = "")
     private String emotion;
 

@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     //User
-    NO_SUCH_USER(404, "U101", "해당하는 유저가 없습니다."),
+    USER_DOESNT_EXIST(404, "U101", "유저를 찾을 수 없습니다."),
     DUPLICATE_USER_ID(409, "U102", "이미 사용중인 아이디입니다."),
 
     //Profile
