@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.family.R
+import com.ssafy.family.data.remote.res.Alarm
 import com.ssafy.family.data.remote.res.FamilyProfile
 import com.ssafy.family.databinding.ItemFamilyStatusBinding
 
 // mainactivity - familyfragment : 우리가족(상태)
 class StatusAdapter(private val context: Context) :
     RecyclerView.Adapter<StatusAdapter.ViewHolder>() {
-
+    lateinit var itemClickListener: AlarmAdapter.ItemClickListener
     var datas = mutableListOf<FamilyProfile>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -63,16 +64,23 @@ class StatusAdapter(private val context: Context) :
 
                     binding.alarmRecycler.visibility = VISIBLE
                     binding.familyMessageButton.visibility = GONE
-                    val adapter = AlarmAdapter(context)
+                    val adapter = AlarmAdapter(context).apply {
+                        itemClickListener = this@StatusAdapter.itemClickListener
+                    }
                     val gridLayoutManager =
                         GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
                     binding.alarmRecycler.layoutManager = gridLayoutManager
                     binding.alarmRecycler.adapter = adapter
-                    adapter.datas = context.resources.getStringArray(R.array.expression).toMutableList()
+                    val AlarmList = mutableListOf<Alarm>()
+                    context.resources.getStringArray(R.array.expression).forEach {
+                        AlarmList.add(Alarm(item, it))
+                    }
+                    adapter.datas = AlarmList
                     adapter.notifyDataSetChanged()
                 }
             }
             binding.executePendingBindings()
         }
     }
+
 }

@@ -30,6 +30,7 @@ class ChatViewModel @AssistedInject constructor(
 
     fun send(data: ChatData) = viewModelScope.launch {
         chatRepository.send(data, myRef)
+        chatRepository.sendChattingFCM(data.message.toString())
     }
     fun initViewModel() = viewModelScope.launch {
         val childEventListener: ChildEventListener = object : ChildEventListener {

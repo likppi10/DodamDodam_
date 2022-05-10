@@ -17,6 +17,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.remote.req.AddFcmReq
@@ -42,11 +44,21 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         permissionUtil = PermissionUtil(this)
+        Log.d("dddd", "onMessageReceived: "+readSharedPreference("fcm").size)
         permissionUtil.permissionListener = object : PermissionUtil.PermissionListener {
             override fun run() {
                 init()
             }
         }
+    }
+    val SP_NAME = "fcm_message"
+     private fun readSharedPreference(key:String): ArrayList<String>{
+        val sp = getSharedPreferences(SP_NAME, MODE_PRIVATE)
+        val gson = Gson()
+        val json = sp.getString(key, "") ?: ""
+        val type = object : TypeToken<ArrayList<String>>() {}.type
+        val obj: ArrayList<String> = gson.fromJson(json, type) ?: ArrayList()
+        return obj
     }
 
     fun init(){
@@ -118,6 +130,7 @@ class HomeActivity : AppCompatActivity() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
+            Log.d("dddd", "getFCM: "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
         createNotificationChannel(MainActivity.channel_id, "ssafy")

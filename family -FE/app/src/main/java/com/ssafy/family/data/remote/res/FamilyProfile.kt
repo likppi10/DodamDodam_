@@ -6,8 +6,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class FamilyProfile(
-    @SerializedName("userPk")
-    val userPk: Int,
+    @SerializedName("profileId")
+    val profileId: Int,
     @SerializedName("imagePath")
     val imagePath: String,
     @SerializedName("role")
