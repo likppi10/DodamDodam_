@@ -61,14 +61,20 @@ public class FcmService {
 
     private String makeMessage(String token, String title, String body)
             throws JsonProcessingException {
-       Message message =  Message.builder()
-                .setToken(token)
-                //.setNotification(Notification.builder().setTitle(title).setBody(body).build())
-                .putData("title",title)
-                .putData("body",body)
-                .build();
+        FcmMessageResDto fcmMessage = FcmMessageResDto.builder()
+                .message(FcmMessageResDto.Message.builder()
+                        .token(token)
+                        .notification(FcmMessageResDto.Notification.builder()
+                                .title(title)
+                                .body(body)
+                                .image(null)
+                                .build()
+                        )
+                        .build()
+                )
+                .data(FcmMessageResDto.data.builder().body(body).title(title).build()).build();
 
-        return objectMapper.writeValueAsString(message);
+        return objectMapper.writeValueAsString(fcmMessage);
     }
     private String getAccessToken() throws IOException {
 
