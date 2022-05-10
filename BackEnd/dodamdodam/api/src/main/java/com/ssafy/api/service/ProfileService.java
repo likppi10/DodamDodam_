@@ -1,15 +1,15 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.KoreanUtil;
 import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
 import com.ssafy.core.dto.req.StatusReqDto;
 import com.ssafy.core.dto.res.ChattingMemberResDto;
 import com.ssafy.core.entity.Profile;
-import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.CustomException;
-import com.ssafy.core.exception.ErrorCode;
 import com.ssafy.core.repository.FamilyRepository;
 import com.ssafy.core.repository.ProfileRepository;
+import com.ssafy.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static com.ssafy.core.exception.ErrorCode.*;
 
@@ -31,10 +31,17 @@ import static com.ssafy.core.exception.ErrorCode.*;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final FileService fileService;
     private final Random random = new Random();
-    private final Map<String, String[]> missionList = MissionList.missionList;
+    final Map<String, String[][]> missionList = MissionList.missionList;
+
+    //[나][대상]
+    final String[][] call = {
+            {"형", "누나"},
+            {"오빠", "언니"}
+    };
 
 
     @Transactional(readOnly = false)
@@ -84,7 +91,6 @@ public class ProfileService {
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
         if (profile.getMission_target() == null) {
-
             //본인을 제외한 가족 profiles 가져오기
             List<Profile> familyProfiles = profileRepository.findProfilesByFamilyIdExceptMe(familyId, profile.getId());
 
@@ -96,15 +102,56 @@ public class ProfileService {
 
             //미션 대상 선정.
             int targetNumber = random.nextInt(familyProfiles.size());
-            String missionTarget = familyProfiles.get(targetNumber).getRole();
-            profile.updateMissionTarget(missionTarget);
+            Profile missionTarget = familyProfiles.get(targetNumber);
+            String targetRole =
+                    missionTarget.getRole().length() > 2 ? missionTarget.getRole().split(" ")[1] : missionTarget.getRole();
+
+            //targetRole Update
+            profile.updateMissionTarget(targetRole);
 
             //미션 대상에 맞는 미션 선정
-            String[] missions = missionList.get(
-                    missionTarget.length() > 2 ? missionTarget.split(" ")[1] : missionTarget);
-            String missionContent = missions[random.nextInt(missions.length)];
-            profile.updateMissionContent(missionContent);
+            String[][] missions = missionList.get(targetRole);
 
+            String missionTargetCall = "";
+            //본인, 미션 대상이 엄마 아빠가 아니라면
+            if (!(profile.getRole().equals("엄마") || profile.getRole().equals("아빠")
+                    || targetRole.equals("엄마") || targetRole.equals("아빠"))) {
+                LocalDate targetBirthday = userRepository.findBirthdayByProfileId(missionTarget.getId());
+                LocalDate myBirthday = userRepository.findBirthdayByProfileId(profile.getId());
+
+                if (targetBirthday.isAfter(myBirthday)) {
+                    int myGender = profile.getRole().equals("아들") ? 0 : 1;
+                    int targetGender = targetRole.equals("아들") ? 0 : 1;
+                    targetRole = call[myGender][targetGender];
+                } else {
+                    targetRole = "동생";
+                }
+                missionTargetCall = missionTargetCall.concat(targetRole + "(" + missionTarget.getNickname() + ")");
+            } else {
+                missionTargetCall = missionTargetCall.concat(targetRole);
+            }
+
+            //0번인지 1번인지 정하기
+            int randomIndex = random.nextInt(2);
+            String missionSelect = missions[randomIndex][random.nextInt(missions[randomIndex].length)];
+
+            StringBuilder missionContent = new StringBuilder();
+
+            //미션 대상 호칭 선택
+            switch (randomIndex) {
+                case 0:
+                    missionContent.append(missionTargetCall);
+                    missionContent.append("에게 ");
+                    break;
+                case 1:
+                    String caseParticle = KoreanUtil.getCompleteWord(targetRole, "을 ", "를 ");
+                    missionContent.append(caseParticle);
+                    break;
+            }
+
+            missionContent.append(missionSelect);
+
+            profile.updateMissionContent(missionContent.toString());
         }
         return profile;
     }
@@ -196,7 +243,7 @@ public class ProfileService {
 
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
-        if(profileRepository.findChattingMemberListByFamilyId(familyId) == null){
+        if (profileRepository.findChattingMemberListByFamilyId(familyId) == null) {
             throw new CustomException(INVALID_REQUEST);
         }
 
