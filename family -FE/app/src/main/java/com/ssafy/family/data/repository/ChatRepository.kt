@@ -8,9 +8,12 @@ import com.ssafy.family.data.remote.res.ChattingRes
 import com.ssafy.family.data.remote.res.LoginRes
 import com.ssafy.family.util.Resource
 import retrofit2.Response
+import retrofit2.http.Query
 
 interface ChatRepository {
     suspend fun send(data: ChatData, myRef: DatabaseReference): Any
 
     suspend fun getMember(): Resource<ChattingRes>
+
+    suspend fun sendChattingFCM(text:String):Resource<BaseResponse>
 }

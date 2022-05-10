@@ -12,8 +12,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.ssafy.family.config.ApplicationClass
-import com.ssafy.family.config.ApplicationClass.Companion.Id
-import com.ssafy.family.config.ApplicationClass.Companion.Name
 import com.ssafy.family.data.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentChattingBinding
