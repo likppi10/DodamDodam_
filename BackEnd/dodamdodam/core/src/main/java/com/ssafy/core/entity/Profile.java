@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @Getter
@@ -61,6 +62,19 @@ public class Profile extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "family_id")
     private Family family;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    @Column(name = "album_reaction_id")
+    private List<AlbumReaction> albumReactions;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    @Column(name = "suggestion_reaction_id")
+    private List<SuggestionReaction> suggestionReactions;
+
+    @OneToMany(mappedBy = "me", cascade = CascadeType.ALL)
+    @Column(name = "alarm_id")
+    private List<Alarm> alarms;
+
 //
 //
 //    @OneToOne(fetch = FetchType.LAZY)
