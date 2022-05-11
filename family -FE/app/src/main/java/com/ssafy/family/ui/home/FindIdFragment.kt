@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.req.findIdReq
 import com.ssafy.family.databinding.FragmentFindIdBinding
+import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.InputValidUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,12 +108,11 @@ class FindIdFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), it.message?:"서버 에러", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
-
     private fun findId(findIdReq: findIdReq) {
         loginViewModel.findId(findIdReq)
     }

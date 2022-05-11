@@ -27,6 +27,7 @@ import com.ssafy.family.ui.album.SearchTagFragment
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.main.EventFragment
 import com.ssafy.family.ui.main.FamilyFragment
+import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,17 +61,18 @@ class AlbumFragment : Fragment() {
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
-            Log.d("ddddddd", "onScrollStateChanged: " + newState)
-            if (!isScrolledDown) {
-                binding.tabs.visibility = View.GONE
-                binding.viewpager.visibility = View.GONE
-            }
-            if (isScrolledDown) {
-                binding.tabs.visibility = View.VISIBLE
-                binding.viewpager.visibility = View.VISIBLE
+            if(recyclerView.adapter!!.itemCount>=4){
+                Log.d("ddddddd", "onScrollStateChanged: " + newState)
+                if (!isScrolledDown) {
+                    binding.tabs.visibility = View.GONE
+                    binding.viewpager.visibility = View.GONE
+                }
+                if (isScrolledDown) {
+                    binding.tabs.visibility = View.VISIBLE
+                    binding.viewpager.visibility = View.VISIBLE
 
+                }
             }
-
         }
     }
     
@@ -123,25 +125,10 @@ class AlbumFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    //테스트용
-//                    val taglist = mutableListOf<HashTag>()
-//                    taglist.add(HashTag("#해시"))
-//                    taglist.add(HashTag("#해시"))
-//                    val temppicture = Picture(
-//                        1,
-//                        "2022년 5월 2일",
-//                        "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png"
-//                    )
-//                    val allalbumlist = mutableListOf<AllAlbum>()
-//                    allalbumlist.add(AllAlbum(taglist, temppicture))
-//                    allalbumlist.add(AllAlbum(taglist, temppicture))
-//                    allalbumlist.add(AllAlbum(taglist, temppicture))
-//                    albumMonthAdapter.datas = (allalbumlist)
-//                    albumMonthAdapter.notifyDataSetChanged()
-                    //테스트용 끝
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
-                        .show()
                     dismissLoading()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                        .show()
+
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -162,25 +149,10 @@ class AlbumFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    //테스트용
-//                    val taglist = mutableListOf<HashTag>()
-//                    taglist.add(HashTag("#해시"))
-//                    taglist.add(HashTag("#해시"))
-//                    val temppicture = Picture(
-//                        1,
-//                        "2022년 5월 2일",
-//                        "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png"
-//                    )
-//                    val allalbumlist = mutableListOf<AllAlbum>()
-//                    allalbumlist.add(AllAlbum(taglist, temppicture))
-//                    allalbumlist.add(AllAlbum(taglist, temppicture))
-//                    allalbumlist.add(AllAlbum(taglist, temppicture))
-//                    albumMonthAdapter.datas = (allalbumlist)
-//                    albumMonthAdapter.notifyDataSetChanged()
-                    //테스트용 끝
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
-                        .show()
                     dismissLoading()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                        .show()
+
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -206,9 +178,10 @@ class AlbumFragment : Fragment() {
 
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
-                        .show()
                     dismissLoading()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                        .show()
+
                 }
                 Status.EXPIRED -> {
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)

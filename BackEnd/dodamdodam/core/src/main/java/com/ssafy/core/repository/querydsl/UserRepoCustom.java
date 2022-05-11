@@ -11,4 +11,5 @@ public interface UserRepoCustom {
 
     String findUserFcmTokenByProfile(Profile target);
 
+    LocalDate findBirthdayByProfileId(Long profileId);
 }

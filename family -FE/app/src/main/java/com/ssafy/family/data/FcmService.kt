@@ -148,7 +148,6 @@ class FcmService: FirebaseMessagingService() {
 
         // icon, color는 메타 데이터에서 설정한 것으로 설정해주면 된다.
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            // TODO: 로고 박아주기
             .setSmallIcon(R.drawable.main_logo)
             .setColor(resources.getColor(R.color.black))
             .setContentTitle(messageBody["title"])

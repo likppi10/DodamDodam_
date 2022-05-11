@@ -30,11 +30,11 @@ public class AlbumPictureListResDto {
                     .imagePath(pictures.get(i).getPath_name())
                     .pictureId(pictures.get(i).getId())
                     .build();
-            if(pictures.get(i).is_main()){
-                result.add(0,albumDetailResDto);
-            }else{
+//            if(pictures.get(i).is_main()){
+//                result.add(0,albumDetailResDto);
+//            }else{
                 result.add(albumDetailResDto);
-            }
+//            }
 
         }
         return result;
