@@ -58,6 +58,7 @@
     <string name="PW_new">새 비밀번호</string>
     <string name="PW_confirm_new">새 비밀번호 확인</string>
     <string name="confirm_change">수정 완료</string>
+    <string name="default_status_message">오늘 기분 최고!</string>
 
     <string name="idErrorMessage">올바르지 않은 아이디입니다.</string>
     <string name="nameErrorMessage">올바르지 않은 이름입니다.</string>

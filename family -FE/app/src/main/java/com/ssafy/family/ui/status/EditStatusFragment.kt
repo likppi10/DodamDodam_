@@ -72,7 +72,7 @@ class EditStatusFragment : Fragment() {
         // 오늘의 한마디 초기값 입력
         statusViewModel.todaysMessage.observe(requireActivity()) {
             if (it.data?.todaysMessage == null){
-                binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable("Default Message")
+                binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(resources.getString(R.string.default_status_message))
             } else {
                 binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(it.data.todaysMessage)
             }
@@ -81,6 +81,7 @@ class EditStatusFragment : Fragment() {
         binding.editStatusConfirmBtn.setOnClickListener {
             val emojiSelected = emojiAdapter.emojiSelected
             val todaysMessage = binding.editStatusInputTodaysMessage.text.toString()
+            Log.d(TAG, "EditStatusFragment - onViewCreated() input text : $todaysMessage")
             if (emojiSelected == null) {
                 Toast.makeText(requireContext(), "오늘의 기분을 선택해주세요!", Toast.LENGTH_SHORT).show()
             } else {

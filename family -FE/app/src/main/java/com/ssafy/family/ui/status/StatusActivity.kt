@@ -1,15 +1,18 @@
 package com.ssafy.family.ui.status
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import com.ssafy.family.R
 import com.ssafy.family.databinding.ActivityStatusBinding
 import com.ssafy.family.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class StatusActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStatusBinding
     private val statusViewModel by viewModels<StatusViewModel>()
