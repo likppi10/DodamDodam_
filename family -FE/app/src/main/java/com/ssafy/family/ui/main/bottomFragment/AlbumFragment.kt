@@ -139,9 +139,10 @@ class AlbumFragment : Fragment() {
 //                    albumMonthAdapter.datas = (allalbumlist)
 //                    albumMonthAdapter.notifyDataSetChanged()
                     //테스트용 끝
+                    dismissLoading()
                     Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
                         .show()
-                    dismissLoading()
+
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -178,9 +179,10 @@ class AlbumFragment : Fragment() {
 //                    albumMonthAdapter.datas = (allalbumlist)
 //                    albumMonthAdapter.notifyDataSetChanged()
                     //테스트용 끝
+                    dismissLoading()
                     Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
                         .show()
-                    dismissLoading()
+
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -206,9 +208,10 @@ class AlbumFragment : Fragment() {
 
                 }
                 Status.ERROR -> {
+                    dismissLoading()
                     Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
                         .show()
-                    dismissLoading()
+
                 }
                 Status.EXPIRED -> {
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
