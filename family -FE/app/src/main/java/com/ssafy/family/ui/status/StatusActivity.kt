@@ -20,7 +20,7 @@ class StatusActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.status_activity_fragment_layout, SelectFamilyPictureFragment())
+            .replace(R.id.status_activity_fragment_layout, EditStatusFragment())
             .commit()
         statusViewModel.getFamilyPicture()
 //        statusViewModel.familyPicture.observe(this) {

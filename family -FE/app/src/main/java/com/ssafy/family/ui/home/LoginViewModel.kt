@@ -11,6 +11,7 @@ import com.ssafy.family.data.remote.req.LoginReq
 import com.ssafy.family.data.remote.req.SignUpReq
 import com.ssafy.family.data.remote.req.findIdReq
 import com.ssafy.family.data.remote.res.LoginRes
+import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.remote.res.RefreshTokenRes
 import com.ssafy.family.data.repository.AccountRepository
 import com.ssafy.family.util.Constants.TAG
@@ -58,6 +59,11 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     val signUpLiveData: LiveData<Resource<BaseResponse>>
         get() = _signUpLiveData
 
+    // 오늘 첫 로그인 체크
+    private val _checkFirstLoginToday = MutableLiveData<Resource<MissionRes>>()
+    val checkFirstLoginToday: LiveData<Resource<MissionRes>>
+        get() = _checkFirstLoginToday
+
     fun MakeRefresh(refreshToken:String)= viewModelScope.launch {
         _makeRefreshLiveData.postValue(Resource.loading(null))
         _makeRefreshLiveData.postValue(accountRepository.MakeRefreshToken(refreshToken))
@@ -100,6 +106,10 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     fun signUp(signUpReq: SignUpReq) = viewModelScope.launch {
         _signUpLiveData.postValue(Resource.loading(null))
         _signUpLiveData.postValue(accountRepository.signUp(signUpReq))
+    }
 
+    fun getFirstLoginToday() = viewModelScope.launch {
+        _checkFirstLoginToday.postValue(Resource.loading(null))
+        _checkFirstLoginToday.postValue(accountRepository.getMainMission())
     }
 }

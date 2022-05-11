@@ -46,6 +46,8 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         permissionUtil = PermissionUtil(this)
         Log.d("dddd", "onMessageReceived: "+readSharedPreference("fcm").size)
+        // 오늘 첫 로그인 확인
+        loginViewModel.getFirstLoginToday()
         permissionUtil.permissionListener = object : PermissionUtil.PermissionListener {
             override fun run() {
                 init()
@@ -63,8 +65,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun init(){
+        // 앱을 켰는데 JWT가 null이 아니다 = 재접속
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
-            // TODO: 첫 접속일시 분기 만들어야함
             // TODO: 토큰 만료됐을시 분기 만들어야함
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
 
@@ -89,10 +91,23 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         loginViewModel.baseResponse.observe(this) {
+            // fcm 받아와 졌는지 확인
             when (it.status) {
-                Status.SUCCESS -> {
+                Status.SUCCESS -> { // 로그인 성공
                     dismissLoading()
-                    startActivity(Intent(this, StatusActivity::class.java))
+                    // 분기처리
+                    // 1) 가입 후 첫 로그인인가? = LoginUtil 내에 familyId가 있는가?
+                    if (LoginUtil.getFamilyId() == null) { // 가입한 Family 없음
+                        startActivity(Intent(this, StartSettingActivity::class.java))
+                    } else { // 가입한 Family 있음
+                        // 2) 오늘 첫 로그인인가? = 오늘의 미션이 있는가?(missionContent)
+                        val missionContent = loginViewModel.checkFirstLoginToday.value?.data?.dataSet?.missionContent
+                        if (missionContent == null) { // 오늘 첫 로그인
+                            startActivity(Intent(this, StatusActivity::class.java))
+                        } else { // 첫 로그인 아님
+                            startActivity(Intent(this, MainActivity::class.java))
+                        }
+                    }
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
