@@ -42,6 +42,16 @@ public class UserRepoCustomImpl implements UserRepoCustom {
                 .fetchFirst();
     }
 
+    @Override
+    public LocalDate findBirthdayByProfileId(Long profileId) {
+        return jpaQueryFactory.select(profile.user.birthday)
+                .from(profile)
+                .join(user)
+                .on(profile.user.userPk.eq(user.userPk))
+                .where(profile.id.eq(profileId))
+                .fetchFirst();
+    }
+
     /**
      * QueryDsl 정리
      * 1. cross조인 해결법 -> join문 없이 그냥 where로 연관관계 직접 불러올 때 발생함.

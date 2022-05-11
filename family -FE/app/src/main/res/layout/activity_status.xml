@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.status.StatusActivity">
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
+        android:id="@+id/status_activity_fragment_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

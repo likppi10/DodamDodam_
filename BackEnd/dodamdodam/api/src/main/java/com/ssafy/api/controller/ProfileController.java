@@ -137,4 +137,28 @@ public class ProfileController {
         return responseService.getSingleResult(imagePath);
     }
 
+    @Operation(summary = "오늘의 한마디 조회", description = "<strong>오늘의 한마디 조회</strong>",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @GetMapping(value = "/comment")
+    public SingleResult<String> getComment(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        Profile profile = profileService.findProfileByUserPk(userPk);
+        return responseService.getSingleResult(profile.getComment());
+    }
+
+    @Operation(summary = "프로필 삭제", description = "<strong>프로필 삭제</strong>",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @DeleteMapping(value = "/delete")
+    public CommonResult deleteProfile(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        profileService.deleteProfile(userPk);
+        return responseService.getSuccessResult();
+    }
+
 }

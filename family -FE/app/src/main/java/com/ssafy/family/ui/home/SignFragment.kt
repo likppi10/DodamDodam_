@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.req.SignUpReq
 import com.ssafy.family.databinding.FragmentSignBinding
+import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.InputValidUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -101,7 +102,7 @@ class SignFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(),it.message?:"서버 에러", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(),ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -157,11 +158,12 @@ class SignFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), it.message?:"서버 에러", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
     private fun setLoading() {
         binding.progressBarLoginFLoading.visibility = View.VISIBLE
     }

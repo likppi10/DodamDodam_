@@ -10,6 +10,7 @@ import com.ssafy.core.entity.QSuggestionReaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -22,6 +23,7 @@ public class SuggestionRepoCustomImpl implements SuggestionRepoCustom {
     QSuggestionReaction suggestionReaction = QSuggestionReaction.suggestionReaction;
 
     @Override
+    @Transactional
     public List<SuggestionResDto> getSuggestionListByFamilyId(Long familyId) {
         return jpaQueryFactory.selectFrom(suggestion)
                 .leftJoin(suggestionReaction)
