@@ -179,7 +179,6 @@ class EventFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     dismissOpinionLoading()
-                    Toast.makeText(requireActivity(), "의견이 추가되었습니다.", Toast.LENGTH_SHORT).show()
                     eventViewModel.getOpinion()
                 }
                 Status.ERROR -> {
@@ -196,7 +195,6 @@ class EventFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     dismissOpinionLoading()
-                    Toast.makeText(requireActivity(), "의견이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                     eventViewModel.getOpinion()
                 }
                 Status.ERROR -> {

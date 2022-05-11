@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.ChatData
@@ -32,7 +33,7 @@ class ChattingFragment : Fragment() {
 
     @Inject
     lateinit var chatViewModelFactory: ChatViewModel.FamilyCodeAssistedFactory
-    private val viewModel by viewModels<ChatViewModel> {
+    private val viewModel by activityViewModels<ChatViewModel> {
         ChatViewModel.provideFactory(chatViewModelFactory, familyCode)
     }
 
@@ -123,7 +124,7 @@ class ChattingFragment : Fragment() {
         }
     }
 
-    //월 단위 일정 로딩바
+    //로딩바
     private fun setLoading() {
         binding.progressBarLoading.visibility = View.VISIBLE
     }
