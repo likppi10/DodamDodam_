@@ -81,13 +81,23 @@ public class User extends BaseEntity implements UserDetails {
         this.birthday = birthday;
     }
 
+    /**
+     *
+     * userPk는 DB에서 AI로 입력되는 값임 -> build로 입력되면 안됨.
+     * 하지만 Authentication에 UserPk 정보가 담기고,
+     * test로직을 돌리기 위해서는 Authentication이 필요함.
+     * Authentication을 test에서 사용하기위해 임의로 만드는 방법을 찾았으나
+     * 찾지 못하여 builder에 userPk를 넣는 방법을 선택하였음.
+     *
+     */
     @Builder
-    public User(String userId, String name, String password,
+    public User(@Nullable Long userPk, String userId, String name, String password,
                 @Nullable LocalDate birthday, @Nullable String fcmToken) {
         Assert.hasText(userId, "userId must be not null");
         Assert.hasText(name, "name must be not null");
         Assert.hasText(password, "password must be not null");
 
+        this.userPk = userPk;
         this.userId = userId;
         this.name = name;
         this.password = password;
