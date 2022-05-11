@@ -26,10 +26,7 @@ import com.ssafy.family.databinding.ActivityHomeBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.ui.startsetting.StartSettingActivity
-import com.ssafy.family.util.LoginUtil
-import com.ssafy.family.util.PermissionUtil
-import com.ssafy.family.util.SharedPreferencesUtil
-import com.ssafy.family.util.Status
+import com.ssafy.family.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -94,7 +91,7 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                 }
                 Status.ERROR -> {
-                    Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
@@ -160,5 +157,4 @@ class HomeActivity : AppCompatActivity() {
 //        binding.homePageLogo.visibility = View.GONE
         binding.homePageAppName.visibility = View.GONE
     }
-
 }

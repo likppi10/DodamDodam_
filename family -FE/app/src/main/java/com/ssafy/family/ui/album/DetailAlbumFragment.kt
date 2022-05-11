@@ -58,7 +58,7 @@ class DetailAlbumFragment : Fragment() {
     }
     private val tagItemClickListener = object : AlbumTagAdapter.ItemClickListener {
         override fun onClick(item: HashTag) {
-            TODO("Not yet implemented")
+
         }
 
     }

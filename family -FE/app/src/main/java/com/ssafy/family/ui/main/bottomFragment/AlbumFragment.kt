@@ -27,6 +27,7 @@ import com.ssafy.family.ui.album.SearchTagFragment
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.main.EventFragment
 import com.ssafy.family.ui.main.FamilyFragment
+import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -140,7 +141,7 @@ class AlbumFragment : Fragment() {
 //                    albumMonthAdapter.notifyDataSetChanged()
                     //테스트용 끝
                     dismissLoading()
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
 
                 }
