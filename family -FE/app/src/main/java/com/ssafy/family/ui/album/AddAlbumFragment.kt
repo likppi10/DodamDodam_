@@ -124,6 +124,7 @@ class AddAlbumFragment : Fragment() {
                         Log.d("ddddd", "tagList: " + detailAlbumViewModel.hashTag)
                         tagAdapter.datas = detailAlbumViewModel.hashTag
                         tagAdapter.notifyDataSetChanged()
+                        binding.addAlbumTagEditText.editText?.setText("")
                     } else {
                         binding.addAlbumTagEditText.error = "태그는 최대 3개입니다"
                     }

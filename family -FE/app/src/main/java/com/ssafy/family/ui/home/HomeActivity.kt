@@ -26,6 +26,7 @@ import com.ssafy.family.databinding.ActivityHomeBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.ui.startsetting.StartSettingActivity
+import com.ssafy.family.util.*
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.LoginUtil
@@ -112,7 +113,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
                 Status.ERROR -> {
-                    Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
@@ -178,5 +179,4 @@ class HomeActivity : AppCompatActivity() {
 //        binding.homePageLogo.visibility = View.GONE
         binding.homePageAppName.visibility = View.GONE
     }
-
 }

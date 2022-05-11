@@ -238,7 +238,8 @@ public class AlbumService {
             for(int k = 0 ; k<newPictureList.size();k++){
                 if(mainIndex==k){
                     newPictureList.get(k).updateIsMain(true);
-                    break;
+                }else{
+                    newPictureList.get(k).updateIsMain(false);
                 }
 
             }
@@ -264,7 +265,8 @@ public class AlbumService {
             for(int k = 0 ; k<newPictureList.size();k++){
                 if(mainIndex==k){
                     newPictureList.get(k).updateIsMain(true);
-                    break;
+                }else{
+                    newPictureList.get(k).updateIsMain(false);
                 }
 
             }

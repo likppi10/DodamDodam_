@@ -133,7 +133,7 @@ class LoginFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
@@ -150,7 +150,8 @@ class LoginFragment : Fragment() {
                     requireActivity().finish()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+
+                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
