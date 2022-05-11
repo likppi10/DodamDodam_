@@ -1,6 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.config.jwt.JwtProvider;
+import com.ssafy.api.config.JwtProvider;
 import com.ssafy.core.dto.req.FindIdReqDto;
 import com.ssafy.core.dto.req.SignUpReqDto;
 import com.ssafy.core.dto.req.UserInfoReqDto;
