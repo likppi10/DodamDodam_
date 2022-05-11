@@ -28,6 +28,7 @@ import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.util.*
 import com.ssafy.family.ui.status.StatusActivity
+import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.PermissionUtil
 import com.ssafy.family.util.SharedPreferencesUtil
@@ -47,6 +48,8 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         permissionUtil = PermissionUtil(this)
         Log.d("dddd", "onMessageReceived: "+readSharedPreference("fcm").size)
+        // 오늘 첫 로그인 확인
+        loginViewModel.getFirstLoginToday()
         permissionUtil.permissionListener = object : PermissionUtil.PermissionListener {
             override fun run() {
                 init()
@@ -65,7 +68,6 @@ class HomeActivity : AppCompatActivity() {
 
     fun init(){
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
-            // TODO: 첫 접속일시 분기 만들어야함
             // TODO: 토큰 만료됐을시 분기 만들어야함
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
 
@@ -90,10 +92,25 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         loginViewModel.baseResponse.observe(this) {
+            // fcm 받아와 졌는지 확인
             when (it.status) {
-                Status.SUCCESS -> {
+                Status.SUCCESS -> { // 로그인 성공
                     dismissLoading()
-                    startActivity(Intent(this, StatusActivity::class.java))
+                    // 분기처리
+                    // 1) 가입 후 첫 로그인인가? = LoginUtil 내에 familyId가 있는가?
+                    val familyId = LoginUtil.getFamilyId()
+                    Log.d(TAG, "HomeActivity - init() familyId : $familyId")
+                    if (familyId == "0") { // 가입한 Family 없음
+                        startActivity(Intent(this, StartSettingActivity::class.java))
+                    } else { // 가입한 Family 있음
+                        // 2) 오늘 첫 로그인인가? = 오늘의 미션이 있는가?(missionContent)
+                        val missionContent = loginViewModel.checkFirstLoginToday.value?.data?.dataSet?.missionContent
+                        if (missionContent == null) { // 오늘 첫 로그인
+                            startActivity(Intent(this, StatusActivity::class.java))
+                        } else { // 첫 로그인 아님
+                            startActivity(Intent(this, MainActivity::class.java))
+                        }
+                    }
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)

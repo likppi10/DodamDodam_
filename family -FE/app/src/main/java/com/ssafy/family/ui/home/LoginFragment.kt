@@ -25,6 +25,7 @@ import com.ssafy.family.databinding.FragmentLoginBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.main.MainActivity.Companion.channel_id
 import com.ssafy.family.ui.startsetting.StartSettingActivity
+import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -86,8 +87,26 @@ class LoginFragment : Fragment() {
         loginViewModel.loginResult.observe(requireActivity()) {
             when (it) {
                 UiMode.SUCCESS -> {
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    requireActivity().finish()
+//                    startActivity(Intent(requireContext(), MainActivity::class.java))
+//                    requireActivity().finish()
+                    // 분기처리
+                    // 1) 가입 후 첫 로그인인가? = LoginUtil 내에 familyId가 있는가?
+                    val familyId = LoginUtil.getFamilyId()
+                    Log.d(Constants.TAG, "LoginFragment familyId : $familyId")
+                    if (familyId == "0") { // 가입한 Family 없음
+                        startActivity(Intent(requireContext(), StartSettingActivity::class.java))
+                        requireActivity().finish()
+                    } else { // 가입한 Family 있음
+                        // 2) 오늘 첫 로그인인가? = 오늘의 미션이 있는가?(missionContent)
+                        val missionContent = loginViewModel.checkFirstLoginToday.value?.data?.dataSet?.missionContent
+                        if (missionContent == null) { // 오늘 첫 로그인
+                            startActivity(Intent(requireContext(), StatusActivity::class.java))
+                            requireActivity().finish()
+                        } else { // 첫 로그인 아님
+                            startActivity(Intent(requireContext(), MainActivity::class.java))
+                            requireActivity().finish()
+                        }
+                    }
                 }
                 else -> {
                     Toast.makeText(requireContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()

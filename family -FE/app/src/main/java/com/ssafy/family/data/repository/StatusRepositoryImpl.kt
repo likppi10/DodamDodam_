@@ -48,6 +48,7 @@ class StatusRepositoryImpl(
                         Resource.success(response.body()!!)
                     }
                     else -> {
+                        Log.d(TAG, "StatusRepositoryImpl - getMyStatus() e-code : ${response.code()}")
                         Resource.error(null, "응답 에러")
                     }
                 }
@@ -79,11 +80,9 @@ class StatusRepositoryImpl(
         withContext(ioDispatcher) {
             try{
                 val familyPicture = convertFileToMultipart(imageFile)
-                Log.d(TAG, "StatusRepositoryImpl - editFamilyPicture() multipart : $familyPicture")
                 val response = api.editFamilyPicture(familyPicture)
                 when {
                     response.isSuccessful -> {
-                        Log.d(TAG, "StatusRepositoryImpl - editFamilyPicture() successRes : $response")
                         Resource.success(response.body()!!)
                     }
                     else -> {

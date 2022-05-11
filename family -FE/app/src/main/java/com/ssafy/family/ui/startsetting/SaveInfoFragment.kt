@@ -178,7 +178,6 @@ class SaveInfoFragment : Fragment() {
         familyViewModel.familyResponseLiveData.observe(requireActivity()) {
             if (it.status == Status.SUCCESS){
                 // 가족 생성 요청 성공 시 sharedpreference에 familyId 저장
-//                SharedPreferencesUtil(requireContext()).setString("familyId", it.data?.dataset?.familyId.toString())
                 LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
                 Log.d(TAG, "SaveInfoFragment - initView() famId : ${it.data!!.dataset!!.familyId.toString()}")
                 Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()

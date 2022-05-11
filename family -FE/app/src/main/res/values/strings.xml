@@ -58,6 +58,7 @@
     <string name="PW_new">새 비밀번호</string>
     <string name="PW_confirm_new">새 비밀번호 확인</string>
     <string name="confirm_change">수정 완료</string>
+    <string name="default_status_message">오늘 기분 최고!</string>
 
     <string name="idErrorMessage">올바르지 않은 아이디입니다.</string>
     <string name="nameErrorMessage">올바르지 않은 이름입니다.</string>
@@ -74,7 +75,7 @@
     <string name="sameIdSuccesMessage">사용할 수 있는 아이디입니다</string>
     <string name="familyCodeErrorMessage">가족코드는 알파벳과 숫자 15자리로 구성되어 있습니다.</string>
 
-    <string name="edit_status_guide">오늘 가족들에게\n 보여줄 내용을 적어주세요.</string>
+    <string name="edit_status_guide">오늘 나의 상태를 표현해주세요.</string>
     <string name="select_family_picture_guide">변경할 가족 사진을 선택해주세요.</string>
     <string name="todays_condition">오늘 기분</string>
     <string name="todays_message">오늘 한마디</string>
