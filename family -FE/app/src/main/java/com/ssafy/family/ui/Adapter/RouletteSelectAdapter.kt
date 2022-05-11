@@ -1,36 +1,36 @@
 package com.ssafy.family.ui.Adapter
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.RouletteFamilyListBinding
 
-class RouletteFamilyAdapter (private val context: Context) : RecyclerView.Adapter<RouletteFamilyAdapter.ViewHolder>() {
+@RequiresApi(Build.VERSION_CODES.O)
+class RouletteSelectAdapter (private val context: Context) : RecyclerView.Adapter<RouletteSelectAdapter.ViewHolder>() {
 
-    var datas = mutableListOf<MemberInfo>()
+    var datas = listOf<MemberInfo>()
+    var selected = hashMapOf<Long, Boolean>()
+
+    lateinit var itemClickListener: ItemClickListener
 
     inner class ViewHolder(val binding: RouletteFamilyListBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item:MemberInfo){
-
-            if(item.profileImage == null){
-                Glide.with(binding.rouletteFamilyImg).load(R.drawable.image_fail)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                    .centerInside()
-                    .into(binding.rouletteFamilyImg)
+            if(selected[item.profileId] == false){
+                binding.rouletteFamilyImg.setImageResource(R.drawable.ic_baseline_close)
             }else{
-                Glide.with(binding.rouletteFamilyImg).load(item.profileImage)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                    .centerInside()
-                    .into(binding.rouletteFamilyImg)
+                binding.rouletteFamilyImg.setImageResource(R.drawable.ic_baseline_check)
             }
-
             binding.rouletteFamilyText.text = item.nickname
 
+            itemView.setOnClickListener {
+                itemClickListener.onClick(item)
+            }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,5 +43,9 @@ class RouletteFamilyAdapter (private val context: Context) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position])
+    }
+
+    interface ItemClickListener {
+        fun onClick(item: MemberInfo)
     }
 }

@@ -9,9 +9,12 @@ import com.ssafy.family.util.Resource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RouletteViewModel @AssistedInject constructor(
+@HiltViewModel
+class RouletteViewModel @Inject constructor(
     private val chatRepository: ChatRepository
 ): ViewModel() {
 

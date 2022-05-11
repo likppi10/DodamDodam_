@@ -30,29 +30,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/win_dialog_img"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/win_dialog_title"
-        app:srcCompat="@drawable/amusing" />
 
-    <TextView
-        android:id="@+id/win_dialog_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="첫째아들"
-        android:textSize="40sp"
-        android:textStyle="bold"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/roulette_family_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/win_dialog_img"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/win_dialog_title" />
 
     <TextView
@@ -61,20 +47,24 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="선택"
-        android:textSize="40sp"
+        android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancle_dialog_text"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/win_dialog_img" />
+        app:layout_constraintTop_toBottomOf="@+id/roulette_family_recycler" />
 
     <TextView
         android:id="@+id/cancle_dialog_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="선택"
-        android:textSize="40sp"
+        android:text="취소"
+        android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ok_dialog_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>
