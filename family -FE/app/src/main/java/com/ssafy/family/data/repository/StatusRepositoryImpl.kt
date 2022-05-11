@@ -48,6 +48,7 @@ class StatusRepositoryImpl(
                         Resource.success(response.body()!!)
                     }
                     else -> {
+                        Log.d(TAG, "StatusRepositoryImpl - getMyStatus() e-code : ${response.code()}")
                         Resource.error(null, "응답 에러")
                     }
                 }

@@ -27,6 +27,7 @@ import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.ui.status.StatusActivity
+import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.PermissionUtil
 import com.ssafy.family.util.SharedPreferencesUtil
@@ -65,7 +66,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun init(){
-        // 앱을 켰는데 JWT가 null이 아니다 = 재접속
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
             // TODO: 토큰 만료됐을시 분기 만들어야함
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
@@ -97,7 +97,9 @@ class HomeActivity : AppCompatActivity() {
                     dismissLoading()
                     // 분기처리
                     // 1) 가입 후 첫 로그인인가? = LoginUtil 내에 familyId가 있는가?
-                    if (LoginUtil.getFamilyId() == null) { // 가입한 Family 없음
+                    val familyId = LoginUtil.getFamilyId()
+                    Log.d(TAG, "HomeActivity - init() familyId : $familyId")
+                    if (familyId == "0") { // 가입한 Family 없음
                         startActivity(Intent(this, StartSettingActivity::class.java))
                     } else { // 가입한 Family 있음
                         // 2) 오늘 첫 로그인인가? = 오늘의 미션이 있는가?(missionContent)

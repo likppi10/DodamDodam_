@@ -1,6 +1,8 @@
 package com.ssafy.family.ui.status
 
+import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,10 +19,13 @@ import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentEditStatusBinding
 import com.ssafy.family.ui.Adapter.StatusEmojiAdapter
+import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.util.Constants.TAG
+import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class EditStatusFragment : Fragment() {
 
     private lateinit var binding: FragmentEditStatusBinding
@@ -79,6 +85,14 @@ class EditStatusFragment : Fragment() {
                 Toast.makeText(requireContext(), "오늘의 기분을 선택해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 statusViewModel.editMyStatus(emotion = emojiSelected, comment = todaysMessage)
+            }
+        }
+        // 상태 변경 Res 확인
+        statusViewModel.editStatusResponse.observe(requireActivity()) {
+            if (it.status == Status.SUCCESS) {
+                Toast.makeText(requireContext(), "오늘의 상태 입력 완료!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
             }
         }
     }
