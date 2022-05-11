@@ -25,10 +25,7 @@ import com.ssafy.family.databinding.FragmentLoginBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.main.MainActivity.Companion.channel_id
 import com.ssafy.family.ui.startsetting.StartSettingActivity
-import com.ssafy.family.util.InputValidUtil
-import com.ssafy.family.util.LoginUtil
-import com.ssafy.family.util.Status
-import com.ssafy.family.util.UiMode
+import com.ssafy.family.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -117,7 +114,7 @@ class LoginFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
@@ -134,7 +131,8 @@ class LoginFragment : Fragment() {
                     requireActivity().finish()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+
+                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }

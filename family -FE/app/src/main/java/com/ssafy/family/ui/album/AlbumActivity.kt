@@ -15,6 +15,7 @@ import com.ssafy.family.data.remote.req.UpdateAlbumReq
 import com.ssafy.family.data.remote.res.AllAlbum
 import com.ssafy.family.databinding.ActivityAlbumBinding
 import com.ssafy.family.ui.main.bottomFragment.AlbumFragment
+import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -172,7 +173,7 @@ class AlbumActivity : AppCompatActivity() {
                    dismissLoading()
                }
                Status.ERROR -> {
-                   Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                   Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                        .show()
                    dismissLoading()
                }
@@ -191,7 +192,7 @@ class AlbumActivity : AppCompatActivity() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(this, it.message ?: "서버 에러", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
