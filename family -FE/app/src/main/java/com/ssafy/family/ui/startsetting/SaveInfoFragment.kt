@@ -23,11 +23,8 @@ import com.ssafy.family.R
 import com.ssafy.family.data.remote.req.FamilyReq
 import com.ssafy.family.databinding.FragmentSaveInfoBinding
 import com.ssafy.family.ui.status.StatusActivity
+import com.ssafy.family.util.*
 import com.ssafy.family.util.Constants.TAG
-import com.ssafy.family.util.FileUtils
-import com.ssafy.family.util.InputValidUtil
-import com.ssafy.family.util.SharedPreferencesUtil
-import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import kotlin.reflect.typeOf
@@ -181,7 +178,9 @@ class SaveInfoFragment : Fragment() {
         familyViewModel.familyResponseLiveData.observe(requireActivity()) {
             if (it.status == Status.SUCCESS){
                 // 가족 생성 요청 성공 시 sharedpreference에 familyId 저장
-                SharedPreferencesUtil(requireContext()).setString("familyId", it.data?.dataset?.familyId.toString())
+//                SharedPreferencesUtil(requireContext()).setString("familyId", it.data?.dataset?.familyId.toString())
+                LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
+                Log.d(TAG, "SaveInfoFragment - initView() famId : ${it.data!!.dataset!!.familyId.toString()}")
                 Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(requireContext(), StatusActivity::class.java))
                 requireActivity().finish()
@@ -283,7 +282,6 @@ class SaveInfoFragment : Fragment() {
     // 이미지 Uri -> File
     private fun imageUriToFile(uri: Uri?): File? {
         var uri: Uri? = uri
-        Log.d(TAG, "SaveInfoFragment - imageUriToFile() uri = $uri")
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         if (uri == null) {
             uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -305,7 +303,6 @@ class SaveInfoFragment : Fragment() {
             cursor.close()
             cursor = null
         }
-        Log.d(TAG, "SaveInfoFragment - imageUriToFile() path = $path")
         return File(path)
     }
 }

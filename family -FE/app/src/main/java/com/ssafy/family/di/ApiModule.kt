@@ -6,6 +6,7 @@ import com.example.covid19_map.data.remote.url.Url.BASE_URL
 import com.ssafy.family.config.AddCookiesInterceptor
 import com.ssafy.family.config.ReceivedCookiesInterceptor
 import com.ssafy.family.config.XAccessTokenInterceptor
+import com.ssafy.family.data.remote.api.*
 import com.ssafy.family.data.remote.api.AccountAPI
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.api.CalendarAPI
@@ -100,6 +101,12 @@ object ApiModule {
     @Provides
     fun provideAlbumApiService(retrofit: Retrofit): AlbumAPI {
         return retrofit.create(AlbumAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideStatusApiService(retrofit: Retrofit): StatusAPI {
+        return retrofit.create(StatusAPI::class.java)
     }
 
     @Singleton

@@ -73,9 +73,7 @@ class FamilyRepositoryImpl(
     override suspend fun checkFamilyCode(familyCode: String): Resource<FamilyRes> =
         withContext(ioDispatcher){
             try {
-                Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() called")
                 val response = api.checkFamilyCode(familyCode)
-                Log.d(TAG, "response $response")
                 when {
                     response.isSuccessful -> {
                         Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")

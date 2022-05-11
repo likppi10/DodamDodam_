@@ -27,6 +27,11 @@ import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.util.*
+import com.ssafy.family.ui.status.StatusActivity
+import com.ssafy.family.util.LoginUtil
+import com.ssafy.family.util.PermissionUtil
+import com.ssafy.family.util.SharedPreferencesUtil
+import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -88,7 +93,7 @@ class HomeActivity : AppCompatActivity() {
             when (it.status) {
                 Status.SUCCESS -> {
                     dismissLoading()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, StatusActivity::class.java))
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
