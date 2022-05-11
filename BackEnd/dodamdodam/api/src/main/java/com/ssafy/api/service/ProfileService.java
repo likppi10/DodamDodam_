@@ -5,6 +5,8 @@ import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
 import com.ssafy.core.dto.req.StatusReqDto;
 import com.ssafy.core.dto.res.ChattingMemberResDto;
+import com.ssafy.core.dto.res.MainProfileResDto;
+import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Profile;
 import com.ssafy.core.exception.CustomException;
 import com.ssafy.core.repository.FamilyRepository;
@@ -34,6 +36,7 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final FileService fileService;
+    private final MainService mainService;
     private final Random random = new Random();
     final Map<String, String[][]> missionList = MissionList.missionList;
 
@@ -248,5 +251,16 @@ public class ProfileService {
         }
 
         return profileRepository.findChattingMemberListByFamilyId(familyId);
+    }
+
+    @Transactional
+    public void deleteProfile(long userPk){
+        Profile profile = findProfileByUserPk(userPk);
+        List<MainProfileResDto> familyProfileList = mainService.getProfileList(userPk);
+        if(familyProfileList.isEmpty()){
+            Family family = familyRepository.findFamilyByUserPk(userPk);
+            familyRepository.delete(family);
+        }
+        profileRepository.delete(profile);
     }
 }
