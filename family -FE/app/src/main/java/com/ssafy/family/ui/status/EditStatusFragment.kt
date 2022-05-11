@@ -1,60 +1,85 @@
 package com.ssafy.family.ui.status
 
+import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.ssafy.family.R
+import com.ssafy.family.databinding.FragmentEditStatusBinding
+import com.ssafy.family.ui.Adapter.StatusEmojiAdapter
+import com.ssafy.family.util.Constants.TAG
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditStatusFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class EditStatusFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentEditStatusBinding
+    private lateinit var emojiAdapter: StatusEmojiAdapter
+    private val statusViewModel by activityViewModels<StatusViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_status, container, false)
+        binding = FragmentEditStatusBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditStatusFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditStatusFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // 가족사진 조회
+        statusViewModel.selectedImgUri.observe(requireActivity()) {
+            val imageView = binding.editStatusFamilyImage
+            if (it == null){
+                imageView.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.image_fail))
+            } else {
+                Glide.with(imageView).load(it).into(imageView)
             }
+        }
+        // 이모지 어댑터 설정
+        emojiAdapter = StatusEmojiAdapter(requireActivity())
+        binding.statusEmojiRecycler.apply {
+            layoutManager =
+                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = emojiAdapter
+        }
+        emojiAdapter.datas = mutableListOf()
+        val emojis = resources.getStringArray(R.array.emoticon)
+        for (i in emojis.indices){
+            emojiAdapter.datas.add(emojis[i])
+            emojiAdapter.checkSelected.add(false)
+        }
+        // 오늘의 한마디 초기값 입력
+        statusViewModel.todaysMessage.observe(requireActivity()) {
+            if (it.data?.todaysMessage == null){
+                binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable("Default Message")
+            } else {
+                binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(it.data.todaysMessage)
+            }
+        }
+        // 확인 버튼 클릭이벤트 리스너 등록
+        binding.editStatusConfirmBtn.setOnClickListener {
+            val emojiSelected = emojiAdapter.emojiSelected
+            val todaysMessage = binding.editStatusInputTodaysMessage.text.toString()
+            if (emojiSelected == null) {
+                Toast.makeText(requireContext(), "오늘의 기분을 선택해주세요!", Toast.LENGTH_SHORT).show()
+            } else {
+                statusViewModel.editMyStatus(emotion = emojiSelected, comment = todaysMessage)
+            }
+        }
     }
 }

@@ -22,6 +22,7 @@
         <activity
             android:name=".ui.status.StatusActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.startsetting.StartSettingActivity"
             android:exported="true">
