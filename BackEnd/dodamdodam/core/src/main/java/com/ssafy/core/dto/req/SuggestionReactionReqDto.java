@@ -3,7 +3,7 @@ package com.ssafy.core.dto.req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
@@ -13,12 +13,12 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "DTO Model : SuggestionReactionReqDto")
 public class SuggestionReactionReqDto {
 
-    @NotBlank
+    @NotNull
     @Schema(description = "의견 제시 id", required = true, example = "1")
     private Long suggestionId;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "좋아요 여부", required = true, example = "true / false")
-    private boolean isLike;
+    private Boolean isLike;
 
 }
