@@ -12,7 +12,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -25,7 +24,6 @@ public class User extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userPk;
 
-    @Setter
     @Column(nullable = false, unique = true, length = 20)
     private String userId;
 
@@ -58,7 +56,6 @@ public class User extends BaseEntity implements UserDetails {
         return result;
     }
 
-    @Setter
     @Nullable
     private String fcmToken;
 
@@ -81,14 +78,16 @@ public class User extends BaseEntity implements UserDetails {
         this.birthday = birthday;
     }
 
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
     /**
-     *
      * userPk는 DB에서 AI로 입력되는 값임 -> build로 입력되면 안됨.
      * 하지만 Authentication에 UserPk 정보가 담기고,
      * test로직을 돌리기 위해서는 Authentication이 필요함.
      * Authentication을 test에서 사용하기위해 임의로 만드는 방법을 찾았으나
      * 찾지 못하여 builder에 userPk를 넣는 방법을 선택하였음.
-     *
      */
     @Builder
     public User(@Nullable Long userPk, String userId, String name, String password,

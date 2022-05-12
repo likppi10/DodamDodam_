@@ -85,7 +85,7 @@ public class UserService {
 
     @Transactional
     public void updateFcmToken(User user, FcmTokenReqDto fcmReq) {
-        user.setFcmToken(fcmReq.getFcmToken());
+        user.updateFcmToken(fcmReq.getFcmToken());
         userRepository.save(user);
     }
 
