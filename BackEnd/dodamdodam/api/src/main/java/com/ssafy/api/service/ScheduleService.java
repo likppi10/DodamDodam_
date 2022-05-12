@@ -76,23 +76,10 @@ public class ScheduleService {
     }
 
 
-    public List<ScheduleDetailResDto> getScheduleListByUserPkAndDay (Long userPk, String day) {
+    public List<ScheduleDetailResDto> getScheduleListByUserPkAndDay (Long userPk, LocalDate day) {
         Family family = familyRepository.findFamilyByUserPk(userPk);
 
-        String[] dayList = day.split("-");
-        LocalDate result;
-        try {
-            if (dayList[0].length() != 4 || dayList[1].length() != 2 || dayList[2].length() != 2) {
-                throw new CustomException(INVALID_REQUEST, "잘못된 날짜 입력 방식입니다.");
-            }
-            result = LocalDate.of(
-                    Integer.parseInt(dayList[0]),
-                    Integer.parseInt(dayList[1]),
-                    Integer.parseInt(dayList[2]));
-        } catch (NumberFormatException | DateTimeException e) {
-            throw new CustomException(INVALID_REQUEST);
-        }
-        return scheduleRepository.findScheduleByDay(result, family);
+        return scheduleRepository.findScheduleByDay(day, family);
     }
 
     public List<ScheduleDetailResDto> getScheduleListByMonth (Family family, String month) {

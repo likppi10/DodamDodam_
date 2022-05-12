@@ -33,7 +33,7 @@ class ChattingControllerTest extends ControllerTestSupport {
 
 
     @Test
-    @WithMockCustomUser(userPk = "1")
+    @WithMockCustomUser
     void getChattingMemberProfile_정상동작() throws Exception {
 
         //given
