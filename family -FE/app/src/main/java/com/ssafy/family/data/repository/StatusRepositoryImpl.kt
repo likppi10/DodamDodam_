@@ -5,6 +5,7 @@ import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.StatusAPI
 import com.ssafy.family.data.remote.req.EditStatusReq
 import com.ssafy.family.data.remote.res.FamilyPictureRes
+import com.ssafy.family.data.remote.res.MyStatusRes
 import com.ssafy.family.data.remote.res.StatusRes
 import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.Resource
@@ -39,7 +40,7 @@ class StatusRepositoryImpl(
             }
         }
 
-    override suspend fun getMyStatus(): Resource<StatusRes> =
+    override suspend fun getMyStatus(): Resource<MyStatusRes> =
         withContext(ioDispatcher) {
             try {
                 val response = api.getMyStatus()

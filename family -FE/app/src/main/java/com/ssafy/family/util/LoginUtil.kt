@@ -1,5 +1,6 @@
 package com.ssafy.family.util
 
+import android.util.Log
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.config.ApplicationClass.Companion.JWT
 import com.ssafy.family.data.remote.res.RefreshJWT
@@ -22,9 +23,9 @@ object LoginUtil {
         deleteUserInfo()
     }
 
-    fun deleteFamily() {
-        deleteUserFamilyInfo()
-    }
+//    fun deleteFamily() {
+//        deleteUserFamilyInfo()
+//    }
 
     fun setAutoLogin(flag: Boolean) {
         preferences.setAutoLogin(flag)
@@ -55,10 +56,10 @@ object LoginUtil {
         preferences.deleteString(FAMILY_ID)
     }
 
-    fun deleteUserFamilyInfo() {
-//        preferences.deleteString(PROFILE_ID)
-        preferences.deleteString(FAMILY_ID)
-    }
+//    fun deleteUserFamilyInfo() {
+////        preferences.deleteString(PROFILE_ID)
+//        preferences.setString(FAMILY_ID, "0")
+//    }
 
     fun getUserInfo(): UserInfo? {
         val accessToken = preferences.getString(JWT)
@@ -67,13 +68,12 @@ object LoginUtil {
         val profileId = preferences.getString(PROFILE_ID)?.toLong()
         val familyId = preferences.getString(FAMILY_ID)?.toLong()
 
-        return if (accessToken!!.isNotEmpty() and refreshToken!!.isNotEmpty() and name!!.isNotEmpty() and (profileId != 0L) and (familyId == null)) {
-            UserInfo(accessToken, refreshToken, name, profileId!!, 0)
-        }else if (accessToken.isNullOrBlank() or refreshToken.isNullOrBlank() or name.isNullOrBlank() or (profileId == null) or (familyId == null)) {
+        return if (accessToken.isNullOrBlank() or refreshToken.isNullOrBlank() or name.isNullOrBlank() or (profileId == null) or (familyId == null)) {
             null
         } else {
             UserInfo(accessToken!!, refreshToken!!, name!!, profileId!!, familyId!!)
         }
+//        return UserInfo(accessToken ?: "", refreshToken ?: "", name ?: "", profileId ?: -1, familyId ?: -1)
     }
 
     fun setFamilyId(id: String) {

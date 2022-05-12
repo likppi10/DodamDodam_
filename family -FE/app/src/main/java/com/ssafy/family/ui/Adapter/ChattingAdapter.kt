@@ -8,7 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.ssafy.family.data.ChatData
+import com.ssafy.family.data.remote.res.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.ItemChattingBinding
 import com.ssafy.family.util.LoginUtil.getUserInfo

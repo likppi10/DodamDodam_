@@ -21,9 +21,7 @@ import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSettingBinding
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.main.MainActivity
-import com.ssafy.family.util.CalendarUtil
-import com.ssafy.family.util.LoginUtil
-import com.ssafy.family.util.LoginUtil.deleteFamily
+import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.LoginUtil.signOut
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +49,7 @@ class SettingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        settingViewModel.getStatus()
         settingViewModel.getFamilyCode()
         settingViewModel.getProfileImage()
     }
@@ -98,7 +97,7 @@ class SettingFragment : Fragment() {
         settingViewModel.exitFamilyRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
-                    deleteFamily()
+                    signOut()
                     (activity as MainActivity).logout()
                 }
                 Status.ERROR -> {
@@ -108,6 +107,25 @@ class SettingFragment : Fragment() {
                 }
                 Status.EXPIRED -> {
                     settingViewModel.exitFamily()
+                }
+            }
+        }
+
+        settingViewModel.getStatusRequestLiveData.observe(requireActivity()){
+            when (it.status) {
+                Status.SUCCESS -> {
+                    if(it.data!!.data != null){
+                        Glide.with(binding.myStatusImage).load(it.data.data!!.emotion).into(binding.myStatusImage)
+                        binding.myStatus.text = it.data.data!!.comment
+                    }
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                }
+                Status.LOADING -> {
+                }
+                Status.EXPIRED -> {
+                    settingViewModel.getStatus()
                 }
             }
         }
@@ -128,6 +146,12 @@ class SettingFragment : Fragment() {
                 sendIntent.type = "text/plain"
                 startActivity(Intent.createChooser(sendIntent, "그룹 코드 공유"))
             } catch (ignored: ActivityNotFoundException) { }
+        }
+
+        binding.statusView.setOnClickListener {
+            val intent = Intent(requireContext(), StatusActivity::class.java)
+            intent.putExtra("to", "edit")
+            startActivity(intent)
         }
 
         binding.exitGroupButton.setOnClickListener {

@@ -23,4 +23,7 @@ interface FamilyAPI {
 
     @GET("api/family/code/check/{code}")
     suspend fun checkFamilyCode(@Path("code") code:String):Response<FamilyRes>
+
+    @GET("api/profile/myprofile")
+    suspend fun getMyProfile(@Path("code") code:String):Response<FamilyRes>
 }

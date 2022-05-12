@@ -4,10 +4,7 @@ import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.CalendarAPI
 import com.ssafy.family.data.remote.api.SettingAPI
 import com.ssafy.family.data.remote.req.*
-import com.ssafy.family.data.remote.res.FamilyCodeRes
-import com.ssafy.family.data.remote.res.ProfileImageRes
-import com.ssafy.family.data.remote.res.ScheduleRes
-import com.ssafy.family.data.remote.res.SchedulesRes
+import com.ssafy.family.data.remote.res.*
 import com.ssafy.family.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -22,6 +19,25 @@ class SettingRepositoryImpl(
     override suspend fun getProfileImage(): Resource<ProfileImageRes> = withContext(ioDispatcher){
         try {
             val response = api.getProfileImage()
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, "오류")
+                }
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
+    override suspend fun getStatus(): Resource<MyStatusRes> = withContext(ioDispatcher){
+        try {
+            val response = api.getStatus()
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)

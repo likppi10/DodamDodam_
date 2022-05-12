@@ -21,6 +21,7 @@ import com.ssafy.family.databinding.FragmentEditStatusBinding
 import com.ssafy.family.ui.Adapter.StatusEmojiAdapter
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.util.Constants.TAG
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,6 +46,12 @@ class EditStatusFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        statusViewModel.getFamilyPicture()
+        statusViewModel.getMyStatus()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // 가족사진 조회
@@ -64,18 +71,46 @@ class EditStatusFragment : Fragment() {
             adapter = emojiAdapter
         }
         emojiAdapter.datas = mutableListOf()
+
         val emojis = resources.getStringArray(R.array.emoticon)
-        for (i in emojis.indices){
-            emojiAdapter.datas.add(emojis[i])
-            emojiAdapter.checkSelected.add(false)
-        }
-        // 오늘의 한마디 초기값 입력
-        statusViewModel.todaysMessage.observe(requireActivity()) {
-            if (it.data?.todaysMessage == null){
-                binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(resources.getString(R.string.default_status_message))
-            } else {
-                binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(it.data.todaysMessage)
+
+        // 오늘의 한마디 초기값 입력, 이모지 세팅
+        statusViewModel.getMyStatus.observe(requireActivity()) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    emojiAdapter.datas.clear()
+                    emojiAdapter.checkSelected.clear()
+                    if (it.data?.data == null){
+                        for (i in emojis.indices){
+                            emojiAdapter.datas.add(emojis[i])
+                            emojiAdapter.checkSelected.add(false)
+                        }
+                        emojiAdapter.notifyDataSetChanged()
+                        binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(resources.getString(R.string.default_status_message))
+                    } else {
+                        for (i in emojis.indices){
+                            if(emojis[i] == it.data.data.emotion){
+                                emojiAdapter.datas.add(emojis[i])
+                                emojiAdapter.checkSelected.add(true)
+                            }else{
+                                emojiAdapter.datas.add(emojis[i])
+                                emojiAdapter.checkSelected.add(false)
+                            }
+                        }
+                        emojiAdapter.notifyDataSetChanged()
+                        binding.editStatusInputTodaysMessage.text = Editable.Factory.getInstance().newEditable(it.data.data.comment)
+                    }
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                }
+                Status.LOADING -> {
+                }
+                Status.EXPIRED -> {
+                    statusViewModel.getMyStatus()
+                }
             }
+
         }
         // 확인 버튼 클릭이벤트 리스너 등록
         binding.editStatusConfirmBtn.setOnClickListener {
@@ -91,9 +126,15 @@ class EditStatusFragment : Fragment() {
         // 상태 변경 Res 확인
         statusViewModel.editStatusResponse.observe(requireActivity()) {
             if (it.status == Status.SUCCESS) {
-                Toast.makeText(requireContext(), "오늘의 상태 입력 완료!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(requireContext(), MainActivity::class.java))
-                requireActivity().finish()
+                if(requireActivity().intent.getStringExtra("to") == "edit"){
+                    Toast.makeText(requireContext(), "오늘의 상태 수정 완료!", Toast.LENGTH_SHORT).show()
+                    requireActivity().finish()
+                }else{
+                    Toast.makeText(requireContext(), "오늘의 상태 입력 완료!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                    requireActivity().finishAffinity()
+                }
+
             }
         }
     }

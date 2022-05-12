@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.res.FamilyCodeRes
+import com.ssafy.family.data.remote.res.MyStatusRes
 import com.ssafy.family.data.remote.res.ProfileImageRes
 import com.ssafy.family.data.remote.res.SchedulesRes
 import com.ssafy.family.data.repository.CalendarRepository
@@ -31,9 +32,9 @@ class SettingViewModel @Inject constructor(private val settingRepository: Settin
     val exitFamilyRequestLiveData: LiveData<Resource<BaseResponse>>
         get() = _exitFamilyRequestLiveData
 
-//    private val _getMonthRequestLiveData = MutableLiveData<Resource<SchedulesRes>>()
-//    val getMonthRequestLiveData: LiveData<Resource<SchedulesRes>>
-//        get() = _getMonthRequestLiveData
+    private val _getStatusRequestLiveData = MutableLiveData<Resource<MyStatusRes>>()
+    val getStatusRequestLiveData: LiveData<Resource<MyStatusRes>>
+        get() = _getStatusRequestLiveData
 
     fun getProfileImage() = viewModelScope.launch {
         _getProfileImageRequestLiveData.postValue(Resource.loading(null))
@@ -50,9 +51,9 @@ class SettingViewModel @Inject constructor(private val settingRepository: Settin
         _exitFamilyRequestLiveData.postValue(settingRepository.exitFamily())
     }
 
-//    fun getProfileImage() = viewModelScope.launch {
-//        _getProfileImageRequestLiveData.postValue(Resource.loading(null))
-//        _getProfileImageRequestLiveData.postValue(settingRepository.getProfileImage())
-//    }
+    fun getStatus() = viewModelScope.launch {
+        _getStatusRequestLiveData.postValue(Resource.loading(null))
+        _getStatusRequestLiveData.postValue(settingRepository.getStatus())
+    }
 
 }

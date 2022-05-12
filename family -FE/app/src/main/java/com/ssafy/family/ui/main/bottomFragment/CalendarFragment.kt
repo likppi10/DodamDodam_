@@ -21,7 +21,7 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ssafy.family.R
-import com.ssafy.family.data.ScheduleInfo
+import com.ssafy.family.data.remote.res.ScheduleInfo
 import com.ssafy.family.databinding.CalendarDayBinding
 import com.ssafy.family.databinding.CalendarHeaderBinding
 import com.ssafy.family.databinding.FragmentCalendarBinding

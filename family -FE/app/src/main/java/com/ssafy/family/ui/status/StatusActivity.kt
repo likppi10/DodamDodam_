@@ -25,10 +25,6 @@ class StatusActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.status_activity_fragment_layout, EditStatusFragment())
             .commit()
-        statusViewModel.getFamilyPicture()
-//        statusViewModel.familyPicture.observe(this) {
-//            Log.d(TAG, "familyPicture : ${it.data?.dataset}")
-//        }
-        statusViewModel.getMyStatus()
+
     }
 }
