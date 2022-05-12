@@ -6,6 +6,7 @@ import com.ssafy.core.dto.req.SuggestionReactionReqDto;
 import com.ssafy.core.dto.res.*;
 import com.ssafy.core.entity.*;
 import com.ssafy.core.exception.CustomException;
+import com.ssafy.core.exception.ErrorCode;
 import com.ssafy.core.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ssafy.core.exception.ErrorCode.INVALID_REQUEST;
-import static com.ssafy.core.exception.ErrorCode.NOT_BELONG_FAMILY;
+import static com.ssafy.core.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +32,19 @@ public class MainService {
     private final AlarmRepository alarmRepository;
 
     public List<MainProfileResDto> getProfileList(Long userPk) {
-        long familyId = familyRepository.findFamilyIdByUserPk(userPk);
-        long profileId = profileRepository.findProfileIdByUserPk(userPk);
+        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
+        Long profileId = profileRepository.findProfileIdByUserPk(userPk);
+
+        if (familyId == null || profileId == null) {
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
 
         return profileRepository.findProfileListByFamilyId(familyId).stream()
                 .filter(profile -> !profile.getProfileId().equals(profileId))
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void createSuggestion(CreateSuggestionReqDto request, Long userPk) {
         Family family = familyRepository.findFamilyByUserPk(userPk);
 
@@ -47,14 +52,15 @@ public class MainService {
             throw new CustomException(INVALID_REQUEST);
         }
 
-        if (suggestionRepository.countSuggestionByFamily_Id(family.getId()) < 3) {
-            suggestionRepository.save(Suggestion.builder()
-                    .family(family)
-                    .text(request.getText())
-                    .build());
-        } else {
+        if (suggestionRepository.countSuggestionByFamily_Id(family.getId()) >= 3) {
             throw new CustomException(INVALID_REQUEST, "의견제시는 가족당 최대 3개까지 입니다!");
         }
+
+        suggestionRepository.save(Suggestion.builder()
+                .family(family)
+                .text(request.getText())
+                .build());
+
     }
 
     public void deleteSuggestion(Long suggestionId, Long userPk) {
@@ -165,6 +171,7 @@ public class MainService {
         return fcmToken;
 
     }
+
     public Profile getProfileByUserPk(Long userPk) {
         Profile profile = profileRepository.findProfileByUserPk(userPk);
         if (profile == null) {
@@ -193,7 +200,7 @@ public class MainService {
                     .build()
             );
         } else {
-            alarm.setCount(alarm.getCount()+1);
+            alarm.setCount(alarm.getCount() + 1);
             alarmRepository.save(alarm);
         }
     }
