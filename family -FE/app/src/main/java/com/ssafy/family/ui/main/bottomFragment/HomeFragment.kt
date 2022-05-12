@@ -40,5 +40,6 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(binding.tabs, binding.viewpager) { tab, position ->
             tab.text = adapter.getTabTitle(position)
         }.attach()
+        binding.viewpager.isUserInputEnabled = false
     }
 }
