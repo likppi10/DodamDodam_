@@ -100,8 +100,8 @@ public class FamilyService {
         }
     }
 
-    public Family fromUserIdToFamily(Authentication authentication) {
-        Long userPk = Long.parseLong(authentication.getName());
+    public Family fromUserIdToFamily(Long userPk) {
+
         Profile profile = profileRepository.findProfileByUserPk(userPk);
         if (profile == null) {
             throw new CustomException(ErrorCode.INVALID_REQUEST, "소속된 그룹이 없습니다.");

@@ -16,7 +16,7 @@ public enum ErrorCode {
     DUPLICATE_NICKNAME(409, "P102", "이미 다른 가족 구성원이 사용중인 닉네임입니다."),
 
     //Family
-    NOT_FOUND_FAMILY(404, "F101", "가입된 가족 그룹이 없습니다.."),
+    NOT_FOUND_FAMILY(404, "F101", "가입된 가족 그룹이 없습니다."),
     NOT_BELONG_FAMILY(405, "F102", "해당 그룹에 권한이 없습니다."),
 
     //Album

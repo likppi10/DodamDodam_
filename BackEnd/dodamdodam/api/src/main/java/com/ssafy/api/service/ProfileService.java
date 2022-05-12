@@ -5,6 +5,8 @@ import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
 import com.ssafy.core.dto.req.StatusReqDto;
 import com.ssafy.core.dto.res.ChattingMemberResDto;
+import com.ssafy.core.dto.res.MyProfileResDto;
+import com.ssafy.core.dto.res.TodayConditionResDto;
 import com.ssafy.core.dto.res.MainProfileResDto;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Profile;
@@ -251,6 +253,39 @@ public class ProfileService {
         }
 
         return profileRepository.findChattingMemberListByFamilyId(familyId);
+    }
+
+    public TodayConditionResDto getTodayCondition(Long userPk) {
+
+        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
+        if(myProfile == null){
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
+        return TodayConditionResDto.builder()
+                .comment(myProfile.getComment())
+                .emotion(myProfile.getEmotion())
+                .build();
+    }
+
+    public MyProfileResDto getMyProfile(Long userPk) {
+        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
+
+        if(myProfile == null){
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
+
+        LocalDate birthday = userRepository.findBirthdayByProfileId(myProfile.getId());
+
+        if(birthday == null){
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
+
+        return MyProfileResDto.builder()
+                .role(myProfile.getRole())
+                .nickname(myProfile.getNickname())
+                .birthday(birthday)
+                .imagePath(myProfile.getImagePath())
+                .build();
     }
 
     @Transactional

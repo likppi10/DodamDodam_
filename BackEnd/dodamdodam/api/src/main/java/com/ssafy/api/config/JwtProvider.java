@@ -1,4 +1,4 @@
-package com.ssafy.api.config.jwt;
+package com.ssafy.api.config;
 
 import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.ErrorCode;
@@ -54,7 +54,7 @@ public class JwtProvider {
     // Jwt 토큰에서 회원 구별 정보 추출
     public Long getUserPk(String token) {
         String userPK = Jwts.parserBuilder()
-                .setSigningKeyResolver(SigningKeyResolver.instance)
+                .setSigningKeyResolver(SigningKeyResolver.getInstance)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -71,7 +71,7 @@ public class JwtProvider {
     // Jwt 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKeyResolver(SigningKeyResolver.instance)
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKeyResolver(SigningKeyResolver.getInstance)
                     .build().parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class JwtProvider {
     //만료됐지만 유효한 jwt에서 userPk 빼오기.
     public Long getUserPkFromExpiredToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parserBuilder().setSigningKeyResolver(SigningKeyResolver.instance)
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKeyResolver(SigningKeyResolver.getInstance)
                     .build().parseClaimsJws(jwtToken);
             if (claims.getBody().getExpiration().before(new Date())) {
                 throw new CustomException(ErrorCode.INVALID_TOKEN);

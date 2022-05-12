@@ -102,6 +102,15 @@ object RepositoryModule {
     ): SettingRepository
             = SettingRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
 
+    @Singleton
+    @Provides
+    fun provideWishtreeRepository(
+        apiAPI: WishtreeAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): WishtreeRepository
+            = WishtreeRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
+
 //    @Singleton
 //    @Provides
 //    fun provideRoomRepository(covidDao: CovidDao): RoomRepository = RoomRepositoryImpl(covidDao)

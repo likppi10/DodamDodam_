@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -16,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -30,6 +32,7 @@ import java.io.File
 import kotlin.reflect.typeOf
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class SaveInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentSaveInfoBinding
@@ -130,8 +133,6 @@ class SaveInfoFragment : Fragment() {
                     Glide.with(activity as StartSettingActivity)
                         .load(imageUri)
                         .placeholder(R.drawable.default_profile)
-                        .error(R.drawable.image_fail)
-                        .fallback(R.drawable.image_fail)
                         .into(binding.saveInfoProfileImage)
                 }
             }
@@ -179,7 +180,7 @@ class SaveInfoFragment : Fragment() {
             if (it.status == Status.SUCCESS){
                 // 가족 생성 요청 성공 시 sharedpreference에 familyId 저장
                 LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
-                Log.d(TAG, "SaveInfoFragment - initView() famId : ${it.data!!.dataset!!.familyId.toString()}")
+                // 토스트메시지 띄우고 화면 이동
                 Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(requireContext(), StatusActivity::class.java))
                 requireActivity().finish()
@@ -237,6 +238,7 @@ class SaveInfoFragment : Fragment() {
         val nickname = binding.saveInfoInputNickname.text.toString()
         val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
         var imageFile: File? = null
+        Log.d(TAG, "SaveInfoFragment - createFamily() imageUri : $imageUri ")
         if (imageUri != null) {
             imageFile = FileUtils.getFile(requireContext(), imageUri!!)
         }
@@ -248,6 +250,7 @@ class SaveInfoFragment : Fragment() {
         val nickname = binding.saveInfoInputNickname.text.toString()
         val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
         var imageFile: File? = null
+        Log.d(TAG, "SaveInfoFragment - joinFamily() imageUri : $imageUri ")
         if (imageUri != null) {
             imageFile = FileUtils.getFile(requireContext(), imageUri!!)
         }
@@ -279,29 +282,29 @@ class SaveInfoFragment : Fragment() {
     }
 
     // 이미지 Uri -> File
-    private fun imageUriToFile(uri: Uri?): File? {
-        var uri: Uri? = uri
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        if (uri == null) {
-            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        }
-        var cursor: Cursor? = (activity as StartSettingActivity).contentResolver.query(
-            uri!!,
-            projection,
-            null,
-            null,
-            MediaStore.Images.Media.DATE_MODIFIED + " desc"
-        )
-        if (cursor == null || cursor.columnCount < 1) {
-            return null
-        }
-        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        cursor.moveToFirst()
-        val path: String = cursor.getString(column_index)
-        if (cursor != null) {
-            cursor.close()
-            cursor = null
-        }
-        return File(path)
-    }
+//    private fun imageUriToFile(uri: Uri?): File? {
+//        var uri: Uri? = uri
+//        val projection = arrayOf(MediaStore.Images.Media.DATA)
+//        if (uri == null) {
+//            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//        }
+//        var cursor: Cursor? = (activity as StartSettingActivity).contentResolver.query(
+//            uri!!,
+//            projection,
+//            null,
+//            null,
+//            MediaStore.Images.Media.DATE_MODIFIED + " desc"
+//        )
+//        if (cursor == null || cursor.columnCount < 1) {
+//            return null
+//        }
+//        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//        cursor.moveToFirst()
+//        val path: String = cursor.getString(column_index)
+//        if (cursor != null) {
+//            cursor.close()
+//            cursor = null
+//        }
+//        return File(path)
+//    }
 }

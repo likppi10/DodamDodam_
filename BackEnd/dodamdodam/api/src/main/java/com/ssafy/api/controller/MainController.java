@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.service.FcmService;
 import com.ssafy.api.service.ScheduleService;
 import com.ssafy.core.dto.req.AlarmReqDto;
+import com.ssafy.core.dto.req.CreateSuggestionReqDto;
 import com.ssafy.core.dto.req.SuggestionReactionReqDto;
 import com.ssafy.core.dto.res.*;
 import com.ssafy.api.service.MainService;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -56,11 +58,11 @@ public class MainController {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
     @PostMapping(value = "suggestion")
-    public CommonResult createSuggestion(@RequestParam String text, Authentication authentication) {
+    public CommonResult createSuggestion(@RequestBody @Valid CreateSuggestionReqDto request, Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
 
-        mainService.createSuggestion(text, userPk);
+        mainService.createSuggestion(request, userPk);
 
         return responseService.getSuccessResult("의견 제시가 정상적으로 등록되었습니다.");
     }
@@ -87,7 +89,9 @@ public class MainController {
             })
     @GetMapping(value = "suggestionList")
     public ListResult<SuggestionResDto> getSuggestionList(Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
+
         return responseService.getListResult(mainService.getSuggestionList(userPk));
     }
 
@@ -98,7 +102,7 @@ public class MainController {
             })
     @PostMapping(value = "suggestion/reaction", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ListResult<SuggestionResDto> manageSuggestionReaction(
-            @RequestBody SuggestionReactionReqDto request,
+            @RequestBody @Valid SuggestionReactionReqDto request,
             Authentication authentication
     ) {
 
@@ -113,11 +117,10 @@ public class MainController {
             })
     @GetMapping(value = "schedule/today")
     public ListResult<ScheduleDetailResDto> getTodayScheduleList(Authentication authentication) {
-        LocalDate localDate = LocalDate.now();
 
         return responseService.getListResult(
                 scheduleService.getScheduleListByUserPkAndDay
-                        (Long.parseLong(authentication.getName()), localDate.toString()));
+                        (Long.parseLong(authentication.getName()), LocalDate.now()));
     }
 
 
@@ -131,20 +134,6 @@ public class MainController {
 
         return responseService.getSingleResult(mainService.findTodayMission(userPk));
     }
-
-//    @Operation(summary = "미션 리스트 목록", description = "<strong>미션 리스트<strong>를 조회한다.",
-//            parameters = {
-//                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
-//            })
-//    @PostMapping(value = "alarm")
-//    public CommonResult pushAlarm(@org.springframework.web.bind.annotation.RequestBody
-//                                  @io.swagger.v3.oas.annotations.parameters.RequestBody
-//                                          PushAlarmReqDto request) {
-//
-//        mainService.sendAlarmMessage(request);
-//
-//        return responseService.getSuccessResult("알림이 정상적으로 발송되었습니다.");
-//    }
 
     @Operation(summary = "푸쉬 알림", description = "<strong>푸쉬 알림<strong>전송 및 데이터 저장.",
             parameters = {

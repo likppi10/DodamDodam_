@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.time.LocalDate;
+
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 
 @Slf4j
@@ -48,7 +50,7 @@ public class ScheduleController {
                                        Authentication authentication) {
         Long userPk = Long.parseLong(authentication.getName());
         User user = userService.findByUserPk(userPk);
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Family family = familyService.fromUserIdToFamily(userPk);
         scheduleService.createSchedule(scheduleReq, family, user);
         return responseService.getSuccessResult("일정 생성 완료");
     }
@@ -59,7 +61,8 @@ public class ScheduleController {
             })
     @GetMapping(value = "/{scheduleId}")
     public SingleResult<ScheduleDetailResDto> scheduleDetail(@PathVariable long scheduleId, Authentication authentication) {
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         Schedule schedule = scheduleService.getSchedule(scheduleId, family);
         ScheduleDetailResDto res = ScheduleDetailResDto.builder()
                 .scheduleId(scheduleId)
@@ -83,7 +86,8 @@ public class ScheduleController {
                                        @io.swagger.v3.oas.annotations.parameters.RequestBody
                                        @Valid NewScheduleReqDto scheduleReq,
                                        Authentication authentication) {
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         Schedule schedule = scheduleService.getSchedule(scheduleId, family);
         scheduleService.updateSchedule(schedule, scheduleReq);
         return responseService.getSuccessResult("일정 수정 완료");
@@ -95,7 +99,8 @@ public class ScheduleController {
             })
     @DeleteMapping(value = "/{scheduleId}")
     public CommonResult deleteSchedule(@PathVariable long scheduleId, Authentication authentication) {
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         Schedule schedule = scheduleService.getSchedule(scheduleId, family);
         scheduleService.deleteSchedule(schedule);
         return responseService.getSuccessResult("일정 삭제 완료");
@@ -108,7 +113,7 @@ public class ScheduleController {
     @GetMapping(value = "/day/{day}")
     public ListResult<ScheduleDetailResDto> scheduleListDay(@PathVariable String day, Authentication authentication) {
         return responseService.getListResult(
-                scheduleService.getScheduleListByUserPkAndDay(Long.parseLong(authentication.getName()), day));
+                scheduleService.getScheduleListByUserPkAndDay(Long.parseLong(authentication.getName()), LocalDate.parse(day)));
     }
 
     @Operation(summary = "월별 일정 조회", description = "<strong>해당 월</strong>로 일정을 조회한다.",
@@ -117,7 +122,8 @@ public class ScheduleController {
             })
     @GetMapping(value = "/month/{month}")
     public ListResult<ScheduleDetailResDto> scheduleListMonth(@PathVariable String month, Authentication authentication) {
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         return responseService.getListResult(scheduleService.getScheduleListByMonth(family, month));
     }
 }

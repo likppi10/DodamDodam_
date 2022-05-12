@@ -1,9 +1,14 @@
 package com.ssafy.core.exception;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +39,6 @@ public class ErrorResponse {
                             error.getDefaultMessage()
                     )).collect(Collectors.toList());
         }
-
     }
 
     public ErrorResponse(String message, int status, String code) {

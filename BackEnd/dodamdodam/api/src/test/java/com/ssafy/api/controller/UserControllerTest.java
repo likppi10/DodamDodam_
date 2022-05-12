@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -41,7 +41,7 @@ class UserControllerTest extends ControllerTestSupport {
     void idCheck_사용가능한_아이디() throws Exception {
 
         //given
-        willDoNothing().given(userService).checkExistId(any(String.class));
+        willDoNothing().given(userService).checkExistId(anyString());
 
         //when
         ResultActions result = mockMvc.perform(
@@ -51,13 +51,14 @@ class UserControllerTest extends ControllerTestSupport {
 
         //then
         result.andExpect(status().isOk());
+
     }
 
     @Test
     void idCheck_아이디_공백포함() throws Exception {
 
         //given
-        willDoNothing().given(userService).checkExistId(any(String.class));
+        willDoNothing().given(userService).checkExistId(anyString());
 
         //when
         ResultActions result = mockMvc.perform(
@@ -72,7 +73,7 @@ class UserControllerTest extends ControllerTestSupport {
     void idCheck_아이디_특수문자_포함() throws Exception {
 
         //given
-        willDoNothing().given(userService).checkExistId(any(String.class));
+        willDoNothing().given(userService).checkExistId(anyString());
 
         //when
         ResultActions result = mockMvc.perform(
@@ -185,7 +186,7 @@ class UserControllerTest extends ControllerTestSupport {
     @WithMockUser
     void reissueAccessToken_정상입력() throws Exception {
         //given
-        given(userService.reissueAccessToken(any(String.class),any(String.class)))
+        given(userService.reissueAccessToken(anyString(),anyString()))
                 .willReturn(defaultReIssueTokenResDto);
 
         //when
@@ -203,7 +204,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void findUserIdWithUserInfo_정상입력() throws Exception {
         //given
-        given(userService.findUserIdWithUserInfo(any(FindIdReqDto.class)))
+        given(userService.getUserIdWithUserInfo(any(FindIdReqDto.class)))
                 .willReturn("test");
 
         //when
@@ -219,7 +220,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void findUserIdWithUserInfo_날짜_형식_틀림() throws Exception {
         //given
-        given(userService.findUserIdWithUserInfo(any(FindIdReqDto.class)))
+        given(userService.getUserIdWithUserInfo(any(FindIdReqDto.class)))
                 .willReturn("test");
 
         //when
@@ -235,7 +236,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void findUserIdWithUserInfo_가족코드_형식_틀림() throws Exception {
         //given
-        given(userService.findUserIdWithUserInfo(any(FindIdReqDto.class)))
+        given(userService.getUserIdWithUserInfo(any(FindIdReqDto.class)))
                 .willReturn("test");
 
         //when
