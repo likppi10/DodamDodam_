@@ -85,6 +85,8 @@
     <string name="ask_family_code">가족 코드를 갖고 계신가요?</string>
     <string name="please_input_family_code">가족 코드를 입력해주세요!</string>
     <string name="nickname">나의 애칭</string>
+    <string name="wishtree_top_message">나만의 소원을 등록해보세요!</string>
+    <string name="wishtree">소원 나무</string>
 
     <string name="statusisnull">아직 오늘의 상태를 등록하지 않았어요</string>
     <string-array name="expression">

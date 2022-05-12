@@ -1,6 +1,5 @@
 package com.ssafy.family.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +13,8 @@ import com.ssafy.family.data.remote.res.LoginRes
 import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.remote.res.RefreshTokenRes
 import com.ssafy.family.data.repository.AccountRepository
-import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Resource
-import com.ssafy.family.util.Status
-import com.ssafy.family.util.UiMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,11 +29,6 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     private val _loginRequestLiveData = MutableLiveData<Resource<LoginRes>>()
     val loginRequestLiveData: LiveData<Resource<LoginRes>>
         get() = _loginRequestLiveData
-
-    private val _loginResult = MutableLiveData<UiMode>()
-    val loginResult: LiveData<UiMode>
-        get() = _loginResult
-
 
     private val _makeRefreshLiveData = MutableLiveData<Resource<RefreshTokenRes>>()
     val makeRefreshLiveData : LiveData<Resource<RefreshTokenRes>>
@@ -72,17 +63,11 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
         _loginRequestLiveData.postValue(Resource.loading(null))
         val response = accountRepository.login(user)
         _loginRequestLiveData.postValue(response)
-        when (response.status) {
-            Status.SUCCESS -> _loginResult.postValue(UiMode.SUCCESS)
-            else -> _loginResult.postValue(UiMode.FAIL)
-        }
-
     }
 
     fun addFCM(fcmToken: AddFcmReq) = viewModelScope.launch {
         _baseResLiveData.postValue(Resource.loading(null))
         _baseResLiveData.postValue(accountRepository.addFcm(fcmToken))
-
     }
 
     fun findId(findIdReq: findIdReq) = viewModelScope.launch {
