@@ -5,7 +5,9 @@ import com.ssafy.api.service.FamilyService;
 import com.ssafy.api.service.ProfileService;
 import com.ssafy.api.service.common.CommonResult;
 import com.ssafy.api.service.common.ResponseService;
+import com.ssafy.api.service.common.SingleResult;
 import com.ssafy.core.dto.req.WishTreeReqDto;
+import com.ssafy.core.dto.res.WishTreeResDto;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Profile;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -49,5 +48,17 @@ public class EventController {
         Family family = familyService.fromUserIdToFamily(userPk);
         eventService.createWishTree(profile, family, wishListReq);
         return responseService.getSuccessResult();
+    }
+
+    @Operation(summary = "위시 리스트 조회", description = "<strong>위시 리스트</strong>을 조회한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @GetMapping(value = "/wish-tree")
+    public SingleResult<WishTreeResDto> getWishTree(Authentication authentication) {
+        Long userPk = Long.parseLong(authentication.getName());
+        Profile profile = profileService.findProfileByUserPk(userPk);
+        Family family = familyService.fromUserIdToFamily(userPk);
+        return responseService.getSingleResult(eventService.getWishTree(profile, family));
     }
 }

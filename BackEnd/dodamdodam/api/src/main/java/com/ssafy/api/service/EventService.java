@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.core.dto.req.WishTreeReqDto;
+import com.ssafy.core.dto.res.WishTreeResDto;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Profile;
 import com.ssafy.core.entity.User;
@@ -46,5 +47,15 @@ public class EventService {
                 .content(wishTreeReq.getContent())
                 .position(allPosition.get(rand.nextInt(allPosition.size())))
                 .build());
+    }
+
+    public WishTreeResDto getWishTree(Profile profile, Family family) {
+        List<WishTreeResDto.WishTreeDetail> wishTreeDetailList = wishTreeRepository.findWishTreeListByFamily(family);
+        boolean canCreate;
+        canCreate = wishTreeRepository.findWishTreeByProfile(profile) == null;
+        return WishTreeResDto.builder()
+                .wishTree(wishTreeDetailList)
+                .canCreate(canCreate)
+                .build();
     }
 }
