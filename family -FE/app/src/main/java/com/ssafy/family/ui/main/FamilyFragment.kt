@@ -74,11 +74,7 @@ class FamilyFragment : Fragment() {
         mainFamilyViewModel.todayMissionRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    val sb = StringBuilder()
-                    sb.append(it.data!!.dataSet!!.missionTarget)
-                    sb.append("\n")
-                    sb.append(it.data!!.dataSet!!.missionContent)
-                    binding.layoutTodayExpression.boxtextTextView.text = sb.toString()
+                    binding.layoutTodayExpression.boxtextTextView.text = it.data!!.dataSet!!.missionContent
                     dismissLoading()
                 }
                 Status.ERROR -> {
