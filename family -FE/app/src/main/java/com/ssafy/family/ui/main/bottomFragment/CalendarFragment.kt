@@ -77,7 +77,7 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initCalendar()
         //월 단위 일정 요청결과 옵저버
         calendarViewModel.getMonthRequestLiveData.observe(requireActivity()){
             when (it.status) {
@@ -98,7 +98,9 @@ class CalendarFragment : Fragment() {
                         }
                     }
                     dismissMonthLoading()
-                    initCalendar()
+
+                    selectDate(today)
+                    updateAdapterForDate()
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
@@ -207,7 +209,12 @@ class CalendarFragment : Fragment() {
 
         //달력 스크롤 리스너
         binding.calendar.monthScrollListener = {
-            selectDate(it.yearMonth.atDay(1))
+            if(it.yearMonth.month==today.month){
+                selectDate(today)
+                updateAdapterForDate()
+            }else{
+                selectDate(it.yearMonth.atDay(1))
+            }
         }
 
         //달력 이전 달, 다음 달 탐색 버튼
