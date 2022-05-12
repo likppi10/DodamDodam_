@@ -34,7 +34,7 @@
     <string name="album_search">검색</string>
 
     <string name="setting_info_edit">개인정보 변경</string>
-    <string name="setting_status_edit">내 상태 및 가족 사진 변경</string>
+    <string name="setting_status_edit">가족 사진 변경</string>
     <string name="setting_family_code">그룹 코드</string>
     <string name="setting_exit_group">그룹 나가기</string>
     <string name="setting_logout">로그아웃</string>

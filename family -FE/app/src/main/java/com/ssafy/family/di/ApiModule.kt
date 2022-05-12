@@ -126,6 +126,12 @@ object ApiModule {
     fun provideMainFamilyApiService(retrofit: Retrofit): MainFamilyAPI {
         return retrofit.create(MainFamilyAPI::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideSettingApiService(retrofit: Retrofit): SettingAPI {
+        return retrofit.create(SettingAPI::class.java)
+    }
 //    fun initRetrofit() {
 //        val client: OkHttpClient = OkHttpClient.Builder()
 //            .readTimeout(TIME_OUT, TimeUnit.MILLISECONDS)

@@ -93,6 +93,15 @@ object RepositoryModule {
     ): MainEventRepository
             = MainEventRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
 
+    @Singleton
+    @Provides
+    fun provideSettingRepository(
+        apiAPI: SettingAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): SettingRepository
+            = SettingRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
+
 //    @Singleton
 //    @Provides
 //    fun provideRoomRepository(covidDao: CovidDao): RoomRepository = RoomRepositoryImpl(covidDao)
