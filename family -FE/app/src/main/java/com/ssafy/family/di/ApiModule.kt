@@ -6,6 +6,7 @@ import com.example.covid19_map.data.remote.url.Url.BASE_URL
 import com.ssafy.family.config.AddCookiesInterceptor
 import com.ssafy.family.config.ReceivedCookiesInterceptor
 import com.ssafy.family.config.XAccessTokenInterceptor
+import com.ssafy.family.data.remote.api.*
 import com.ssafy.family.data.remote.api.AccountAPI
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.api.CalendarAPI
@@ -104,6 +105,12 @@ object ApiModule {
 
     @Singleton
     @Provides
+    fun provideStatusApiService(retrofit: Retrofit): StatusAPI {
+        return retrofit.create(StatusAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun provideMainEventApiService(retrofit: Retrofit): MainEventAPI {
         return retrofit.create(MainEventAPI::class.java)
     }
@@ -118,6 +125,12 @@ object ApiModule {
     @Provides
     fun provideMainFamilyApiService(retrofit: Retrofit): MainFamilyAPI {
         return retrofit.create(MainFamilyAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideWishtreeApiService(retrofit: Retrofit): WishtreeAPI {
+        return retrofit.create(WishtreeAPI::class.java)
     }
 //    fun initRetrofit() {
 //        val client: OkHttpClient = OkHttpClient.Builder()

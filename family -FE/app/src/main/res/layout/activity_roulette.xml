@@ -24,13 +24,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="10dp"
-        android:elevation="20dp"
         android:background="@drawable/box_roulette"
+        android:clipToOutline="true"
+        android:elevation="20dp"
         android:fontFamily="@font/spoqahansans"
         android:gravity="center_horizontal|center_vertical"
-        android:clipToOutline="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,25 +52,24 @@
         android:id="@+id/roulette_allow"
         android:layout_width="74dp"
         android:layout_height="61dp"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="124dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/roulette_box1"
         app:srcCompat="@drawable/ic_baseline_arrow_downward_24" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="72dp"
         android:elevation="50dp"
         android:text="당번 뽑기"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/roulette_allow"
+        app:layout_constraintEnd_toEndOf="@+id/roulette_box1"
+        app:layout_constraintStart_toStartOf="@+id/roulette_box1"
+        app:layout_constraintTop_toTopOf="@+id/roulette_box1" />
 
     <ImageView
         android:id="@+id/roulette_family_add"
@@ -97,5 +96,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roulette_allow"
         app:layout_constraintVertical_bias="0.423" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

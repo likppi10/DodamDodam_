@@ -1,16 +1,15 @@
 package com.ssafy.family.di
 
 import com.google.firebase.database.FirebaseDatabase
+import com.ssafy.family.data.remote.api.*
+import com.ssafy.family.data.repository.*
 import com.ssafy.family.data.remote.api.AccountAPI
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.api.CalendarAPI
 import com.ssafy.family.data.remote.api.MainFamilyAPI
-import com.ssafy.family.data.repository.*
 import com.ssafy.family.data.remote.api.AlbumAPI
 import com.ssafy.family.data.remote.api.MainEventAPI
-import com.ssafy.family.data.repository.*
 import com.ssafy.family.data.remote.api.ChattingAPI
-import com.ssafy.family.data.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,6 +68,15 @@ object RepositoryModule {
 
     @Singleton
     @Provides
+    fun provideStatusRepository(
+        apiAPI: StatusAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): StatusRepository
+            = StatusRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
+
+    @Singleton
+    @Provides
     fun provideMainFamilyRepository(
         mainFamilyAPI: MainFamilyAPI,
         @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
@@ -84,6 +92,15 @@ object RepositoryModule {
         @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
     ): MainEventRepository
             = MainEventRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
+
+    @Singleton
+    @Provides
+    fun provideWishtreeRepository(
+        apiAPI: WishtreeAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): WishtreeRepository
+            = WishtreeRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
 
 //    @Singleton
 //    @Provides

@@ -1,19 +1,26 @@
 package com.ssafy.family.ui.home
 
+
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.req.SignUpReq
 import com.ssafy.family.databinding.FragmentSignBinding
+import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.InputValidUtil
 import com.ssafy.family.util.Status
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class SignFragment : Fragment() {
     lateinit var binding: FragmentSignBinding
     private var checkId = false
@@ -95,7 +102,7 @@ class SignFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(),it.message?:"서버 에러", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(),ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -151,11 +158,12 @@ class SignFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), it.message?:"서버 에러", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
     private fun setLoading() {
         binding.progressBarLoginFLoading.visibility = View.VISIBLE
     }

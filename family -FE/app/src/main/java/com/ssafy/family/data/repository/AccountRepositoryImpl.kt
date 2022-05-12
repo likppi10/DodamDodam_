@@ -8,6 +8,7 @@ import com.ssafy.family.data.remote.req.LoginReq
 import com.ssafy.family.data.remote.req.SignUpReq
 import com.ssafy.family.data.remote.req.findIdReq
 import com.ssafy.family.data.remote.res.LoginRes
+import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.remote.res.RefreshTokenRes
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Resource
@@ -186,4 +187,20 @@ class AccountRepositoryImpl(
             }
         }
 
+    override suspend fun getMainMission(): Resource<MissionRes> =
+        withContext(ioDispatcher) {
+            try {
+                val response = api.getMainMission()
+                when {
+                    response.isSuccessful -> {
+                        Resource.success(response.body()!!)
+                    }
+                    else -> {
+                        Resource.error(null, response.message())
+                    }
+                }
+            } catch (e: Exception) {
+                Resource.error(null, "서버와 연결오류")
+            }
+    }
 }

@@ -14,39 +14,36 @@
         android:allowBackup="true"
         android:icon="@drawable/main_logo"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/main_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Family"
-        android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true">
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.wishtree.WishTreeActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.status.StatusActivity"
             android:exported="false" />
         <activity
             android:name=".ui.startsetting.StartSettingActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".ui.album.AlbumActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".ui.chagephoto.ChangePhotoActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".ui.roulette.RouletteActivity"
             android:exported="false" />
-         <activity
-             android:name=".ui.schedule.ScheduleActivity"
-             android:exported="true"
-             android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.schedule.ScheduleActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="true">
@@ -56,6 +53,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".data.FcmService"
             android:exported="false">

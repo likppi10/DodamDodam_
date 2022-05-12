@@ -69,7 +69,7 @@ public class FamilyController {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
     @PostMapping(value = "/join", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CommonResult joinFamily(
+    public SingleResult<FamilyIdResDto> joinFamily(
             @ModelAttribute
             @Valid FamilyJoinReqDto familyRequest,
             Authentication authentication,
@@ -87,7 +87,10 @@ public class FamilyController {
         Family family = familyService.getFamily(familyRequest.getFamilyId());
         String[] imageInfo = profileService.enrollImage(familyRequest.getImage(), request).split("#");
         familyService.createProfileForJoin(family, user, familyRequest, imageInfo);
-        return responseService.getSuccessResult("그룹 가입 완료");
+        FamilyIdResDto res = FamilyIdResDto.builder()
+                .familyId(family.getId())
+                .build();
+        return responseService.getSingleResult(res);
     }
 
     @Operation(summary = "가족 코드 검사", description = "<strong>가족 코드<strong>를 받아 가족 id를 조회한다.",
@@ -109,7 +112,8 @@ public class FamilyController {
             })
     @GetMapping(value = "/code")
     public SingleResult<FamilyCodeResDto> getFamilyCode(Authentication authentication) {
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         FamilyCodeResDto res = FamilyCodeResDto.builder()
                 .code(family.getCode())
                 .build();
@@ -120,11 +124,12 @@ public class FamilyController {
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
-    @PutMapping(value = "/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult updateFamilyPicture(
             @RequestParam(value = "picture") MultipartFile picture, Authentication authentication, HttpServletRequest request) {
 
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         String path = request.getServletContext().getRealPath("");
         familyService.updateFamilyPicture(family, picture, path);
         return responseService.getSuccessResult();
@@ -136,7 +141,8 @@ public class FamilyController {
             })
     @GetMapping(value = "/picture")
     public SingleResult<FamilyPictureResDto> getFamilyPicture(Authentication authentication) {
-        Family family = familyService.fromUserIdToFamily(authentication);
+        Long userPk = Long.parseLong(authentication.getName());
+        Family family = familyService.fromUserIdToFamily(userPk);
         String picture = family.getPicture();
         FamilyPictureResDto res = FamilyPictureResDto.builder()
                 .picture(picture)

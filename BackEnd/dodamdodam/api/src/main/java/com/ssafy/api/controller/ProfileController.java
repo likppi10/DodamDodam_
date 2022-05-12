@@ -149,4 +149,16 @@ public class ProfileController {
 
         //emotion 출력.
     }
+    @Operation(summary = "프로필 삭제", description = "<strong>프로필 삭제</strong>",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @DeleteMapping(value = "/delete")
+    public CommonResult deleteProfile(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        profileService.deleteProfile(userPk);
+        return responseService.getSuccessResult();
+    }
+
 }

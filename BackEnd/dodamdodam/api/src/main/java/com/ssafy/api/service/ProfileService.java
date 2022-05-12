@@ -7,6 +7,8 @@ import com.ssafy.core.dto.req.StatusReqDto;
 import com.ssafy.core.dto.res.ChattingMemberResDto;
 import com.ssafy.core.dto.res.MyProfileResDto;
 import com.ssafy.core.dto.res.TodayConditionResDto;
+import com.ssafy.core.dto.res.MainProfileResDto;
+import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Profile;
 import com.ssafy.core.exception.CustomException;
 import com.ssafy.core.exception.ErrorCode;
@@ -38,6 +40,7 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final FileService fileService;
+    private final MainService mainService;
     private final Random random = new Random();
     final Map<String, String[][]> missionList = MissionList.missionList;
 
@@ -285,5 +288,16 @@ public class ProfileService {
                 .birthday(birthday)
                 .imagePath(myProfile.getImagePath())
                 .build();
+    }
+
+    @Transactional
+    public void deleteProfile(long userPk){
+        Profile profile = findProfileByUserPk(userPk);
+        List<MainProfileResDto> familyProfileList = mainService.getProfileList(userPk);
+        if(familyProfileList.isEmpty()){
+            Family family = familyRepository.findFamilyByUserPk(userPk);
+            familyRepository.delete(family);
+        }
+        profileRepository.delete(profile);
     }
 }

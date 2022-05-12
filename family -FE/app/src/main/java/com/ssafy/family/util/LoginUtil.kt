@@ -64,4 +64,12 @@ object LoginUtil {
             UserInfo(accessToken!!, refreshToken!!, name!!, profileId!!, familyId!!)
         }
     }
+
+    fun setFamilyId(id: String) {
+        preferences.setString(FAMILY_ID, id)
+    }
+
+    fun getFamilyId(): String? {
+        return preferences.getString(FAMILY_ID)
+    }
 }
