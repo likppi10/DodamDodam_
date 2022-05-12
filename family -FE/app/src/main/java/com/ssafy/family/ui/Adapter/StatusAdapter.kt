@@ -37,8 +37,12 @@ class StatusAdapter(private val context: Context) :
     inner class ViewHolder(val binding: ItemFamilyStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FamilyProfile) {
-            Glide.with(itemView).load(item.imagePath).into(binding.familyProfileImage)
-
+            if (item.imagePath.isNullOrEmpty()) {
+                // TODO: 디폴트이미지
+                Glide.with(itemView).load("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/crying_1651797037512.png").into(binding.familyProfileImage)
+            } else {
+                Glide.with(itemView).load(item.imagePath).into(binding.familyProfileImage)
+            }
             if (item.emotion.isNullOrEmpty()) {
                 Glide.with(itemView)
                     .load("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/crying_1651797037512.png")
