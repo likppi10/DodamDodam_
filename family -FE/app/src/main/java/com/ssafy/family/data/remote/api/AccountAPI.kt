@@ -6,6 +6,7 @@ import com.ssafy.family.data.remote.req.LoginReq
 import com.ssafy.family.data.remote.req.SignUpReq
 import com.ssafy.family.data.remote.req.findIdReq
 import com.ssafy.family.data.remote.res.LoginRes
+import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.remote.res.RefreshTokenRes
 import retrofit2.Response
 import retrofit2.http.*
@@ -34,4 +35,7 @@ interface AccountAPI {
 
     @POST("/api/user/refresh")
     suspend fun makeRefreshToken(@Header("X-AUTH-REFRESH-TOKEN") refreshToken:String):Response<RefreshTokenRes>
+
+    @GET("/api/main/mission")
+    suspend fun getMainMission(): Response<MissionRes>
 }

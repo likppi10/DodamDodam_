@@ -1,4 +1,4 @@
-package com.ssafy.api.config.jwt;
+package com.ssafy.api.config;
 
 import com.ssafy.core.entity.User;
 import com.ssafy.core.repository.UserRepository;

@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.core.dto.req.AlarmReqDto;
+import com.ssafy.core.dto.req.CreateSuggestionReqDto;
 import com.ssafy.core.dto.req.SuggestionReactionReqDto;
 import com.ssafy.core.dto.res.*;
 import com.ssafy.core.entity.*;
@@ -39,7 +40,7 @@ public class MainService {
                 .collect(Collectors.toList());
     }
 
-    public void createSuggestion(String text, Long userPk) {
+    public void createSuggestion(CreateSuggestionReqDto request, Long userPk) {
         Family family = familyRepository.findFamilyByUserPk(userPk);
 
         if (family == null) {
@@ -49,7 +50,7 @@ public class MainService {
         if (suggestionRepository.countSuggestionByFamily_Id(family.getId()) < 3) {
             suggestionRepository.save(Suggestion.builder()
                     .family(family)
-                    .text(text)
+                    .text(request.getText())
                     .build());
         } else {
             throw new CustomException(INVALID_REQUEST, "의견제시는 가족당 최대 3개까지 입니다!");
@@ -112,10 +113,10 @@ public class MainService {
             suggestionReactionRepository.save(SuggestionReaction.builder()
                     .profile(profile)
                     .suggestion(suggestion)
-                    .isLike(request.isLike())
+                    .isLike(request.getIsLike())
                     .build());
 
-            if (request.isLike()) {
+            if (request.getIsLike()) {
                 suggestion.updateLikeCount(1);
             } else {
                 suggestion.updateDislikeCount(1);
@@ -123,18 +124,18 @@ public class MainService {
 
             suggestionRepository.save(suggestion);
 
-        } else if (suggestionReaction.getIsLike() != request.isLike()) {
-            suggestionReaction.setIsLike(request.isLike());
+        } else if (suggestionReaction.getIsLike() != request.getIsLike()) {
+            suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            int updateCount = request.isLike() ? +1 : -1;
+            int updateCount = request.getIsLike() ? +1 : -1;
             suggestion.updateLikeCount(updateCount);
             suggestion.updateDislikeCount(updateCount * -1);
 
             suggestionRepository.save(suggestion);
         } else {
             suggestionReactionRepository.delete(suggestionReaction);
-            if (request.isLike()) {
+            if (request.getIsLike()) {
                 suggestion.updateLikeCount(-1);
             } else {
                 suggestion.updateDislikeCount(-1);

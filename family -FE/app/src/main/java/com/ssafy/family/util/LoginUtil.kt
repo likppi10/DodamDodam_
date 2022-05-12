@@ -68,4 +68,8 @@ object LoginUtil {
     fun setFamilyId(id: String) {
         preferences.setString(FAMILY_ID, id)
     }
+
+    fun getFamilyId(): String? {
+        return preferences.getString(FAMILY_ID)
+    }
 }

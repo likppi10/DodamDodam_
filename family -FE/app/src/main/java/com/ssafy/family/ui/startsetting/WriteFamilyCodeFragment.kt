@@ -64,7 +64,7 @@ class WriteFamilyCodeFragment : Fragment() {
         // 유효성 검사
         binding.writeFamilyCodeInputText.addTextChangedListener {
             val input = it.toString()
-            if (InputValidUtil.isValidId(input)) {
+            if (InputValidUtil.isValidFamilyCode(input)) {
                 dismissErrorOnFamilyCode()
             } else {
                 setErrorOnFamilyCode()

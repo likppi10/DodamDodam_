@@ -2,6 +2,8 @@ package com.ssafy.api.controller;
 
 import com.ssafy.core.dto.req.ProfileReqDto;
 import com.ssafy.core.dto.req.StatusReqDto;
+import com.ssafy.core.dto.res.MyProfileResDto;
+import com.ssafy.core.dto.res.TodayConditionResDto;
 import com.ssafy.core.entity.Profile;
 import com.ssafy.api.service.ProfileService;
 import com.ssafy.api.service.UserService;
@@ -92,21 +94,6 @@ public class ProfileController {
         return responseService.getSuccessResult();
     }
 
-//    @Operation(summary = "미션 등록", notes = "<strong>미션 등록</strong>",
-//            parameters = {
-//                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
-//            })
-//    @PatchMapping("/mission")
-//    public CommonResult updateMission(@RequestBody @Valid MissionReqDto missionReqDto, Authentication authentication) {
-//        String token = jwtTokenProvider.resolveToken(request);
-//        String userId = jwtTokenProvider.getUserId(token);
-//        Profile mission = profileService.enrollMission(userId, missionReqDto.getMissionContent());
-//        profileService.enrollProfile(mission);
-//
-//        return responseService.getSuccessResult();
-//    }
-
-
     @Operation(summary = "상태 수정", description = "<strong>상태 수정</strong>",
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
@@ -137,16 +124,41 @@ public class ProfileController {
         return responseService.getSingleResult(imagePath);
     }
 
-    @Operation(summary = "오늘의 한마디 조회", description = "<strong>오늘의 한마디 조회</strong>",
+    @Operation(summary = "본인 상태 정보 조회 조회", description = "<strong>본인 상태 정보(오늘의 한마디, 이모션) 조회</strong>",
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
-    @GetMapping(value = "/comment")
-    public SingleResult<String> getComment(Authentication authentication) {
+    @GetMapping(value = "/condition")
+    public SingleResult<TodayConditionResDto> getTodayCondition(Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-        Profile profile = profileService.findProfileByUserPk(userPk);
-        return responseService.getSingleResult(profile.getComment());
+
+        return responseService.getSingleResult(profileService.getTodayCondition(userPk));
+    }
+
+    @Operation(summary = "본인 프로필 정보 조회 조회", description = "<strong>본인 프로필 정보 조회</strong>",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @GetMapping(value = "/myprofile")
+    public SingleResult<MyProfileResDto> getMyProfile(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+
+        return responseService.getSingleResult(profileService.getMyProfile(userPk));
+
+        //emotion 출력.
+    }
+    @Operation(summary = "프로필 삭제", description = "<strong>프로필 삭제</strong>",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @DeleteMapping(value = "/delete")
+    public CommonResult deleteProfile(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        profileService.deleteProfile(userPk);
+        return responseService.getSuccessResult();
     }
 
 }

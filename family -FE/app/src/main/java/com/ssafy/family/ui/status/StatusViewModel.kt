@@ -78,8 +78,6 @@ class StatusViewModel @Inject constructor(private val statusRepository: StatusRe
         _editFamilyPictureResponse.postValue(Resource.loading(null))
 //        _editFamilyPictureResponse.postValue(statusRepository.editFamilyPicture(imageFile))
         val res = statusRepository.editFamilyPicture(imageFile)
-        Log.d(TAG, "StatusViewModel - editFamilyPicture() imageFile : $imageFile")
-        Log.d(TAG, "StatusViewModel - editFamilyPicture() res : $res")
         _editFamilyPictureResponse.postValue(res)
     }
 

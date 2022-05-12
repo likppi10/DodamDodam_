@@ -1,6 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.config.jwt.JwtProvider;
+import com.ssafy.api.config.JwtProvider;
 import com.ssafy.core.dto.req.FcmTokenReqDto;
 import com.ssafy.core.dto.req.FindIdReqDto;
 import com.ssafy.core.dto.req.UserInfoReqDto;
@@ -17,10 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import static com.ssafy.core.exception.ErrorCode.*;
@@ -36,12 +35,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
+    @Transactional(readOnly = true)
     public User findByUserPk(Long userPk) {
         return userRepository.findUserByUserPk(userPk)
                 .orElseThrow(() -> new CustomException(USER_DOESNT_EXIST));
     }
 
-    @Transactional()
+    @Transactional
     public void signUp(SignUpReqDto singUpRequest) {
 
         this.checkExistId(singUpRequest.getUserId());
@@ -53,43 +53,43 @@ public class UserService {
                 .build());
     }
 
+    @Transactional(readOnly = true)
     public void checkExistId(String userId) {
         if (userRepository.existsUserByUserId(userId)) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_ID);
         }
     }
 
-    public String findUserIdWithUserInfo(FindIdReqDto request) {
-        return userRepository.findUserIdByUserInfo(
+    @Transactional(readOnly = true)
+    public String getUserIdWithUserInfo(FindIdReqDto request) {
+        String userId = userRepository.findUserIdByUserInfo(
                 request.getName(),
                 LocalDate.parse(request.getBirthday()),
                 request.getFamilyCode()
         );
+        if(userId == null){
+            throw new CustomException(USER_DOESNT_EXIST);
+        }
+        return userId;
     }
 
+    @Transactional
     public void updateBirthdayWithUserPk(Long userPk, String birthday) {
 
         User user = this.findByUserPk(userPk);
 
-        String[] list = birthday.split("-");
-
-        try {
-            if (list[0].length() != 4 || list[1].length() != 2 || list[2].length() != 2) {
-                throw new CustomException(ErrorCode.INVALID_REQUEST);
-            }
-            user.updateBirthday(LocalDate.of(Integer.parseInt(list[0]), Integer.parseInt(list[1]), Integer.parseInt(list[2])));
-        } catch (NumberFormatException | DateTimeException e) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST);
-        }
+        user.updateBirthday(LocalDate.parse(birthday));
 
         userRepository.save(user);
     }
 
+    @Transactional
     public void updateFcmToken(User user, FcmTokenReqDto fcmReq) {
         user.setFcmToken(fcmReq.getFcmToken());
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public Long getFamilyIdByUserPk(Long userPk) {
         Long familyId = familyRepository.findFamilyIdByUserPK(userPk);
         if (familyId == null) {
@@ -114,7 +114,8 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
 
-        SignInResDto userInfo = profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
+        SignInResDto userInfo =
+                profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
 
         if (userInfo == null) {
             userInfo = new SignInResDto();
@@ -152,6 +153,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public void updatePassword(UserInfoReqDto request) {
         User user = userRepository.findUserByUserId(request.getUserId())
                 .orElseThrow(()-> new CustomException(USER_DOESNT_EXIST));

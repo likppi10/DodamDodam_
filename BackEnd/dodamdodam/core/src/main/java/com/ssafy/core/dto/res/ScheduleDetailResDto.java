@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Schema(name = "ScheduleDetail Response")
 public class ScheduleDetailResDto {
     @Schema(description = "id", example = "1")
-    private long scheduleId;
+    private Long scheduleId;
 
     @Schema(description = "제목", example = "엄마 생일파티")
     private String title;

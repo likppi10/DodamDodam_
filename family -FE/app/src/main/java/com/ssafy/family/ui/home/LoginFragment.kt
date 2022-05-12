@@ -25,6 +25,7 @@ import com.ssafy.family.databinding.FragmentLoginBinding
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.main.MainActivity.Companion.channel_id
 import com.ssafy.family.ui.startsetting.StartSettingActivity
+import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -83,30 +84,16 @@ class LoginFragment : Fragment() {
             parentFragmentManager.beginTransaction().replace(R.id.home_frame, SignFragment())
                 .commit()
         }
-        loginViewModel.loginResult.observe(requireActivity()) {
-            when (it) {
-                UiMode.SUCCESS -> {
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    requireActivity().finish()
-                }
-                else -> {
-                    Toast.makeText(requireContext(), "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+
         loginViewModel.loginRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
-
                     LoginUtil.setAutoLogin(loginViewModel.isAutoLogin)
                     LoginUtil.saveUserInfo(it.data!!.dataSet!!)
                     Log.d("dddd", "initView: " + LoginUtil.getUserInfo())
                     // TODO: 에러나는지 확인 attach
                     dismissLoading()
                     getFCM()
-//                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
-//                    requireActivity().finish()
-
                 }
                 Status.EXPIRED->{
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
@@ -123,23 +110,6 @@ class LoginFragment : Fragment() {
                 }
             }
 
-        }
-        loginViewModel.baseResponse.observe(requireActivity()) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    startActivity(Intent(requireContext(), StartSettingActivity::class.java))
-                    requireActivity().finish()
-                }
-                Status.ERROR -> {
-
-                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
-                    dismissLoading()
-                }
-                Status.LOADING -> {
-                    setLoading()
-                }
-            }
         }
     }
 
