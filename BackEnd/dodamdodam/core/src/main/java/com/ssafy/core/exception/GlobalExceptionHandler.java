@@ -2,9 +2,12 @@ package com.ssafy.core.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,6 +25,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.INVALID_REQUEST.getStatus()));
     }
+
+    @ExceptionHandler({HttpMessageNotReadableException.class,
+            MethodArgumentTypeMismatchException.class,
+            MissingPathVariableException.class})
+    public ResponseEntity<ErrorResponse> handleCustomException() {
+
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_REQUEST);
+
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.INVALID_REQUEST.getStatus()));
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException() {
