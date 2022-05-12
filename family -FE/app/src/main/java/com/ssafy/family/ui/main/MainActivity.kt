@@ -4,11 +4,10 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -16,7 +15,6 @@ import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.databinding.ActivityMainBinding
 import com.ssafy.family.ui.main.bottomFragment.*
-import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.util.LoginUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val SP_NAME = "fcm_message"
-
+    var pressedTime =0
     companion object {
         // Notification Channel ID
         const val channel_id = "FAMILY"
@@ -93,5 +91,22 @@ class MainActivity : AppCompatActivity() {
         val type = object : TypeToken<ArrayList<String>>() {}.type
         val obj: ArrayList<String> = gson.fromJson(json, type) ?: ArrayList()
         return obj
+    }
+
+    override fun onBackPressed() {
+        if (pressedTime === 0) {
+            Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
+            pressedTime = System.currentTimeMillis().toInt()
+        } else {
+            val seconds = (System.currentTimeMillis().toInt() - pressedTime)
+            Log.d("ddddd", "onBackPressed: "+seconds)
+            if (seconds > 2000) {
+                Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
+                pressedTime = 0
+            } else {
+                super.onBackPressed()
+            }
+        }
+
     }
 }
