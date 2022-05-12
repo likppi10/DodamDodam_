@@ -58,4 +58,13 @@ public class EventService {
                 .canCreate(canCreate)
                 .build();
     }
+
+    public void updateWishTree(Profile profile, WishTreeReqDto wishListReq, long wishTreeId) {
+        WishTree wishTree = wishTreeRepository.findWishTreeById(wishTreeId);
+        if (wishTree.getProfile().getId() != profile.getId()) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST, "해당 권한이 없습니다.");
+        }
+        wishTree.setContent(wishListReq.getContent());
+        wishTreeRepository.save(wishTree);
+    }
 }

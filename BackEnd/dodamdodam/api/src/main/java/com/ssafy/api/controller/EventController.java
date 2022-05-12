@@ -61,4 +61,20 @@ public class EventController {
         Family family = familyService.fromUserIdToFamily(userPk);
         return responseService.getSingleResult(eventService.getWishTree(profile, family));
     }
+
+    @Operation(summary = "위시 리스트 수정", description = "<strong>위시 리스트</strong>을 수정한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @PatchMapping(value = "/wish-tree/{wishTreeId}")
+    public CommonResult updateWishTree(@PathVariable long wishTreeId,
+                                       @RequestBody
+                                           @io.swagger.v3.oas.annotations.parameters.RequestBody
+                                           @Valid WishTreeReqDto wishListReq,
+                                       Authentication authentication) {
+        Long userPk = Long.parseLong(authentication.getName());
+        Profile profile = profileService.findProfileByUserPk(userPk);
+        eventService.updateWishTree(profile, wishListReq, wishTreeId);
+        return responseService.getSuccessResult();
+    }
 }
