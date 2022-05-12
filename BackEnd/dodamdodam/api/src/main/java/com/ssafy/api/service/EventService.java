@@ -61,10 +61,24 @@ public class EventService {
 
     public void updateWishTree(Profile profile, WishTreeReqDto wishListReq, long wishTreeId) {
         WishTree wishTree = wishTreeRepository.findWishTreeById(wishTreeId);
+        if (wishTree == null) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST, "해당 위시 트리가 없습니다.");
+        }
         if (wishTree.getProfile().getId() != profile.getId()) {
             throw new CustomException(ErrorCode.INVALID_REQUEST, "해당 권한이 없습니다.");
         }
         wishTree.setContent(wishListReq.getContent());
         wishTreeRepository.save(wishTree);
+    }
+
+    public void deleteWishTree(Profile profile, long wishTreeId) {
+        WishTree wishTree = wishTreeRepository.findWishTreeById(wishTreeId);
+        if (wishTree == null) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST, "해당 위시 트리가 없습니다.");
+        }
+        if (wishTree.getProfile().getId() != profile.getId()) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST, "해당 권한이 없습니다.");
+        }
+        wishTreeRepository.delete(wishTree);
     }
 }

@@ -77,4 +77,17 @@ public class EventController {
         eventService.updateWishTree(profile, wishListReq, wishTreeId);
         return responseService.getSuccessResult();
     }
+
+    @Operation(summary = "위시 리스트 삭제", description = "<strong>위시 리스트</strong>을 삭제한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @DeleteMapping(value = "/wish-tree/{wishTreeId}")
+    public CommonResult deleteWishList(@PathVariable long wishTreeId,
+                                       Authentication authentication) {
+        Long userPk = Long.parseLong(authentication.getName());
+        Profile profile = profileService.findProfileByUserPk(userPk);
+        eventService.deleteWishTree(profile, wishTreeId);
+        return responseService.getSuccessResult();
+    }
 }
