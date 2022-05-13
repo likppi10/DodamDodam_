@@ -74,8 +74,19 @@ public class UserController {
              @io.swagger.v3.oas.annotations.parameters.RequestBody
              @Valid UserInfoReqDto signInRequest) {
 
-        return responseService.getSingleResult(userService.signIn(signInRequest));
+        return responseService.getSingleResult(userService.localSignIn(signInRequest));
     }
+
+    @Operation(summary = "소셜 로그인", description = "<strong>소셜 로그인<strong> 한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @PostMapping(value = "/social", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody SingleResult<SignInResDto> socialLogin(@RequestHeader(value = "X-AUTH-TOKEN") String accessToken) {
+
+        return responseService.getSingleResult(userService.socialSignIn(accessToken));
+    }
+
 
     @PostMapping(value = "refresh")
     @Parameters({

@@ -20,7 +20,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
                 .name(customUser.name())
                 .build();
 
-        principal.setAuthority();
+        principal.prePersist();
 
         Authentication auth = new UsernamePasswordAuthenticationToken(principal, customUser.userPk(), principal.getAuthorities());
         context.setAuthentication(auth);

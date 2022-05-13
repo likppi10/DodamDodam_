@@ -78,6 +78,10 @@ project(':api') {
     dependencies {
         implementation project(':core')
 
+        // WebClient
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+        implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+
         //restdocs
         testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
