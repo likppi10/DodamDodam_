@@ -35,6 +35,6 @@ public class ProfileReqDto {
     @Schema(description = "생년월일", required = true, example = "1995-08-20")
     private String birthday;
 
-    @Schema(description = "프로필사진", required = true, example = "")
+    @Schema(description = "프로필사진")
     private MultipartFile multipartFile;
 }
