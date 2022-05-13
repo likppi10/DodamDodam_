@@ -138,7 +138,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void userSignIn_정상입력() throws Exception {
         //given
-        given(userService.signIn(any(UserInfoReqDto.class))).willReturn(defaultSignInResDto);
+        given(userService.localSignIn(any(UserInfoReqDto.class))).willReturn(defaultSignInResDto);
 
         //when
         ResultActions result = mockMvc.perform(
@@ -153,7 +153,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void userSignIn_비밀번호_형식_틀림() throws Exception {
         //given
-        given(userService.signIn(any(UserInfoReqDto.class))).willReturn(defaultSignInResDto);
+        given(userService.localSignIn(any(UserInfoReqDto.class))).willReturn(defaultSignInResDto);
 
         //when
         ResultActions result = mockMvc.perform(
@@ -169,7 +169,7 @@ class UserControllerTest extends ControllerTestSupport {
     @Test
     void userSignIn_아이디_공백() throws Exception {
         //given
-        given(userService.signIn(any(UserInfoReqDto.class))).willReturn(defaultSignInResDto);
+        given(userService.localSignIn(any(UserInfoReqDto.class))).willReturn(defaultSignInResDto);
 
         //when
         ResultActions result = mockMvc.perform(

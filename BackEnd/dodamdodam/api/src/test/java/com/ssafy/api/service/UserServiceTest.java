@@ -260,8 +260,8 @@ class UserServiceTest {
                 .profileId(1L)
                 .build();
 
-        given(userRepository.findUserByUserId(anyString()))
-                .willReturn(Optional.ofNullable(defaultUser));
+        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+                .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(CharSequence.class), anyString()))
                 .willReturn(true);
@@ -277,7 +277,7 @@ class UserServiceTest {
                 .willReturn(expectResDto);
 
         //when
-        SignInResDto actualResDto = userService.signIn(givenReqDto);
+        SignInResDto actualResDto = userService.localSignIn(givenReqDto);
 
         //then
         then(actualResDto.getFamilyId()).isEqualTo(expectResDto.getFamilyId());
@@ -295,12 +295,12 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserByUserId(anyString()))
-                .willReturn(Optional.empty());
+        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+                .willReturn(null);
 
         //when
         final Throwable throwable =
-                catchThrowable(() -> userService.signIn(givenReqDto));
+                catchThrowable(() -> userService.localSignIn(givenReqDto));
 
         //then
         then(throwable).isExactlyInstanceOf(CustomException.class);
@@ -314,8 +314,8 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserByUserId(anyString()))
-                .willReturn(Optional.ofNullable(defaultUser));
+        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+                .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(), anyString()))
                 .willReturn(false);
@@ -323,7 +323,7 @@ class UserServiceTest {
 
         //when
         final Throwable throwable =
-                catchThrowable(() -> userService.signIn(givenReqDto));
+                catchThrowable(() -> userService.localSignIn(givenReqDto));
 
         //then
         then(throwable).isExactlyInstanceOf(CustomException.class);
@@ -337,8 +337,8 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserByUserId(anyString()))
-                .willReturn(Optional.ofNullable(defaultUser));
+        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+                .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(), anyString()))
                 .willReturn(true);
@@ -354,7 +354,7 @@ class UserServiceTest {
                 .willReturn(null);
 
         //when
-        SignInResDto actualResDto = userService.signIn(givenReqDto);
+        SignInResDto actualResDto = userService.localSignIn(givenReqDto);
 
         //then
         then(actualResDto.getFamilyId()).isNull();
