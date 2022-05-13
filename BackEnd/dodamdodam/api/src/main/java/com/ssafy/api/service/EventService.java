@@ -51,11 +51,14 @@ public class EventService {
 
     public WishTreeResDto getWishTree(Profile profile, Family family) {
         List<WishTreeResDto.WishTreeDetail> wishTreeDetailList = wishTreeRepository.findWishTreeListByFamily(family);
-        boolean canCreate;
-        canCreate = wishTreeRepository.findWishTreeByProfile(profile) == null;
+        long myWishPosition = -1;
+        WishTree wishTree = wishTreeRepository.findWishTreeByProfile(profile);
+        if (wishTree != null) {
+            myWishPosition = wishTree.getPosition();
+        }
         return WishTreeResDto.builder()
                 .wishTree(wishTreeDetailList)
-                .canCreate(canCreate)
+                .myWishPosition(myWishPosition)
                 .build();
     }
 

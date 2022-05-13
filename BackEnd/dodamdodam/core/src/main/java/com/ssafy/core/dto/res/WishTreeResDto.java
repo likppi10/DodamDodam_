@@ -14,7 +14,7 @@ import java.util.List;
 public class WishTreeResDto {
 
     @Schema(description = "위시 트리 생성 여부", example = "true")
-    private boolean canCreate;
+    private long myWishPosition;
 
     private List<WishTreeDetail> wishTree;
 
