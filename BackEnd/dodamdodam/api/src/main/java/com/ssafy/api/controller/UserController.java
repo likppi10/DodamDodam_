@@ -81,12 +81,10 @@ public class UserController {
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", required = true, in = HEADER)
             })
-    @PostMapping(value = "/social", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "social", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<SignInResDto> socialLogin(@RequestHeader(value = "X-AUTH-TOKEN") String accessToken) {
         SignInResDto signInResDto = userService.socialSignIn(accessToken);
 
-        System.out.println(signInResDto.getProfileId());
-        System.out.println(signInResDto.getFamilyId());
         return responseService.getSingleResult(signInResDto);
     }
 
