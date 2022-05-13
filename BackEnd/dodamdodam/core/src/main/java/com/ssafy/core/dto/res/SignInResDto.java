@@ -12,9 +12,6 @@ import lombok.*;
 @Schema(name = "SingIn Response")
 public class SignInResDto {
 
-    @Schema(description = "이름", example = "싸피")
-    private String name;
-
     @Schema(description = "엑세스 토큰", example = "SSAFYSSAFY12345")
     private String jwtToken;
 

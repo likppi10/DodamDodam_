@@ -29,7 +29,8 @@ public class UserRepoCustomImpl implements UserRepoCustom {
                 .on(user.userPk.eq(profile.user.userPk))
                 .where(user.name.eq(name)
                         .and(user.birthday.eq(birthday))
-                        .and(profile.family.code.eq(familyCode)))
+                        .and(profile.family.code.eq(familyCode))
+                        .and(user.providerType.eq(ProviderType.LOCAL)))
                 .fetchFirst();
     }
 

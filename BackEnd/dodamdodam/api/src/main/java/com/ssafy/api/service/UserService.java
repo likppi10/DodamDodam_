@@ -176,7 +176,6 @@ public class UserService {
             user = User.builder()
                     .userId(socialUser.getId())
                     .providerType(ProviderType.KAKAO)
-                    .name(socialUser.getProperties().getNickname())
                     .build();
 
             user = userRepository.save(user);
@@ -202,7 +201,6 @@ public class UserService {
 
         userInfo.setJwtToken(token);
         userInfo.setRefreshToken(refreshToken);
-        userInfo.setName(user.getName());
 
         return userInfo;
     }
