@@ -56,7 +56,7 @@ public class ChattingController {
         for (MainProfileResDto pf : familyList) {
             if (me.getId() != pf.getProfileId()) {
                 Profile target = mainService.getProfileByProfilePk(pf.getProfileId());
-                fcmService.sendMessageTo(mainService.getTargetFcmToken(target), "채팅 알림", target.getNickname()+" : "+text);
+                fcmService.sendMessageTo(mainService.getTargetFcmToken(target), "채팅 알림", me.getNickname()+" : "+text);
             }
         }
         return responseService.getSuccessResult();
