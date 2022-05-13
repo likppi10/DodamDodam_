@@ -171,8 +171,6 @@ public class UserService {
         User user = userRepository.findUserByUserIdAndProviderType(socialUser.getId(), ProviderType.KAKAO);
 
         System.out.println(socialUser.getId());
-        System.out.println(user.getUserId());
-        System.out.println(user.getUserPk());
 
         //처음이면 가입시킴.
         if (user == null) {
