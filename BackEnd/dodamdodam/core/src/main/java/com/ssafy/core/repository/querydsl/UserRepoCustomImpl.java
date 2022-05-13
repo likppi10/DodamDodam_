@@ -55,7 +55,7 @@ public class UserRepoCustomImpl implements UserRepoCustom {
     }
 
     @Override
-    public User findUserIdAndProviderType(String userId, ProviderType providerType) {
+    public User findUserByUserIdAndProviderType(String userId, ProviderType providerType) {
         return jpaQueryFactory.select(user)
                 .from(user)
                 .where(user.userId.eq(userId).and(user.providerType.eq(providerType)))

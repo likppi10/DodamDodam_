@@ -14,5 +14,5 @@ public interface UserRepoCustom {
 
     LocalDate findBirthdayByProfileId(Long profileId);
 
-    User findUserIdAndProviderType(String userId, ProviderType providerType);
+    User findUserByUserIdAndProviderType(String userId, ProviderType providerType);
 }
