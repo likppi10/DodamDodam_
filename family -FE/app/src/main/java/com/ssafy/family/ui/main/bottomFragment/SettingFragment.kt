@@ -13,15 +13,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSettingBinding
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.main.MainActivity
+import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.ui.status.StatusActivity
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.LoginUtil.signOut
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +69,8 @@ class SettingFragment : Fragment() {
                 Status.LOADING -> {
                 }
                 Status.EXPIRED -> {
-                    settingViewModel.getFamilyCode()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -89,7 +90,8 @@ class SettingFragment : Fragment() {
                 Status.LOADING -> {
                 }
                 Status.EXPIRED -> {
-                    settingViewModel.getProfileImage()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -106,7 +108,8 @@ class SettingFragment : Fragment() {
                 Status.LOADING -> {
                 }
                 Status.EXPIRED -> {
-                    settingViewModel.exitFamily()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -125,7 +128,8 @@ class SettingFragment : Fragment() {
                 Status.LOADING -> {
                 }
                 Status.EXPIRED -> {
-                    settingViewModel.getStatus()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -151,6 +155,18 @@ class SettingFragment : Fragment() {
         binding.statusView.setOnClickListener {
             val intent = Intent(requireContext(), StatusActivity::class.java)
             intent.putExtra("to", "edit")
+            startActivity(intent)
+        }
+
+        binding.myInfoEditButton.setOnClickListener {
+            val intent = Intent(requireContext(), StartSettingActivity::class.java)
+            intent.putExtra("to", "edit")
+            startActivity(intent)
+        }
+
+        binding.myStatusEditButton.setOnClickListener {
+            val intent = Intent(requireContext(), StatusActivity::class.java)
+            intent.putExtra("to", "change")
             startActivity(intent)
         }
 

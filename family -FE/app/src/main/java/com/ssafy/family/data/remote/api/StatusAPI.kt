@@ -12,18 +12,12 @@ import retrofit2.http.*
 interface StatusAPI {
     @GET("/api/family/picture")
     suspend fun getFamilyPicture(): Response<FamilyPictureRes>
-//    @GET("/api/profile/comment")
-//    suspend fun getMyStatus(): Response<StatusRes>
+
     @PATCH("/api/profile/status")
     suspend fun editMyStatus(@Body editStatusReq: EditStatusReq): Response<BaseResponse>
-    //@Multipart
-    //    @POST("/api/family/join")
-    //    suspend fun joinFamily(
-    //        @PartMap data: HashMap<String, RequestBody>,
-    //        @Part image: MultipartBody.Part?
-    //    ): Response<FamilyRes>
+
     @Multipart
-    @PUT("/api/family/picture")
+    @PATCH("/api/family/picture")
     suspend fun editFamilyPicture(
         @Part picture: MultipartBody.Part?
     ): Response<BaseResponse>

@@ -21,6 +21,8 @@ import com.ssafy.family.data.remote.res.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentChattingBinding
 import com.ssafy.family.ui.Adapter.ChattingAdapter
+import com.ssafy.family.ui.home.LoginViewModel
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.LoginUtil.getUserInfo
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,8 +36,8 @@ import java.util.*
 class ChattingFragment : Fragment() {
 
     private lateinit var binding: FragmentChattingBinding
-
     private val viewModel by activityViewModels<ChatViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     lateinit var chattingAdapter:ChattingAdapter
     val familyCode = getUserInfo()!!.familyId.toString()
@@ -96,6 +98,11 @@ class ChattingFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -54,9 +54,9 @@ class MainEventRepositoryImpl(
         }
     }
 
-    override suspend fun addOpinion(text: String): Resource<BaseResponse>  = withContext(ioDispatcher){
+    override suspend fun addOpinion(opinionReq: OpinionReq): Resource<BaseResponse>  = withContext(ioDispatcher){
         try {
-            val response = api.addOpinion(text)
+            val response = api.addOpinion(opinionReq)
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)

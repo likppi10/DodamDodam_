@@ -20,9 +20,11 @@ import com.ssafy.family.data.remote.res.Opinion
 import com.ssafy.family.ui.Adapter.TodayScheduleAdapter
 import com.ssafy.family.databinding.FragmentEventBinding
 import com.ssafy.family.ui.Adapter.OpinionAdapter
+import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.roulette.RouletteActivity
 import com.ssafy.family.ui.schedule.ScheduleActivity
 import com.ssafy.family.util.CalendarUtil
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -33,6 +35,8 @@ class EventFragment : Fragment() {
 
     private lateinit var binding: FragmentEventBinding
     private val eventViewModel by activityViewModels<EventViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
+
     private var eventsAdapter: TodayScheduleAdapter? = null
     private var opinionAdapter: OpinionAdapter? = null
     private var scheduleDayList = mutableListOf<ScheduleInfo>()
@@ -123,6 +127,11 @@ class EventFragment : Fragment() {
                 Status.LOADING -> {
                     setScheduleLoading()
                 }
+                Status.EXPIRED -> {
+                    dismissScheduleLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -144,6 +153,11 @@ class EventFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissOpinionLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -167,6 +181,11 @@ class EventFragment : Fragment() {
                 Status.LOADING -> {
                     setOpinionLoading()
                 }
+                Status.EXPIRED -> {
+                    dismissOpinionLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -183,6 +202,11 @@ class EventFragment : Fragment() {
                 Status.LOADING -> {
                     setOpinionLoading()
                 }
+                Status.EXPIRED -> {
+                    dismissOpinionLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -198,6 +222,11 @@ class EventFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissOpinionLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.ssafy.family.ui.status
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -21,7 +20,6 @@ import com.ssafy.family.databinding.FragmentEditStatusBinding
 import com.ssafy.family.ui.Adapter.StatusEmojiAdapter
 import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.util.Constants.TAG
-import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +33,6 @@ class EditStatusFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -134,7 +131,6 @@ class EditStatusFragment : Fragment() {
                     startActivity(Intent(requireContext(), MainActivity::class.java))
                     requireActivity().finishAffinity()
                 }
-
             }
         }
     }

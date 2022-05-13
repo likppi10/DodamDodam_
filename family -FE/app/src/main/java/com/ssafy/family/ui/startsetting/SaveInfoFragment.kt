@@ -2,13 +2,11 @@ package com.ssafy.family.ui.startsetting
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,17 +17,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.req.FamilyReq
+import com.ssafy.family.data.remote.res.MyProfile
 import com.ssafy.family.databinding.FragmentSaveInfoBinding
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
 import com.ssafy.family.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import kotlin.reflect.typeOf
 
 @AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
@@ -45,7 +44,6 @@ class SaveInfoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -59,8 +57,7 @@ class SaveInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 상단 텍스트 수정
-        (activity as StartSettingActivity).changeTopMessage("'나'를 저장하세요!")
+
         // 스피너(다이얼로그 형) 한개짜리 설정
         val Data = resources.getStringArray(R.array.family_role)
         val Adapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item, Data)
@@ -129,6 +126,7 @@ class SaveInfoFragment : Fragment() {
         imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == RESULT_OK) {
+                    Log.d(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx : ${ it.data?.data}")
                     imageUri = it.data?.data
                     Glide.with(activity as StartSettingActivity)
                         .load(imageUri)
@@ -149,15 +147,63 @@ class SaveInfoFragment : Fragment() {
         // 가족 생성
         binding.saveInfoMoveNextBtn.setOnClickListener {
             if (isValidForm()) {
-                val viewModelFamilyId = familyViewModel.checkFamilyCodeRes.value?.data?.dataset?.familyId
-                // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
-                if (viewModelFamilyId is Int) {
-                    Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
-                    joinFamily(role, viewModelFamilyId)
-                } else { // 바로 온 경우 가족 및 프로필 생성
-                    Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
-                    createFamily(role)
+                if(requireActivity().intent.getStringExtra("to") == "edit"){
+                    updateProfile(role)
+                }else{
+                    val viewModelFamilyId = familyViewModel.checkFamilyCodeRes.value?.data?.dataset?.familyId
+                    // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
+                    if (viewModelFamilyId is Int) {
+                        Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
+                        joinFamily(role, viewModelFamilyId)
+                    } else { // 바로 온 경우 가족 및 프로필 생성
+                        Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
+                        createFamily(role)
+                    }
                 }
+            }
+        }
+
+        if(requireActivity().intent.getStringExtra("to") == "edit"){
+            familyViewModel.getMyProfile()
+            binding.saveInfoMoveNextBtn.text = "수정하기"
+            // 상단 텍스트 수정
+            (activity as StartSettingActivity).changeTopMessage("'나'를 수정하세요!")
+        }else{
+            // 상단 텍스트 수정
+            (activity as StartSettingActivity).changeTopMessage("'나'를 저장하세요!")
+        }
+
+        // LiveData observe
+        familyViewModel.getMyProfileRes.observe(requireActivity()) {
+            if (it.status == Status.SUCCESS){
+                Log.d(TAG, "datadatadatadata: ${it.data!!.data!!}")
+                setMyProfile(it.data.data!!)
+            } else if(it.status == Status.ERROR) {
+                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // LiveData observe
+        familyViewModel.familyResponseLiveData.observe(requireActivity()) {
+            if (it.status == Status.SUCCESS){
+                // 가족 생성 요청 성공 시 sharedpreference에 familyId 저장
+                LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
+                // 토스트메시지 띄우고 화면 이동
+                Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(requireContext(), StatusActivity::class.java))
+                requireActivity().finish()
+            } else if(it.status == Status.ERROR) {
+                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // LiveData observe
+        familyViewModel.updateMyProfileRes.observe(requireActivity()) {
+            if (it.status == Status.SUCCESS){
+                Toast.makeText(requireContext(), "오늘의 상태 수정 완료!", Toast.LENGTH_SHORT).show()
+                requireActivity().finish()
+            } else if(it.status == Status.ERROR) {
+                Toast.makeText(requireContext(), "상태 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
         // 닉네임 유효성 검사 통과 시 에러메시지 삭제
@@ -175,20 +221,62 @@ class SaveInfoFragment : Fragment() {
             }
         }
 
-        // LiveData observe
-        familyViewModel.familyResponseLiveData.observe(requireActivity()) {
-            if (it.status == Status.SUCCESS){
-                // 가족 생성 요청 성공 시 sharedpreference에 familyId 저장
-                LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
-                // 토스트메시지 띄우고 화면 이동
-                Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(requireContext(), StatusActivity::class.java))
-                requireActivity().finish()
-            } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+    } // initView
+
+    private fun setMyProfile(data: MyProfile) {
+        binding.saveInfoInputNickname.setText(data.nickname)
+        var birth = data.birthday.split("-")
+        binding.saveInfoInputBirthday.setText(birth[0]+birth[1]+birth[2])
+        role = data.role
+
+        if(data.imagePath == null){
+            Glide.with(binding.saveInfoProfileImage).load(R.drawable.image_fail).into(binding.saveInfoProfileImage)
+        }else{
+            Glide.with(binding.saveInfoProfileImage).load(data.imagePath).into(binding.saveInfoProfileImage)
+        }
+        if(role == "아빠"){
+            binding.saveInfoSpinner.setSelection(0)
+        }else if(role == "엄마"){
+            binding.saveInfoSpinner.setSelection(1)
+        }else{
+            var roleDetail = role.split(" ")
+
+            if(roleDetail[0] == "딸"){
+                spinnerToggle(3)
+                binding.saveInfoSpinnerNumber.setSelection(0)
+                binding.saveInfoSpinnerRole.setSelection(3)
+            }else if(roleDetail[0] == "아들"){
+                spinnerToggle(2)
+                binding.saveInfoSpinnerNumber.setSelection(0)
+                binding.saveInfoSpinnerRole.setSelection(2)
+            }else{
+                if(roleDetail[1] == "딸"){
+                    spinnerToggle(3)
+                    binding.saveInfoSpinnerRole.setSelection(3)
+                }else if(roleDetail[1] == "아들"){
+                    spinnerToggle(2)
+                    binding.saveInfoSpinnerRole.setSelection(2)
+                }
+                when {
+                    roleDetail[0] == "넷째" -> {
+                        binding.saveInfoSpinnerNumber.setSelection(4)
+                    }
+                    roleDetail[0] == "셋째" -> {
+                        binding.saveInfoSpinnerNumber.setSelection(3)
+                    }
+                    roleDetail[0] == "둘째" -> {
+                        binding.saveInfoSpinnerNumber.setSelection(2)
+                    }
+                    roleDetail[0] == "첫째" -> {
+                        binding.saveInfoSpinnerNumber.setSelection(1)
+                    }
+                    else -> {
+                        binding.saveInfoSpinnerNumber.setSelection(0)
+                    }
+                }
             }
         }
-    } // initView
+    }
 
     // 데이터 유효성 검사
     private fun isValidForm(): Boolean {
@@ -230,6 +318,20 @@ class SaveInfoFragment : Fragment() {
 
     private fun dismissErrorOnBirthday() {
         binding.textInputLayoutSaveInfoBirthday.error = null
+    }
+
+    private fun updateProfile(role: String) {
+        val selectedRole = role.trim()
+        val nickname = binding.saveInfoInputNickname.text.toString()
+        val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
+//        familyViewModel.path = imageUri
+        var imageFile: File? = null
+        Log.d(TAG, "SaveInfoFragment - createFamily() imageUri : $imageUri ")
+        if (imageUri != null) {
+            imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+        }
+
+        familyViewModel.updateMyProfile(FamilyReq(selectedRole, nickname, birthday), imageFile)
     }
 
     // ***중요*** 네트워크(profile 데이터 보내고 familyId 받아오는 함수)
@@ -280,6 +382,7 @@ class SaveInfoFragment : Fragment() {
         chooserIntent.putExtra(Intent.EXTRA_TITLE, "사용할 앱을 선택해주세요.")
         imagePickerLauncher.launch(chooserIntent)
     }
+
 
     // 이미지 Uri -> File
 //    private fun imageUriToFile(uri: Uri?): File? {

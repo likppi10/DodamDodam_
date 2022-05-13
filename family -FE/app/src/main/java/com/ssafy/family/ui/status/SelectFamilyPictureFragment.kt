@@ -4,7 +4,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +16,10 @@ import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSelectFamilyPictureBinding
 import com.ssafy.family.ui.Adapter.SinglePhotoRecyclerViewAdapter
-import com.ssafy.family.ui.startsetting.StartSettingActivity
-import com.ssafy.family.util.Constants
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
+@AndroidEntryPoint
 class SelectFamilyPictureFragment : Fragment() {
     private lateinit var binding: FragmentSelectFamilyPictureBinding
     private lateinit var photoRecyclerViewAdapter: SinglePhotoRecyclerViewAdapter
@@ -51,6 +50,7 @@ class SelectFamilyPictureFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // 하단 버튼 텍스트 설정
@@ -58,12 +58,13 @@ class SelectFamilyPictureFragment : Fragment() {
         binding.selectFamilyPictureButtonInclude.button2.text = "완료"
         // 하단 버튼 클릭리스너 등록
         binding.selectFamilyPictureButtonInclude.button.setOnClickListener(View.OnClickListener {
-            // TODO : 가족사진 변경 취소 -> 설정 페이지로 이동
+            requireActivity().finish()
         })
         binding.selectFamilyPictureButtonInclude.button2.setOnClickListener(View.OnClickListener {
             // 사진 변경 api 요청
             val imageFile = statusViewModel.selectedImgUri.value
             statusViewModel.editFamilyPicture(imageUriToFile(imageFile))
+            requireActivity().finish()
         })
         // 리사이클러뷰 설정
         photoRecyclerViewAdapter = SinglePhotoRecyclerViewAdapter().apply {
@@ -82,11 +83,21 @@ class SelectFamilyPictureFragment : Fragment() {
                 Glide.with(imageView).load(it).into(imageView)
             }
         }
+        statusViewModel.selectedImgUri.observe(requireActivity()) {
+            val imageView = binding.selectedFamilyPicture
+            if (it != null){
+                Glide.with(imageView).load(it).into(imageView)
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         reloadImages()
+
+        if(requireActivity().intent.getStringExtra("to") == "change"){
+            statusViewModel.getFamilyPicture()
+        }
     }
 
     fun reloadImages() {
