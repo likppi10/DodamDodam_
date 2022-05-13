@@ -143,7 +143,7 @@ public class UserService {
     @Transactional
     public SignInResDto localSignIn(UserInfoReqDto signInRequest) {
 
-        User user = userRepository.findUserIdAndProviderType(signInRequest.getUserId(), ProviderType.LOCAL);
+        User user = userRepository.findUserByUserIdAndProviderType(signInRequest.getUserId(), ProviderType.LOCAL);
 
         if(user == null){
             throw new CustomException(USER_DOESNT_EXIST);
@@ -168,8 +168,12 @@ public class UserService {
                 .bodyToMono(SocialUserResDTO.class)
                 .block();
 
+        User user = userRepository.findUserByUserIdAndProviderType(socialUser.getId(), ProviderType.KAKAO);
 
-        User user = userRepository.findUserIdAndProviderType(socialUser.getId(), ProviderType.KAKAO);
+        log.info("socialUser parameter === userId : {}", socialUser.getId());
+
+        log.info("user parameter === userId : {}", user.getUserId());
+        log.info("user parameter === userPk : {}", user.getUserPk());
 
         //처음이면 가입시킴.
         if (user == null) {
@@ -193,12 +197,18 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
 
+        log.info("=========== Method ===============");
+        log.info("user parameter === userId : {}", user.getUserId());
+        log.info("user parameter === userPk : {}", user.getUserPk());
+
         SignInResDto userInfo =
                 profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
 
         if (userInfo == null) {
             userInfo = new SignInResDto();
         }
+        log.info("userInfo parameter === profileId : {}", userInfo.getProfileId());
+        log.info("userInfo parameter === familyId : {}", userInfo.getFamilyId());
 
         userInfo.setJwtToken(token);
         userInfo.setRefreshToken(refreshToken);

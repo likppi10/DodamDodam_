@@ -98,6 +98,7 @@ class UserServiceTest {
 
     }
 
+
     @Test
     @DisplayName("signUp 정상동작")
     void signUp_success() {
@@ -260,7 +261,7 @@ class UserServiceTest {
                 .profileId(1L)
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(CharSequence.class), anyString()))
@@ -295,7 +296,7 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(null);
 
         //when
@@ -314,7 +315,7 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(), anyString()))
@@ -337,7 +338,7 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(), anyString()))

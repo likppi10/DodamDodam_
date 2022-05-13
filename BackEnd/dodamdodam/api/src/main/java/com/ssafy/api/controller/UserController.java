@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping(value = "signin", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "로그인", description = "<strong>아이디, 패스워드</strong> 정보를 받아 로그인 한다.")
+    @Operation(summary = "로그인", description = "<strong>아이디, 패스워드</strong> 정보를 받아 로컬 로그인 한다.")
     public SingleResult<SignInResDto> userSignIn
             (@RequestBody
              @io.swagger.v3.oas.annotations.parameters.RequestBody
@@ -79,12 +79,15 @@ public class UserController {
 
     @Operation(summary = "소셜 로그인", description = "<strong>소셜 로그인<strong> 한다.",
             parameters = {
-                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+                    @Parameter(name = "X-AUTH-TOKEN", required = true, in = HEADER)
             })
     @PostMapping(value = "/social", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<SignInResDto> socialLogin(@RequestHeader(value = "X-AUTH-TOKEN") String accessToken) {
+        SignInResDto signInResDto = userService.socialSignIn(accessToken);
 
-        return responseService.getSingleResult(userService.socialSignIn(accessToken));
+        System.out.println(signInResDto.getProfileId());
+        System.out.println(signInResDto.getFamilyId());
+        return responseService.getSingleResult(signInResDto);
     }
 
 
