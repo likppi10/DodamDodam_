@@ -75,10 +75,17 @@ public class ProfileService {
     @Transactional(readOnly = false)
     public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
-        String originFileName = multipartFile.getOriginalFilename();
-        String filePath = fileService.uploadFileV1("profile", multipartFile);
-        profile.updateImageName(originFileName);
-        profile.updateImagePath(filePath);
+        try {
+            if (!multipartFile.isEmpty()) {
+                String originFileName = multipartFile.getOriginalFilename();
+                String filePath = fileService.uploadFileV1("profile", multipartFile);
+                profile.updateImageName(originFileName);
+                profile.updateImagePath(filePath);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 //        updateImage(multipartFile, profile, request);
         profile.updateRole(profileDto.getRole());
         profile.updateNickname(profileDto.getNickname());
