@@ -6,6 +6,7 @@ import com.ssafy.core.dto.res.FamilyCodeResDto;
 import com.ssafy.core.dto.res.FamilyIdResDto;
 import com.ssafy.core.dto.res.FamilyPictureResDto;
 import com.ssafy.core.entity.Family;
+import com.ssafy.core.entity.Profile;
 import com.ssafy.core.entity.User;
 import com.ssafy.api.service.FamilyService;
 import com.ssafy.api.service.ProfileService;
@@ -57,9 +58,10 @@ public class FamilyController {
         userService.updateBirthdayWithUserPk(userPk, familyReq.getBirthday());
         Family family = familyService.createFamily();
         String[] imageInfo = profileService.enrollImage(familyReq.getImage(), request).split("#");
-        familyService.createProfileForFirst(family, user, familyReq, imageInfo);
+        Profile profile = familyService.createProfileForFirst(family, user, familyReq, imageInfo);
         FamilyIdResDto res = FamilyIdResDto.builder()
                 .familyId(family.getId())
+                .profileId(profile.getId())
                 .build();
         return responseService.getSingleResult(res);
     }
@@ -86,9 +88,10 @@ public class FamilyController {
         userService.updateBirthdayWithUserPk(userPk, familyRequest.getBirthday());
         Family family = familyService.getFamily(familyRequest.getFamilyId());
         String[] imageInfo = profileService.enrollImage(familyRequest.getImage(), request).split("#");
-        familyService.createProfileForJoin(family, user, familyRequest, imageInfo);
+        Profile profile = familyService.createProfileForJoin(family, user, familyRequest, imageInfo);
         FamilyIdResDto res = FamilyIdResDto.builder()
                 .familyId(family.getId())
+                .profileId(profile.getId())
                 .build();
         return responseService.getSingleResult(res);
     }

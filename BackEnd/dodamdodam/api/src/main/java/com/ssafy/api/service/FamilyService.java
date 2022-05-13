@@ -48,7 +48,7 @@ public class FamilyService {
     }
 
     // profile 생성
-    public void createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, String[] imageInfo) {
+    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, String[] imageInfo) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
@@ -59,9 +59,9 @@ public class FamilyService {
             profile.updateImagePath(imageInfo[0]);
             profile.updateImageName(imageInfo[1]);
         }
-        profileRepository.save(profile);
+        return profileRepository.save(profile);
     }
-    public void createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, String[] imageInfo) {
+    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, String[] imageInfo) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
@@ -72,7 +72,7 @@ public class FamilyService {
             profile.updateImagePath(imageInfo[0]);
             profile.updateImageName(imageInfo[1]);
         }
-        profileRepository.save(profile);
+        return profileRepository.save(profile);
     }
 
     // family_id로 Family 객체 조회

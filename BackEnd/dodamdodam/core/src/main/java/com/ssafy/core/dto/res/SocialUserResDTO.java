@@ -18,7 +18,6 @@ public class SocialUserResDTO {
 
     private Properties properties;
 
-    @ToString
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
