@@ -3,12 +3,10 @@ package com.ssafy.family.ui.status
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import com.ssafy.family.R
 import com.ssafy.family.databinding.ActivityStatusBinding
-import com.ssafy.family.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,13 +20,14 @@ class StatusActivity : AppCompatActivity() {
         binding = ActivityStatusBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.status_activity_fragment_layout, EditStatusFragment())
-            .commit()
-        statusViewModel.getFamilyPicture()
-//        statusViewModel.familyPicture.observe(this) {
-//            Log.d(TAG, "familyPicture : ${it.data?.dataset}")
-//        }
-        statusViewModel.getMyStatus()
+        if(intent.getStringExtra("to") == "change"){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.status_activity_fragment_layout, SelectFamilyPictureFragment())
+                .commit()
+        }else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.status_activity_fragment_layout, EditStatusFragment())
+                .commit()
+        }
     }
 }

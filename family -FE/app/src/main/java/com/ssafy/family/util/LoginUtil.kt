@@ -1,5 +1,6 @@
 package com.ssafy.family.util
 
+import android.util.Log
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.config.ApplicationClass.Companion.JWT
 import com.ssafy.family.data.remote.res.RefreshJWT
@@ -21,6 +22,10 @@ object LoginUtil {
         preferences.deleteString(ApplicationClass.JWT)
         deleteUserInfo()
     }
+
+//    fun deleteFamily() {
+//        deleteUserFamilyInfo()
+//    }
 
     fun setAutoLogin(flag: Boolean) {
         preferences.setAutoLogin(flag)
@@ -51,6 +56,11 @@ object LoginUtil {
         preferences.deleteString(FAMILY_ID)
     }
 
+//    fun deleteUserFamilyInfo() {
+////        preferences.deleteString(PROFILE_ID)
+//        preferences.setString(FAMILY_ID, "0")
+//    }
+
     fun getUserInfo(): UserInfo? {
         val accessToken = preferences.getString(JWT)
         val refreshToken = preferences.getString(REFRESH_TOKEN)
@@ -63,6 +73,7 @@ object LoginUtil {
         } else {
             UserInfo(accessToken!!, refreshToken!!, name!!, profileId!!, familyId!!)
         }
+//        return UserInfo(accessToken ?: "", refreshToken ?: "", name ?: "", profileId ?: -1, familyId ?: -1)
     }
 
     fun setFamilyId(id: String) {

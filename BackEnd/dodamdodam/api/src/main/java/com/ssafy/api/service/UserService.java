@@ -192,12 +192,19 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
 
+        System.out.println(user.getUserPk());
+        System.out.println(user.getUserId());
+
         SignInResDto userInfo =
                 profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
 
         if (userInfo == null) {
             userInfo = new SignInResDto();
         }
+
+        System.out.println(userInfo.getProfileId());
+        System.out.println(userInfo.getFamilyId());
+
 
         userInfo.setJwtToken(token);
         userInfo.setRefreshToken(refreshToken);

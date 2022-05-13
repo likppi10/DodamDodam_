@@ -1,4 +1,4 @@
-package com.ssafy.family.data
+package com.ssafy.family.data.remote.res
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

@@ -12,11 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.AdapterView
+import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -237,47 +235,9 @@ class DetailAlbumFragment : Fragment() {
     }
 
     private fun initView() {
-        val arrayAdapterView = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_dropdown_item,
-            arrayOf("- 설정 -","앨범 수정","앨범 삭제"))
-        binding.spinner.adapter=arrayAdapterView
-        binding.spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                when (position) {
-                    0->{
-                        view.isEnabled=true
-                    }
-                    1 -> {
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.album_frame, UpdateAlbumFragment())
-                            .commit()
-                    }
-                    2 -> {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("앨범 삭제")
-                            .setMessage("정말 삭제하시겠습니까?")
-                            .setPositiveButton("네", object : DialogInterface.OnClickListener {
-                                override fun onClick(dialog: DialogInterface, which: Int) {
-                                    detailAlbumViewModel.deleteAlbum(detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture.albumId)
-                                }
-                            })
-                            .setNegativeButton("아니요", object : DialogInterface.OnClickListener {
-                                override fun onClick(dialog: DialogInterface, which: Int) {
-                                    Log.d("MyTag", "negative")
-                                }
-                            })
-                            .create()
-                            .show()
 
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        binding.spinner.setOnClickListener {
+            showSpinnerDialog()
         }
         binding.detailAlbumTitleText.text = ""
         photoAdapter = DetailAlbumPhotoAdapter(requireActivity(), 0).apply {
@@ -341,6 +301,46 @@ class DetailAlbumFragment : Fragment() {
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
         dialog.window!!.attributes = params
 
+        //나오는부분말고는 투명하게 해주는것
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        dialog.show()
+
+    }
+    fun showSpinnerDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.setting_spinner_item, null)
+        val adb = android.app.AlertDialog.Builder(requireContext(), R.style.MyDialogTheme)
+            .setView(dialogView)
+        val dialog = adb.create()
+        val params: WindowManager.LayoutParams = dialog.window!!.attributes;
+
+        dialogView.findViewById<TextView>(R.id.spinner_album_update).setOnClickListener {
+            dialog.dismiss()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.album_frame, UpdateAlbumFragment())
+                .commit()
+        }
+        dialogView.findViewById<TextView>(R.id.spinner_album_delete).setOnClickListener {
+            dialog.dismiss()
+            AlertDialog.Builder(requireContext())
+                .setTitle("앨범 삭제")
+                .setMessage("정말 삭제하시겠습니까?")
+                .setPositiveButton("네", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, which: Int) {
+                        detailAlbumViewModel.deleteAlbum(detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture.albumId)
+                    }
+                })
+                .setNegativeButton("아니요", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, which: Int) {
+                        Log.d("MyTag", "negative")
+                    }
+                })
+                .create()
+                .show()
+        }
+
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.window!!.attributes = params
         //나오는부분말고는 투명하게 해주는것
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         dialog.show()

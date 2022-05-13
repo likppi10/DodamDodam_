@@ -69,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
     fun init(){
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
             // TODO: 토큰 만료됐을시 분기 만들어야함
+            Log.d("XXXXXXXX", "LoginUtil.getUserInfo():${LoginUtil.getUserInfo()}")
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
 
 
@@ -102,13 +103,16 @@ class HomeActivity : AppCompatActivity() {
                     Log.d(TAG, "HomeActivity - init() familyId : $familyId")
                     if (familyId == "0") { // 가입한 Family 없음
                         startActivity(Intent(this, StartSettingActivity::class.java))
+                        finishAffinity()
                     } else { // 가입한 Family 있음
                         // 2) 오늘 첫 로그인인가? = 오늘의 미션이 있는가?(missionContent)
                         val missionContent = loginViewModel.checkFirstLoginToday.value?.data?.dataSet?.missionContent
                         if (missionContent == null) { // 오늘 첫 로그인
                             startActivity(Intent(this, StatusActivity::class.java))
+                            finishAffinity()
                         } else { // 첫 로그인 아님
                             startActivity(Intent(this, MainActivity::class.java))
+                            finishAffinity()
                         }
                     }
                 }

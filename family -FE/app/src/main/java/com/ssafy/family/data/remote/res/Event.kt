@@ -1,4 +1,4 @@
-package com.ssafy.family.data
+package com.ssafy.family.data.remote.res
 
 import java.time.LocalDate
 

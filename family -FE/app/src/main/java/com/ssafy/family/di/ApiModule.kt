@@ -129,6 +129,12 @@ object ApiModule {
 
     @Singleton
     @Provides
+    fun provideSettingApiService(retrofit: Retrofit): SettingAPI {
+        return retrofit.create(SettingAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun provideWishtreeApiService(retrofit: Retrofit): WishtreeAPI {
         return retrofit.create(WishtreeAPI::class.java)
     }

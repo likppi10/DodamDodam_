@@ -12,6 +12,8 @@ import com.jhdroid.view.RotateListener
 import com.ssafy.family.ui.Adapter.RouletteFamilyAdapter
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.ActivityRouletteBinding
+import com.ssafy.family.ui.home.LoginViewModel
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -22,6 +24,7 @@ class RouletteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRouletteBinding
     private val viewModel by viewModels<RouletteViewModel>()
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     var rouletteData = mutableListOf<String>()
     var memberFixList = mutableListOf<MemberInfo>()
@@ -57,6 +60,11 @@ class RouletteActivity : AppCompatActivity() {
                 }
                 Status.LOADING -> {
                     setLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(this, "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.ssafy.family.ui.Adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.family.data.ScheduleInfo
+import com.ssafy.family.data.remote.res.ScheduleInfo
 import com.ssafy.family.databinding.ItemTodayScheduleBinding
 
 // mainactivity - eventfragment : 오늘의 일정

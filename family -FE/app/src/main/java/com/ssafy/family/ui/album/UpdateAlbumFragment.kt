@@ -89,10 +89,10 @@ class UpdateAlbumFragment : Fragment() {
         Log.d("ddddd", "picker: " + detailAlbumViewModel.date)
         val date = detailAlbumViewModel.date.split("-")
         val year = date[0].toInt()
-        val month = date[1].toInt()
+        val month = date[1].toInt()-1
         val day = date[2].toInt()
         val datePicker = binding.updateAlbumDatePicker
-        binding.updateAlbumTimeText.text = "날짜 : ${year}년 ${month}월 ${day}일"
+        binding.updateAlbumTimeText.text = "날짜 : ${year}년 ${month+1}월 ${day}일"
         detailAlbumViewModel.date = "${year}-${month}-${day}"
         datePicker.init(
             year, month, day

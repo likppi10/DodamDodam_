@@ -39,6 +39,7 @@
         android:layout_marginTop="-30dp"
         android:background="@drawable/form_white_bg"
         app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_page_logo" />
 
@@ -51,6 +52,7 @@
         android:text="@string/Welcome"
         android:textColor="@color/pink01"
         android:textSize="36sp"
+        android:elevation="5dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/login_page_form_box"
         app:layout_constraintStart_toStartOf="@+id/login_page_form_box"
@@ -63,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_weight="20"
+        android:elevation="5dp"
         android:hint="@string/ID"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -89,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="20"
         android:hint="@string/PW"
+        android:elevation="5dp"
         android:textSize="20sp"
         android:textStyle="bold"
         app:boxStrokeColor="@color/pink01"
@@ -132,6 +136,7 @@
         android:layout_marginTop="7dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="@id/login_page_form_box"
         app:layout_constraintStart_toStartOf="@id/login_page_form_box"
         app:layout_constraintTop_toBottomOf="@id/login_page_login_btn">
@@ -142,6 +147,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqahansans"
             android:text="@string/sign"
+            android:elevation="5dp"
             android:textColor="@color/pink01"
             android:textSize="16dp"
             android:textStyle="bold" />
@@ -151,6 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:elevation="5dp"
             android:fontFamily="@font/spoqahansans"
             android:text="@string/find_user"
             android:textColor="@color/pink01"

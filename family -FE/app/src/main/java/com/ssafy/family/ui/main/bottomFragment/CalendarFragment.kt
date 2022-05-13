@@ -21,11 +21,12 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.ssafy.family.R
-import com.ssafy.family.data.ScheduleInfo
+import com.ssafy.family.data.remote.res.ScheduleInfo
 import com.ssafy.family.databinding.CalendarDayBinding
 import com.ssafy.family.databinding.CalendarHeaderBinding
 import com.ssafy.family.databinding.FragmentCalendarBinding
 import com.ssafy.family.ui.Adapter.ScheduleAdapter
+import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.schedule.ScheduleActivity
 import com.ssafy.family.util.CalendarUtil.dayLocalDateToString
 import com.ssafy.family.util.CalendarUtil.daysOfWeekFromLocale
@@ -34,6 +35,7 @@ import com.ssafy.family.util.CalendarUtil.makeVisible
 import com.ssafy.family.util.CalendarUtil.monthLocalDateToString
 import com.ssafy.family.util.CalendarUtil.setTextColorRes
 import com.ssafy.family.util.CalendarUtil.stringToLocalDate
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -46,6 +48,7 @@ class CalendarFragment : Fragment() {
 
     private lateinit var binding: FragmentCalendarBinding
     private val calendarViewModel by activityViewModels<CalendarViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     private var mContext: Context? = null
     private var selectedDate: LocalDate? = null
@@ -77,7 +80,7 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initCalendar()
         //월 단위 일정 요청결과 옵저버
         calendarViewModel.getMonthRequestLiveData.observe(requireActivity()){
             when (it.status) {
@@ -98,7 +101,9 @@ class CalendarFragment : Fragment() {
                         }
                     }
                     dismissMonthLoading()
-                    initCalendar()
+
+                    selectDate(today)
+                    updateAdapterForDate()
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
@@ -106,6 +111,11 @@ class CalendarFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setMonthLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissMonthLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -136,6 +146,11 @@ class CalendarFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setDayLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissDayLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -207,7 +222,12 @@ class CalendarFragment : Fragment() {
 
         //달력 스크롤 리스너
         binding.calendar.monthScrollListener = {
-            selectDate(it.yearMonth.atDay(1))
+            if(it.yearMonth.month==today.month){
+                selectDate(today)
+                updateAdapterForDate()
+            }else{
+                selectDate(it.yearMonth.atDay(1))
+            }
         }
 
         //달력 이전 달, 다음 달 탐색 버튼

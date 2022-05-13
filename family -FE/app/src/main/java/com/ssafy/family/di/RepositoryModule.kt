@@ -95,6 +95,15 @@ object RepositoryModule {
 
     @Singleton
     @Provides
+    fun provideSettingRepository(
+        apiAPI: SettingAPI,
+        @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
+        @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
+    ): SettingRepository
+            = SettingRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
+
+    @Singleton
+    @Provides
     fun provideWishtreeRepository(
         apiAPI: WishtreeAPI,
         @DispatcherModule.IoDispatcher ioDispatcher: CoroutineDispatcher,
