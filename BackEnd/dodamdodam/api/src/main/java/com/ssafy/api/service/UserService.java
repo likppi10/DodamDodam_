@@ -170,10 +170,9 @@ public class UserService {
 
         User user = userRepository.findUserByUserIdAndProviderType(socialUser.getId(), ProviderType.KAKAO);
 
-        log.info("socialUser parameter === userId : {}", socialUser.getId());
-
-        log.info("user parameter === userId : {}", user.getUserId());
-        log.info("user parameter === userPk : {}", user.getUserPk());
+        System.out.println(socialUser.getId());
+        System.out.println(user.getUserId());
+        System.out.println(user.getUserPk());
 
         //처음이면 가입시킴.
         if (user == null) {
@@ -197,9 +196,8 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
 
-        log.info("=========== Method ===============");
-        log.info("user parameter === userId : {}", user.getUserId());
-        log.info("user parameter === userPk : {}", user.getUserPk());
+        System.out.println(user.getUserPk());
+        System.out.println(user.getUserId());
 
         SignInResDto userInfo =
                 profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
@@ -207,8 +205,10 @@ public class UserService {
         if (userInfo == null) {
             userInfo = new SignInResDto();
         }
-        log.info("userInfo parameter === profileId : {}", userInfo.getProfileId());
-        log.info("userInfo parameter === familyId : {}", userInfo.getFamilyId());
+
+        System.out.println(userInfo.getProfileId());
+        System.out.println(userInfo.getFamilyId());
+
 
         userInfo.setJwtToken(token);
         userInfo.setRefreshToken(refreshToken);
