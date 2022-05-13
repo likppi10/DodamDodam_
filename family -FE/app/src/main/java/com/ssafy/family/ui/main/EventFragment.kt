@@ -27,6 +27,7 @@ import com.ssafy.family.ui.album.AlbumActivity
 import com.ssafy.family.ui.main.bottomFragment.AlbumFragment
 import com.ssafy.family.ui.roulette.RouletteActivity
 import com.ssafy.family.ui.schedule.ScheduleActivity
+import com.ssafy.family.ui.wishtree.WishTreeActivity
 import com.ssafy.family.util.CalendarUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -209,6 +210,11 @@ class EventFragment : Fragment() {
 
         binding.rouletteIcon.setOnClickListener {
             val intent = Intent(requireContext(), RouletteActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.wishtreeIcon.setOnClickListener {
+            val intent = Intent(requireContext(), WishTreeActivity::class.java)
             startActivity(intent)
         }
     }

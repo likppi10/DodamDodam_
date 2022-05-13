@@ -58,7 +58,8 @@ class SelectFamilyPictureFragment : Fragment() {
         binding.selectFamilyPictureButtonInclude.button2.text = "완료"
         // 하단 버튼 클릭리스너 등록
         binding.selectFamilyPictureButtonInclude.button.setOnClickListener(View.OnClickListener {
-            // TODO : 가족사진 변경 취소 -> 설정 페이지로 이동
+            // 가족사진 변경 취소 -> 액티비티 종료
+            requireActivity().finish()
         })
         binding.selectFamilyPictureButtonInclude.button2.setOnClickListener(View.OnClickListener {
             // 사진 변경 api 요청

@@ -1,13 +1,16 @@
 package com.ssafy.family.ui.startsetting
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.ssafy.family.R
 import com.ssafy.family.databinding.ActivityStartSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@RequiresApi(Build.VERSION_CODES.O)
 class StartSettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartSettingBinding
 
