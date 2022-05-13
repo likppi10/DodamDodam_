@@ -69,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
     fun init(){
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
             // TODO: 토큰 만료됐을시 분기 만들어야함
+            Log.d("XXXXXXXX", "LoginUtil.getUserInfo():${LoginUtil.getUserInfo()}")
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
 
 

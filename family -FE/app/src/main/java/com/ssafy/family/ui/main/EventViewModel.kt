@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.OpinionReactionReq
-import com.ssafy.family.data.remote.res.OpinionReactionRes
+import com.ssafy.family.data.remote.req.OpinionReq
 import com.ssafy.family.data.remote.res.OpinionRes
 import com.ssafy.family.data.remote.res.SchedulesRes
 import com.ssafy.family.data.repository.CalendarRepository
@@ -58,7 +58,7 @@ class EventViewModel @Inject constructor(private val calendarRepository: Calenda
 
     fun addOpinion(text: String) = viewModelScope.launch {
         _addOpinionRequestLiveData.postValue(Resource.loading(null))
-        _addOpinionRequestLiveData.postValue(mainEventRepository.addOpinion(text))
+        _addOpinionRequestLiveData.postValue(mainEventRepository.addOpinion(OpinionReq(text)))
     }
 
     fun deleteOpinion(suggestionId :Long) = viewModelScope.launch {

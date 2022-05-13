@@ -21,12 +21,14 @@ import com.ssafy.family.data.remote.req.ScheduleReq
 import com.ssafy.family.databinding.CalendarHeaderBinding
 import com.ssafy.family.databinding.CalendarSelectingDayBinding
 import com.ssafy.family.databinding.FragmentEditScheduleBinding
+import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.util.CalendarUtil
 import com.ssafy.family.util.CalendarUtil.getDrawableCompat
 import com.ssafy.family.util.CalendarUtil.makeInVisible
 import com.ssafy.family.util.CalendarUtil.makeVisible
 import com.ssafy.family.util.CalendarUtil.setTextColorRes
 import com.ssafy.family.util.CalendarUtil.stringToLocalDate
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -41,8 +43,9 @@ class EditScheduleFragment : Fragment() {
 
     private lateinit var binding: FragmentEditScheduleBinding
     private val editScheduleViewModel by activityViewModels<EditScheduleViewModel>()
-    private var scheduleId: Long? = null
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
+    private var scheduleId: Long? = null
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
     private val headerDateFormatter = DateTimeFormatter.ofPattern("MMM d'일'")
@@ -136,6 +139,11 @@ class EditScheduleFragment : Fragment() {
                 Status.LOADING -> {
                     setLoading()
                 }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -161,6 +169,11 @@ class EditScheduleFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }

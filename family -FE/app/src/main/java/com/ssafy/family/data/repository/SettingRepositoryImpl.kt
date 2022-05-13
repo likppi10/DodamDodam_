@@ -1,24 +1,24 @@
 package com.ssafy.family.data.repository
 
 import com.ssafy.family.config.BaseResponse
-import com.ssafy.family.data.remote.api.MainEventAPI
+import com.ssafy.family.data.remote.api.CalendarAPI
+import com.ssafy.family.data.remote.api.SettingAPI
 import com.ssafy.family.data.remote.req.*
-import com.ssafy.family.data.remote.res.OpinionReactionRes
-import com.ssafy.family.data.remote.res.OpinionRes
+import com.ssafy.family.data.remote.res.*
 import com.ssafy.family.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class MainEventRepositoryImpl(
-    private val api: MainEventAPI,
+class SettingRepositoryImpl(
+    private val api: SettingAPI,
     private val ioDispatcher: CoroutineDispatcher,
     private val mainDispatcher: CoroutineDispatcher
-) : MainEventRepository {
+) : SettingRepository {
 
-    override suspend fun getOpinion(): Resource<OpinionRes>  = withContext(ioDispatcher){
+    override suspend fun getProfileImage(): Resource<ProfileImageRes> = withContext(ioDispatcher){
         try {
-            val response = api.getOpinion()
+            val response = api.getProfileImage()
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
@@ -35,28 +35,9 @@ class MainEventRepositoryImpl(
         }
     }
 
-    override suspend fun addOpinionReaction(opinionReactionReq: OpinionReactionReq): Resource<OpinionRes> = withContext(ioDispatcher) {
+    override suspend fun getStatus(): Resource<MyStatusRes> = withContext(ioDispatcher){
         try {
-            val response = api.addOpinionReaction(opinionReactionReq)
-            when {
-                response.isSuccessful -> {
-                    Resource.success(response.body()!!)
-                }
-                response.code() == 403 ->{
-                    Resource.expired(response.body()!!)
-                }
-                else -> {
-                    Resource.error(null, "오류")
-                }
-            }
-        } catch (e: Exception) {
-            Resource.error(null, "서버와 연결오류")
-        }
-    }
-
-    override suspend fun addOpinion(opinionReq: OpinionReq): Resource<BaseResponse>  = withContext(ioDispatcher){
-        try {
-            val response = api.addOpinion(opinionReq)
+            val response = api.getStatus()
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
@@ -73,14 +54,14 @@ class MainEventRepositoryImpl(
         }
     }
 
-    override suspend fun deleteOpinion(suggestionId:Long): Resource<BaseResponse> = withContext(ioDispatcher) {
+    override suspend fun getFamilyCode(): Resource<FamilyCodeRes> = withContext(ioDispatcher){
         try {
-            val response = api.deleteOpinion(suggestionId)
+            val response = api.getFamilyCode()
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
                 }
-                response.code() == 403 ->{
+                response.code() == 403 -> {
                     Resource.expired(response.body()!!)
                 }
                 else -> {
@@ -91,5 +72,25 @@ class MainEventRepositoryImpl(
             Resource.error(null, "서버와 연결오류")
         }
     }
+
+    override suspend fun exitFamily(): Resource<BaseResponse> = withContext(ioDispatcher){
+        try {
+            val response = api.exitFamily()
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, "오류")
+                }
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
 
 }

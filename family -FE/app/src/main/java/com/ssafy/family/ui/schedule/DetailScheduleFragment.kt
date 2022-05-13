@@ -11,7 +11,9 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentDetailScheduleBinding
+import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.util.CalendarUtil.stringToLocalDate
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
@@ -24,6 +26,8 @@ class DetailScheduleFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailScheduleBinding
     private val detailScheduleViewModel by activityViewModels<DetailScheduleViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
+
     private var scheduleId: Long? = null
     private val headerDateFormatter = DateTimeFormatter.ofPattern("MMM d'일'")
 
@@ -86,6 +90,11 @@ class DetailScheduleFragment : Fragment() {
                 Status.LOADING -> {
                     setLoading()
                 }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -103,6 +112,11 @@ class DetailScheduleFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }

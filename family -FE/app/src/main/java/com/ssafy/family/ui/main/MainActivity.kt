@@ -1,5 +1,6 @@
 package com.ssafy.family.ui.main
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import com.google.gson.reflect.TypeToken
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.databinding.ActivityMainBinding
+import com.ssafy.family.ui.home.HomeActivity
 import com.ssafy.family.ui.main.bottomFragment.*
 import com.ssafy.family.util.LoginUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,5 +110,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun logout() {
+        Toast.makeText(this, "로그아웃 했습니다.", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, HomeActivity::class.java)
+        finishAffinity()
+        startActivity(intent)
     }
 }
