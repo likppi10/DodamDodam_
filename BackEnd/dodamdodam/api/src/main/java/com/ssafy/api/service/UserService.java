@@ -202,6 +202,15 @@ public class UserService {
         ProfileIdAndFamilyIdResDto Ids =
                 profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
 
+        //profile Id와 family Id는 둘 다 존재하거나, 둘다 없음.
+        if(Ids == null){
+            return SignInResDto.builder()
+                    .jwtToken(token)
+                    .refreshToken(refreshToken)
+                    .name(user.getName())
+                    .build();
+        }
+
         return SignInResDto.builder()
                 .profileId(Ids.getProfileId())
                 .familyId(Ids.getFamilyId())
