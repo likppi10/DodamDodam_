@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -46,17 +47,18 @@ class ChattingFragment : Fragment() {
     var database = FirebaseDatabase.getInstance()
     var myRef = database!!.getReference("message_" + familyCode)
     var datas = mutableListOf<ChatData>()
+    var check = false
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        ApplicationClass.isChatting.postValue(true)
-        Log.d("dddd", "onAttach: "+ ApplicationClass.isChatting.value)
+    override fun onStart() {
+        super.onStart()
+        ApplicationClass.isChatting = MutableLiveData(true)
+        Log.d("dddddddd", "onAttach: "+ ApplicationClass.isChatting.value)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        ApplicationClass.isChatting.postValue(false)
-        Log.d("dddd", "onDetach: "+ ApplicationClass.isChatting.value)
+    override fun onPause() {
+        ApplicationClass.isChatting= MutableLiveData(false)
+        Log.d("dddddddd", "onDetach: "+ ApplicationClass.isChatting.value)
+        super.onPause()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +74,23 @@ class ChattingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getMember()
         initView()
     }
 
     private fun initView(){
 
-        viewModel.getMember()
+        val manager = LinearLayoutManager(requireContext())
+        manager.stackFromEnd = true
+        binding.chattingRecyclerView.layoutManager = manager
+        chattingAdapter = ChattingAdapter(listOf(), mutableListOf())
+        binding.chattingRecyclerView.adapter = chattingAdapter
+
+        chattingAdapter.datas = datas
+
+
+
+
         viewModel.getMemberRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
@@ -88,8 +101,11 @@ class ChattingFragment : Fragment() {
                             break
                         }
                     }
-                    chattingAdapter = ChattingAdapter(memberList, mutableListOf())
-                    setChatListener()
+                    chattingAdapter.memberList = memberList
+                    if(!check){
+                        setChatListener()
+                    }
+
                     dismissLoading()
                 }
                 Status.ERROR -> {
@@ -121,13 +137,16 @@ class ChattingFragment : Fragment() {
         }
     }
 
-    private fun setChatListener() {
+    fun setChatListener() {
+        check = true
         val childEventListener: ChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val data = snapshot.getValue(ChatData::class.java)
                 datas.add(data!!)
-                binding.chattingRecyclerView.adapter = chattingAdapter
+//                binding.chattingRecyclerView.adapter = chattingAdapter
+                binding.chattingRecyclerView.adapter!!.notifyDataSetChanged()
                 binding.chattingRecyclerView.scrollToPosition(chattingAdapter.itemCount-1)
+                Log.d("chattingAdapter.itemCount-1", "chattingAdapter.itemCount-1: "+ (chattingAdapter.itemCount-1))
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -135,13 +154,14 @@ class ChattingFragment : Fragment() {
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
             override fun onCancelled(error: DatabaseError) {}
         }
-
+        Log.d("1111111111111", "chattingAdapter.itemCount-1: "+ 1111111111111)
         myRef.addChildEventListener(childEventListener)
-        chattingAdapter.datas = datas
-        val manager = LinearLayoutManager(requireContext())
-        manager.stackFromEnd = true
-        binding.chattingRecyclerView.layoutManager = manager
-        binding.chattingRecyclerView.adapter = chattingAdapter
+//        chattingAdapter.datas = datas
+//        binding.chattingRecyclerView.adapter!!.notifyDataSetChanged()
+//        val manager = LinearLayoutManager(requireContext())
+//        manager.stackFromEnd = true
+//        binding.chattingRecyclerView.layoutManager = manager
+//        binding.chattingRecyclerView.adapter = chattingAdapter
     }
 
     //로딩바

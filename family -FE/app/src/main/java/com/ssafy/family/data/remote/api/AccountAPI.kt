@@ -38,4 +38,11 @@ interface AccountAPI {
 
     @GET("/api/main/mission")
     suspend fun getMainMission(): Response<MissionRes>
+
+    @POST("/api/user/social")
+    suspend fun socialLogin():Response<LoginRes>
+
+    @GET("/api/user/signout")
+    suspend fun logout():Response<BaseResponse>
+
 }

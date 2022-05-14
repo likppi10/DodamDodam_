@@ -18,7 +18,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 import com.ssafy.family.R
+import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.remote.req.AddFcmReq
 import com.ssafy.family.data.remote.req.LoginReq
 import com.ssafy.family.databinding.FragmentLoginBinding
@@ -27,6 +32,7 @@ import com.ssafy.family.ui.main.MainActivity.Companion.channel_id
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
+import com.ssafy.family.util.LoginUtil.setScocialToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +45,15 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val loginViewModel by activityViewModels<LoginViewModel>()
+
+    private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.e("TAG", "카카오계정으로 로그인 실패", error)
+        } else if (token != null) {
+            Log.i("TAG", "카카오계정으로 로그인 성공 ${token.accessToken}")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,6 +74,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun initView() {
+
+        binding.kakaoIcon.setOnClickListener {
+            kakaoLogin()
+        }
+
         binding.loginPageLoginBtn.setOnClickListener {
             if (isValidForm()) {
                 login()
@@ -90,10 +110,12 @@ class LoginFragment : Fragment() {
                 Status.SUCCESS -> {
                     LoginUtil.setAutoLogin(loginViewModel.isAutoLogin)
                     LoginUtil.saveUserInfo(it.data!!.dataSet!!)
-                    Log.d("dddd", "initView: " + LoginUtil.getUserInfo())
+                    Log.d("dddd", "initView: " + it.data!!.dataSet!!)
                     // TODO: 에러나는지 확인 attach
                     dismissLoading()
+                    Log.d("ddddddddddddd", "i왜 안와1 ")
                     getFCM()
+                    Log.d("ddddddddddddd", "i왜 안와2 ")
                 }
                 Status.EXPIRED->{
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
@@ -111,6 +133,35 @@ class LoginFragment : Fragment() {
             }
 
         }
+
+        loginViewModel.socialLoginLiveData.observe(requireActivity()) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    LoginUtil.setAutoLogin(loginViewModel.isAutoLogin)
+                    LoginUtil.saveUserInfo(it.data!!.dataSet!!)
+                    Log.d("dddd", "ddddinitView: " + it.data!!.dataSet!!)
+                    // TODO: 에러나는지 확인 attach
+                    dismissLoading()
+                    getFCM()
+                }
+                Status.EXPIRED->{
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    kakaoLogin()
+                    dismissLoading()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                        .show()
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
+                }
+            }
+
+        }
+
+
     }
 
     private fun addFCM(fcmToken: AddFcmReq) {
@@ -175,21 +226,45 @@ class LoginFragment : Fragment() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
+            Log.d("ddddddddddddd", "i안와1 "+task.result!!)
+            Log.d("ddddddddddddd", "i안와2 "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
-        createNotificationChannel(channel_id, "ssafy")
+//        createNotificationChannel(channel_id, "ssafy")
     }
 
-    // NotificationChannel 설정
-    private fun createNotificationChannel(id: String, name: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(id, name, importance)
+//    // NotificationChannel 설정
+//    private fun createNotificationChannel(id: String, name: String) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val importance = NotificationManager.IMPORTANCE_DEFAULT
+//            val channel = NotificationChannel(id, name, importance)
+//
+//            val notificationManager = context?.getSystemService(
+//                Context.NOTIFICATION_SERVICE) as NotificationManager
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//    }
 
-            val notificationManager = context?.getSystemService(
-                Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+    fun kakaoLogin(){
+        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
+            UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
+                if (error != null) {
+                    Log.e("TAG", "카카오톡으로 로그인 실패 $error", error)
+                    // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+                    // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        return@loginWithKakaoTalk
+                    }
+                    // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                    UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
+                } else if (token != null) {
+                    setScocialToken(token.accessToken)
+                    loginViewModel.socialLogin()
+                }
+            }
+        } else {
+            UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
         }
     }
-    // NotificationChannel 설정
 }

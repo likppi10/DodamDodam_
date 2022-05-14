@@ -7,7 +7,7 @@ import com.ssafy.family.data.remote.res.ChattingRes
 import com.ssafy.family.util.Resource
 
 interface ChatRepository {
-    suspend fun send(data: ChatData, myRef: DatabaseReference): Any
+    fun send(data: ChatData, myRef: DatabaseReference): Any
 
     suspend fun getMember(): Resource<ChattingRes>
 

@@ -77,7 +77,7 @@ class EditStatusFragment : Fragment() {
                 Status.SUCCESS -> {
                     emojiAdapter.datas.clear()
                     emojiAdapter.checkSelected.clear()
-                    if (it.data?.data == null){
+                    if (it.data?.data!!.comment == null && it.data?.data!!.emotion == null){
                         for (i in emojis.indices){
                             emojiAdapter.datas.add(emojis[i])
                             emojiAdapter.checkSelected.add(false)

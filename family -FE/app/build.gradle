@@ -121,4 +121,8 @@ dependencies {
 
     //calendar
     implementation 'com.github.kizitonwose:CalendarView:1.0.4'
+
+    // 카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.9.1"
+
 }

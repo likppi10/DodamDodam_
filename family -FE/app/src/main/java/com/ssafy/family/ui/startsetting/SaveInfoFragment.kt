@@ -1,6 +1,9 @@
 package com.ssafy.family.ui.startsetting
 
 import android.app.Activity.RESULT_OK
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -15,15 +18,21 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.ssafy.family.R
+import com.ssafy.family.data.remote.req.AddFcmReq
 import com.ssafy.family.data.remote.req.FamilyReq
 import com.ssafy.family.data.remote.res.MyProfile
 import com.ssafy.family.databinding.FragmentSaveInfoBinding
+import com.ssafy.family.ui.home.LoginViewModel
+import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
 import com.ssafy.family.util.Constants.TAG
@@ -36,6 +45,7 @@ class SaveInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentSaveInfoBinding
     private val familyViewModel by activityViewModels<StartSettingViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     // 이미지 업로드 관련 변수들
     var imageUri: Uri? = null
@@ -150,7 +160,7 @@ class SaveInfoFragment : Fragment() {
                 if(requireActivity().intent.getStringExtra("to") == "edit"){
                     updateProfile(role)
                 }else{
-                    val viewModelFamilyId = familyViewModel.checkFamilyCodeRes.value?.data?.dataset?.familyId
+                    val viewModelFamilyId = familyViewModel.checkFamilyCodeInfoRes.value?.data?.dataset?.familyId
                     // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
                     if (viewModelFamilyId is Int) {
                         Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
@@ -184,14 +194,13 @@ class SaveInfoFragment : Fragment() {
         }
 
         // LiveData observe
-        familyViewModel.familyResponseLiveData.observe(requireActivity()) {
+        familyViewModel.familyInfoResponseLiveData.observe(requireActivity()) {
             if (it.status == Status.SUCCESS){
                 // 가족 생성 요청 성공 시 sharedpreference에 familyId 저장
                 LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
-                // 토스트메시지 띄우고 화면 이동
-                Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(requireContext(), StatusActivity::class.java))
-                requireActivity().finish()
+                LoginUtil.setProfileId(it.data.dataset!!.profileId.toString())
+                getFCM()
+
             } else if(it.status == Status.ERROR) {
                 Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -206,6 +215,23 @@ class SaveInfoFragment : Fragment() {
                 Toast.makeText(requireContext(), "상태 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        loginViewModel.baseResponse.observe(requireActivity()) {
+            // fcm 받아와 졌는지 확인
+            when (it.status) {
+                Status.SUCCESS -> { // 로그인 성공
+                    // 토스트메시지 띄우고 화면 이동
+                    Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(), StatusActivity::class.java))
+                    requireActivity().finish()
+                }
+                Status.ERROR -> {
+                }
+                Status.LOADING -> {
+                }
+            }
+        }
+
         // 닉네임 유효성 검사 통과 시 에러메시지 삭제
         binding.saveInfoInputNickname.addTextChangedListener {
             val input = it.toString()
@@ -359,6 +385,34 @@ class SaveInfoFragment : Fragment() {
 
         familyViewModel.joinFamily(FamilyReq(selectedRole, nickname, birthday), familyId, imageFile)
     }
+
+    private fun addFCM(fcmToken: AddFcmReq) {
+        loginViewModel.addFCM(fcmToken)
+    }
+
+    fun getFCM() {
+        // FCM 토큰 수신
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            Log.d("dddd", "getFCM: "+task.result!!)
+            addFCM(AddFcmReq(task.result!!))
+        })
+//        createNotificationChannel(MainActivity.channel_id, "ssafy")
+    }
+
+//    // NotificationChannel 설정
+//    private fun createNotificationChannel(id: String, name: String) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val importance = NotificationManager.IMPORTANCE_DEFAULT
+//            val channel = NotificationChannel(id, name, importance)
+//
+//            val notificationManager = context?.getSystemService(
+//                Context.NOTIFICATION_SERVICE) as NotificationManager
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//    }
 
     // 스피너 UI 토글 함수 (한개 or 두개)
     fun spinnerToggle(role: Int) {

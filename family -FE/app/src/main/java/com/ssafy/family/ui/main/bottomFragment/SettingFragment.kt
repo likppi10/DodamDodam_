@@ -14,8 +14,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.ssafy.family.R
+import com.ssafy.family.config.ApplicationClass.Companion.livePush
 import com.ssafy.family.databinding.FragmentSettingBinding
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.main.MainActivity
@@ -134,6 +137,25 @@ class SettingFragment : Fragment() {
             }
         }
 
+        settingViewModel.logoutRequestLiveData.observe(requireActivity()){
+            when (it.status) {
+                Status.SUCCESS -> {
+
+                    signOut()
+                    (activity as MainActivity).logout()
+                }
+                Status.ERROR -> {
+                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                }
+                Status.LOADING -> {
+                }
+                Status.EXPIRED -> {
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         binding.copyImageButton.setOnClickListener {
             val clipboard = requireActivity().getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("label", binding.familyCodeText.toString())
@@ -175,9 +197,9 @@ class SettingFragment : Fragment() {
         }
 
         binding.logoutButton.setOnClickListener {
-            signOut()
-            (activity as MainActivity).logout()
+            settingViewModel.logout()
         }
     }
+
 
 }
