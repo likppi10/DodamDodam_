@@ -89,6 +89,21 @@ public class UserController {
     }
 
 
+    @PostMapping(value = "signout", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "로그아웃", description = "<strong>로그아웃</strong>을 한다.")
+    public CommonResult userSignOut
+            (@RequestBody
+             @io.swagger.v3.oas.annotations.parameters.RequestBody
+             @Valid Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+
+        userService.signOut(userPk);
+
+        return responseService.getSuccessResult("로그아웃에 성공했습니다.");
+    }
+
+
     @PostMapping(value = "refresh")
     @Parameters({
             @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER),

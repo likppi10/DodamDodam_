@@ -68,7 +68,7 @@ public class UserService {
     public String getUserIdWithUserInfo(FindIdReqDto request) {
         String userId = userRepository.findUserIdByUserInfo(
                 request.getName(),
-                LocalDate.parse(request.getBirthday()),
+                request.getBirthday(),
                 request.getFamilyCode()
         );
         if (userId == null) {
@@ -204,5 +204,15 @@ public class UserService {
         userInfo.setName(user.getName());
 
         return userInfo;
+    }
+
+    @Transactional
+    public void signOut(Long userPk) {
+        User user = userRepository.findUserByUserPk(userPk)
+                .orElseThrow(() -> new CustomException(USER_DOESNT_EXIST));
+
+        user.updateFcmToken(null);
+
+        userRepository.save(user);
     }
 }
