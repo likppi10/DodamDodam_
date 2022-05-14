@@ -4,10 +4,10 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.MessageFormat;
 
-public class UserNameValidator implements ConstraintValidator<UserName, String> {
+import static com.ssafy.core.common.Validate.USER_NAME_MAX;
+import static com.ssafy.core.common.Validate.USER_NAME_MIN;
 
-    final int USER_NAME_MIN = 2;
-    final int USER_NAME_MAX = 10;
+public class UserNameValidator implements ConstraintValidator<UserName, String> {
 
     @Override
     public void initialize(UserName constraintAnnotation) {

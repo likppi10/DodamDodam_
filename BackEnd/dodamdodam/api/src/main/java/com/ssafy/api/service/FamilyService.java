@@ -110,7 +110,7 @@ public class FamilyService {
         return familyRepository.findFamilyById(familyId);
     }
 
-    public void updateFamilyPicture(Family family, MultipartFile picture, String path) {
+    public void updateFamilyPicture(Family family, MultipartFile picture) {
         String originFileName = picture.getOriginalFilename();
         String filePath = fileService.uploadFileV1("family",picture);
 //        String originFileName = picture.getOriginalFilename();

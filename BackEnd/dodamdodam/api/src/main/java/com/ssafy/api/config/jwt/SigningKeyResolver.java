@@ -1,4 +1,4 @@
-package com.ssafy.api.config;
+package com.ssafy.api.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwsHeader;

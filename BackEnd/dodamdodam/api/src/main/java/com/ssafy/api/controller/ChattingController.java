@@ -40,7 +40,6 @@ public class ChattingController {
     public ListResult<ChattingMemberResDto> getChattingMemberProfile(Authentication authentication) {
 
         long userPk = Long.parseLong(authentication.getName());
-
         return responseService.getListResult(profileService.getProfileListByUserPk(userPk));
     }
 
@@ -50,17 +49,19 @@ public class ChattingController {
             })
     @PostMapping(value = "/send")
     public CommonResult send(@RequestParam String text, Authentication authentication) throws  IOException {
+
         Long userPk = Long.parseLong(authentication.getName());
         Profile me = mainService.getProfileByUserPk(userPk);
         List<MainProfileResDto> familyList = mainService.getProfileListExceptMe(userPk);
 
         //본인 뿐이 없을때는 그냥 성공만 보냄.
         for (MainProfileResDto pf : familyList) {
-            Profile target = mainService.getProfileByProfilePk(pf.getProfileId());
-            fcmService.sendMessageTo(mainService.getTargetFcmToken(target), "채팅 알림", me.getNickname()+" : "+text);
+            String targetFcmToken = fcmService.findFcmTokenByProfileId(pf.getProfileId());
+            if(targetFcmToken != null) {
+                fcmService.sendMessageTo(targetFcmToken, "채팅 알림", me.getNickname() + " : " + text);
+            }
         }
 
         return responseService.getSuccessResult();
     }
-
 }

@@ -19,9 +19,9 @@ public class SwaggerConfig {
     public OpenAPI openAPI(@Value("${springdoc.version}") String appVersion) {
         Info info = new Info().title("Demo API").version(appVersion)
                 .description("SSAFY 구미 2반 D203팀의 DodamDodam Project")
-                .termsOfService("http://swagger.io/terms/")
+                .termsOfService("https://swagger.io/terms/")
                 .contact(new Contact().name("hanjibung").email("wjs1724@naver.com"))
-                .license(new License().name("Apache License Version 2.0").url("http://www.apache.org/licenses/LICENSE-2.0"));
+                .license(new License().name("Apache License Version 2.0").url("https://www.apache.org/licenses/LICENSE-2.0"));
 
         Server localServer = new Server();
         localServer.setDescription("local");
