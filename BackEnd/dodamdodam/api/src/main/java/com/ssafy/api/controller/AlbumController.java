@@ -106,7 +106,7 @@ public class AlbumController {
 
         Album album = Album.builder()
                 .family(family)
-                .date(albumService.createDate(albumReqDto.getDate()))
+                .date(albumReqDto.getDate())
                 .build();
         albumService.createAlbum(albumReqDto, family, album, albumReqDto.getMultipartFiles(), request);
 
@@ -169,7 +169,7 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             }
     )
-    public ListResult<AlbumResDto> searchAlbum(@PathVariable String keyword,Authentication authentication){
+    public ListResult<AlbumResDto> searchAlbum(@PathVariable String keyword, Authentication authentication){
         Long userPK = Long.parseLong(authentication.getName());
         Family family = albumService.findFamilyByUserPK(userPK);
         List<Album> albums = albumService.findAlbumsByHashTag(keyword, family.getId());

@@ -15,11 +15,11 @@ import javax.validation.constraints.Size;
 public class StatusReqDto {
 
     @NotBlank
-    @Schema(description = "상태", required = true, example = "")
+    @Schema(description = "상태", required = true, example = "happy")
     private String emotion;
 
     @NotBlank
-    @Size(max = 10, min = 1)
-    @Schema(description = "오늘의 한마디", required = true, example = "")
+    @Size(max = 30)
+    @Schema(description = "오늘의 한마디", required = true, example = "오늘 기분 최고!")
     private String comment;
 }

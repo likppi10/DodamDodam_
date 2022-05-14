@@ -298,7 +298,7 @@ public class ProfileService {
     @Transactional
     public void deleteProfile(long userPk){
         Profile profile = findProfileByUserPk(userPk);
-        List<MainProfileResDto> familyProfileList = mainService.getProfileList(userPk);
+        List<MainProfileResDto> familyProfileList = mainService.getProfileListExceptMe(userPk);
         if(familyProfileList.isEmpty()){
             Family family = familyRepository.findFamilyByUserPk(userPk);
             familyRepository.delete(family);

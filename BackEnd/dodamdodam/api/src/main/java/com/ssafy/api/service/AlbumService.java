@@ -76,14 +76,6 @@ public class AlbumService {
 
 
     @Transactional(readOnly = false)
-    public LocalDate createDate(String date){
-        String[] list = date.split("-");
-        LocalDate updateDate = LocalDate.of(Integer.parseInt(list[0]), Integer.parseInt(list[1]), Integer.parseInt(list[2]));
-        return updateDate;
-    }
-
-
-    @Transactional(readOnly = false)
     public AlbumMainResDto findMainPictureByAlbumId(long albumId){
         return pictureRepository.findMainPictureByAlbumId(albumId);
     }
@@ -167,7 +159,7 @@ public class AlbumService {
     public void updateAlbum(long userPk, Album album, AlbumUpdateReqDto albumUpdateReqDto,
                              Authentication authentication, HttpServletRequest request){
         Family family = findFamilyByUserPK(userPk);
-        album.updateLocalDate(createDate(albumUpdateReqDto.getDate()));
+        album.updateLocalDate(albumUpdateReqDto.getDate());
         albumRepository.save(album);
         boolean flag;
         List<String> updateHashTags =albumUpdateReqDto.getHashTags();

@@ -31,39 +31,25 @@ public class ScheduleService {
 
     public void createSchedule(NewScheduleReqDto scheduleReq, Family family, User user) {
         Profile profile = profileRepository.findProfileByUserPk(user.getUserPk());
-        LocalDate startDate = stringToLocalDate(scheduleReq.getStartDate());
+
         LocalDate endDate;
-        if (scheduleReq.getEndDate().length() > 0) {
-            endDate = stringToLocalDate(scheduleReq.getEndDate());
-        } else {
-            endDate = startDate;
+
+        if (scheduleReq.getEndDate() == null) {
+            endDate = scheduleReq.getStartDate();
+        }else{
+            endDate = scheduleReq.getEndDate();
         }
+
         scheduleRepository.save(Schedule.builder()
                 .title(scheduleReq.getTitle())
                 .content(scheduleReq.getContent())
-                .startDate(startDate)
+                .startDate(scheduleReq.getStartDate())
                 .endDate(endDate)
                 .family(family)
                 .role(profile.getRole())
                 .build());
     }
 
-    public LocalDate stringToLocalDate(String localDate) {
-        String[] localDateList = localDate.split("-");
-        LocalDate result;
-        try {
-            if (localDateList[0].length() != 4 || localDateList[1].length() != 2 || localDateList[2].length() != 2) {
-                throw new CustomException(INVALID_REQUEST, "잘못된 날짜 입력 방식입니다.");
-            }
-            result = LocalDate.of(
-                    Integer.parseInt(localDateList[0]),
-                    Integer.parseInt(localDateList[1]),
-                    Integer.parseInt(localDateList[2]));
-        } catch (NumberFormatException | DateTimeException e) {
-            throw new CustomException(INVALID_REQUEST);
-        }
-        return result;
-    }
 
     public Schedule getSchedule (long scheduleId, Family family) {
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId);
@@ -96,16 +82,18 @@ public class ScheduleService {
     }
 
     public void updateSchedule(Schedule schedule, NewScheduleReqDto scheduleReq) {
-        LocalDate startDate = stringToLocalDate(scheduleReq.getStartDate());
+
         LocalDate endDate;
-        if (scheduleReq.getEndDate().length() > 0) {
-            endDate = stringToLocalDate(scheduleReq.getEndDate());
-        } else {
-            endDate = startDate;
+
+        if (scheduleReq.getEndDate() == null) {
+            endDate = scheduleReq.getStartDate();
+        }else{
+            endDate = scheduleReq.getEndDate();
         }
+
         schedule.setTitle(scheduleReq.getTitle());
         schedule.setContent(scheduleReq.getContent());
-        schedule.setStartDate(startDate);
+        schedule.setStartDate(scheduleReq.getStartDate());
         schedule.setEndDate(endDate);
         scheduleRepository.save(schedule);
     }

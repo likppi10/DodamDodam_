@@ -84,7 +84,7 @@ class MainServiceTest {
 
         //when
         final List<MainProfileResDto> actualProfileList
-                = mainService.getProfileList(1L);
+                = mainService.getProfileListExceptMe(1L);
 
         //then
         then(actualProfileList).isEqualTo(List.of(expectMainProfileDto));
@@ -101,7 +101,7 @@ class MainServiceTest {
 
         //when
         final List<MainProfileResDto> actualProfileList
-                = mainService.getProfileList(1L);
+                = mainService.getProfileListExceptMe(1L);
 
         //then
         then(actualProfileList).isEqualTo(Collections.emptyList());
@@ -115,7 +115,7 @@ class MainServiceTest {
         given(profileRepository.findProfileIdByUserPk(anyLong())).willReturn(null);
 
         //when
-        final Throwable throwable = catchThrowable(() -> mainService.getProfileList(1L));
+        final Throwable throwable = catchThrowable(() -> mainService.getProfileListExceptMe(1L));
 
         //then
         then(throwable).isExactlyInstanceOf(CustomException.class);

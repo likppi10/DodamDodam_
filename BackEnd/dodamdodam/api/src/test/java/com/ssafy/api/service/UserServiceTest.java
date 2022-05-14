@@ -157,7 +157,7 @@ class UserServiceTest {
         //given
         FindIdReqDto givenDto = FindIdReqDto.builder()
                 .name("test")
-                .birthday("1992-12-04")
+                .birthday(LocalDate.parse("1992-12-04"))
                 .familyCode("123451234512345")
                 .build();
 
@@ -176,7 +176,7 @@ class UserServiceTest {
         //given
         FindIdReqDto givenDto = FindIdReqDto.builder()
                 .name("test")
-                .birthday("1992-12-04")
+                .birthday(LocalDate.parse("1992-12-04"))
                 .familyCode("123451234512345")
                 .build();
 
@@ -200,7 +200,7 @@ class UserServiceTest {
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         //when
-        userService.updateBirthdayWithUserPk(1L, "1992-12-04");
+        userService.updateBirthdayWithUserPk(1L, LocalDate.parse("1992-12-04"));
 
         //then
         verify(userRepository, times(1)).save(captor.capture());
