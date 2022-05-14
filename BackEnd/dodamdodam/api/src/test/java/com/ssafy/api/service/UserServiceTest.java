@@ -1,9 +1,10 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.config.JwtProvider;
+import com.ssafy.api.config.jwt.JwtProvider;
 import com.ssafy.core.dto.req.FindIdReqDto;
 import com.ssafy.core.dto.req.SignUpReqDto;
 import com.ssafy.core.dto.req.UserInfoReqDto;
+import com.ssafy.core.dto.res.ProfileIdAndFamilyIdResDto;
 import com.ssafy.core.dto.res.ReIssueTokenResDto;
 import com.ssafy.core.dto.res.SignInResDto;
 import com.ssafy.core.entity.User;
@@ -72,7 +73,7 @@ class UserServiceTest {
                 .willReturn(Optional.ofNullable(defaultUser));
 
         //when
-        final User user = userService.findByUserPk(1L);
+        final User user = userService.getUserByUserPk(1L);
 
         //then
         then(user.getUserId()).isEqualTo("test");
@@ -91,12 +92,13 @@ class UserServiceTest {
 
         //when
         final Throwable throwable = catchThrowable(
-                () -> userService.findByUserPk(1L));
+                () -> userService.getUserByUserPk(1L));
 
         //then
         then(throwable).isInstanceOf(CustomException.class);
 
     }
+
 
     @Test
     @DisplayName("signUp 정상동작")
@@ -156,7 +158,7 @@ class UserServiceTest {
         //given
         FindIdReqDto givenDto = FindIdReqDto.builder()
                 .name("test")
-                .birthday("1992-12-04")
+                .birthday(LocalDate.parse("1992-12-04"))
                 .familyCode("123451234512345")
                 .build();
 
@@ -175,7 +177,7 @@ class UserServiceTest {
         //given
         FindIdReqDto givenDto = FindIdReqDto.builder()
                 .name("test")
-                .birthday("1992-12-04")
+                .birthday(LocalDate.parse("1992-12-04"))
                 .familyCode("123451234512345")
                 .build();
 
@@ -199,7 +201,7 @@ class UserServiceTest {
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         //when
-        userService.updateBirthdayWithUserPk(1L, "1992-12-04");
+        userService.updateBirthdayByUserPk(1L, LocalDate.parse("1992-12-04"));
 
         //then
         verify(userRepository, times(1)).save(captor.capture());
@@ -255,12 +257,12 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        SignInResDto expectResDto = SignInResDto.builder()
+        ProfileIdAndFamilyIdResDto expectResDto = ProfileIdAndFamilyIdResDto.builder()
                 .familyId(1L)
                 .profileId(1L)
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(CharSequence.class), anyString()))
@@ -295,7 +297,7 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(null);
 
         //when
@@ -314,7 +316,7 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(), anyString()))
@@ -337,7 +339,7 @@ class UserServiceTest {
                 .password("password")
                 .build();
 
-        given(userRepository.findUserIdAndProviderType(anyString(),any()))
+        given(userRepository.findUserByUserIdAndProviderType(anyString(),any()))
                 .willReturn(defaultUser);
 
         given(passwordEncoder.matches(any(), anyString()))

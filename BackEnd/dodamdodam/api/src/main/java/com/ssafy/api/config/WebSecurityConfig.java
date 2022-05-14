@@ -1,5 +1,7 @@
 package com.ssafy.api.config;
 
+import com.ssafy.api.config.jwt.JwtAuthenticationFilter;
+import com.ssafy.api.config.jwt.JwtProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

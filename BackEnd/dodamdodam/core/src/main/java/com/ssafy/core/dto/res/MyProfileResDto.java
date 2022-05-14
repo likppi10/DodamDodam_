@@ -1,5 +1,6 @@
 package com.ssafy.core.dto.res;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class MyProfileResDto {
     private String nickname;
 
     @Schema(description = "생년월일", example = "1995-08-20")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate birthday;
 
 }

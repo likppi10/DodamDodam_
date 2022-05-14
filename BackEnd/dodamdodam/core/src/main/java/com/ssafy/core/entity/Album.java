@@ -30,15 +30,12 @@ public class Album extends BaseEntity{
     private LocalDate date;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
-    @Column(name = "hashtag_id")
     private List<HashTag> hashTags;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
-    @Column(name = "album_reaction_id")
     private List<AlbumReaction> albumReactions;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
-    @Column(name = "picture_id")
     private List<Picture> pictures;
 
     public void updateLocalDate(LocalDate date){

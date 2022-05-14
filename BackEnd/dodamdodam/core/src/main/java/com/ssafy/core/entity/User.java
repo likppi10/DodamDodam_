@@ -31,7 +31,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 100)
     private String userId;
 
-    //
     @Column(nullable = false, length = 10)
     private String name;
 

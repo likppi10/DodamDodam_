@@ -1,5 +1,6 @@
 package com.ssafy.api.config;
 
+import com.ssafy.api.config.jwt.JwtKey;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

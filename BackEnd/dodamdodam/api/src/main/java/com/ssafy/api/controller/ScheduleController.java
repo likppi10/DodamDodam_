@@ -49,7 +49,7 @@ public class ScheduleController {
                                        @Valid NewScheduleReqDto scheduleReq,
                                        Authentication authentication) {
         Long userPk = Long.parseLong(authentication.getName());
-        User user = userService.findByUserPk(userPk);
+        User user = userService.getUserByUserPk(userPk);
         Family family = familyService.fromUserIdToFamily(userPk);
         scheduleService.createSchedule(scheduleReq, family, user);
         return responseService.getSuccessResult("일정 생성 완료");

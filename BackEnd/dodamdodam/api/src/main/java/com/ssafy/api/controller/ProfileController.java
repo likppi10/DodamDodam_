@@ -87,7 +87,7 @@ public class ProfileController {
 
         Profile updateResult = profileService.updateProfile(userPk, profileRequest, profileRequest.getMultipartFile(), request);
 
-        userService.updateBirthdayWithUserPk(userPk, profileRequest.getBirthday());
+        userService.updateBirthdayByUserPk(userPk, profileRequest.getBirthday());
 
         profileService.enrollProfile(updateResult);
 

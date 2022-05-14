@@ -69,7 +69,7 @@ class MainControllerTest extends ControllerTestSupport {
     @WithMockCustomUser
     void getProfileList_정상작동() throws Exception {
         //given
-        given(mainService.getProfileList(any())).willReturn(expectListProfileDto);
+        given(mainService.getProfileListExceptMe(any())).willReturn(expectListProfileDto);
 
         //when
         ResultActions result = mockMvc.perform(

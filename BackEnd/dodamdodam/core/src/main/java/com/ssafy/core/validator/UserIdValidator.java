@@ -1,16 +1,15 @@
 package com.ssafy.core.validator;
 
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserIdValidator implements ConstraintValidator<UserId, String> {
+import static com.ssafy.core.common.Validate.USER_ID_MAX;
+import static com.ssafy.core.common.Validate.USER_ID_MIN;
 
-    final int USER_ID_MAX = 20;
-    final int USER_ID_MIN = 4;
+public class UserIdValidator implements ConstraintValidator<UserId, String> {
 
     @Override
     public void initialize(UserId constraintAnnotation) {

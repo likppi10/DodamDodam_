@@ -3,7 +3,6 @@ package com.ssafy.core.dto.res;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-
 @Builder
 @Getter
 @Setter

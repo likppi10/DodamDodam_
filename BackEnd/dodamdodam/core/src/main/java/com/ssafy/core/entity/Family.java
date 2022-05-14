@@ -26,15 +26,12 @@ public class Family {
     private String picture;
 
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL)
-    @Column(name = "album_id")
     private List<Album> albums;
 
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL)
-    @Column(name = "schedule_id")
     private List<Schedule> schedules;
 
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL)
-    @Column(name = "suggestion")
     private List<Suggestion> suggestions;
 
 }

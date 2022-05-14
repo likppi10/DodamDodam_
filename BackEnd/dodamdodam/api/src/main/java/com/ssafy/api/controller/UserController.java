@@ -24,6 +24,8 @@ import javax.validation.Valid;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.ssafy.core.common.Validate.USER_ID_MAX;
+import static com.ssafy.core.common.Validate.USER_ID_MIN;
 import static com.ssafy.core.exception.ErrorCode.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 
@@ -37,9 +39,6 @@ public class UserController {
     private final UserService userService;
     private final ResponseService responseService;
 
-    final int USER_ID_MAX = 20;
-    final int USER_ID_MIN = 4;
-
     @GetMapping(value = "{userId}")
     @Operation(summary = "ID 중복체크", description = "<strong>아이디</strong>의 사용여부를 확인한다.")
     public CommonResult idCheck(@PathVariable String userId) {
@@ -50,7 +49,6 @@ public class UserController {
             throw new CustomException(INVALID_REQUEST,
                     String.format("아이디는 영문,숫자만 사용가능하며, %d자 이상, %d자 이하여야 합니다.", USER_ID_MIN, USER_ID_MAX));
         }
-
         return responseService.getSuccessResult("사용 가능한 아이디입니다.");
     }
 
@@ -63,12 +61,11 @@ public class UserController {
              @Valid SignUpReqDto singUpRequest) {
 
         userService.signUp(singUpRequest);
-
         return responseService.getSuccessResult("회원가입 성공");
     }
 
     @PostMapping(value = "signin", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "로그인", description = "<strong>아이디, 패스워드</strong> 정보를 받아 로그인 한다.")
+    @Operation(summary = "로그인", description = "<strong>아이디, 패스워드</strong> 정보를 받아 로컬 로그인 한다.")
     public SingleResult<SignInResDto> userSignIn
             (@RequestBody
              @io.swagger.v3.oas.annotations.parameters.RequestBody
@@ -79,12 +76,26 @@ public class UserController {
 
     @Operation(summary = "소셜 로그인", description = "<strong>소셜 로그인<strong> 한다.",
             parameters = {
-                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+                    @Parameter(name = "X-AUTH-TOKEN", required = true, in = HEADER)
             })
-    @PostMapping(value = "/social", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "social", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody SingleResult<SignInResDto> socialLogin(@RequestHeader(value = "X-AUTH-TOKEN") String accessToken) {
 
-        return responseService.getSingleResult(userService.socialSignIn(accessToken));
+        SignInResDto signInResDto = userService.socialSignIn(accessToken);
+        return responseService.getSingleResult(signInResDto);
+    }
+
+
+    @GetMapping(value = "signout")
+    @Operation(summary = "로그아웃", description = "<strong>로그아웃</strong>을 한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    public CommonResult userSignOut(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        userService.signOut(userPk);
+        return responseService.getSuccessResult("로그아웃에 성공했습니다.");
     }
 
 
@@ -118,7 +129,6 @@ public class UserController {
              @Valid UserInfoReqDto request) {
 
         userService.updatePassword(request);
-
         return responseService.getSuccessResult("비밀번호가 성공적으로 재설정 되었습니다.");
     }
 
@@ -135,7 +145,7 @@ public class UserController {
              Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-        User user = userService.findByUserPk(userPk);
+        User user = userService.getUserByUserPk(userPk);
         userService.updateFcmToken(user, fcmReq);
         return responseService.getSuccessResult("성공적으로 저장되었습니다.");
     }

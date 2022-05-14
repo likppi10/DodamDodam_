@@ -6,7 +6,6 @@ import com.ssafy.core.dto.req.SuggestionReactionReqDto;
 import com.ssafy.core.dto.res.*;
 import com.ssafy.core.entity.*;
 import com.ssafy.core.exception.CustomException;
-import com.ssafy.core.exception.ErrorCode;
 import com.ssafy.core.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,18 +30,20 @@ public class MainService {
     private final SuggestionReactionRepository suggestionReactionRepository;
     private final AlarmRepository alarmRepository;
 
-    public List<MainProfileResDto> getProfileList(Long userPk) {
+    @Transactional
+    public List<MainProfileResDto> getProfileListExceptMe(Long userPk) {
+
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
         Long profileId = profileRepository.findProfileIdByUserPk(userPk);
 
         if (familyId == null || profileId == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
-
         return profileRepository.findProfileListByFamilyId(familyId).stream()
                 .filter(profile -> !profile.getProfileId().equals(profileId))
                 .collect(Collectors.toList());
     }
+
 
     @Transactional
     public void createSuggestion(CreateSuggestionReqDto request, Long userPk) {
@@ -159,7 +160,8 @@ public class MainService {
     }
 
 
-    public MissionResDto findTodayMission(long userPk) {
+    public MissionResDto findTodayMission(Long userPk) {
+
         return profileRepository.findTodayMissionByUserPk(userPk);
     }
 
