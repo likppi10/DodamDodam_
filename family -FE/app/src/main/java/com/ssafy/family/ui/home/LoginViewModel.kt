@@ -50,6 +50,11 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     val signUpLiveData: LiveData<Resource<BaseResponse>>
         get() = _signUpLiveData
 
+    private val _socialLoginLiveData = MutableLiveData<Resource<LoginRes>>()
+    val socialLoginLiveData: LiveData<Resource<LoginRes>>
+        get() = _socialLoginLiveData
+
+
     // 오늘 첫 로그인 체크
     private val _checkFirstLoginToday = MutableLiveData<Resource<MissionRes>>()
     val checkFirstLoginToday: LiveData<Resource<MissionRes>>
@@ -96,5 +101,10 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     fun getFirstLoginToday() = viewModelScope.launch {
         _checkFirstLoginToday.postValue(Resource.loading(null))
         _checkFirstLoginToday.postValue(accountRepository.getMainMission())
+    }
+
+    fun socialLogin() = viewModelScope.launch {
+        _socialLoginLiveData.postValue(Resource.loading(null))
+        _socialLoginLiveData.postValue(accountRepository.socialLogin())
     }
 }

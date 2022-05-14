@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.FamilyReq
-import com.ssafy.family.data.remote.res.FamilyRes
+import com.ssafy.family.data.remote.res.FamilyIdRes
+import com.ssafy.family.data.remote.res.FamilyInfoRes
 import com.ssafy.family.data.remote.res.MyProfileRes
 import com.ssafy.family.data.repository.FamilyRepository
 import com.ssafy.family.util.Resource
@@ -22,13 +23,13 @@ class StartSettingViewModel @Inject constructor(private val familyRepository: Fa
     ViewModel() {
 
     // 가족 생성/가입 시 받아온 id
-    private val _familyResponseLiveData = MutableLiveData<Resource<FamilyRes>>()
-    val familyResponseLiveData: LiveData<Resource<FamilyRes>>
+    private val _familyResponseLiveData = MutableLiveData<Resource<FamilyInfoRes>>()
+    val familyInfoResponseLiveData: LiveData<Resource<FamilyInfoRes>>
         get() = _familyResponseLiveData
 
     // 가족코드 검증 시 받아온 id
-    private val _checkFamilyCodeRes = MutableLiveData<Resource<FamilyRes?>>()
-    val checkFamilyCodeRes: LiveData<Resource<FamilyRes?>>
+    private val _checkFamilyCodeRes = MutableLiveData<Resource<FamilyIdRes?>>()
+    val checkFamilyCodeInfoRes: LiveData<Resource<FamilyIdRes?>>
         get() = _checkFamilyCodeRes
 
     // 수정 시 받아올 정보

@@ -76,11 +76,12 @@ class CalendarFragment : Fragment() {
         //월 단위 일정 요청
         scheduleMonthList = mutableMapOf()
         calendarViewModel.getMonthSchedule(monthLocalDateToString(today))
+        initCalendar()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCalendar()
+
         //월 단위 일정 요청결과 옵저버
         calendarViewModel.getMonthRequestLiveData.observe(requireActivity()){
             when (it.status) {
@@ -101,7 +102,7 @@ class CalendarFragment : Fragment() {
                         }
                     }
                     dismissMonthLoading()
-
+                    initCalendar()
                     selectDate(today)
                     updateAdapterForDate()
                 }

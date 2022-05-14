@@ -4,7 +4,8 @@ import android.util.Log
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.req.FamilyReq
-import com.ssafy.family.data.remote.res.FamilyRes
+import com.ssafy.family.data.remote.res.FamilyIdRes
+import com.ssafy.family.data.remote.res.FamilyInfoRes
 import com.ssafy.family.data.remote.res.MyProfileRes
 import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.Resource
@@ -26,7 +27,7 @@ class FamilyRepositoryImpl(
     override suspend fun createFamily(
         profile: FamilyReq,
         imageFile: File?
-    ): Resource<FamilyRes> =
+    ): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
@@ -49,7 +50,7 @@ class FamilyRepositoryImpl(
             }
         }
 
-    override suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyRes> =
+    override suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
@@ -72,7 +73,7 @@ class FamilyRepositoryImpl(
             }
         }
 
-    override suspend fun checkFamilyCode(familyCode: String): Resource<FamilyRes> =
+    override suspend fun checkFamilyCode(familyCode: String): Resource<FamilyIdRes> =
         withContext(ioDispatcher){
             try {
                 val response = api.checkFamilyCode(familyCode)

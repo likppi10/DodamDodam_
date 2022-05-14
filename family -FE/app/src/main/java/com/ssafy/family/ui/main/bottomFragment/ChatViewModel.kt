@@ -26,10 +26,10 @@ class ChatViewModel @Inject constructor(private val chatRepository: ChatReposito
     val getMemberRequestLiveData: LiveData<Resource<ChattingRes>>
         get() = _getMemberRequestLiveData
 
-    fun send(data: ChatData, familyCode: String) = viewModelScope.launch {
+    fun send(data: ChatData, familyCode: String) {
         var myRef = database.getReference("message_" + familyCode)
         chatRepository.send(data, myRef)
-        chatRepository.sendChattingFCM(data.message.toString())
+        viewModelScope.launch {chatRepository.sendChattingFCM(data.message.toString())}
     }
 
     fun getMember() = viewModelScope.launch {

@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">도담도담</string>
 
+    <string name="kakao_native_key">a1f1fa77f90e70af62243eda95593018</string>
+    <string name="kakao_manifest_key">kakaoa1f1fa77f90e70af62243eda95593018</string>
+
     <string name="bot_settingfragment">설정</string>
     <string name="bot_albumfragment">앨범</string>
     <string name="bot_calendarfragment">캘린더</string>

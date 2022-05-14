@@ -9,6 +9,7 @@ import com.ssafy.family.data.remote.res.FamilyCodeRes
 import com.ssafy.family.data.remote.res.MyStatusRes
 import com.ssafy.family.data.remote.res.ProfileImageRes
 import com.ssafy.family.data.remote.res.SchedulesRes
+import com.ssafy.family.data.repository.AccountRepository
 import com.ssafy.family.data.repository.CalendarRepository
 import com.ssafy.family.data.repository.SettingRepository
 import com.ssafy.family.util.Resource
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingViewModel @Inject constructor(private val settingRepository: SettingRepository) :
+class SettingViewModel @Inject constructor(private val settingRepository: SettingRepository, private val accountRepository: AccountRepository) :
     ViewModel() {
 
     private val _getProfileImageRequestLiveData = MutableLiveData<Resource<ProfileImageRes>>()
@@ -31,6 +32,10 @@ class SettingViewModel @Inject constructor(private val settingRepository: Settin
     private val _exitFamilyRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val exitFamilyRequestLiveData: LiveData<Resource<BaseResponse>>
         get() = _exitFamilyRequestLiveData
+
+    private val _logoutRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
+    val logoutRequestLiveData: LiveData<Resource<BaseResponse>>
+        get() = _logoutRequestLiveData
 
     private val _getStatusRequestLiveData = MutableLiveData<Resource<MyStatusRes>>()
     val getStatusRequestLiveData: LiveData<Resource<MyStatusRes>>
@@ -54,6 +59,11 @@ class SettingViewModel @Inject constructor(private val settingRepository: Settin
     fun getStatus() = viewModelScope.launch {
         _getStatusRequestLiveData.postValue(Resource.loading(null))
         _getStatusRequestLiveData.postValue(settingRepository.getStatus())
+    }
+
+    fun logout() = viewModelScope.launch {
+        _logoutRequestLiveData.postValue(Resource.loading(null))
+        _logoutRequestLiveData.postValue(accountRepository.logout())
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kakao.sdk.common.KakaoSdk
 import com.ssafy.family.util.SharedPreferencesUtil
 import dagger.hilt.android.HiltAndroidApp
 import okhttp3.OkHttpClient
@@ -38,6 +39,9 @@ class ApplicationClass: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        KakaoSdk.init(this, "a1f1fa77f90e70af62243eda95593018")
+
         sSharedPreferences = SharedPreferencesUtil(applicationContext)
         sContentResolver = contentResolver
 //        initRetrofit()
