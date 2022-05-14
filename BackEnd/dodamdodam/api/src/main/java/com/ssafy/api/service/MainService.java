@@ -30,14 +30,15 @@ public class MainService {
     private final SuggestionReactionRepository suggestionReactionRepository;
     private final AlarmRepository alarmRepository;
 
+    @Transactional
     public List<MainProfileResDto> getProfileListExceptMe(Long userPk) {
+
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
         Long profileId = profileRepository.findProfileIdByUserPk(userPk);
 
         if (familyId == null || profileId == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
-
         return profileRepository.findProfileListByFamilyId(familyId).stream()
                 .filter(profile -> !profile.getProfileId().equals(profileId))
                 .collect(Collectors.toList());
@@ -159,7 +160,8 @@ public class MainService {
     }
 
 
-    public MissionResDto findTodayMission(long userPk) {
+    public MissionResDto findTodayMission(Long userPk) {
+
         return profileRepository.findTodayMissionByUserPk(userPk);
     }
 

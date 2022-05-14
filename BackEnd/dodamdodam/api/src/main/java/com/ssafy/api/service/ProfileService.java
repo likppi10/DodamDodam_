@@ -208,8 +208,8 @@ public class ProfileService {
 //        }
 //    }
 
-    @Transactional(readOnly = false)
-    public String enrollImage(MultipartFile multipartFile, HttpServletRequest request) {
+    @Transactional
+    public String enrollImage(MultipartFile multipartFile) {
 
         try {
             if (!multipartFile.isEmpty()) {
@@ -296,7 +296,7 @@ public class ProfileService {
     }
 
     @Transactional
-    public void deleteProfile(long userPk){
+    public void deleteProfile(Long userPk){
         Profile profile = findProfileByUserPk(userPk);
         List<MainProfileResDto> familyProfileList = mainService.getProfileListExceptMe(userPk);
         if(familyProfileList.isEmpty()){

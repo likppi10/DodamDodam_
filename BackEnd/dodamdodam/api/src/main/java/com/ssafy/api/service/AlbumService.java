@@ -93,7 +93,7 @@ public class AlbumService {
 
 
     @Transactional(readOnly = false)
-    public void createAlbum(AlbumReqDto albumReqDto, Family family, Album album, List<MultipartFile> multipartFiles, HttpServletRequest request) {
+    public void createAlbum(AlbumReqDto albumReqDto, Family family, Album album, List<MultipartFile> multipartFiles) {
 
 
         String familyCode = family.getCode();
@@ -156,8 +156,7 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = false)
-    public void updateAlbum(long userPk, Album album, AlbumUpdateReqDto albumUpdateReqDto,
-                             Authentication authentication, HttpServletRequest request){
+    public void updateAlbum(Long userPk, Album album, AlbumUpdateReqDto albumUpdateReqDto){
         Family family = findFamilyByUserPK(userPk);
         album.updateLocalDate(albumUpdateReqDto.getDate());
         albumRepository.save(album);

@@ -1,9 +1,6 @@
 package com.ssafy.core.repository.querydsl;
 
-import com.ssafy.core.dto.res.ChattingMemberResDto;
-import com.ssafy.core.dto.res.MainProfileResDto;
-import com.ssafy.core.dto.res.MissionResDto;
-import com.ssafy.core.dto.res.SignInResDto;
+import com.ssafy.core.dto.res.*;
 import com.ssafy.core.entity.Profile;
 
 import java.util.List;
@@ -16,7 +13,7 @@ public interface ProfileRepoCustom {
 
     List<MainProfileResDto> findProfileListByFamilyId(Long familyId);
 
-    SignInResDto findProfileIdAndFamilyIdByUserPk(Long userPk);
+    ProfileIdAndFamilyIdResDto findProfileIdAndFamilyIdByUserPk(Long userPk);
 
     Long checkRoleByFamilyIdExceptMe(Long familyId, String role, Long profileId);
 
@@ -27,4 +24,6 @@ public interface ProfileRepoCustom {
     MissionResDto findTodayMissionByUserPk(Long userPk);
 
     List<ChattingMemberResDto> findChattingMemberListByFamilyId(Long familyId);
+
+    String findFcmTokenByProfileId(Long profileId);
 }

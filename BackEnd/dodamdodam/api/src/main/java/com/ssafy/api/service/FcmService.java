@@ -8,6 +8,7 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.google.firebase.messaging.Message;
 import com.ssafy.core.dto.res.FcmMessageResDto;
+import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -28,6 +29,7 @@ public class FcmService {
     private String firebasePath;
     private final ObjectMapper objectMapper;
 
+    private final ProfileRepository profileRepository;
 
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         String message = makeMessage(targetToken, title, body);
@@ -87,4 +89,7 @@ public class FcmService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
+    public String findFcmTokenByProfileId(Long profileId) {
+        return profileRepository.findFcmTokenByProfileId(profileId);
+    }
 }

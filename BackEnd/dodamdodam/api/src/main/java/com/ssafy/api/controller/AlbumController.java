@@ -1,6 +1,5 @@
 package com.ssafy.api.controller;
 
-
 import com.ssafy.core.dto.req.AlbumReactionReqDto;
 import com.ssafy.core.dto.req.AlbumReqDto;
 import com.ssafy.core.dto.req.AlbumUpdateReqDto;
@@ -19,9 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +94,7 @@ public class AlbumController {
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult createAlbum(@ModelAttribute
                                     @Valid final AlbumReqDto albumReqDto,
-                                    Authentication authentication,
-                                    HttpServletRequest request) {
+                                    Authentication authentication) {
 
         Long userPK = Long.parseLong(authentication.getName());
 
@@ -108,7 +104,7 @@ public class AlbumController {
                 .family(family)
                 .date(albumReqDto.getDate())
                 .build();
-        albumService.createAlbum(albumReqDto, family, album, albumReqDto.getMultipartFiles(), request);
+        albumService.createAlbum(albumReqDto, family, album, albumReqDto.getMultipartFiles());
 
         return responseService.getSuccessResult();
 
@@ -121,10 +117,10 @@ public class AlbumController {
             })
     @PostMapping(value = "/reaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult createReaction(
-                                       @RequestBody
-                                       @io.swagger.v3.oas.annotations.parameters.RequestBody
-                                               AlbumReactionReqDto albumReactionReqDto,
-                                       Authentication authentication) {
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody
+                    AlbumReactionReqDto albumReactionReqDto,
+            Authentication authentication) {
 
         Long userPK = Long.parseLong(authentication.getName());
         Album album = albumService.findByAlbum(albumReactionReqDto.getAlbumId());
@@ -154,12 +150,11 @@ public class AlbumController {
     public CommonResult updateAlbum(
             @ModelAttribute
             @Valid AlbumUpdateReqDto albumUpdateReqDto,
-            Authentication authentication,
-            HttpServletRequest request) {
+            Authentication authentication) {
 
         Long userPK = Long.parseLong(authentication.getName());
         Album album = albumService.findByAlbum(albumUpdateReqDto.getAlbumId());
-        albumService.updateAlbum(userPK, album, albumUpdateReqDto, authentication, request);
+        albumService.updateAlbum(userPK, album, albumUpdateReqDto);
         return responseService.getSuccessResult();
     }
 
@@ -169,7 +164,7 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             }
     )
-    public ListResult<AlbumResDto> searchAlbum(@PathVariable String keyword, Authentication authentication){
+    public ListResult<AlbumResDto> searchAlbum(@PathVariable String keyword, Authentication authentication) {
         Long userPK = Long.parseLong(authentication.getName());
         Family family = albumService.findFamilyByUserPK(userPK);
         List<Album> albums = albumService.findAlbumsByHashTag(keyword, family.getId());
@@ -197,7 +192,7 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             }
     )
-    public ListResult<AlbumResDto> searchAlbumByDate(@PathVariable String date,Authentication authentication){
+    public ListResult<AlbumResDto> searchAlbumByDate(@PathVariable String date, Authentication authentication) {
         Long userPK = Long.parseLong(authentication.getName());
         Family family = albumService.findFamilyByUserPK(userPK);
         List<Album> albums = albumService.findAlbumsByDate(date, family.getId());
@@ -225,7 +220,7 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             }
     )
-    public CommonResult deleteAlbum(@PathVariable long albumId,Authentication authentication){
+    public CommonResult deleteAlbum(@PathVariable long albumId, Authentication authentication) {
         Long userPK = Long.parseLong(authentication.getName());
         albumService.deleteAlbum(albumId, userPK);
 

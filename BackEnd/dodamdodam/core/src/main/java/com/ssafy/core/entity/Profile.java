@@ -39,7 +39,7 @@ public class Profile extends BaseEntity {
     private String nickname;
 
     @Nullable
-    @Column(length = 20)
+    @Column(length = 100)
     private String mission_content;
 
     @Nullable
@@ -64,15 +64,12 @@ public class Profile extends BaseEntity {
     private Family family;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
-    @Column(name = "album_reaction_id")
     private List<AlbumReaction> albumReactions;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
-    @Column(name = "suggestion_reaction_id")
     private List<SuggestionReaction> suggestionReactions;
 
     @OneToMany(mappedBy = "me", cascade = CascadeType.ALL)
-    @Column(name = "alarm_id")
     private List<Alarm> alarms;
 
 //

@@ -1,4 +1,4 @@
-package com.ssafy.api.config;
+package com.ssafy.api.config.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

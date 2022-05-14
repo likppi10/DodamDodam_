@@ -1,4 +1,4 @@
-package com.ssafy.api.config;
+package com.ssafy.api.config.jwt;
 
 import com.ssafy.core.entity.User;
 import com.ssafy.core.exception.ErrorCode;
