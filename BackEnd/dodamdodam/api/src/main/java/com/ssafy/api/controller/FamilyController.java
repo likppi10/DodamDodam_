@@ -107,6 +107,7 @@ public class FamilyController {
                 .familyId(family.getId())
                 .build();
         return responseService.getSingleResult(res);
+        //profile Id 반납 여부 생각해보기.
     }
 
     @Operation(summary = "가족 코드 조회", description = "<strong>가족 id<strong>를 받아 가족 코드를 조회한다.",

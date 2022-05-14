@@ -7,12 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
@@ -25,10 +27,10 @@ public class AlbumUpdateReqDto {
     @ArraySchema(schema = @Schema(description = "해시태그", required = true, example = "광화문"))
     private List<String> hashTags;
 
-    @NotBlank
-    @Size(max = 10, min = 1)
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Schema(description = "앨범날짜", required = true, example = "2022-04-20")
-    private String date;
+    private LocalDate date;
 
     @Schema(description = "앨범아이디", required = false, example = "")
     private long albumId;
@@ -44,6 +46,6 @@ public class AlbumUpdateReqDto {
     @Schema(description = "메인사진 index", required = true, example = "")
     private int mainIndex;
 
-    @Schema(description = "사진들", required = false, example = "")
+    @Schema(description = "사진들", example = "")
     private List<MultipartFile> multipartFiles;
 }

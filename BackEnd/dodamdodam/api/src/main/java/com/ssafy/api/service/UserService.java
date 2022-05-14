@@ -78,11 +78,11 @@ public class UserService {
     }
 
     @Transactional
-    public void updateBirthdayWithUserPk(Long userPk, String birthday) {
+    public void updateBirthdayWithUserPk(Long userPk, LocalDate birthday) {
 
         User user = this.findByUserPk(userPk);
 
-        user.updateBirthday(LocalDate.parse(birthday));
+        user.updateBirthday(birthday);
 
         userRepository.save(user);
     }

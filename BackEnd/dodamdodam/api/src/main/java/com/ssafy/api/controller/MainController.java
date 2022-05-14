@@ -48,7 +48,7 @@ public class MainController {
 
         Long userPk = Long.parseLong(authentication.getName());
 
-        return responseService.getListResult(mainService.getProfileList(userPk));
+        return responseService.getListResult(mainService.getProfileListExceptMe(userPk));
     }
 
 
