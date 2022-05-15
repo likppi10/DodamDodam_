@@ -23,6 +23,7 @@ import com.ssafy.family.ui.Adapter.OpinionAdapter
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.roulette.RouletteActivity
 import com.ssafy.family.ui.schedule.ScheduleActivity
+import com.ssafy.family.ui.wishtree.WishTreeActivity
 import com.ssafy.family.util.CalendarUtil
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
@@ -233,6 +234,11 @@ class EventFragment : Fragment() {
 
         binding.rouletteIcon.setOnClickListener {
             val intent = Intent(requireContext(), RouletteActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.wishtreeIcon.setOnClickListener {
+            val intent = Intent(requireContext(), WishTreeActivity::class.java)
             startActivity(intent)
         }
     }
