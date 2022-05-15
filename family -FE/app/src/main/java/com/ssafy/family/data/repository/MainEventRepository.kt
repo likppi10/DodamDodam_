@@ -12,7 +12,7 @@ interface MainEventRepository {
 
     suspend fun addOpinionReaction(opinionReactionReq: OpinionReactionReq): Resource<OpinionRes>
 
-    suspend fun addOpinion(text: String): Resource<BaseResponse>
+    suspend fun addOpinion(opinionReq: OpinionReq): Resource<BaseResponse>
 
     suspend fun deleteOpinion(suggestionId:Long): Resource<BaseResponse>
 }

@@ -1,10 +1,11 @@
 package com.ssafy.core.repository.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.core.dto.req.FindIdReqDto;
+import com.ssafy.core.common.ProviderType;
 import com.ssafy.core.entity.Profile;
 import com.ssafy.core.entity.QProfile;
 import com.ssafy.core.entity.QUser;
+import com.ssafy.core.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +29,8 @@ public class UserRepoCustomImpl implements UserRepoCustom {
                 .on(user.userPk.eq(profile.user.userPk))
                 .where(user.name.eq(name)
                         .and(user.birthday.eq(birthday))
-                        .and(profile.family.code.eq(familyCode)))
+                        .and(profile.family.code.eq(familyCode))
+                        .and(user.providerType.eq(ProviderType.LOCAL)))
                 .fetchFirst();
     }
 
@@ -49,6 +51,14 @@ public class UserRepoCustomImpl implements UserRepoCustom {
                 .join(user)
                 .on(profile.user.userPk.eq(user.userPk))
                 .where(profile.id.eq(profileId))
+                .fetchFirst();
+    }
+
+    @Override
+    public User findUserByUserIdAndProviderType(String userId, ProviderType providerType) {
+        return jpaQueryFactory.select(user)
+                .from(user)
+                .where(user.userId.eq(userId).and(user.providerType.eq(providerType)))
                 .fetchFirst();
     }
 

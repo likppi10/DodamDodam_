@@ -31,33 +31,37 @@ public class ChattingController {
     private final ResponseService responseService;
     private final MainService mainService;
     private final FcmService fcmService;
+
     @Operation(summary = "채팅 맴버들 프로필 조회", description = "<strong>채팅 맴버들<strong>의 프로필을 조회한다.",
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
     @GetMapping(value = "")
     public ListResult<ChattingMemberResDto> getChattingMemberProfile(Authentication authentication) {
-        long userPk = Long.parseLong(authentication.getName());
 
+        long userPk = Long.parseLong(authentication.getName());
         return responseService.getListResult(profileService.getProfileListByUserPk(userPk));
     }
 
-    @Operation(summary = "채팅 맴버들 프로필 조회", description = "<strong>채팅 맴버들<strong>의 프로필을 조회한다.",
+    @Operation(summary = "채팅 발송", description = "<strong>채팅 맴버들<strong>에게 FCM 알람을 발송한다.",
             parameters = {
                     @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
             })
     @PostMapping(value = "/send")
     public CommonResult send(@RequestParam String text, Authentication authentication) throws  IOException {
+
         Long userPk = Long.parseLong(authentication.getName());
         Profile me = mainService.getProfileByUserPk(userPk);
-        List<MainProfileResDto> familyList = mainService.getProfileList(userPk);
+        List<MainProfileResDto> familyList = mainService.getProfileListExceptMe(userPk);
+
+        //본인 뿐이 없을때는 그냥 성공만 보냄.
         for (MainProfileResDto pf : familyList) {
-            if (me.getId() != pf.getProfileId()) {
-                Profile target = mainService.getProfileByProfilePk(pf.getProfileId());
-                fcmService.sendMessageTo(mainService.getTargetFcmToken(target), "채팅 알림", target.getNickname()+" : "+text);
+            String targetFcmToken = fcmService.findFcmTokenByProfileId(pf.getProfileId());
+            if(targetFcmToken != null) {
+                fcmService.sendMessageTo(targetFcmToken, "채팅 알림", me.getNickname() + " : " + text);
             }
         }
+
         return responseService.getSuccessResult();
     }
-
 }

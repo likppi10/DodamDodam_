@@ -42,38 +42,22 @@ class FcmService: FirebaseMessagingService() {
         // 메시지 유형이 데이터 메시지일 경우
         // Check if message contains a data payload.
 
-        Log.d("dddd", "onMessageReceived: "+remoteMessage.data)
+        Log.d("datadatadata", "onMessageReceived: "+remoteMessage.data)
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d("dddd", "Message data payload: ${remoteMessage.data}")
+            Log.d("datadatadata", "Message data payload: ${remoteMessage.data}")
+
             sendDataMessage(remoteMessage.data)
 
             if(remoteMessage.data["title"]?.contains("채팅") == true&&ApplicationClass.isChatting.value!=true){
+                //sendDataMessage(remoteMessage.data)
                 fcmList = readSharedPreference("fcm")
                 fcmList.add(remoteMessage.data["body"].toString())
                 writeSharedPreference("fcm", fcmList)
-                Log.d("tetete", "onMessageReceived: "+readSharedPreference("fcm").size)
+                Log.d("datadatadata", "readSharedPreference(\"fcm\").size: "+readSharedPreference("fcm").size)
                 ApplicationClass.livePush.postValue(readSharedPreference("fcm").size)
             }
         }
 
-        // 메시지 유형이 알림 메시지일 경우
-        // Check if message contains a notification payload.
-        // Set FCM title, body to android notification
-        var notificationInfo: Map<String, String> = mapOf()
-//        remoteMessage.notification?.let {
-//            notificationInfo = mapOf(
-//                "title" to it.title.toString(),
-//                "body" to it.body.toString()
-//            )
-//            if(notificationInfo["body"]?.contains("채팅") == true){
-//                fcmList = readSharedPreference("fcm")
-//                fcmList.add(it.body.toString())
-//                writeSharedPreference("fcm", fcmList)
-//                Log.d("tetete", "onMessageReceived: "+readSharedPreference("fcm").size)
-//                ApplicationClass.livePush.postValue(readSharedPreference("fcm").size)
-//            }
-//            sendNotification(notificationInfo)
-//        }
     }
     override fun onDeletedMessages() {
         super.onDeletedMessages()
@@ -106,7 +90,7 @@ class FcmService: FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Since android Oreo notification channel is needed.
+//        // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
@@ -123,7 +107,7 @@ class FcmService: FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-
+        Log.d("sendDataMessagesendDataMessage", "sendDataMessagesendDataMessagesendDataMessagesendDataMessage: ")
         notificationManager.notify(100, notificationBuilder.build() )
 
     }
@@ -190,6 +174,9 @@ class FcmService: FirebaseMessagingService() {
         val obj: ArrayList<String> = gson.fromJson(json, type) ?: ArrayList()
         return obj
     }
+
+
+
     companion object {
         private const val TAG = "FAMILY"
     }

@@ -10,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Schema(name = "FamilyCodeCheck Response")
 public class FamilyIdResDto {
-    @Schema(description = "id", example = "1")
+    @Schema(description = "familyId", example = "1")
     private long familyId;
 }

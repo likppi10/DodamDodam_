@@ -5,14 +5,14 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Validate {
+public class Validate {
 
-    USER_ID_MAX(20),
-    USER_ID_MIN(4),
-    USER_PWD_MAX(20),
-    USER_PWD_MIN(8),
-    USER_NAME_MIN(1),
-    USER_NAME_MAX(10);
+    public static final int USER_ID_MAX = 20;
+    public static final int USER_ID_MIN = 4;
+    public static final int USER_PWD_MAX = 20;
+    public static final int USER_PWD_MIN = 8;
+    public static final int USER_NAME_MIN = 1;
+    public static final int USER_NAME_MAX = 10;
 
     private final int number;
 }

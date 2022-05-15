@@ -2,6 +2,7 @@ package com.ssafy.family.data.remote.api
 
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.OpinionReactionReq
+import com.ssafy.family.data.remote.req.OpinionReq
 import com.ssafy.family.data.remote.req.ScheduleReq
 import com.ssafy.family.data.remote.res.OpinionReactionRes
 import com.ssafy.family.data.remote.res.OpinionRes
@@ -19,7 +20,7 @@ interface MainEventAPI {
     suspend fun addOpinionReaction(@Body opinionReactionReq: OpinionReactionReq): Response<OpinionRes>
 
     @POST("api/main/suggestion")
-    suspend fun addOpinion(@Query("text") text: String): Response<BaseResponse>
+    suspend fun addOpinion(@Body opinionReq: OpinionReq): Response<BaseResponse>
 
     @HTTP(method = "DELETE", path = "/api/main/{suggestionId}")
     suspend fun deleteOpinion(@Path("suggestionId") suggestionId :Long): Response<BaseResponse>

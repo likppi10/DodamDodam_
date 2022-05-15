@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.time.LocalDate;
+
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 
 @Slf4j
@@ -47,7 +49,7 @@ public class ScheduleController {
                                        @Valid NewScheduleReqDto scheduleReq,
                                        Authentication authentication) {
         Long userPk = Long.parseLong(authentication.getName());
-        User user = userService.findByUserPk(userPk);
+        User user = userService.getUserByUserPk(userPk);
         Family family = familyService.fromUserIdToFamily(userPk);
         scheduleService.createSchedule(scheduleReq, family, user);
         return responseService.getSuccessResult("일정 생성 완료");
@@ -111,7 +113,7 @@ public class ScheduleController {
     @GetMapping(value = "/day/{day}")
     public ListResult<ScheduleDetailResDto> scheduleListDay(@PathVariable String day, Authentication authentication) {
         return responseService.getListResult(
-                scheduleService.getScheduleListByUserPkAndDay(Long.parseLong(authentication.getName()), day));
+                scheduleService.getScheduleListByUserPkAndDay(Long.parseLong(authentication.getName()), LocalDate.parse(day)));
     }
 
     @Operation(summary = "월별 일정 조회", description = "<strong>해당 월</strong>로 일정을 조회한다.",

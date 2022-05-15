@@ -3,12 +3,10 @@ package com.ssafy.core.repository.querydsl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.core.dto.res.ChattingMemberResDto;
-import com.ssafy.core.dto.res.MainProfileResDto;
-import com.ssafy.core.dto.res.MissionResDto;
-import com.ssafy.core.dto.res.SignInResDto;
+import com.ssafy.core.dto.res.*;
 import com.ssafy.core.entity.Profile;
 import com.ssafy.core.entity.QProfile;
+import com.ssafy.core.entity.QUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +18,7 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
     private final JPAQueryFactory queryFactory;
 
     QProfile profile = QProfile.profile;
+    QUser user = QUser.user;
 
     @Override
     public Profile findProfileByUserPk(Long userPK) {
@@ -53,9 +52,9 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
     }
 
     @Override
-    public SignInResDto findProfileIdAndFamilyIdByUserPk(Long userPk) {
+    public ProfileIdAndFamilyIdResDto findProfileIdAndFamilyIdByUserPk(Long userPk) {
         return queryFactory
-                .select(Projections.fields(SignInResDto.class,
+                .select(Projections.fields(ProfileIdAndFamilyIdResDto.class,
                         profile.id.as("profileId"),
                         profile.family.id.as("familyId")))
                 .from(profile)
@@ -117,6 +116,15 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
                 .where(profile.id.in(ids))
                 .fetch();
     }
+
+    @Override
+    public String findFcmTokenByProfileId(Long profileId) {
+        return queryFactory.select(user.fcmToken)
+                .from(profile)
+                .where(profile.id.eq(profileId))
+                .fetchFirst();
+    }
+
 
     private BooleanExpression profileIdNotEquals(Long profileId) {
         return profileId != null ? profile.id.ne(profileId) : null;

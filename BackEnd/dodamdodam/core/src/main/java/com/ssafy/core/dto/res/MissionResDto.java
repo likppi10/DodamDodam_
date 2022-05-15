@@ -3,9 +3,6 @@ package com.ssafy.core.dto.res;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 @Builder
 @Getter
 @Setter

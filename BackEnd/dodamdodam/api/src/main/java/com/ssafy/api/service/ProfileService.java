@@ -5,6 +5,8 @@ import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
 import com.ssafy.core.dto.req.StatusReqDto;
 import com.ssafy.core.dto.res.ChattingMemberResDto;
+import com.ssafy.core.dto.res.MyProfileResDto;
+import com.ssafy.core.dto.res.TodayConditionResDto;
 import com.ssafy.core.dto.res.MainProfileResDto;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Profile;
@@ -73,10 +75,17 @@ public class ProfileService {
     @Transactional(readOnly = false)
     public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
-        String originFileName = multipartFile.getOriginalFilename();
-        String filePath = fileService.uploadFileV1("profile", multipartFile);
-        profile.updateImageName(originFileName);
-        profile.updateImagePath(filePath);
+        try {
+            if (!multipartFile.isEmpty()) {
+                String originFileName = multipartFile.getOriginalFilename();
+                String filePath = fileService.uploadFileV1("profile", multipartFile);
+                profile.updateImageName(originFileName);
+                profile.updateImagePath(filePath);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 //        updateImage(multipartFile, profile, request);
         profile.updateRole(profileDto.getRole());
         profile.updateNickname(profileDto.getNickname());
@@ -199,8 +208,8 @@ public class ProfileService {
 //        }
 //    }
 
-    @Transactional(readOnly = false)
-    public String enrollImage(MultipartFile multipartFile, HttpServletRequest request) {
+    @Transactional
+    public String enrollImage(MultipartFile multipartFile) {
 
         try {
             if (!multipartFile.isEmpty()) {
@@ -253,10 +262,43 @@ public class ProfileService {
         return profileRepository.findChattingMemberListByFamilyId(familyId);
     }
 
+    public TodayConditionResDto getTodayCondition(Long userPk) {
+
+        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
+        if(myProfile == null){
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
+        return TodayConditionResDto.builder()
+                .comment(myProfile.getComment())
+                .emotion(myProfile.getEmotion())
+                .build();
+    }
+
+    public MyProfileResDto getMyProfile(Long userPk) {
+        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
+
+        if(myProfile == null){
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
+
+        LocalDate birthday = userRepository.findBirthdayByProfileId(myProfile.getId());
+
+        if(birthday == null){
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
+
+        return MyProfileResDto.builder()
+                .role(myProfile.getRole())
+                .nickname(myProfile.getNickname())
+                .birthday(birthday)
+                .imagePath(myProfile.getImagePath())
+                .build();
+    }
+
     @Transactional
-    public void deleteProfile(long userPk){
+    public void deleteProfile(Long userPk){
         Profile profile = findProfileByUserPk(userPk);
-        List<MainProfileResDto> familyProfileList = mainService.getProfileList(userPk);
+        List<MainProfileResDto> familyProfileList = mainService.getProfileListExceptMe(userPk);
         if(familyProfileList.isEmpty()){
             Family family = familyRepository.findFamilyByUserPk(userPk);
             familyRepository.delete(family);

@@ -17,5 +17,5 @@ public class BaseEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime modifyedAt;
+    private LocalDateTime modifiedAt;
 }

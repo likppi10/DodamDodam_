@@ -76,14 +76,6 @@ public class AlbumService {
 
 
     @Transactional(readOnly = false)
-    public LocalDate createDate(String date){
-        String[] list = date.split("-");
-        LocalDate updateDate = LocalDate.of(Integer.parseInt(list[0]), Integer.parseInt(list[1]), Integer.parseInt(list[2]));
-        return updateDate;
-    }
-
-
-    @Transactional(readOnly = false)
     public AlbumMainResDto findMainPictureByAlbumId(long albumId){
         return pictureRepository.findMainPictureByAlbumId(albumId);
     }
@@ -101,7 +93,7 @@ public class AlbumService {
 
 
     @Transactional(readOnly = false)
-    public void createAlbum(AlbumReqDto albumReqDto, Family family, Album album, List<MultipartFile> multipartFiles, HttpServletRequest request) {
+    public void createAlbum(AlbumReqDto albumReqDto, Family family, Album album, List<MultipartFile> multipartFiles) {
 
 
         String familyCode = family.getCode();
@@ -164,10 +156,9 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = false)
-    public void updateAlbum(long userPk, Album album, AlbumUpdateReqDto albumUpdateReqDto,
-                             Authentication authentication, HttpServletRequest request){
+    public void updateAlbum(Long userPk, Album album, AlbumUpdateReqDto albumUpdateReqDto){
         Family family = findFamilyByUserPK(userPk);
-        album.updateLocalDate(createDate(albumUpdateReqDto.getDate()));
+        album.updateLocalDate(albumUpdateReqDto.getDate());
         albumRepository.save(album);
         boolean flag;
         List<String> updateHashTags =albumUpdateReqDto.getHashTags();

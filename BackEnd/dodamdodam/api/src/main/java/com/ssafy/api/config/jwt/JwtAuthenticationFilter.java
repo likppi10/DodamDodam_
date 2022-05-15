@@ -1,6 +1,5 @@
-package com.ssafy.api.config;
+package com.ssafy.api.config.jwt;
 
-import com.ssafy.api.config.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +20,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     // Request로 들어오는 Jwt Token의 유효성을 검증(jwtTokenProvider.validateToken)하는 filter를 filterChain에 등록합니다.
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws
-            IOException,
-            ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtProvider.resolveToken((HttpServletRequest) request);
         if (token != null && jwtProvider.validateToken(token)) {
             try {

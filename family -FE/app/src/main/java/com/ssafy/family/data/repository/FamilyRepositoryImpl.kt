@@ -1,9 +1,12 @@
 package com.ssafy.family.data.repository
 
 import android.util.Log
+import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.req.FamilyReq
-import com.ssafy.family.data.remote.res.FamilyRes
+import com.ssafy.family.data.remote.res.FamilyIdRes
+import com.ssafy.family.data.remote.res.FamilyInfoRes
+import com.ssafy.family.data.remote.res.MyProfileRes
 import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +27,7 @@ class FamilyRepositoryImpl(
     override suspend fun createFamily(
         profile: FamilyReq,
         imageFile: File?
-    ): Resource<FamilyRes> =
+    ): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
@@ -47,7 +50,7 @@ class FamilyRepositoryImpl(
             }
         }
 
-    override suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyRes> =
+    override suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
@@ -70,10 +73,68 @@ class FamilyRepositoryImpl(
             }
         }
 
-    override suspend fun checkFamilyCode(familyCode: String): Resource<FamilyRes> =
+    override suspend fun checkFamilyCode(familyCode: String): Resource<FamilyIdRes> =
         withContext(ioDispatcher){
             try {
                 val response = api.checkFamilyCode(familyCode)
+                when {
+                    response.isSuccessful -> {
+                        Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")
+                        Resource.success(response.body()!!)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG,
+                            "FamilyRepositoryImpl - createFamily() ErrorCode:${
+                                response.code().toString()
+                            }"
+                        )
+                        Resource.error(null, "응답 에러")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "api 요청 실패")
+                Resource.error(null, "서버 에러 $e")
+            }
+        }
+
+    override suspend fun getMyProfile(): Resource<MyProfileRes> =
+        withContext(ioDispatcher){
+            try {
+                val response = api.getMyProfile()
+                when {
+                    response.isSuccessful -> {
+                        Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")
+                        Resource.success(response.body()!!)
+                    }
+                    else -> {
+                        Log.d(
+                            TAG,
+                            "FamilyRepositoryImpl - createFamily() ErrorCode:${
+                                response.code().toString()
+                            }"
+                        )
+                        Resource.error(null, "응답 에러")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "api 요청 실패")
+                Resource.error(null, "서버 에러 $e")
+            }
+        }
+
+    override suspend fun updateMyProfile(
+        profile: FamilyReq,
+        imageFile: File?
+    ): Resource<BaseResponse> =
+        withContext(ioDispatcher){
+            try {
+                val map = HashMap<String, RequestBody>()
+                map.put("role", getRequestBody(profile.role))
+                map.put("nickname", getRequestBody(profile.nickname))
+                map.put("birthday", getRequestBody(profile.birthday))
+                val image = convertFile(imageFile)
+                val response = api.updateMyProfile(map, image)
                 when {
                     response.isSuccessful -> {
                         Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")
@@ -101,6 +162,15 @@ class FamilyRepositoryImpl(
         } else {
             val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
             return MultipartBody.Part.createFormData("image", file.name, requestFile)
+        }
+    }
+
+    private fun convertFile(file: File?): MultipartBody.Part? {
+        if (file == null) {
+            return null
+        } else {
+            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+            return MultipartBody.Part.createFormData("multipartFile", file.name, requestFile)
         }
     }
 

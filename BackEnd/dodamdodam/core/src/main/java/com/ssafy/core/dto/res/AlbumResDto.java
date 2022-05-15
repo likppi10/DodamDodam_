@@ -1,14 +1,10 @@
 package com.ssafy.core.dto.res;
 
-
-import com.ssafy.core.entity.Album;
-import com.ssafy.core.entity.Picture;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
-
 
 @Builder
 @Getter

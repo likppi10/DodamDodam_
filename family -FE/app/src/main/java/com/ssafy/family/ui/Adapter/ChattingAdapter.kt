@@ -1,5 +1,6 @@
 package com.ssafy.family.ui.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -8,7 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.ssafy.family.data.ChatData
+import com.ssafy.family.data.remote.res.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.ItemChattingBinding
 import com.ssafy.family.util.LoginUtil.getUserInfo
@@ -27,6 +28,7 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemBinding = holder.binding as ItemChattingBinding
 
+        Log.d("XXXX", "memberList: $memberList")
         var user: MemberInfo? = null
         for(a in memberList){
             if(a.profileId == datas[position].id){
@@ -46,8 +48,8 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
                 itemBinding.oppChatting.visibility = VISIBLE
                 itemBinding.oppChattingText.text = datas[position].message.toString()
                 itemBinding.oppTimeText.text = datas[position].time.toString()
-                itemBinding.oppWriterText.text = datas[position].name.toString()
-                Glide.with(itemBinding.oppProfileButton).load(datas[position].profileImage)
+                itemBinding.oppWriterText.text = user.nickname
+                Glide.with(itemBinding.oppProfileButton).load(user.profileImage)
                     .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                     .centerInside()
                     .into(itemBinding.oppProfileButton)
@@ -57,7 +59,7 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
             itemBinding.oppChatting.visibility = VISIBLE
             itemBinding.oppChattingText.text = datas[position].message.toString()
             itemBinding.oppTimeText.text = datas[position].time.toString()
-            itemBinding.oppWriterText.text = "탈퇴한 회원입니다."
+            itemBinding.oppWriterText.text = "존재하지 않는 회원입니다."
         }
 
     }

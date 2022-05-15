@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.core.dto.req.AlarmReqDto;
+import com.ssafy.core.dto.req.CreateSuggestionReqDto;
 import com.ssafy.core.dto.req.SuggestionReactionReqDto;
 import com.ssafy.core.dto.res.*;
 import com.ssafy.core.entity.*;
@@ -16,8 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ssafy.core.exception.ErrorCode.INVALID_REQUEST;
-import static com.ssafy.core.exception.ErrorCode.NOT_BELONG_FAMILY;
+import static com.ssafy.core.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,30 +30,38 @@ public class MainService {
     private final SuggestionReactionRepository suggestionReactionRepository;
     private final AlarmRepository alarmRepository;
 
-    public List<MainProfileResDto> getProfileList(Long userPk) {
-        long familyId = familyRepository.findFamilyIdByUserPk(userPk);
-        long profileId = profileRepository.findProfileIdByUserPk(userPk);
+    @Transactional
+    public List<MainProfileResDto> getProfileListExceptMe(Long userPk) {
 
+        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
+        Long profileId = profileRepository.findProfileIdByUserPk(userPk);
+
+        if (familyId == null || profileId == null) {
+            throw new CustomException(NOT_FOUND_FAMILY);
+        }
         return profileRepository.findProfileListByFamilyId(familyId).stream()
                 .filter(profile -> !profile.getProfileId().equals(profileId))
                 .collect(Collectors.toList());
     }
 
-    public void createSuggestion(String text, Long userPk) {
+
+    @Transactional
+    public void createSuggestion(CreateSuggestionReqDto request, Long userPk) {
         Family family = familyRepository.findFamilyByUserPk(userPk);
 
         if (family == null) {
             throw new CustomException(INVALID_REQUEST);
         }
 
-        if (suggestionRepository.countSuggestionByFamily_Id(family.getId()) < 3) {
-            suggestionRepository.save(Suggestion.builder()
-                    .family(family)
-                    .text(text)
-                    .build());
-        } else {
+        if (suggestionRepository.countSuggestionByFamily_Id(family.getId()) >= 3) {
             throw new CustomException(INVALID_REQUEST, "의견제시는 가족당 최대 3개까지 입니다!");
         }
+
+        suggestionRepository.save(Suggestion.builder()
+                .family(family)
+                .text(request.getText())
+                .build());
+
     }
 
     public void deleteSuggestion(Long suggestionId, Long userPk) {
@@ -112,10 +120,10 @@ public class MainService {
             suggestionReactionRepository.save(SuggestionReaction.builder()
                     .profile(profile)
                     .suggestion(suggestion)
-                    .isLike(request.isLike())
+                    .isLike(request.getIsLike())
                     .build());
 
-            if (request.isLike()) {
+            if (request.getIsLike()) {
                 suggestion.updateLikeCount(1);
             } else {
                 suggestion.updateDislikeCount(1);
@@ -123,18 +131,18 @@ public class MainService {
 
             suggestionRepository.save(suggestion);
 
-        } else if (suggestionReaction.getIsLike() != request.isLike()) {
-            suggestionReaction.setIsLike(request.isLike());
+        } else if (suggestionReaction.getIsLike() != request.getIsLike()) {
+            suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            int updateCount = request.isLike() ? +1 : -1;
+            int updateCount = request.getIsLike() ? +1 : -1;
             suggestion.updateLikeCount(updateCount);
             suggestion.updateDislikeCount(updateCount * -1);
 
             suggestionRepository.save(suggestion);
         } else {
             suggestionReactionRepository.delete(suggestionReaction);
-            if (request.isLike()) {
+            if (request.getIsLike()) {
                 suggestion.updateLikeCount(-1);
             } else {
                 suggestion.updateDislikeCount(-1);
@@ -152,7 +160,8 @@ public class MainService {
     }
 
 
-    public MissionResDto findTodayMission(long userPk) {
+    public MissionResDto findTodayMission(Long userPk) {
+
         return profileRepository.findTodayMissionByUserPk(userPk);
     }
 
@@ -164,6 +173,7 @@ public class MainService {
         return fcmToken;
 
     }
+
     public Profile getProfileByUserPk(Long userPk) {
         Profile profile = profileRepository.findProfileByUserPk(userPk);
         if (profile == null) {
@@ -192,7 +202,7 @@ public class MainService {
                     .build()
             );
         } else {
-            alarm.setCount(alarm.getCount()+1);
+            alarm.setCount(alarm.getCount() + 1);
             alarmRepository.save(alarm);
         }
     }

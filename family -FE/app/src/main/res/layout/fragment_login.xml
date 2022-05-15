@@ -6,38 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.LoginFragment">
 
-    <TextView
-        android:id="@+id/login_page_app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:fontFamily="@font/spoqahansans"
-        android:text="@string/app_name"
-        android:textColor="@color/pink01"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/login_page_app_name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:fontFamily="@font/spoqahansans"-->
+<!--        android:text="@string/app_name"-->
+<!--        android:textColor="@color/pink01"-->
+<!--        android:textSize="36sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ImageView
         android:id="@+id/login_page_logo"
         android:layout_width="250dp"
         android:layout_height="300dp"
-        android:layout_marginTop="-45dp"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/main_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_page_app_name" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/login_page_form_box"
         android:layout_width="295dp"
-        android:layout_height="377dp"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="-30dp"
+        android:layout_marginTop="-45dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/form_white_bg"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_page_logo" />
@@ -46,11 +48,12 @@
         android:id="@+id/login_page_welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/spoqahansans"
         android:text="@string/Welcome"
         android:textColor="@color/pink01"
         android:textSize="36sp"
+        android:elevation="5dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/login_page_form_box"
         app:layout_constraintStart_toStartOf="@+id/login_page_form_box"
@@ -63,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_weight="20"
+        android:elevation="5dp"
         android:hint="@string/ID"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -89,6 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="20"
         android:hint="@string/PW"
+        android:elevation="5dp"
         android:textSize="20sp"
         android:textStyle="bold"
         app:boxStrokeColor="@color/pink01"
@@ -110,9 +115,8 @@
 
     <TextView
         android:id="@+id/login_page_login_btn"
-        android:layout_width="233dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:background="@drawable/box_roulette"
         android:elevation="5dp"
         android:fontFamily="@font/spoqahansans"
@@ -121,8 +125,8 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/login_page_form_box"
-        app:layout_constraintStart_toStartOf="@id/login_page_form_box"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_loginF_PW"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_loginF_PW"
         app:layout_constraintTop_toBottomOf="@id/textInputLayout_loginF_PW" />
 
     <LinearLayout
@@ -130,6 +134,7 @@
         android:layout_width="233dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        android:elevation="5dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/login_page_form_box"
@@ -140,6 +145,7 @@
             android:id="@+id/login_page_sign_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="5dp"
             android:fontFamily="@font/spoqahansans"
             android:text="@string/sign"
             android:textColor="@color/pink01"
@@ -151,6 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
+            android:elevation="5dp"
             android:fontFamily="@font/spoqahansans"
             android:text="@string/find_user"
             android:textColor="@color/pink01"
@@ -158,6 +165,21 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/kakaoIcon"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/kakao_login"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/login_page_form_box"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_loginF_PW"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_loginF_PW"
+        app:layout_constraintTop_toBottomOf="@+id/login_page_bottom_nav_button_box" />
 
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"

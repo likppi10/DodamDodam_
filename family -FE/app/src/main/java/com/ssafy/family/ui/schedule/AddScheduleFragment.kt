@@ -22,6 +22,7 @@ import com.ssafy.family.data.remote.req.ScheduleReq
 import com.ssafy.family.databinding.CalendarHeaderBinding
 import com.ssafy.family.databinding.CalendarSelectingDayBinding
 import com.ssafy.family.databinding.FragmentAddScheduleBinding
+import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.util.CalendarUtil
 import com.ssafy.family.util.CalendarUtil.getDrawableCompat
 import com.ssafy.family.util.CalendarUtil.dayLocalDateToString
@@ -30,6 +31,7 @@ import com.ssafy.family.util.CalendarUtil.isOutDateBetween
 import com.ssafy.family.util.CalendarUtil.makeInVisible
 import com.ssafy.family.util.CalendarUtil.makeVisible
 import com.ssafy.family.util.CalendarUtil.setTextColorRes
+import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -42,6 +44,7 @@ class AddScheduleFragment : Fragment() {
 
     private lateinit var binding: FragmentAddScheduleBinding
     private val addScheduleViewModel by activityViewModels<AddScheduleViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
@@ -116,6 +119,11 @@ class AddScheduleFragment : Fragment() {
                 }
                 Status.LOADING -> {
                     setLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                    loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.util.Utility
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.remote.req.AddFcmReq
@@ -42,10 +44,16 @@ class HomeActivity : AppCompatActivity() {
     private val loginViewModel by viewModels<LoginViewModel>()
     lateinit var dialog: Dialog
     lateinit var permissionUtil: PermissionUtil
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        val keyHash = Utility.getKeyHash(this)//onCreate 안에 입력해주자
+//        Log.d("Hash", keyHash)
+
         permissionUtil = PermissionUtil(this)
         Log.d("dddd", "onMessageReceived: "+readSharedPreference("fcm").size)
         // 오늘 첫 로그인 확인
@@ -69,6 +77,7 @@ class HomeActivity : AppCompatActivity() {
     fun init(){
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
             // TODO: 토큰 만료됐을시 분기 만들어야함
+            Log.d("XXXXXXXX", "LoginUtil.getUserInfo():${LoginUtil.getUserInfo()}")
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
 
 
@@ -100,18 +109,21 @@ class HomeActivity : AppCompatActivity() {
                     // 1) 가입 후 첫 로그인인가? = LoginUtil 내에 familyId가 있는가?
                     val familyId = LoginUtil.getFamilyId()
                     Log.d(TAG, "HomeActivity - init() familyId : $familyId")
+                    Log.d("XXXXXXXXXX", "HomeActivity - LoginUtil.getFamilyId() : ${LoginUtil.getUserInfo()}")
                     if (familyId == "0") { // 가입한 Family 없음
                         startActivity(Intent(this, StartSettingActivity::class.java))
-                        finish()
+                        finishAffinity()
                     } else { // 가입한 Family 있음
                         // 2) 오늘 첫 로그인인가? = 오늘의 미션이 있는가?(missionContent)
                         val missionContent = loginViewModel.checkFirstLoginToday.value?.data?.dataSet?.missionContent
                         if (missionContent == null) { // 오늘 첫 로그인
                             startActivity(Intent(this, StatusActivity::class.java))
-                            finish()
+                            finishAffinity()
                         } else { // 첫 로그인 아님
+                            Log.d("ddddddddddddd", "왜 안와1 ")
+                            Log.d("ddddddddddddd", "왜 안와2 ")
                             startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            finishAffinity()
                         }
                     }
                 }
@@ -153,23 +165,25 @@ class HomeActivity : AppCompatActivity() {
                 return@OnCompleteListener
             }
             Log.d("dddd", "getFCM: "+task.result!!)
+            Log.d("ddddddddddddd", "안와1 "+task.result!!)
+            Log.d("ddddddddddddd", "안와2 "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
-        createNotificationChannel(MainActivity.channel_id, "ssafy")
+//        createNotificationChannel(MainActivity.channel_id, "ssafy")
     }
 
-    // NotificationChannel 설정
-    private fun createNotificationChannel(id: String, name: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(id, name, importance)
-
-            val notificationManager = getSystemService(
-                Context.NOTIFICATION_SERVICE
-            ) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
+//    // NotificationChannel 설정
+//    private fun createNotificationChannel(id: String, name: String) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val importance = NotificationManager.IMPORTANCE_DEFAULT
+//            val channel = NotificationChannel(id, name, importance)
+//
+//            val notificationManager = getSystemService(
+//                Context.NOTIFICATION_SERVICE
+//            ) as NotificationManager
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//    }
 
     private fun setLoading() {
         binding.progressBarLoginFLoading.visibility = View.VISIBLE

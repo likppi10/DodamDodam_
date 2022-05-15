@@ -10,13 +10,15 @@ public enum ErrorCode {
     //User
     USER_DOESNT_EXIST(404, "U101", "유저를 찾을 수 없습니다."),
     DUPLICATE_USER_ID(409, "U102", "이미 사용중인 아이디입니다."),
+    //Social Login
+    SOCIAL_TOKEN_IS_NOT_VALID(401,"S101","소셜 토큰이 유효하지 않습니다."),
 
     //Profile
     DUPLICATE_ROLE(409, "P101", "이미 다른 가족 구성원이 설정한 역할입니다."),
     DUPLICATE_NICKNAME(409, "P102", "이미 다른 가족 구성원이 사용중인 닉네임입니다."),
 
     //Family
-    NOT_FOUND_FAMILY(404, "F101", "가입된 가족 그룹이 없습니다.."),
+    NOT_FOUND_FAMILY(404, "F101", "가입된 가족 그룹이 없습니다."),
     NOT_BELONG_FAMILY(405, "F102", "해당 그룹에 권한이 없습니다."),
 
     //Album

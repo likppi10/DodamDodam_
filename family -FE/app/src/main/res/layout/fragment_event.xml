@@ -22,8 +22,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/today_schedule_recyclerView"
-        android:layout_width="330dp"
         android:layout_height="120dp"
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/box_text_event"
         android:orientation="vertical"
         android:layout_marginTop="8dp"
@@ -71,7 +73,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/opinion_recyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -105,7 +107,9 @@
 
         <View
             android:id="@+id/rectangle_1"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -129,7 +133,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/add_opinion_button"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/rectangle_1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -143,7 +147,7 @@
             android:textColor="@color/pink01"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/rectangle_1"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -171,8 +175,10 @@
 
         <View
             android:id="@+id/free_icon_g"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/box_text_event"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

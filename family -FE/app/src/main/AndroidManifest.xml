@@ -21,10 +21,10 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.wishtree.WishTreeActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.status.StatusActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.startsetting.StartSettingActivity"
             android:exported="true"></activity>
@@ -39,7 +39,7 @@
             android:exported="true"></activity>
         <activity
             android:name=".ui.roulette.RouletteActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".ui.schedule.ScheduleActivity"
             android:exported="true"
@@ -51,6 +51,20 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakaoa1f1fa77f90e70af62243eda95593018"  />
             </intent-filter>
         </activity>
 

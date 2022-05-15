@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.res.FamilyPictureRes
+import com.ssafy.family.data.remote.res.MyStatusRes
 import com.ssafy.family.data.remote.res.StatusRes
 import com.ssafy.family.data.repository.StatusRepository
 import com.ssafy.family.util.Constants.TAG
@@ -28,10 +29,10 @@ class StatusViewModel @Inject constructor(private val statusRepository: StatusRe
     private val _editFamilyPictureResponse = MutableLiveData<Resource<BaseResponse>>()
     val editFamilyPictureResponse: LiveData<Resource<BaseResponse>>
         get() = _editFamilyPictureResponse
-    // 오늘의 한마디
-    private val _todaysMessage = MutableLiveData<Resource<StatusRes>>()
-    val todaysMessage: LiveData<Resource<StatusRes>>
-        get() = _todaysMessage
+    // 내 상태
+    private val _getMyStatus = MutableLiveData<Resource<MyStatusRes>>()
+    val getMyStatus: LiveData<Resource<MyStatusRes>>
+        get() = _getMyStatus
     // 수정 요청 res
     private val _editStatusResponse = MutableLiveData<Resource<BaseResponse>>()
     val editStatusResponse: LiveData<Resource<BaseResponse>>
@@ -54,9 +55,9 @@ class StatusViewModel @Inject constructor(private val statusRepository: StatusRe
     }
 
     fun getMyStatus() = viewModelScope.launch {
-        _todaysMessage.postValue(Resource.loading(null))
+        _getMyStatus.postValue(Resource.loading(null))
         val res = statusRepository.getMyStatus()
-        _todaysMessage.postValue(res)
+        _getMyStatus.postValue(res)
         Log.d(TAG, "StatusViewModel - getMyStatus() $res")
     }
 
