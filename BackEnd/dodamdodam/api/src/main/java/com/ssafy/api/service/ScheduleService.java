@@ -14,6 +14,7 @@ import com.ssafy.core.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -29,7 +30,9 @@ public class ScheduleService {
     private final ProfileRepository profileRepository;
     private final FamilyRepository familyRepository;
 
+    @Transactional
     public void createSchedule(NewScheduleReqDto scheduleReq, Family family, User user) {
+
         Profile profile = profileRepository.findProfileByUserPk(user.getUserPk());
 
         LocalDate endDate;
@@ -51,7 +54,9 @@ public class ScheduleService {
     }
 
 
+    @Transactional(readOnly = true)
     public Schedule getSchedule (long scheduleId, Family family) {
+
         Schedule schedule = scheduleRepository.findScheduleById(scheduleId);
         if (schedule == null) {
             throw new CustomException(INVALID_REQUEST, "해당 일정이 없습니다.");
@@ -61,14 +66,16 @@ public class ScheduleService {
         return scheduleRepository.findScheduleById(scheduleId);
     }
 
-
+    @Transactional(readOnly = true)
     public List<ScheduleDetailResDto> getScheduleListByUserPkAndDay (Long userPk, LocalDate day) {
-        Family family = familyRepository.findFamilyByUserPk(userPk);
 
+        Family family = familyRepository.findFamilyByUserPk(userPk);
         return scheduleRepository.findScheduleByDay(day, family);
     }
 
+    @Transactional(readOnly = true)
     public List<ScheduleDetailResDto> getScheduleListByMonth (Family family, String month) {
+
         String[] dayList = month.split("-");
         try {
             if (dayList[0].length() != 4 || dayList[1].length() != 2) {
@@ -81,6 +88,7 @@ public class ScheduleService {
         return scheduleRepository.findScheduleByMonth(result, family);
     }
 
+    @Transactional
     public void updateSchedule(Schedule schedule, NewScheduleReqDto scheduleReq) {
 
         LocalDate endDate;
@@ -98,6 +106,7 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
 
+    @Transactional
     public void deleteSchedule(Schedule schedule) {
         scheduleRepository.delete(schedule);
     }
