@@ -13,7 +13,7 @@ import lombok.*;
 public class SuggestionReactionListResDto {
 
     @Schema(description = "좋아요 여부", example = "true/false")
-    private boolean isLike;
+    private Boolean isLike;
 
     @Schema(description = "프로필 id", example = "1")
     private Long profileId;
