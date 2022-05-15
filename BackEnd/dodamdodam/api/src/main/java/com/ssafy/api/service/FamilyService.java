@@ -135,21 +135,4 @@ public class FamilyService {
         family.setPicture(filePath);
         familyRepository.save(family);
     }
-
-    public void checkFamilyAuthority(Authentication authentication) {
-        Long userPk = Long.parseLong(authentication.getName());
-        Profile profile = profileRepository.findProfileByUserPk(userPk);
-        if (profile == null) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST, "그룹에 권한이 없습니다.");
-        }
-    }
-
-    public Long getFamilyIdByUserPk(Long userPk) {
-        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
-        if (familyId == null) {
-            throw new CustomException(ErrorCode.NOT_BELONG_FAMILY);
-        }
-        return familyId;
-    }
-
 }

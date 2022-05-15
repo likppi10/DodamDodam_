@@ -56,6 +56,7 @@ public class ChattingController {
 
         //본인 뿐이 없을때는 그냥 성공만 보냄.
         for (MainProfileResDto pf : familyList) {
+
             String targetFcmToken = fcmService.findFcmTokenByProfileId(pf.getProfileId());
             if(targetFcmToken != null) {
                 fcmService.sendMessageTo(targetFcmToken, "채팅 알림", me.getNickname() + " : " + text);
