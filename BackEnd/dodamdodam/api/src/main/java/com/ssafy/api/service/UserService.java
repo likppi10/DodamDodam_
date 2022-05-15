@@ -125,7 +125,6 @@ public class UserService {
                 .jwtToken(token)
                 .refreshToken(refreshToken)
                 .build();
-
     }
 
     @Transactional
@@ -174,7 +173,6 @@ public class UserService {
                     .build();
             user = userRepository.save(user);
         }
-
         return getSignInResDto(user);
     }
 
@@ -224,7 +222,6 @@ public class UserService {
     public void signOut(Long userPk) {
 
         User user = this.getUserByUserPk(userPk);
-
         user.updateFcmToken(null);
         userRepository.save(user);
     }

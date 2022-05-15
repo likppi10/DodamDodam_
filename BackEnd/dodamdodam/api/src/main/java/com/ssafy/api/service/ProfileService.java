@@ -31,7 +31,6 @@ import static com.ssafy.core.exception.ErrorCode.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
@@ -49,30 +48,12 @@ public class ProfileService {
     };
 
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void enrollProfile(Profile profile) {
         profileRepository.save(profile);
     }
 
-    //    @Transactional(readOnly = false)
-//    public void enrollProfile(String userId){
-//        User user = userService.findByUserId(userId);
-//
-//        String[] imageInfo  = enrollImage(multipartFile, request).split("#");
-//        //family코드로 넣을 부분 필요
-//        Profile profile = Profile.builder()
-//                .role(profileRequest.getRole())
-//                .nickname(profileRequest.getNickname())
-//                .user(user)
-//                .imagePath(imageInfo[0])
-//                .imageName(imageInfo[1])
-////                .family()
-//                .build();
-//
-//        profileService.enrollProfile(profile);
-//
-//    }
-    @Transactional(readOnly = false)
+    @Transactional
     public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
         try {
@@ -162,51 +143,19 @@ public class ProfileService {
             }
 
             missionContent.append(missionSelect);
-
             profile.updateMissionContent(missionContent.toString());
         }
         return profile;
     }
 
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void updateStatus(Profile profile, StatusReqDto statusDto) {
         profile.updateEmotion(statusDto.getEmotion());
         profile.updateComment(statusDto.getComment());
 
         profileRepository.save(profile);
     }
-//
-//    @Transactional(readOnly = false)
-//    public void updateImage(MultipartFile multipartFile, Profile profile, HttpServletRequest request){
-//        try{
-//            String separ = File.separator;
-//            String today= new SimpleDateFormat("yyMMdd").format(new Date());
-//
-//            File file = new File("");
-////            String rootPath = file.getAbsolutePath().split("src")[0];
-//
-////            String savePath = "../"+"profileImg"+separ+today;
-//            String savePath = request.getServletContext().getRealPath("/resources/profileImage");
-//            log.info(savePath);
-//            if(!new File(savePath).exists()){
-//                try{
-//                    new File(savePath).mkdirs();
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//            String originFileName = multipartFile.getOriginalFilename();
-//            String saveFileName = UUID.randomUUID().toString() + originFileName.substring(originFileName.lastIndexOf("."));
-//
-//            String filePath = savePath+separ+saveFileName;
-//            multipartFile.transferTo(new File(filePath));
-//            profile.updateImagePath("/resources/profileImage/"+saveFileName);
-//            profile.updateImageName(originFileName);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 
     @Transactional
     public String enrollImage(MultipartFile multipartFile) {
@@ -236,14 +185,18 @@ public class ProfileService {
     }
 
 
+    @Transactional(readOnly = true)
     public void checkRoleByFamilyIdExceptMe(Long familyId, String role, Long userPk) {
+
         Long profileId = profileRepository.findProfileIdByUserPk(userPk);
         if (profileRepository.checkRoleByFamilyIdExceptMe(familyId, role, profileId) != 0) {
             throw new CustomException(DUPLICATE_ROLE);
         }
     }
 
+    @Transactional(readOnly = true)
     public void checkNicknameByFamilyIdExceptMe(Long familyId, String nickname, Long userPk) {
+
         Long profileId = profileRepository.findProfileIdByUserPk(userPk);
         if (profileRepository.checkNicknameByFamilyIdExceptMe(familyId, nickname, profileId) != 0) {
             throw new CustomException(DUPLICATE_NICKNAME);
@@ -258,10 +211,10 @@ public class ProfileService {
         if (profileRepository.findChattingMemberListByFamilyId(familyId) == null) {
             throw new CustomException(INVALID_REQUEST);
         }
-
         return profileRepository.findChattingMemberListByFamilyId(familyId);
     }
 
+    @Transactional(readOnly = true)
     public TodayConditionResDto getTodayCondition(Long userPk) {
 
         Profile myProfile = profileRepository.findProfileByUserPk(userPk);
@@ -274,9 +227,10 @@ public class ProfileService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public MyProfileResDto getMyProfile(Long userPk) {
-        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
 
+        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
         if(myProfile == null){
             throw new CustomException(NOT_FOUND_FAMILY);
         }
