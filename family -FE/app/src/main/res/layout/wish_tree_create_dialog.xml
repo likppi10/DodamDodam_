@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/wish_tree_create_dialog_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="@drawable/box_wish_tree_dialog"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/box_wish_tree_dialog"
         android:padding="40dp">
 
         <TextView
             android:id="@+id/wish_tree_create_dialog_guide_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wishtree_create_guide_message"
             android:layout_marginVertical="20dp"
             android:fontFamily="@font/spoqahansans"
+            android:gravity="center"
+            android:text="@string/wishtree_create_guide_message"
             android:textColor="@color/black_text"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -42,13 +43,13 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/wish_tree_create_dialog_input_wish"
                 style="@style/TextInputStyle"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
                 android:maxLength="20"
                 android:textColor="@color/pink01"
-                android:inputType="textPersonName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -59,7 +60,6 @@
             android:background="@drawable/box_wish_tree_confirm"
             android:fontFamily="@font/spoqahansans"
             android:gravity="center"
-            android:text="@string/add_wish"
             android:textColor="@color/pink02"
             android:textSize="24sp"
             android:textStyle="bold" />

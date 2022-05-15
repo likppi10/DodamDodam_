@@ -20,6 +20,7 @@ object InputValidUtil {
     val phoneRegex = "^\\d{3}\\d{3,4}\\d{4}$".toRegex()
 
     val familyCodeRegex = "^[0-9a-zA-Z]{15}$".toRegex()
+    val wishRegex = "^[가-힣a-zA-Z0-9`~!?@#$%^&*()_=+]{1,20}$".toRegex()
 
     fun isValidId(Id: String): Boolean {
         val result = Id.matches(idRegex)
@@ -90,5 +91,9 @@ object InputValidUtil {
 
     fun isValidFamilyCode(code: String): Boolean {
         return code.matches(familyCodeRegex)
+    }
+
+    fun isValidWish(content: String): Boolean {
+        return content.matches(wishRegex)
     }
 }

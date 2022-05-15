@@ -11,4 +11,7 @@ interface WishtreeRepository {
 
     suspend fun createWishTree(content: String): Resource<BaseResponse>
 
+    suspend fun updateWishTree(wishTreeId: Int, content: String): Resource<BaseResponse>
+
+    suspend fun deleteWishTree(wishTreeId: Int): Resource<BaseResponse>
 }

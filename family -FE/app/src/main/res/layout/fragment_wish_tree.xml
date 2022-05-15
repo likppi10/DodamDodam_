@@ -127,9 +127,8 @@
         app:layout_constraintEnd_toEndOf="@id/wish_tree_img"
         app:layout_constraintStart_toStartOf="@id/wish_tree_img"
         app:layout_constraintTop_toTopOf="@id/wish_tree_img"
-        app:lottie_autoPlay="true"
+        app:lottie_autoPlay="false"
         app:lottie_fileName="open_box.json"
         app:lottie_loop="false" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import com.ssafy.family.R
+import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.ActivityWishTreeBinding
+import com.ssafy.family.ui.roulette.RoulettetResultDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,4 +24,5 @@ class WishTreeActivity : AppCompatActivity() {
             .replace(R.id.wishtree_frame_layout, WishTreeFragment())
             .commit()
     }
+
 }

@@ -7,13 +7,13 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class WishTree (
     @SerializedName("position")
-    val position: Long,
+    val position: Int,
     @SerializedName("content")
     val content: String,
     @SerializedName("role")
     val role: String,
     @SerializedName("profileImg")
     val profileImg: String?,
-    @SerializedName("wishListId")
-    val wishListId: Long
+    @SerializedName("wishTreeId")
+    val wishTreeId: Int
 ): Parcelable

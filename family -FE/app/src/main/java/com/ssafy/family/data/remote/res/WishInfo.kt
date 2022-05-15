@@ -6,8 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class WishInfo (
-    @SerializedName("profileImg")
-    val canCreate: Boolean,
+    @SerializedName("myWishPosition")
+    val myWishPosition: Int,
     @SerializedName("wishTree")
     val wishTree: List<WishTree>
 ): Parcelable
