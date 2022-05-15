@@ -22,7 +22,7 @@ public class AlbumReqDto {
     private List<String> hashTags;
 
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-M-d")
     @Schema(description = "앨범날짜", required = true, example = "2022-04-20")
     private LocalDate date;
 

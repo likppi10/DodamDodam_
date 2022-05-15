@@ -11,5 +11,5 @@ import lombok.*;
 @Schema(name = "FamilyCodeCheck Response")
 public class FamilyIdResDto {
     @Schema(description = "familyId", example = "1")
-    private long familyId;
+    private Long familyId;
 }
