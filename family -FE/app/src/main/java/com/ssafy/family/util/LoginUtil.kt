@@ -57,7 +57,7 @@ object LoginUtil {
         preferences.deleteString(REFRESH_TOKEN)
         preferences.deleteString(NAME)
         preferences.deleteString(PROFILE_ID)
-        preferences.deleteString(FAMILY_ID)
+        preferences.setString(FAMILY_ID, "0")
     }
 
 //    fun deleteUserFamilyInfo() {

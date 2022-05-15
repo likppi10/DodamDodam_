@@ -122,12 +122,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun logout() {
-        livePush = MutableLiveData(0)
-        writeSharedPreference("fcm", arrayListOf())
-        Toast.makeText(this, "로그아웃 했습니다.", Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, HomeActivity::class.java)
-        finishAffinity()
-        startActivity(intent)
-    }
+
 }

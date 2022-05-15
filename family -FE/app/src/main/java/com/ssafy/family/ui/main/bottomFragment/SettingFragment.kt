@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +18,23 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.gson.Gson
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass.Companion.livePush
+import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentSettingBinding
+import com.ssafy.family.ui.home.HomeActivity
 import com.ssafy.family.ui.home.LoginViewModel
+import com.ssafy.family.ui.main.GuideDialog
 import com.ssafy.family.ui.main.MainActivity
+import com.ssafy.family.ui.roulette.RouletteSelectDialog
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.LoginUtil.signOut
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.HashMap
 
 @AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
@@ -36,6 +43,8 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingBinding
     private val loginViewModel by activityViewModels<LoginViewModel>()
     private val settingViewModel by activityViewModels<SettingViewModel>()
+
+    val SP_NAME = "fcm_message"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +69,7 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         settingViewModel.getFamilyCodeRequestLiveData.observe(requireActivity()){
             when (it.status) {
@@ -103,7 +113,7 @@ class SettingFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     signOut()
-                    (activity as MainActivity).logout()
+                    logout()
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
@@ -142,7 +152,7 @@ class SettingFragment : Fragment() {
                 Status.SUCCESS -> {
 
                     signOut()
-                    (activity as MainActivity).logout()
+                    logout()
                 }
                 Status.ERROR -> {
                     Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
@@ -193,13 +203,57 @@ class SettingFragment : Fragment() {
         }
 
         binding.exitGroupButton.setOnClickListener {
-            settingViewModel.exitFamily()
+            showExitDialog()
         }
 
         binding.logoutButton.setOnClickListener {
-            settingViewModel.logout()
+            showLogoutDialog()
         }
     }
 
+    private fun showExitDialog(){
+        var dialog = ExitDialog(requireContext())
+        dialog.showDialog()
+        dialog.setOnClickListener(object : ExitDialog.OnDialogClickListener {
+            override fun onClicked() {
+                settingViewModel.exitFamily()
+            }
+            override fun onClosed() {}
+        })
+    }
+
+    private fun showLogoutDialog(){
+        var dialog = LogoutDialog(requireContext())
+        dialog.showDialog()
+        dialog.setOnClickListener(object : LogoutDialog.OnDialogClickListener {
+            override fun onClicked() {
+                settingViewModel.logout()
+            }
+            override fun onClosed() {}
+        })
+    }
+
+    private fun writeSharedPreference(key:String, value:ArrayList<String>){
+        val sp = requireActivity().getSharedPreferences(SP_NAME, AppCompatActivity.MODE_PRIVATE)
+        val editor = sp.edit()
+        val gson = Gson()
+        val json: String = gson.toJson(value)
+        editor.putString(key, json)
+        editor.apply()
+    }
+
+    fun logout() {
+        livePush = MutableLiveData(0)
+        writeSharedPreference("fcm", arrayListOf())
+        Toast.makeText(requireContext(), "로그아웃 했습니다.", Toast.LENGTH_SHORT).show()
+        val intent = Intent(requireContext(), HomeActivity::class.java)
+        requireActivity().finishAffinity()
+        startActivity(intent)
+    }
+
+//    private fun showSelectDialog(){
+//        var dialog = GuideDialog(requireContext())
+//        dialog.showDialog()
+//    }
 
 }

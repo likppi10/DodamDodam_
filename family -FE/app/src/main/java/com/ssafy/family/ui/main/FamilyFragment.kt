@@ -11,6 +11,7 @@ import com.ssafy.family.data.remote.res.FamilyProfile
 import com.ssafy.family.databinding.FragmentFamilyBinding
 import com.ssafy.family.ui.Adapter.AlarmAdapter
 import com.ssafy.family.ui.Adapter.StatusAdapter
+import com.ssafy.family.ui.roulette.RouletteSelectDialog
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +48,13 @@ class FamilyFragment : Fragment() {
     }
 
     private fun initView() {
+
+//        showSelectDialog("main")
+
+        if(requireActivity().intent.getStringExtra("to") == "first"){
+            showSelectDialog()
+        }
+
         statusAdapter = StatusAdapter(requireActivity()).apply {
             itemClickListener=this@FamilyFragment.alarmClickListener
         }
@@ -106,6 +114,11 @@ class FamilyFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showSelectDialog(){
+        var dialog = GuideDialog(requireContext())
+        dialog.showDialog()
     }
 
     private fun setLoading() {

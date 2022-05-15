@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -115,7 +116,7 @@ class AddAlbumFragment : Fragment() {
         binding.addAlbumTagEditButton.setOnClickListener {
             val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9]*$")
             val tagtext = binding.addAlbumTagEditText.editText?.text.toString()
-            if (!tagtext.isNullOrBlank()) {
+            if (tagtext.length<15) {
                 if (tagtext.matches(regex)) {
                     addtag = "#" + tagtext
                     if (tagList.size < 3) {
@@ -131,6 +132,8 @@ class AddAlbumFragment : Fragment() {
                 } else {
                     binding.addAlbumTagEditText.error = "특수문자는 사용불가합니다"
                 }
+            } else if(tagtext.length>15) {
+                Toast.makeText(requireActivity(), "태그는 15자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
                 binding.addAlbumTagEditText.error = "태그를 입력해주세요"
             }

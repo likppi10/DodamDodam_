@@ -39,14 +39,12 @@ class StatusAdapter(private val context: Context) :
         fun bind(item: FamilyProfile) {
             if (item.imagePath.isNullOrEmpty()) {
                 // TODO: 디폴트이미지
-                Glide.with(itemView).load("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/crying_1651797037512.png").into(binding.familyProfileImage)
+                Glide.with(itemView).load(R.drawable.image_fail).into(binding.familyProfileImage)
             } else {
                 Glide.with(itemView).load(item.imagePath).into(binding.familyProfileImage)
             }
             if (item.emotion.isNullOrEmpty()) {
-                Glide.with(itemView)
-                    .load("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/crying_1651797037512.png")
-                    .into(binding.familyStatusImage)
+
             } else {
                 Glide.with(itemView).load(item.emotion).into(binding.familyStatusImage)
             }
@@ -62,12 +60,10 @@ class StatusAdapter(private val context: Context) :
                 if (binding.alarmRecycler.visibility == VISIBLE) {
                     Log.d("log닷", "onBindViewHolder: 1")
                     binding.alarmRecycler.visibility = GONE
-                    binding.familyMessageButton.visibility = VISIBLE
                 } else {
                     Log.d("log닷", "onBindViewHolder: 2")
 
                     binding.alarmRecycler.visibility = VISIBLE
-                    binding.familyMessageButton.visibility = GONE
                     val adapter = AlarmAdapter(context).apply {
                         itemClickListener = this@StatusAdapter.itemClickListener
                     }

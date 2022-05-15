@@ -51,6 +51,7 @@ class SaveInfoFragment : Fragment() {
     var imageUri: Uri? = null
     var role: String = "아빠"
     lateinit var imagePickerLauncher : ActivityResultLauncher<Intent>
+    var first = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,17 +158,21 @@ class SaveInfoFragment : Fragment() {
         // 가족 생성
         binding.saveInfoMoveNextBtn.setOnClickListener {
             if (isValidForm()) {
-                if(requireActivity().intent.getStringExtra("to") == "edit"){
-                    updateProfile(role)
+                if(binding.saveInfoInputNickname.text!!.contains(" ")){
+                    Toast.makeText(requireContext(), "닉네임에서 공백은 제거해주세요.", Toast.LENGTH_SHORT).show()
                 }else{
-                    val viewModelFamilyId = familyViewModel.checkFamilyCodeInfoRes.value?.data?.dataset?.familyId
-                    // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
-                    if (viewModelFamilyId is Int) {
-                        Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
-                        joinFamily(role, viewModelFamilyId)
-                    } else { // 바로 온 경우 가족 및 프로필 생성
-                        Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
-                        createFamily(role)
+                    if(requireActivity().intent.getStringExtra("to") == "edit"){
+                        updateProfile(role)
+                    }else{
+                        val viewModelFamilyId = familyViewModel.checkFamilyCodeInfoRes.value?.data?.dataset?.familyId
+                        // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
+                        if (viewModelFamilyId is Int) {
+                            Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
+                            joinFamily(role, viewModelFamilyId)
+                        } else { // 바로 온 경우 가족 및 프로필 생성
+                            Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
+                            createFamily(role)
+                        }
                     }
                 }
             }
@@ -222,7 +227,11 @@ class SaveInfoFragment : Fragment() {
                 Status.SUCCESS -> { // 로그인 성공
                     // 토스트메시지 띄우고 화면 이동
                     Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(requireContext(), StatusActivity::class.java))
+                    var intent = Intent(requireContext(), StatusActivity::class.java)
+                    if(first){
+                        intent.putExtra("to", "first")
+                    }
+                    startActivity(intent)
                     requireActivity().finish()
                 }
                 Status.ERROR -> {
@@ -371,6 +380,7 @@ class SaveInfoFragment : Fragment() {
             imageFile = FileUtils.getFile(requireContext(), imageUri!!)
         }
 
+        first = true
         familyViewModel.createFamily(FamilyReq(selectedRole, nickname, birthday), imageFile)
     }
     private fun joinFamily(role: String, familyId: Int) {

@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.ssafy.family.R
 import com.ssafy.family.data.remote.res.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.ItemChattingBinding
@@ -49,10 +50,17 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
                 itemBinding.oppChattingText.text = datas[position].message.toString()
                 itemBinding.oppTimeText.text = datas[position].time.toString()
                 itemBinding.oppWriterText.text = user.nickname
-                Glide.with(itemBinding.oppProfileButton).load(user.profileImage)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                    .centerInside()
-                    .into(itemBinding.oppProfileButton)
+                if(user.profileImage == null){
+                    Glide.with(itemBinding.oppProfileButton).load(R.drawable.image_fail)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                        .centerInside()
+                        .into(itemBinding.oppProfileButton)
+                }else{
+                    Glide.with(itemBinding.oppProfileButton).load(user.profileImage)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                        .centerInside()
+                        .into(itemBinding.oppProfileButton)
+                }
             }
         }else{
             itemBinding.ownChatting.visibility = GONE
@@ -60,6 +68,10 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
             itemBinding.oppChattingText.text = datas[position].message.toString()
             itemBinding.oppTimeText.text = datas[position].time.toString()
             itemBinding.oppWriterText.text = "존재하지 않는 회원입니다."
+            Glide.with(itemBinding.oppProfileButton).load(R.drawable.image_fail)
+                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                .centerInside()
+                .into(itemBinding.oppProfileButton)
         }
 
     }

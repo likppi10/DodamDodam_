@@ -46,6 +46,20 @@
         app:layout_constraintStart_toStartOf="@+id/layout_today_expression"
         app:layout_constraintTop_toBottomOf="@+id/layout_today_expression" />
 
+    <TextView
+        android:id="@+id/family_message_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/spoqahansans"
+        android:maxLines="2"
+        android:text="가족을 클릭하면, 알림을 보낼 수 있어요!"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView3" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/status_recyclerView"
         android:layout_width="match_parent"

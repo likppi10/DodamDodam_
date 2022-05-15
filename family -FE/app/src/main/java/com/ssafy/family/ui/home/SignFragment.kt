@@ -82,9 +82,16 @@ class SignFragment : Fragment() {
         }
         binding.signPageCheckIDBtn.setOnClickListener {
             val id = binding.signPageInputID.text.toString()
-            if (InputValidUtil.isValidId(id)) {
-                loginViewModel.idCheck(id)
+            if(id.length>20){
+                Toast.makeText(requireActivity(), "ID의 길이가 너무 깁니다! \n (4자 이상 20자 미만)", Toast.LENGTH_SHORT).show()
+            }else{
+                if (InputValidUtil.isValidId(id)) {
+                    loginViewModel.idCheck(id)
+                }else{
+                    Toast.makeText(requireActivity(), "한글은 안됩니다!", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
         loginViewModel.idCheckLiveData.observe(requireActivity()) {
             when (it.status) {
@@ -149,6 +156,7 @@ class SignFragment : Fragment() {
             when(it.status){
                 Status.SUCCESS -> {
                     dismissLoading()
+                    Toast.makeText(requireActivity(), "회원가입이 완료되었습니다!", Toast.LENGTH_SHORT).show()
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.home_frame, LoginFragment())
                         .commit()

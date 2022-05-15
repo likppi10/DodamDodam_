@@ -125,7 +125,9 @@ class ChattingFragment : Fragment() {
 
         binding.submitButton.setOnClickListener {
             val message: String = binding.chattingText.text.toString()
-            if (message != "") {
+            if (message.length>500) {
+                Toast.makeText(requireActivity(), "너무 보내고 싶은 말이 길어요 (500자 미만)", Toast.LENGTH_SHORT).show()
+            }else if(message != "") {
                 val now: LocalDateTime = LocalDateTime.now()
                 val nowTime = now.format(
                     DateTimeFormatter.ofPattern("a h시 mm분").withLocale(Locale.forLanguageTag("ko"))

@@ -9,6 +9,6 @@ import kotlinx.android.parcel.Parcelize
 class OpinionReactionReq (
     @SerializedName("suggestionId")
     val suggestionId: Long,
-    @SerializedName("like")
-    val like: Boolean
+    @SerializedName("isLike")
+    val isLike: Boolean
 ) : Parcelable

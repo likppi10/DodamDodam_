@@ -23,20 +23,26 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/spoqahansans"
         android:gravity="center"
-        android:text="인원 선택"
-        android:textSize="36dp"
+        android:text="로그아웃"
+        android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
-    <androidx.recyclerview.widget.RecyclerView
+    <TextView
         android:id="@+id/roulette_family_recycler"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/spoqahansans"
+        android:textColor="@color/black"
+        android:text="알림을 받아 보실 수 없어요. \n 정말 나가시겠어요?"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/ok_dialog_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/win_dialog_title" />

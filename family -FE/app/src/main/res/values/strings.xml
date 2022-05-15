@@ -38,8 +38,8 @@
 
     <string name="setting_info_edit">개인정보 변경</string>
     <string name="setting_status_edit">가족 사진 변경</string>
-    <string name="setting_family_code">그룹 코드</string>
-    <string name="setting_exit_group">그룹 나가기</string>
+    <string name="setting_family_code">가족 코드</string>
+    <string name="setting_exit_group">가족 나가기</string>
     <string name="setting_logout">로그아웃</string>
 
 
@@ -64,9 +64,9 @@
     <string name="default_status_message">오늘 기분 최고!</string>
 
     <string name="idErrorMessage">올바르지 않은 아이디입니다.</string>
-    <string name="nameErrorMessage">올바르지 않은 이름입니다.</string>
+    <string name="nameErrorMessage">올바르지 않은 이름입니다. \n (공백은 안돼요, 10자 미만)</string>
     <string name="nickNameErrorMessage">올바르지 않은 별명입니다.</string>
-    <string name="passwordErrorMessage">올바르지 않은 비밀번호입니다.</string>
+    <string name="passwordErrorMessage">올바르지 않은 비밀번호입니다. \n (숫자,특수문자 포함 8자리 이상)</string>
     <string name="passwordCheckErrorMessage">입력한 비밀번호와 다릅니다.</string>
     <string name="phoneNumberErrorMessage">올바르지 않은 휴대전화번호입니다.</string>
     <string name="birthdayErrorMessage">올바르지 않은 생년월일입니다.</string>

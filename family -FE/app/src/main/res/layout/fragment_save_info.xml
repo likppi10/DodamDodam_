@@ -24,7 +24,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="25dp"
-            android:src="@drawable/default_profile" />
+            android:src="@drawable/image_fail" />
 
         <FrameLayout
             android:layout_width="match_parent"

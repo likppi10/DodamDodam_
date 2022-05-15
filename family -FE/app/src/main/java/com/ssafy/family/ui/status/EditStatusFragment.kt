@@ -109,6 +109,7 @@ class EditStatusFragment : Fragment() {
             }
 
         }
+
         // 확인 버튼 클릭이벤트 리스너 등록
         binding.editStatusConfirmBtn.setOnClickListener {
             val emojiSelected = emojiAdapter.emojiSelected
@@ -116,10 +117,13 @@ class EditStatusFragment : Fragment() {
             Log.d(TAG, "EditStatusFragment - onViewCreated() input text : $todaysMessage")
             if (emojiSelected == null) {
                 Toast.makeText(requireContext(), "오늘의 기분을 선택해주세요!", Toast.LENGTH_SHORT).show()
-            } else {
+            } else if(todaysMessage.length>30 || todaysMessage.length<1){
+                Toast.makeText(requireContext(), "오늘의 한마디는 30자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
+            }else {
                 statusViewModel.editMyStatus(emotion = emojiSelected, comment = todaysMessage)
             }
         }
+
         // 상태 변경 Res 확인
         statusViewModel.editStatusResponse.observe(requireActivity()) {
             if (it.status == Status.SUCCESS) {
@@ -128,7 +132,9 @@ class EditStatusFragment : Fragment() {
                     requireActivity().finish()
                 }else{
                     Toast.makeText(requireContext(), "오늘의 상태 입력 완료!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                    var intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.putExtra("to", requireActivity().intent.getStringExtra("to"))
+                    startActivity(intent)
                     requireActivity().finishAffinity()
                 }
             }

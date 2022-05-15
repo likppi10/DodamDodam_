@@ -105,7 +105,11 @@ class EventFragment : Fragment() {
         }
 
         binding.addOpinionButton.setOnClickListener {
-            eventViewModel.addOpinion(binding.opinionText.text.toString())
+            if(binding.opinionText.text.length<20){
+                eventViewModel.addOpinion(binding.opinionText.text.toString())
+            }else{
+                Toast.makeText(requireActivity(), "의견은 20자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         eventViewModel.getDayRequestLiveData.observe(requireActivity()){

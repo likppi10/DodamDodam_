@@ -87,10 +87,10 @@ class AddScheduleFragment : Fragment() {
 
         //일정 추가 버튼
         (activity as ScheduleActivity).binding.scheduleButtonInclude.button2.setOnClickListener {
-            if(binding.scheduleTitle.text.isEmpty()){
-                Toast.makeText(requireContext(), "일정 제목을 입력해주세요", Toast.LENGTH_SHORT).show()
-            } else if(binding.scheduleContent.text!!.isEmpty()){
-                Toast.makeText(requireContext(), "일정 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+            if(binding.scheduleTitle.text.length < 2 || binding.scheduleTitle.text.length > 20){
+                Toast.makeText(requireContext(), "일정 제목을 2~20자로 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else if(binding.scheduleContent.text!!.length < 2){
+                Toast.makeText(requireContext(), "일정 내용을 2자 이상 입력해주세요", Toast.LENGTH_SHORT).show()
             }else if(startDate == null && endDate == null){
                 Toast.makeText(requireContext(), "일정 날짜를 선택해주세요", Toast.LENGTH_SHORT).show()
             }else{

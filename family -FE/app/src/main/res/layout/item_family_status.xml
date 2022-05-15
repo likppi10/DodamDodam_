@@ -14,14 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/family_profile_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/box_text_alarm"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,14 +37,12 @@
                 app:layout_constraintStart_toStartOf="@+id/family_profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/family_profile_image" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/family_status_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/box_text_alarm"
                 app:layout_constraintStart_toEndOf="@+id/family_profile_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,18 +64,7 @@
                 app:layout_constraintStart_toEndOf="@+id/family_status_image"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/family_message_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/spoqahansans"
-                android:maxLines="2"
-                android:text="알림 보내기"
-                android:textColor="@color/pink01"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/family_status" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/alarm_recycler"
