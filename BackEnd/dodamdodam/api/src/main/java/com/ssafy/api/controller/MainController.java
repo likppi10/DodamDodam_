@@ -138,11 +138,14 @@ public class MainController {
 
         Long userPk = Long.parseLong(authentication.getName());
         Profile me = mainService.getProfileByUserPk(userPk);
-        Profile target = mainService.getProfileByProfilePk(alarmReq.getTargetProfileId());
+        Profile target = mainService.getProfileById(alarmReq.getTargetProfileId());
         mainService.meAndTargetFamilyCheck(me, target);
-        String fcmToken = mainService.getTargetFcmToken(target);
-        fcmService.sendMessageTo(fcmToken, me.getNickname(), alarmReq.getContent());
-        mainService.recordAlarmCount(me, alarmReq);
+        String fcmToken = fcmService.findFcmTokenByProfileId(target.getId());
+        //없는사람 null 체크해서 안보내게 바꿈.
+        if(fcmToken != null) {
+            fcmService.sendMessageTo(fcmToken, me.getNickname(), alarmReq.getContent());
+            mainService.recordAlarmCount(me, alarmReq);
+        }
         return responseService.getSuccessResult();
     }
 
@@ -155,7 +158,7 @@ public class MainController {
 
         Long userPk = Long.parseLong(authentication.getName());
         Profile me = mainService.getProfileByUserPk(userPk);
-        Profile target = mainService.getProfileByProfilePk(targetProfileId);
+        Profile target = mainService.getProfileById(targetProfileId);
         mainService.meAndTargetFamilyCheck(me, target);
         return responseService.getListResult(mainService.getAlarmList(me, target));
     }

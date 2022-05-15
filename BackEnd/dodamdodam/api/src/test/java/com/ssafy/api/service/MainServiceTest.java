@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.core.dto.req.CreateSuggestionReqDto;
 import com.ssafy.core.dto.res.MainProfileResDto;
+import com.ssafy.core.dto.res.ProfileIdAndFamilyIdResDto;
 import com.ssafy.core.entity.*;
 import com.ssafy.core.exception.CustomException;
 import com.ssafy.core.repository.*;
@@ -46,7 +47,7 @@ class MainServiceTest {
     private AlarmRepository alarmRepository;
 
     final MainProfileResDto expectMainProfileDto = MainProfileResDto.builder()
-            .profileId(2L)
+            .profileId(1L)
             .comment("test")
             .emotion("smile")
             .imagePath("image.jpg")
@@ -74,17 +75,27 @@ class MainServiceTest {
             .likeCount(1L)
             .dislikeCount(0L)
             .build();
+
+    private ProfileIdAndFamilyIdResDto getIds(Long id){
+
+        return ProfileIdAndFamilyIdResDto.builder()
+                .profileId(id)
+                .familyId(id)
+                .build();
+    }
+
     @Test
-    void getProfileList_정상동작() {
+    void getProfileListExceptMe_정상동작() {
         //given
-        given(familyRepository.findFamilyIdByUserPk(anyLong())).willReturn(1L);
-        given(profileRepository.findProfileIdByUserPk(anyLong())).willReturn(1L);
+        given(profileRepository.findProfileIdAndFamilyIdByUserPk(anyLong()))
+                .willReturn(getIds(2L));
+
         given(profileRepository.findProfileListByFamilyId(anyLong()))
                 .willReturn(List.of(expectMainProfileDto));
 
         //when
         final List<MainProfileResDto> actualProfileList
-                = mainService.getProfileListExceptMe(1L);
+                = mainService.getProfileListExceptMe(2L);
 
         //then
         then(actualProfileList).isEqualTo(List.of(expectMainProfileDto));
@@ -92,10 +103,11 @@ class MainServiceTest {
     }
 
     @Test
-    void getProfileList_본인_제외_한명도_없을경우() {
+    void getProfileListExceptMe_본인_제외_한명도_없을경우() {
         //given
-        given(familyRepository.findFamilyIdByUserPk(anyLong())).willReturn(1L);
-        given(profileRepository.findProfileIdByUserPk(anyLong())).willReturn(2L);
+        given(profileRepository.findProfileIdAndFamilyIdByUserPk(anyLong()))
+                .willReturn(getIds(1L));
+
         given(profileRepository.findProfileListByFamilyId(anyLong()))
                 .willReturn(List.of(expectMainProfileDto));
 
@@ -109,10 +121,10 @@ class MainServiceTest {
     }
 
     @Test
-    void getProfileList_family_profile_id가_null일때() {
+    void getProfileListExceptMe_profile_id가_null일때() {
         //given
-        given(familyRepository.findFamilyIdByUserPk(anyLong())).willReturn(null);
-        given(profileRepository.findProfileIdByUserPk(anyLong())).willReturn(null);
+        given(profileRepository.findProfileIdAndFamilyIdByUserPk(anyLong()))
+                .willReturn(null);
 
         //when
         final Throwable throwable = catchThrowable(() -> mainService.getProfileListExceptMe(1L));

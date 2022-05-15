@@ -187,8 +187,8 @@ class MainControllerTest extends ControllerTestSupport {
                 .value(expectSuggestionDto.getLikeCount()));
         result.andExpect(jsonPath("$.data[0].dislikeCount")
                 .value(expectSuggestionDto.getDislikeCount()));
-        result.andExpect(jsonPath("$.data[0].suggestionReactions[0].like")
-                .value(expectReactionListDto.isLike()));
+        result.andExpect(jsonPath("$.data[0].suggestionReactions[0].isLike")
+                .value(expectReactionListDto.getIsLike()));
         result.andExpect(jsonPath("$.data[0].suggestionReactions[0].profileId")
                 .value(expectReactionListDto.getProfileId()));
     }
@@ -217,8 +217,8 @@ class MainControllerTest extends ControllerTestSupport {
                 .value(expectSuggestionDto.getLikeCount()));
         result.andExpect(jsonPath("$.data[0].dislikeCount")
                 .value(expectSuggestionDto.getDislikeCount()));
-        result.andExpect(jsonPath("$.data[0].suggestionReactions[0].like")
-                .value(expectReactionListDto.isLike()));
+        result.andExpect(jsonPath("$.data[0].suggestionReactions[0].isLike")
+                .value(expectReactionListDto.getIsLike()));
         result.andExpect(jsonPath("$.data[0].suggestionReactions[0].profileId")
                 .value(expectReactionListDto.getProfileId()));
     }
