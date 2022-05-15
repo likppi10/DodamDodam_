@@ -12,6 +12,8 @@
     <string name="before">이전</string>
     <string name="next">다음</string>
     <string name="search">검색</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
 
     <string name="tab_family">Family</string>
     <string name="tab_event">Event</string>
@@ -77,6 +79,7 @@
     <string name="sameIdErrorMessage">중복된 아이디 입니다</string>
     <string name="sameIdSuccesMessage">사용할 수 있는 아이디입니다</string>
     <string name="familyCodeErrorMessage">가족코드는 알파벳과 숫자 15자리로 구성되어 있습니다.</string>
+    <string name="askDelete">삭제하시겠습니까?</string>
 
     <string name="edit_status_guide">오늘 나의 상태를 표현해주세요.</string>
     <string name="select_family_picture_guide">변경할 가족 사진을 선택해주세요.</string>
@@ -89,7 +92,11 @@
     <string name="please_input_family_code">가족 코드를 입력해주세요!</string>
     <string name="nickname">나의 애칭</string>
     <string name="wishtree_top_message">나만의 소원을 등록해보세요!</string>
+    <string name="wishtree_create_guide_message">당신의 소원은 무엇인가요?</string>
     <string name="wishtree">소원 나무</string>
+    <string name="add_wish">소원 생성</string>
+    <string name="update_wish">소원 수정</string>
+    <string name="my_wish">나의 소원</string>
 
     <string name="statusisnull">아직 오늘의 상태를 등록하지 않았어요</string>
     <string-array name="expression">

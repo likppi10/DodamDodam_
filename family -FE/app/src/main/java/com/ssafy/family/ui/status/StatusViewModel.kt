@@ -77,19 +77,6 @@ class StatusViewModel @Inject constructor(private val statusRepository: StatusRe
     // 가족사진 변경
     fun editFamilyPicture(imageFile: File?) = viewModelScope.launch {
         _editFamilyPictureResponse.postValue(Resource.loading(null))
-//        _editFamilyPictureResponse.postValue(statusRepository.editFamilyPicture(imageFile))
-        val res = statusRepository.editFamilyPicture(imageFile)
-        _editFamilyPictureResponse.postValue(res)
+        _editFamilyPictureResponse.postValue(statusRepository.editFamilyPicture(imageFile))
     }
-
-
-    // 가족사진 uri 초기화는 할필요없음 -> 설정에서 가족사진변경 이동 시 엑티비티가 바뀌니까
-//    fun resetImgUri() {
-//        val familyPicture = familyPicture.value?.data?.dataset?.familyPicture
-//        if (familyPicture != null) {
-//            _selectedImgUri.postValue(Uri.parse(familyPicture))
-//        } else {
-//            _selectedImgUri.postValue(null)
-//        }
-//    }
 }

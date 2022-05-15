@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.wishtree.WishTreeFragment">
+
+    <ImageView
+        android:id="@+id/wish_tree_img"
+        android:layout_width="match_parent"
+        android:layout_height="480dp"
+        android:layout_marginTop="-20dp"
+        android:src="@drawable/tree_illust"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/gift_box_0"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/gift_box_1"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gift_box_0" />
+
+    <include
+        android:id="@+id/gift_box_2"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gift_box_1" />
+
+    <include
+        android:id="@+id/gift_box_3"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toStartOf="@id/gift_box_4"
+        app:layout_constraintStart_toEndOf="@id/gift_box_2"
+        app:layout_constraintTop_toTopOf="@id/gift_box_2" />
+
+    <include
+        android:id="@+id/gift_box_4"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gift_box_3"
+        app:layout_constraintTop_toTopOf="@id/gift_box_2" />
+
+    <include
+        android:id="@+id/gift_box_5"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toStartOf="@id/gift_box_6"
+        app:layout_constraintStart_toEndOf="@id/gift_box_1"
+        app:layout_constraintTop_toTopOf="@id/gift_box_1" />
+
+    <include
+        android:id="@+id/gift_box_6"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gift_box_5"
+        app:layout_constraintTop_toTopOf="@id/gift_box_1" />
+
+    <include
+        android:id="@+id/gift_box_7"
+        layout="@layout/item_wish_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gift_box_0"
+        app:layout_constraintTop_toTopOf="@id/gift_box_0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/wish_tree_add_btn"
+        android:layout_width="320dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/box_wish_tree_confirm"
+        android:fontFamily="@font/spoqahansans"
+        android:gravity="center"
+        android:text="@string/add_wish"
+        android:textColor="@color/pink01"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wish_tree_img" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_open_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/wish_tree_img"
+        app:layout_constraintStart_toStartOf="@id/wish_tree_img"
+        app:layout_constraintTop_toTopOf="@id/wish_tree_img"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="open_box.json"
+        app:lottie_loop="false" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
