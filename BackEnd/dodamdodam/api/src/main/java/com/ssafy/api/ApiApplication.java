@@ -24,8 +24,8 @@ public class ApiApplication {
 	void startred() {
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 	}
-	public static void main(String[] argv) {
-		SpringApplication.run(ApiApplication.class, argv);
+	public static void main(String[] args) {
+		SpringApplication.run(ApiApplication.class);
 	}
 
 }

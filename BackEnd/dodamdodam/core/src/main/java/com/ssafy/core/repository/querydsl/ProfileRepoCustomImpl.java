@@ -109,9 +109,9 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
 
         return queryFactory
                 .select(Projections.fields(ChattingMemberResDto.class,
-                                profile.id.as("profileId"),
-                                profile.imagePath.as("profileImage"),
-                                profile.nickname))
+                        profile.id.as("profileId"),
+                        profile.imagePath.as("profileImage"),
+                        profile.nickname))
                 .from(profile)
                 .where(profile.id.in(ids))
                 .fetch();
