@@ -47,7 +47,6 @@ public class ProfileController {
                                       HttpServletRequest request) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         Long familyId = userService.getFamilyIdByUserPk(userPk);
 
         profileService.checkNicknameByFamilyIdExceptMe(familyId, profileRequest.getNickname(), userPk);
@@ -56,9 +55,7 @@ public class ProfileController {
         Profile updateResult = profileService.updateProfile(userPk, profileRequest, profileRequest.getMultipartFile(), request);
 
         userService.updateBirthdayByUserPk(userPk, profileRequest.getBirthday());
-
         profileService.enrollProfile(updateResult);
-
         return responseService.getSuccessResult();
     }
 
@@ -72,11 +69,9 @@ public class ProfileController {
                                      @Valid StatusReqDto statusReqDto, Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         Profile checkMissionProfile = profileService.createMission(userPk);
 
         profileService.updateStatus(checkMissionProfile, statusReqDto);
-
         return responseService.getSuccessResult();
     }
 
@@ -100,7 +95,6 @@ public class ProfileController {
     public SingleResult<TodayConditionResDto> getTodayCondition(Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         return responseService.getSingleResult(profileService.getTodayCondition(userPk));
     }
 
@@ -112,7 +106,6 @@ public class ProfileController {
     public SingleResult<MyProfileResDto> getMyProfile(Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         return responseService.getSingleResult(profileService.getMyProfile(userPk));
 
         //emotion 출력.

@@ -7,6 +7,7 @@ import org.springframework.data.util.Pair;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Random;
 
@@ -22,7 +23,7 @@ public class JwtKey {
             "key3", "EL3NGF0DJ4KSF8H983KLK5LSJDG90BU9XDFBK3KKKL34TMLJiohjrngknelkrgn92u34klnklgndklWghtkendKteiMdpet"
     );
     private static final String[] KID_SET = SECRET_KEY_SET.keySet().toArray(new String[0]);
-    private static final Random random = new Random();
+    private static final Random random = new SecureRandom();
 
     //랜덤한 KEY값 얻는 메소드
     public static Pair<String, Key> getRandomKey() {

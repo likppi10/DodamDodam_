@@ -11,10 +11,10 @@ import com.ssafy.core.repository.FamilyRepository;
 import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Service
@@ -24,18 +24,18 @@ public class FamilyService {
     private final FamilyRepository familyRepository;
     private final ProfileRepository profileRepository;
     private final FileService fileService;
+    private final Random random = new SecureRandom();
 
     // 가족 생성 및 프로필 생성
     public Family createFamily() {
         String key;
         for (int i = 0; true; i++) {
-            Random rnd = new Random();
             key = "";
             for (int j = 0; j < 15; j++) {
-                if (rnd.nextBoolean()) {
-                    key += ((char) ((int) (rnd.nextInt(26)) + 65));
+                if (random.nextBoolean()) {
+                    key += ((char) ((int) (random.nextInt(26)) + 65));
                 } else {
-                    key += (rnd.nextInt(10));
+                    key += (random.nextInt(10));
                 }
             }
             if (familyRepository.findFamilyByCode(key) == null) {
@@ -135,4 +135,5 @@ public class FamilyService {
         family.setPicture(filePath);
         familyRepository.save(family);
     }
+
 }
