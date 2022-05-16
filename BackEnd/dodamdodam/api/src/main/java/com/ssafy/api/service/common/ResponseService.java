@@ -11,8 +11,8 @@ public class ResponseService {
     public enum CommonResponse {
         SUCCESS(1, "성공");
 
-        int output;
-        String msg;
+        final int output;
+        final String msg;
 
         CommonResponse(int output, String msg) {
             this.output = output;
