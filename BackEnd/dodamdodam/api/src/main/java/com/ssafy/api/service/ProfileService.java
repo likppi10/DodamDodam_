@@ -57,7 +57,7 @@ public class ProfileService {
     public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
 
-        if (!multipartFile.isEmpty()) {
+        if (multipartFile != null) {
             String originFileName = multipartFile.getOriginalFilename();
             String filePath = fileService.uploadFileV1("profile", multipartFile);
             profile.updateImageName(originFileName);
