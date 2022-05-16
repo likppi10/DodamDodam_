@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
+import com.ssafy.family.config.ApplicationClass.Companion.livePush
 import com.ssafy.family.databinding.ActivityMainBinding
 import com.ssafy.family.ui.home.HomeActivity
 import com.ssafy.family.ui.main.bottomFragment.*
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-        binding.badge.setNumber(2)
+        //binding.badge.setNumber(2)
 
         ApplicationClass.livePush.observe(this) {
             if (ApplicationClass.livePush.value!! > 0) {
@@ -95,6 +97,14 @@ class MainActivity : AppCompatActivity() {
         return obj
     }
 
+//    // SP 초기화
+//    fun resetSharedPreference(key:String){
+//        val sp = getSharedPreferences("fcm_message", FirebaseMessagingService.MODE_PRIVATE)
+//        val editor = sp.edit()
+//        editor.putString(key, "")
+//        editor.apply()
+//    }
+
     override fun onBackPressed() {
         if (pressedTime === 0) {
             Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
@@ -113,6 +123,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun logout() {
+        livePush = MutableLiveData(0)
+        writeSharedPreference("fcm", arrayListOf())
         Toast.makeText(this, "로그아웃 했습니다.", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, HomeActivity::class.java)
         finishAffinity()

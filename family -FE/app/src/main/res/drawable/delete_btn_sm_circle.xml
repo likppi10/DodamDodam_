@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 배경색 -->
+    <solid android:color="@color/red"/>
+    <!-- 모서리 둥글게-->
+    <corners android:radius="100dp"/>
+    <size android:width="3dp"/>
+    <size android:height="3dp"/>
+
+    <!-- 각각 적용하려면
+    <corners android:bottomRightRadius="15dp"
+        android:bottomLeftRadius="15dp"
+        android:topLeftRadius="15dp"
+        android:topRightRadius="15dp"/>
+    -->
+</shape>

@@ -23,9 +23,29 @@ class AccountRepositoryImpl(
 //    val accountAPI = ApplicationClass.sRetrofit.create(AccountAPI::class.java)
 
 
+
     override suspend fun login(user: LoginReq): Resource<LoginRes> = withContext(ioDispatcher) {
         try {
             val response = api.login(user)
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, response.message())
+                }
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
+    override suspend fun socialLogin(): Resource<LoginRes> = withContext(ioDispatcher) {
+        try {
+            val response = api.socialLogin()
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
@@ -203,4 +223,20 @@ class AccountRepositoryImpl(
                 Resource.error(null, "서버와 연결오류")
             }
     }
+
+    override suspend fun logout(): Resource<BaseResponse> = withContext(ioDispatcher) {
+            try {
+                val response = api.logout()
+                when {
+                    response.isSuccessful -> {
+                        Resource.success(response.body()!!)
+                    }
+                    else -> {
+                        Resource.error(null, response.message())
+                    }
+                }
+            } catch (e: Exception) {
+                Resource.error(null, "서버와 연결오류")
+            }
+        }
 }

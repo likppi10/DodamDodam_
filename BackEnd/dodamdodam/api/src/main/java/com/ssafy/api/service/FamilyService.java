@@ -48,31 +48,35 @@ public class FamilyService {
     }
 
     // profile 생성
-    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, String[] imageInfo) {
+    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, MultipartFile multipartFile) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
                 .user(user)
                 .family(family)
                 .build();
-        if (!imageInfo[0].equals(".")) {
-            profile.updateImagePath(imageInfo[0]);
-            profile.updateImageName(imageInfo[1]);
-        }
-        return profileRepository.save(profile);
+//        if (!imageInfo[0].equals(".")) {
+//            profile.updateImagePath(imageInfo[0]);
+//            profile.updateImageName(imageInfo[1]);
+//        }
+        profileRepository.save(profile);
+        fileService.resizeImage("profile", multipartFile, profile);
+        return profile;
     }
-    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, String[] imageInfo) {
+    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, MultipartFile multipartFile) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
                 .user(user)
                 .family(family)
                 .build();
-        if (!imageInfo[0].equals(".")) {
-            profile.updateImagePath(imageInfo[0]);
-            profile.updateImageName(imageInfo[1]);
-        }
-        return profileRepository.save(profile);
+//        if (!imageInfo[0].equals(".")) {
+//            profile.updateImagePath(imageInfo[0]);
+//            profile.updateImageName(imageInfo[1]);
+//        }
+        profileRepository.save(profile);
+        fileService.resizeImage("profile", multipartFile, profile);
+        return profile;
     }
 
     // family_id로 Family 객체 조회
@@ -134,6 +138,7 @@ public class FamilyService {
 //        }
         family.setPicture(filePath);
         familyRepository.save(family);
+        fileService.resizeImage("family", picture,family);
     }
 
 }

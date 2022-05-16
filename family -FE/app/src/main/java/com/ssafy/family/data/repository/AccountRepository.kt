@@ -9,6 +9,7 @@ import com.ssafy.family.data.remote.res.LoginRes
 import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.remote.res.RefreshTokenRes
 import com.ssafy.family.util.Resource
+import retrofit2.Response
 
 interface AccountRepository {
     suspend fun login(user: LoginReq): Resource<LoginRes>
@@ -28,4 +29,8 @@ interface AccountRepository {
     suspend fun MakeRefreshToken(refreshToken:String):Resource<RefreshTokenRes>
 
     suspend fun getMainMission(): Resource<MissionRes>
+
+    suspend fun socialLogin(): Resource<LoginRes>
+
+    suspend fun logout(): Resource<BaseResponse>
 }

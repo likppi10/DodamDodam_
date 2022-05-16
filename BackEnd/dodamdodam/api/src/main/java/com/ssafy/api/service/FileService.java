@@ -3,10 +3,14 @@ package com.ssafy.api.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.ssafy.core.common.FileUtil;
+import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
+import com.ssafy.core.entity.Profile;
 import com.ssafy.core.exception.ErrorCode;
 import com.ssafy.core.exception.CustomException;
+import com.ssafy.core.repository.FamilyRepository;
 import com.ssafy.core.repository.PictureRepository;
+import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import marvin.image.MarvinImage;
 import org.marvinproject.image.transform.scale.Scale;
@@ -31,6 +35,9 @@ public class FileService {
 
     private final AmazonS3Client amazonS3Client;
     private final PictureRepository pictureRepository;
+    private final ProfileRepository profileRepository;
+
+    private final FamilyRepository familyRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -95,26 +102,7 @@ public class FileService {
     public void resizeImage(String category, MultipartFile file, Picture picture) {
         if (file.getSize() > 1572864) {
             try {
-
-                String fileName = FileUtil.buildFileName(category, file.getOriginalFilename());
-                String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
-                BufferedImage inputImage = ImageIO.read(file.getInputStream());
-                int originWidth = inputImage.getWidth();
-                int originHeight = inputImage.getHeight();
-
-                MarvinImage imageMarvin = new MarvinImage(inputImage);
-                Scale scale = new Scale();
-                scale.load();
-                scale.setAttribute("newWidth", 712);
-                scale.setAttribute("newHeight", 712 * originHeight / originWidth);
-                scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
-
-                BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(imageNoAlpha, fileFormatName, baos);
-                baos.flush();
-                MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
-                String filePath = uploadFileV2(category, resizedFile);
+                String filePath = resizeFile(category,file);
                 picture.updatePathName(filePath);
                 pictureRepository.save(picture);
 //            return new MockMultipartFile(fileName,baos.toByteArray());
@@ -127,4 +115,70 @@ public class FileService {
 //            return file;
         }
     }
+
+    @Async
+    public void resizeImage(String category, MultipartFile file, Family family) {
+        if (file.getSize() > 1572864) {
+            try {
+                String filePath = resizeFile(category,file);
+                family.setPicture(filePath);
+                familyRepository.save(family);
+//            return new MockMultipartFile(fileName,baos.toByteArray());
+//                return new MockMultipartFile(fileName,"","image/"+fileFormatName, baos.toByteArray());
+//                return resizedFile;
+            } catch (Exception e) {
+                throw new CustomException(ErrorCode.INVALID_REQUEST);
+            }
+        } else {
+//            return file;
+        }
+    }
+    @Async
+    public void resizeImage(String category, MultipartFile file, Profile profile) {
+        if (file.getSize() > 1572864) {
+            try {
+                String filePath = resizeFile(category,file);
+                profile.updateImagePath(filePath);
+                profileRepository.save(profile);
+//            return new MockMultipartFile(fileName,baos.toByteArray());
+//                return new MockMultipartFile(fileName,"","image/"+fileFormatName, baos.toByteArray());
+//                return resizedFile;
+            } catch (Exception e) {
+                throw new CustomException(ErrorCode.INVALID_REQUEST);
+            }
+        } else {
+//            return file;
+        }
+    }
+
+    public String resizeFile(String category, MultipartFile multipartFile){
+        try {
+            String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
+            String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
+            BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
+            int originWidth = inputImage.getWidth();
+            int originHeight = inputImage.getHeight();
+
+            MarvinImage imageMarvin = new MarvinImage(inputImage);
+            Scale scale = new Scale();
+            scale.load();
+            scale.setAttribute("newWidth", 712);
+            scale.setAttribute("newHeight", 712 * originHeight / originWidth);
+            scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
+
+            BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(imageNoAlpha, fileFormatName, baos);
+            baos.flush();
+            MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
+            String filePath = uploadFileV2(category, resizedFile);
+            return filePath;
+        }
+        catch (Exception e) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
+    }
+
+
+
 }

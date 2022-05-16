@@ -23,7 +23,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class AlbumService {
-
     private final AlbumRepository albumRepository;
     private final FamilyRepository familyRepository;
     private final HashTagRepository hashTagRepository;
@@ -77,13 +76,13 @@ public class AlbumService {
 
 
     @Transactional(readOnly = true)
-    public AlbumMainResDto findMainPictureByAlbumId(Long albumId) {
+    public AlbumMainResDto findMainPictureByAlbumId(long albumId) {
 
         return pictureRepository.findMainPictureByAlbumId(albumId);
     }
 
     @Transactional
-    public void deleteAlbum(Long albumId, Long userPK) {
+    public void deleteAlbum(long albumId, long userPK) {
         long familyId = familyRepository.findFamilyIdByUserPk(userPK);
         Album album = albumRepository.findAlbumByAlbumId(albumId);
         if (album.getFamily().getId() != familyId) {
@@ -100,36 +99,43 @@ public class AlbumService {
         String familyCode = family.getCode();
 
         List<String> hashTags = albumReqDto.getHashTags();
+        try {
 
-        String[] originFileNames = new String[multipartFiles.size()];
+            String[] originFileNames = new String[multipartFiles.size()];
 
-        String saveFileName = "";
-        String filePath = "";
-        boolean isMain = false;
-        for (int i = 0; i < multipartFiles.size(); i++) {
-            originFileNames[i] = multipartFiles.get(i).getOriginalFilename();
+            String saveFileName = "";
+            String filePath = "";
+            boolean isMain = false;
+            for (int i = 0; i < multipartFiles.size(); i++) {
+                originFileNames[i] = multipartFiles.get(i).getOriginalFilename();
 
-            if (albumReqDto.getMainIndex() == i) isMain = true;
-            else isMain = false;
-            filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
-            Picture picture = Picture.builder()
-                    .album(album)
-                    .origin_name(multipartFiles.get(i).getOriginalFilename())
-                    .path_name(filePath)
-                    .is_main(isMain)
-                    .build();
-            pictureRepository.save(picture);
+                if (albumReqDto.getMainIndex() == i) isMain = true;
+                else isMain = false;
+                filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
+                Picture picture = Picture.builder()
+                        .album(album)
+                        .origin_name(multipartFiles.get(i).getOriginalFilename())
+                        .path_name(filePath)
+                        .is_main(isMain)
+                        .build();
+                pictureRepository.save(picture);
+                fileService.resizeImage("album",multipartFiles.get(i), picture);
+            }
+
+            for (int i = 0; i < hashTags.size(); i++) {
+                HashTag hashTag = HashTag.builder()
+                        .album(album)
+                        .text(hashTags.get(i))
+                        .build();
+                hashTagRepository.save(hashTag);
+
+            }
+
+            albumRepository.save(album);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        for (int i = 0; i < hashTags.size(); i++) {
-            HashTag hashTag = HashTag.builder()
-                    .album(album)
-                    .text(hashTags.get(i))
-                    .build();
-            hashTagRepository.save(hashTag);
-        }
-
-        albumRepository.save(album);
     }
 
     @Transactional(readOnly = false)
@@ -197,6 +203,7 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
+                    fileService.resizeImage("album",multipartFiles.get(j), picture);
                 }
             }
             //메인 사진 업데이트
@@ -224,7 +231,7 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
-                    fileService.resizeImage("album", multipartFiles.get(j), picture);
+                    fileService.resizeImage("album",multipartFiles.get(j), picture);
                 }
             }
             //메인 사진 업데이트
@@ -298,7 +305,7 @@ public class AlbumService {
 
 
     @Transactional
-    public void manageAlbumReaction(Long userPk, Album album, AlbumReactionReqDto albumReactionReqDto) {
+    public void manageAlbumReaction(long userPk, Album album, AlbumReactionReqDto albumReactionReqDto) {
         Profile profile = profileRepository.findProfileByUserPk(userPk);
 
         AlbumReaction albumReaction =
@@ -319,7 +326,7 @@ public class AlbumService {
     }
 
     @Transactional
-    public void deleteAlbumReaction(Long userPk, Long reactionId) {
+    public void deleteAlbumReaction(long userPk, long reactionId) {
 
         Profile profile = profileRepository.findProfileByUserPk(userPk);
         AlbumReaction albumReaction =
@@ -329,12 +336,11 @@ public class AlbumService {
     }
 
     @Transactional
-    public List<AlbumReactionListResDto> findReactionList(List<AlbumReaction> albumReactions, Long userPk) {
+    public List<AlbumReactionListResDto> findReactionList(List<AlbumReaction> albumReactions, long userPk) {
 
         List<AlbumReactionListResDto> result = new ArrayList<>();
         Profile profile = profileRepository.findProfileByUserPk(userPk);
 
-        //전면적으로 수정해야함! reaction 받고 본인꺼 고려 안하고 profile 붙이고 있음...
         for (int i = 0; i < albumReactions.size(); i++) {
             AlbumReactionListResDto albumReactionListResDto = AlbumReactionListResDto.builder()
                     .emoticon(albumReactions.get(i).getEmoticon())
@@ -359,4 +365,6 @@ public class AlbumService {
 
         return albumRepository.findAlbumByDate(date, albumId);
     }
+
+
 }

@@ -35,6 +35,10 @@ object LoginUtil {
         return !preferences.getString(ApplicationClass.JWT).isNullOrBlank()
     }
 
+    fun setScocialToken(socialtoken: String){
+        preferences.setString(JWT, socialtoken)
+    }
+
     fun changeUserToken(refreshJWT: RefreshJWT){
         preferences.setString(JWT, refreshJWT.jwtToken)
         preferences.setString(REFRESH_TOKEN, refreshJWT.refreshToken)
@@ -82,5 +86,13 @@ object LoginUtil {
 
     fun getFamilyId(): String? {
         return preferences.getString(FAMILY_ID)
+    }
+
+    fun setProfileId(id: String) {
+        preferences.setString(PROFILE_ID, id)
+    }
+
+    fun getProfileId(): String? {
+        return preferences.getString(PROFILE_ID)
     }
 }
