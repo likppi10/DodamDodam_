@@ -99,43 +99,38 @@ public class AlbumService {
         String familyCode = family.getCode();
 
         List<String> hashTags = albumReqDto.getHashTags();
-        try {
 
-            String[] originFileNames = new String[multipartFiles.size()];
+        String[] originFileNames = new String[multipartFiles.size()];
 
-            String saveFileName = "";
-            String filePath = "";
-            boolean isMain = false;
-            for (int i = 0; i < multipartFiles.size(); i++) {
-                originFileNames[i] = multipartFiles.get(i).getOriginalFilename();
+        String saveFileName = "";
+        String filePath = "";
+        boolean isMain = false;
+        for (int i = 0; i < multipartFiles.size(); i++) {
+            originFileNames[i] = multipartFiles.get(i).getOriginalFilename();
 
-                if (albumReqDto.getMainIndex() == i) isMain = true;
-                else isMain = false;
-                filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
-                Picture picture = Picture.builder()
-                        .album(album)
-                        .origin_name(multipartFiles.get(i).getOriginalFilename())
-                        .path_name(filePath)
-                        .is_main(isMain)
-                        .build();
-                pictureRepository.save(picture);
-                fileService.resizeImage("album",multipartFiles.get(i), picture);
-            }
-
-            for (int i = 0; i < hashTags.size(); i++) {
-                HashTag hashTag = HashTag.builder()
-                        .album(album)
-                        .text(hashTags.get(i))
-                        .build();
-                hashTagRepository.save(hashTag);
-
-            }
-
-            albumRepository.save(album);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (albumReqDto.getMainIndex() == i) isMain = true;
+            else isMain = false;
+            filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
+            Picture picture = Picture.builder()
+                    .album(album)
+                    .origin_name(multipartFiles.get(i).getOriginalFilename())
+                    .path_name(filePath)
+                    .is_main(isMain)
+                    .build();
+            pictureRepository.save(picture);
+            fileService.resizeImage("album", multipartFiles.get(i), picture);
         }
+
+        for (int i = 0; i < hashTags.size(); i++) {
+            HashTag hashTag = HashTag.builder()
+                    .album(album)
+                    .text(hashTags.get(i))
+                    .build();
+            hashTagRepository.save(hashTag);
+
+        }
+
+        albumRepository.save(album);
     }
 
     @Transactional(readOnly = false)
@@ -203,7 +198,7 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
-                    fileService.resizeImage("album",multipartFiles.get(j), picture);
+                    fileService.resizeImage("album", multipartFiles.get(j), picture);
                 }
             }
             //메인 사진 업데이트
@@ -231,7 +226,7 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
-                    fileService.resizeImage("album",multipartFiles.get(j), picture);
+                    fileService.resizeImage("album", multipartFiles.get(j), picture);
                 }
             }
             //메인 사진 업데이트

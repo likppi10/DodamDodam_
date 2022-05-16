@@ -32,13 +32,13 @@ public class MainService {
     @Transactional
     public List<MainProfileResDto> getProfileListExceptMe(Long userPk) {
 
-        ProfileIdAndFamilyIdResDto Ids = profileRepository.findProfileIdAndFamilyIdByUserPk(userPk);
+        ProfileIdAndFamilyIdResDto ids = profileRepository.findProfileIdAndFamilyIdByUserPk(userPk);
 
-        if (Ids == null) {
+        if (ids == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
-        return profileRepository.findProfileListByFamilyId(Ids.getFamilyId())
-                .stream().filter(profile -> !profile.getProfileId().equals(Ids.getProfileId()))
+        return profileRepository.findProfileListByFamilyId(ids.getFamilyId())
+                .stream().filter(profile -> !profile.getProfileId().equals(ids.getProfileId()))
                 .collect(Collectors.toList());
     }
 
@@ -118,25 +118,25 @@ public class MainService {
                     .isLike(request.getIsLike())
                     .build());
 
-            if (request.getIsLike()) {
+            if (Boolean.TRUE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(1);
             } else {
                 suggestion.updateDislikeCount(1);
             }
             suggestionRepository.save(suggestion);
 
-        } else if (suggestionReaction.getIsLike() != request.getIsLike()) {
+        } else if (suggestionReaction.getIsLike().equals(request.getIsLike())) {
             suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            int updateCount = request.getIsLike() ? +1 : -1;
+            int updateCount = Boolean.TRUE.equals(request.getIsLike()) ? +1 : -1;
             suggestion.updateLikeCount(updateCount);
             suggestion.updateDislikeCount(updateCount * -1);
 
             suggestionRepository.save(suggestion);
         } else {
             suggestionReactionRepository.delete(suggestionReaction);
-            if (request.getIsLike()) {
+            if (Boolean.TRUE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(-1);
             } else {
                 suggestion.updateDislikeCount(-1);

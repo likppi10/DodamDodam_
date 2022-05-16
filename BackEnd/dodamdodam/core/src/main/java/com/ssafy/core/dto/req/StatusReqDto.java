@@ -19,7 +19,7 @@ public class StatusReqDto {
     private String emotion;
 
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 20)
     @Schema(description = "오늘의 한마디", required = true, example = "오늘 기분 최고!")
     private String comment;
 }
