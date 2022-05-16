@@ -125,7 +125,7 @@ public class MainService {
             }
             suggestionRepository.save(suggestion);
 
-        } else if (suggestionReaction.getIsLike().equals(request.getIsLike())) {
+        } else if (!suggestionReaction.getIsLike().equals(request.getIsLike())) {
             suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
