@@ -85,7 +85,7 @@ public class ProfileService {
             List<Profile> familyProfiles = profileRepository.findProfilesByFamilyIdExceptMe(familyId, profile.getId());
 
             //본인 뿐이 없다면, target은 비우고, content만 갱신
-            if (familyProfiles.isEmpty()) {
+            if (familyProfiles == null) {
                 profile.updateMissionContent("우리 가족을 초대해 주세요!");
                 return profile;
             }

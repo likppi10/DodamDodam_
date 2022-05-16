@@ -13,6 +13,7 @@ import com.ssafy.core.repository.PictureRepository;
 import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import marvin.image.MarvinImage;
+import org.marvinproject.image.transform.rotate.Rotate;
 import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -156,10 +158,18 @@ public class FileService {
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
             BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
+
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
+            int originType = inputImage.getType();
 
-            MarvinImage imageMarvin = new MarvinImage(inputImage);
+            BufferedImage rotateFixImage = new BufferedImage(originWidth, originHeight, originType);
+            Graphics2D graphics2D = rotateFixImage.createGraphics();
+            graphics2D.rotate(Math.toRadians(90), originWidth / 2, originHeight / 2);
+            graphics2D.drawImage(inputImage, null, 0, 0);
+
+            MarvinImage imageMarvin = new MarvinImage(rotateFixImage);
+
             Scale scale = new Scale();
             scale.load();
             scale.setAttribute("newWidth", 712);
