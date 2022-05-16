@@ -11,10 +11,10 @@ import com.ssafy.core.repository.FamilyRepository;
 import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Service
@@ -24,18 +24,18 @@ public class FamilyService {
     private final FamilyRepository familyRepository;
     private final ProfileRepository profileRepository;
     private final FileService fileService;
+    private final Random random = new SecureRandom();
 
     // 가족 생성 및 프로필 생성
     public Family createFamily() {
         String key;
         for (int i = 0; true; i++) {
-            Random rnd = new Random();
             key = "";
             for (int j = 0; j < 15; j++) {
-                if (rnd.nextBoolean()) {
-                    key += ((char) ((int) (rnd.nextInt(26)) + 65));
+                if (random.nextBoolean()) {
+                    key += ((char) ((int) (random.nextInt(26)) + 65));
                 } else {
-                    key += (rnd.nextInt(10));
+                    key += (random.nextInt(10));
                 }
             }
             if (familyRepository.findFamilyByCode(key) == null) {
@@ -48,31 +48,35 @@ public class FamilyService {
     }
 
     // profile 생성
-    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, String[] imageInfo) {
+    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, MultipartFile multipartFile) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
                 .user(user)
                 .family(family)
                 .build();
-        if (!imageInfo[0].equals(".")) {
-            profile.updateImagePath(imageInfo[0]);
-            profile.updateImageName(imageInfo[1]);
-        }
-        return profileRepository.save(profile);
+//        if (!imageInfo[0].equals(".")) {
+//            profile.updateImagePath(imageInfo[0]);
+//            profile.updateImageName(imageInfo[1]);
+//        }
+        profileRepository.save(profile);
+        fileService.resizeImage("profile", multipartFile, profile);
+        return profile;
     }
-    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, String[] imageInfo) {
+    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, MultipartFile multipartFile) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
                 .user(user)
                 .family(family)
                 .build();
-        if (!imageInfo[0].equals(".")) {
-            profile.updateImagePath(imageInfo[0]);
-            profile.updateImageName(imageInfo[1]);
-        }
-        return profileRepository.save(profile);
+//        if (!imageInfo[0].equals(".")) {
+//            profile.updateImagePath(imageInfo[0]);
+//            profile.updateImageName(imageInfo[1]);
+//        }
+        profileRepository.save(profile);
+        fileService.resizeImage("profile", multipartFile, profile);
+        return profile;
     }
 
     // family_id로 Family 객체 조회
@@ -134,22 +138,7 @@ public class FamilyService {
 //        }
         family.setPicture(filePath);
         familyRepository.save(family);
-    }
-
-    public void checkFamilyAuthority(Authentication authentication) {
-        Long userPk = Long.parseLong(authentication.getName());
-        Profile profile = profileRepository.findProfileByUserPk(userPk);
-        if (profile == null) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST, "그룹에 권한이 없습니다.");
-        }
-    }
-
-    public Long getFamilyIdByUserPk(Long userPk) {
-        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
-        if (familyId == null) {
-            throw new CustomException(ErrorCode.NOT_BELONG_FAMILY);
-        }
-        return familyId;
+        fileService.resizeImage("family", picture,family);
     }
 
 }

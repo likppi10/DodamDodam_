@@ -51,7 +51,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public void checkExistId(String userId) {
 
-        if (userRepository.existsUserByUserId(userId)) {
+        if (Boolean.TRUE.equals(userRepository.existsUserByUserId(userId))) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_ID);
         }
     }
@@ -125,7 +125,6 @@ public class UserService {
                 .jwtToken(token)
                 .refreshToken(refreshToken)
                 .build();
-
     }
 
     @Transactional
@@ -174,7 +173,6 @@ public class UserService {
                     .build();
             user = userRepository.save(user);
         }
-
         return getSignInResDto(user);
     }
 
@@ -199,11 +197,11 @@ public class UserService {
         user.updateRefreshToken(refreshToken);
         userRepository.save(user);
 
-        ProfileIdAndFamilyIdResDto Ids =
+        ProfileIdAndFamilyIdResDto ids =
                 profileRepository.findProfileIdAndFamilyIdByUserPk(user.getUserPk());
 
         //profile Id와 family Id는 둘 다 존재하거나, 둘다 없음.
-        if(Ids == null){
+        if(ids == null){
             return SignInResDto.builder()
                     .jwtToken(token)
                     .refreshToken(refreshToken)
@@ -212,8 +210,8 @@ public class UserService {
         }
 
         return SignInResDto.builder()
-                .profileId(Ids.getProfileId())
-                .familyId(Ids.getFamilyId())
+                .profileId(ids.getProfileId())
+                .familyId(ids.getFamilyId())
                 .jwtToken(token)
                 .refreshToken(refreshToken)
                 .name(user.getName())
@@ -224,7 +222,6 @@ public class UserService {
     public void signOut(Long userPk) {
 
         User user = this.getUserByUserPk(userPk);
-
         user.updateFcmToken(null);
         userRepository.save(user);
     }

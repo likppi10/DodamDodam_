@@ -10,6 +10,7 @@ public enum ErrorCode {
     //User
     USER_DOESNT_EXIST(404, "U101", "유저를 찾을 수 없습니다."),
     DUPLICATE_USER_ID(409, "U102", "이미 사용중인 아이디입니다."),
+
     //Social Login
     SOCIAL_TOKEN_IS_NOT_VALID(401,"S101","소셜 토큰이 유효하지 않습니다."),
 
@@ -31,7 +32,10 @@ public enum ErrorCode {
     //Common
     INTERVAL_SERVER_ERROR(500, "C101", "서버에 오류가 발생했습니다."),
     INVALID_REQUEST(400, "C102", "잘못된 요청입니다."),
-    INVALID_TOKEN(400, "C103", "유효하지 않은 토큰입니다.");
+    INVALID_TOKEN(400, "C103", "유효하지 않은 토큰입니다."),
+
+    //File
+    WRONG_FILE_EXTENSION(400, "A106", "잘못된 파일 확장자명입니다.");
 
 
     private final int status;

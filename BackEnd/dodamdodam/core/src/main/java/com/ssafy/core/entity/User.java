@@ -58,7 +58,7 @@ public class User extends BaseEntity implements UserDetails {
     @PrePersist
     public void prePersist() {
         this.providerType = this.providerType == null ? ProviderType.LOCAL : this.providerType;
-        this.authority = "ROLE_USE";
+        this.authority = "ROLE_USER";
     }
 
     public void updateRefreshToken(String refreshToken) {

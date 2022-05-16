@@ -31,42 +31,10 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 @RequestMapping(value = "/api/profile")
 @Tag(name = "ProfileController", description = "프로필 컨트롤러")
 public class ProfileController {
+
     private final ResponseService responseService;
     private final ProfileService profileService;
     private final UserService userService;
-
-
-//    @Operation(summary = "프로필 등록", description = "<strong>프로필 등록</strong>",
-//            parameters = {
-//                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
-//            })
-//    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public CommonResult enrollProfile(@RequestBody
-//                                      @io.swagger.v3.oas.annotations.parameters.RequestBody
-//                                      @Valid ProfileReqDto profileRequest,
-//                                      @RequestParam(value = "file", required = false) MultipartFile multipartFile,
-//                                      Authentication authentication,
-//                                      HttpServletRequest request) {
-//
-//        User user = userService.findByUserPk(Long.parseLong(authentication.getName()));
-//
-//        userService.updateBirthdayWithUserPk(user.getUserPk(), profileRequest.getBirthday());
-//
-//        String[] imageInfo = profileService.enrollImage(multipartFile, request).split("#");
-//        //family코드로 넣을 부분 필요
-//        Profile profile = Profile.builder()
-//                .role(profileRequest.getRole())
-//                .nickname(profileRequest.getNickname())
-//                .user(user)
-//                .imagePath(imageInfo[0])
-//                .imageName(imageInfo[1])
-////                .family()
-//                .build();
-//
-//        profileService.enrollProfile(profile);
-//        return responseService.getSuccessResult();
-//    }
-
 
     @Operation(summary = "프로필 수정", description = "<strong>프로필 수정</strong>",
             parameters = {
@@ -79,7 +47,6 @@ public class ProfileController {
                                       HttpServletRequest request) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         Long familyId = userService.getFamilyIdByUserPk(userPk);
 
         profileService.checkNicknameByFamilyIdExceptMe(familyId, profileRequest.getNickname(), userPk);
@@ -88,9 +55,7 @@ public class ProfileController {
         Profile updateResult = profileService.updateProfile(userPk, profileRequest, profileRequest.getMultipartFile(), request);
 
         userService.updateBirthdayByUserPk(userPk, profileRequest.getBirthday());
-
         profileService.enrollProfile(updateResult);
-
         return responseService.getSuccessResult();
     }
 
@@ -104,11 +69,9 @@ public class ProfileController {
                                      @Valid StatusReqDto statusReqDto, Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         Profile checkMissionProfile = profileService.createMission(userPk);
 
         profileService.updateStatus(checkMissionProfile, statusReqDto);
-
         return responseService.getSuccessResult();
     }
 
@@ -132,7 +95,6 @@ public class ProfileController {
     public SingleResult<TodayConditionResDto> getTodayCondition(Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         return responseService.getSingleResult(profileService.getTodayCondition(userPk));
     }
 
@@ -144,7 +106,6 @@ public class ProfileController {
     public SingleResult<MyProfileResDto> getMyProfile(Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-
         return responseService.getSingleResult(profileService.getMyProfile(userPk));
 
         //emotion 출력.

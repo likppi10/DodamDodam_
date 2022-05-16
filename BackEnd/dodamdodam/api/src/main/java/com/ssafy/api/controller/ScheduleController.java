@@ -48,6 +48,7 @@ public class ScheduleController {
                                        @io.swagger.v3.oas.annotations.parameters.RequestBody
                                        @Valid NewScheduleReqDto scheduleReq,
                                        Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         User user = userService.getUserByUserPk(userPk);
         Family family = familyService.fromUserIdToFamily(userPk);
@@ -61,6 +62,7 @@ public class ScheduleController {
             })
     @GetMapping(value = "/{scheduleId}")
     public SingleResult<ScheduleDetailResDto> scheduleDetail(@PathVariable long scheduleId, Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Family family = familyService.fromUserIdToFamily(userPk);
         Schedule schedule = scheduleService.getSchedule(scheduleId, family);
@@ -86,6 +88,7 @@ public class ScheduleController {
                                        @io.swagger.v3.oas.annotations.parameters.RequestBody
                                        @Valid NewScheduleReqDto scheduleReq,
                                        Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Family family = familyService.fromUserIdToFamily(userPk);
         Schedule schedule = scheduleService.getSchedule(scheduleId, family);
@@ -99,6 +102,7 @@ public class ScheduleController {
             })
     @DeleteMapping(value = "/{scheduleId}")
     public CommonResult deleteSchedule(@PathVariable long scheduleId, Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Family family = familyService.fromUserIdToFamily(userPk);
         Schedule schedule = scheduleService.getSchedule(scheduleId, family);
@@ -112,6 +116,7 @@ public class ScheduleController {
             })
     @GetMapping(value = "/day/{day}")
     public ListResult<ScheduleDetailResDto> scheduleListDay(@PathVariable String day, Authentication authentication) {
+
         return responseService.getListResult(
                 scheduleService.getScheduleListByUserPkAndDay(Long.parseLong(authentication.getName()), LocalDate.parse(day)));
     }
@@ -122,6 +127,7 @@ public class ScheduleController {
             })
     @GetMapping(value = "/month/{month}")
     public ListResult<ScheduleDetailResDto> scheduleListMonth(@PathVariable String month, Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Family family = familyService.fromUserIdToFamily(userPk);
         return responseService.getListResult(scheduleService.getScheduleListByMonth(family, month));

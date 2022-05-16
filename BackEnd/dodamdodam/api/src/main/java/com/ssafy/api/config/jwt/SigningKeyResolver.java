@@ -11,7 +11,7 @@ import java.security.Key;
  */
 public class SigningKeyResolver extends SigningKeyResolverAdapter {
 
-    public static SigningKeyResolver getInstance = new SigningKeyResolver();
+    public static final SigningKeyResolver getInstance = new SigningKeyResolver();
 
     @Override
     public Key resolveSigningKey(JwsHeader jwsHeader, Claims claims) {

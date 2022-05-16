@@ -15,6 +15,6 @@ public class AlbumReactionReqDto {
     private String emoticon;
 
     @Schema(description = "앨범Id", required = true, example = "아들")
-    private long albumId;
+    private Long albumId;
 
 }

@@ -9,8 +9,8 @@ import com.ssafy.core.exception.CustomException;
 import com.ssafy.core.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +25,6 @@ public class MainService {
 
     private final ProfileRepository profileRepository;
     private final FamilyRepository familyRepository;
-    private final UserRepository userRepository;
     private final SuggestionRepository suggestionRepository;
     private final SuggestionReactionRepository suggestionReactionRepository;
     private final AlarmRepository alarmRepository;
@@ -33,22 +32,21 @@ public class MainService {
     @Transactional
     public List<MainProfileResDto> getProfileListExceptMe(Long userPk) {
 
-        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
-        Long profileId = profileRepository.findProfileIdByUserPk(userPk);
+        ProfileIdAndFamilyIdResDto ids = profileRepository.findProfileIdAndFamilyIdByUserPk(userPk);
 
-        if (familyId == null || profileId == null) {
+        if (ids == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
-        return profileRepository.findProfileListByFamilyId(familyId).stream()
-                .filter(profile -> !profile.getProfileId().equals(profileId))
+        return profileRepository.findProfileListByFamilyId(ids.getFamilyId())
+                .stream().filter(profile -> !profile.getProfileId().equals(ids.getProfileId()))
                 .collect(Collectors.toList());
     }
 
 
     @Transactional
     public void createSuggestion(CreateSuggestionReqDto request, Long userPk) {
-        Family family = familyRepository.findFamilyByUserPk(userPk);
 
+        Family family = familyRepository.findFamilyByUserPk(userPk);
         if (family == null) {
             throw new CustomException(INVALID_REQUEST);
         }
@@ -61,9 +59,9 @@ public class MainService {
                 .family(family)
                 .text(request.getText())
                 .build());
-
     }
 
+    @Transactional
     public void deleteSuggestion(Long suggestionId, Long userPk) {
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
@@ -77,8 +75,9 @@ public class MainService {
         suggestionRepository.delete(suggestion);
     }
 
+    @Transactional(readOnly = true)
     public List<SuggestionResDto> getSuggestionList(Long userPk) {
-        long familyId = familyRepository.findFamilyIdByUserPk(userPk);
+        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
         return suggestionRepository.getSuggestionListByFamilyId(familyId)
                 .stream().peek(suggestion -> {
@@ -91,18 +90,14 @@ public class MainService {
     @Transactional
     public List<SuggestionResDto> manageSuggestionReaction(SuggestionReactionReqDto request, Long userPk) {
         //step 0. 본인의 프로필을 찾아온다.
-        Profile profile = profileRepository.findProfileByUserPk(userPk);
-
-        if (profile == null) {
-            throw new CustomException(INVALID_REQUEST);
-        }
+        Profile profile = this.getProfileByUserPk(userPk);
 
         //step 1. 주어진 pk로 의견을 찾아온다.
         Suggestion suggestion = suggestionRepository.findSuggestionById(request.getSuggestionId())
                 .orElseThrow(() -> new CustomException(INVALID_REQUEST));
 
         //step 2. 본인의 가족번호를 찾아온다.
-        long familyId = familyRepository.findFamilyIdByUserPk(userPk);
+        Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
         //step 3. 본인 가족 의견이 아니면 Exception 발생
         if (familyId != suggestion.getFamily().getId()) {
@@ -123,31 +118,29 @@ public class MainService {
                     .isLike(request.getIsLike())
                     .build());
 
-            if (request.getIsLike()) {
+            if (Boolean.TRUE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(1);
             } else {
                 suggestion.updateDislikeCount(1);
             }
-
             suggestionRepository.save(suggestion);
 
-        } else if (suggestionReaction.getIsLike() != request.getIsLike()) {
+        } else if (!suggestionReaction.getIsLike().equals(request.getIsLike())) {
             suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            int updateCount = request.getIsLike() ? +1 : -1;
+            int updateCount = Boolean.TRUE.equals(request.getIsLike()) ? +1 : -1;
             suggestion.updateLikeCount(updateCount);
             suggestion.updateDislikeCount(updateCount * -1);
 
             suggestionRepository.save(suggestion);
         } else {
             suggestionReactionRepository.delete(suggestionReaction);
-            if (request.getIsLike()) {
+            if (Boolean.TRUE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(-1);
             } else {
                 suggestion.updateDislikeCount(-1);
             }
-
             suggestionRepository.save(suggestion);
         }
 
@@ -159,22 +152,15 @@ public class MainService {
                 }).collect(Collectors.toList());
     }
 
-
+    @Transactional(readOnly = true)
     public MissionResDto findTodayMission(Long userPk) {
 
         return profileRepository.findTodayMissionByUserPk(userPk);
     }
 
-    public String getTargetFcmToken(Profile target) {
-        String fcmToken = userRepository.findUserFcmTokenByProfile(target);
-        if (fcmToken == null) {
-            throw new CustomException(INVALID_REQUEST, "fcm 토큰이 없습니다.");
-        }
-        return fcmToken;
-
-    }
-
+    @Transactional(readOnly = true)
     public Profile getProfileByUserPk(Long userPk) {
+
         Profile profile = profileRepository.findProfileByUserPk(userPk);
         if (profile == null) {
             throw new CustomException(INVALID_REQUEST, "소속된 그룹이 없습니다.");
@@ -182,7 +168,9 @@ public class MainService {
         return profile;
     }
 
-    public Profile getProfileByProfilePk(long targetProfileId) {
+    @Transactional(readOnly = true)
+    public Profile getProfileById(long targetProfileId) {
+
         Profile profile = profileRepository.findProfileById(targetProfileId);
         if (profile == null) {
             throw new CustomException(INVALID_REQUEST, "소속된 그룹이 없습니다.");
@@ -190,8 +178,10 @@ public class MainService {
         return profile;
     }
 
+    @Transactional
     public void recordAlarmCount(Profile me, AlarmReqDto alarmReq) {
-        Profile target = profileRepository.findProfileById(alarmReq.getTargetProfileId());
+
+        Profile target = this.getProfileById(alarmReq.getTargetProfileId());
         Alarm alarm = alarmRepository.findAlarmByProfileAndTarget(me, target, alarmReq.getContent());
         if (alarm == null) {
             alarmRepository.save(Alarm.builder()
@@ -207,7 +197,9 @@ public class MainService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<AlarmResDto> getAlarmList(Profile me, Profile target) {
+
         ArrayList<String> contentList = new ArrayList<>(Arrays.asList("사랑해", "보고싶어", "감사해요!", "이따 봐용~", "오늘도 화이팅", "밥 먹자~"));
         List<AlarmResDto> dtoList = alarmRepository.findAlarmByProfileAndTargetOrderByCount(me, target);
         for (AlarmResDto alarmResDto : dtoList) {
@@ -223,6 +215,7 @@ public class MainService {
     }
 
     public void meAndTargetFamilyCheck(Profile me, Profile target) {
+
         if (me.getFamily().getId() != target.getFamily().getId()) {
             throw new CustomException(INVALID_REQUEST, "다른 가족 그룹 인원에게 알람 전송 불가능");
         }

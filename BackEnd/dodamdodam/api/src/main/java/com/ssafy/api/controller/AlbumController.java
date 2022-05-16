@@ -67,13 +67,13 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             })
     @GetMapping(value = "{albumId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public SingleResult<AlbumDetailResDto> getAlbum(@PathVariable long albumId, Authentication authentication) {
+    public SingleResult<AlbumDetailResDto> getAlbum(@PathVariable Long albumId, Authentication authentication) {
         Long userPK = Long.parseLong(authentication.getName());
         AlbumPictureListResDto albumPictureListResDto = AlbumPictureListResDto.builder().build();
         AlbumHashTagListResDto albumHashTagListResDto = AlbumHashTagListResDto.builder().build();
 
         Album album = albumService.findByAlbum(albumId);
-        List<AlbumReaction> albumReactions = albumService.findAlbumReactionsByAlbumId(albumId);
+        List<AlbumReactionListResDto> albumReactions = albumService.findAlbumReactionListResDtoByAlbumId(albumId);
         List<HashTag> hashTags = albumService.findHashTagsByAlbumId(albumId);
         List<Picture> pictures = albumService.findPicturesByAlbumId(albumId);
 
@@ -81,7 +81,7 @@ public class AlbumController {
                 .date(album.getDate().toString())
                 .pictures(albumPictureListResDto.fromEntity(pictures))
                 .hashTags(albumHashTagListResDto.fromEntity(hashTags))
-                .albumReactions(albumService.findReactionList(albumReactions, userPK))
+                .albumReactions(albumReactions)
                 .build();
 
         return responseService.getSingleResult(albumDetailResDto);
@@ -134,7 +134,7 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             })
     @DeleteMapping(value = "/{reactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult deleteReaction(@PathVariable long reactionid, Authentication authentication) {
+    public CommonResult deleteReaction(@PathVariable Long reactionid, Authentication authentication) {
 
         Long userPK = Long.parseLong(authentication.getName());
 
@@ -220,7 +220,7 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             }
     )
-    public CommonResult deleteAlbum(@PathVariable long albumId, Authentication authentication) {
+    public CommonResult deleteAlbum(@PathVariable Long albumId, Authentication authentication) {
         Long userPK = Long.parseLong(authentication.getName());
         albumService.deleteAlbum(albumId, userPK);
 
