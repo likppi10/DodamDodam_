@@ -64,6 +64,7 @@ public class AlbumReactionRepoCustomImpl implements AlbumReactionRepoCustom{
                 .from(albumReaction)
                 .leftJoin(profile)
                 .on(albumReaction.profile.id.eq(profile.id))
+                .where(albumReaction.album.id.eq(albumId))
                 .fetch();
     }
 
