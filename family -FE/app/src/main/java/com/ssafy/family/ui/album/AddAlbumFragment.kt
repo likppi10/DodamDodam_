@@ -130,7 +130,7 @@ class AddAlbumFragment : Fragment() {
                         binding.addAlbumTagEditText.error = "태그는 최대 3개까지에요."
                     }
                 } else {
-                    binding.addAlbumTagEditText.error = "특수문자는 사용불가해요."
+                    binding.addAlbumTagEditText.error = "특수문자랑 공백은 사용불가해요."
                 }
             } else if(tagtext.length>15) {
                 Toast.makeText(requireActivity(), "태그는 15자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()

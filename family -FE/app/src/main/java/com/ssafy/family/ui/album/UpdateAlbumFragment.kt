@@ -154,7 +154,7 @@ class UpdateAlbumFragment : Fragment() {
                         binding.updateAlbumTagEditText.error = "태그는 최대 3개까지에요"
                     }
                 } else {
-                    binding.updateAlbumTagEditText.error = "특수문자는 사용불가해요"
+                    binding.updateAlbumTagEditText.error = "특수문자랑 공백은 사용불가해요"
                 }
             } else {
                 binding.updateAlbumTagEditText.error = "태그를 입력해주세요"

@@ -26,8 +26,8 @@
     <string name="main_opinion">의견 제시</string>
     <string name="main_add_opinion">등록</string>
     <string name="main_event">가족 이벤트 만들기</string>
-    <string name="main_roulette">당번 뽑기</string>
-    <string name="main_wishtree">위시트리</string>
+    <string name="main_roulette">당번뽑기</string>
+    <string name="main_wishtree">소원나무</string>
     <string name="main_surprise">서프라이즈 파티</string>
 
     <string name="father">아빠</string>
