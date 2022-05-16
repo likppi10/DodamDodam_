@@ -4,6 +4,7 @@ import android.util.Log
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.req.FamilyReq
+import com.ssafy.family.data.remote.res.AlarmListRes
 import com.ssafy.family.data.remote.res.FamilyIdRes
 import com.ssafy.family.data.remote.res.FamilyInfoRes
 import com.ssafy.family.data.remote.res.MyProfileRes
@@ -24,10 +25,7 @@ class FamilyRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher,
     private val mainDispatcher: CoroutineDispatcher
 ): FamilyRepository {
-    override suspend fun createFamily(
-        profile: FamilyReq,
-        imageFile: File?
-    ): Resource<FamilyInfoRes> =
+    override suspend fun createFamily(profile: FamilyReq, imageFile: File?): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
@@ -49,6 +47,7 @@ class FamilyRepositoryImpl(
                 Resource.error(null, "통신 에러 $e")
             }
         }
+
 
     override suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {

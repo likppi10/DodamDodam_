@@ -2,10 +2,13 @@ package com.ssafy.family.data.repository
 
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.FamilyReq
+import com.ssafy.family.data.remote.res.AlarmListRes
 import com.ssafy.family.data.remote.res.FamilyIdRes
 import com.ssafy.family.data.remote.res.FamilyInfoRes
 import com.ssafy.family.data.remote.res.MyProfileRes
 import com.ssafy.family.util.Resource
+import retrofit2.Response
+import retrofit2.http.Path
 import java.io.File
 
 interface FamilyRepository {

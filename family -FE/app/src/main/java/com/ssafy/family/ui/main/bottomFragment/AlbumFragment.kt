@@ -126,7 +126,7 @@ class AlbumFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                    Toast.makeText(requireActivity(), "앨범들을 불러오지 못했어요.", Toast.LENGTH_SHORT)
                         .show()
 
                 }
@@ -150,7 +150,7 @@ class AlbumFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                    Toast.makeText(requireActivity(), "검색을 하지 못했어요.", Toast.LENGTH_SHORT)
                         .show()
 
                 }
@@ -179,7 +179,7 @@ class AlbumFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                    Toast.makeText(requireActivity(), "검색을 하지 못했어요.", Toast.LENGTH_SHORT)
                         .show()
 
                 }

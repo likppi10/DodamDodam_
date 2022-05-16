@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.res.Alarm
+import com.ssafy.family.data.remote.res.AlarmInfo
 import com.ssafy.family.data.remote.res.FamilyProfile
 import com.ssafy.family.databinding.ItemFamilyStatusBinding
 
@@ -19,6 +20,7 @@ class StatusAdapter(private val context: Context) :
     RecyclerView.Adapter<StatusAdapter.ViewHolder>() {
     lateinit var itemClickListener: AlarmAdapter.ItemClickListener
     var datas = mutableListOf<FamilyProfile>()
+    var alarmList = mutableListOf<AlarmInfo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -72,8 +74,8 @@ class StatusAdapter(private val context: Context) :
                     binding.alarmRecycler.layoutManager = gridLayoutManager
                     binding.alarmRecycler.adapter = adapter
                     val AlarmList = mutableListOf<Alarm>()
-                    context.resources.getStringArray(R.array.expression).forEach {
-                        AlarmList.add(Alarm(item, it))
+                    alarmList.forEach {
+                        AlarmList.add(Alarm(item, it.content))
                     }
                     adapter.datas = AlarmList
                     adapter.notifyDataSetChanged()

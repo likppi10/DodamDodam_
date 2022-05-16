@@ -25,4 +25,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView_pick" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_albumF"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView_albumF"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView_albumF"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView_albumF" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -81,13 +81,13 @@ class FindIdFragment : Fragment() {
                         )
                     } else {
                         binding.findIDPageInputFamilyCode.error =
-                            "올바르지않은 형식입니다. (ex , 15자리의 영문 숫자 코드)"
+                            "올바르지않은 형식이에요. (ex , 15자리의 영문 숫자 코드)"
                     }
                 } else {
-                    binding.findIDPageInputName.error = ("올바르지않은 형식입니다.(ex 홍길동)")
+                    binding.findIDPageInputName.error = ("올바르지않은 형식이에요.(ex 홍길동)")
                 }
             } else {
-                binding.findIDPageInputBirthday.error = ("올바르지않은 형식입니다.(ex 20220428)")
+                binding.findIDPageInputBirthday.error = ("올바르지않은 형식이에요.(ex 20220428)")
             }
         }
         loginViewModel.findLiveData.observe(requireActivity()) {
@@ -96,11 +96,10 @@ class FindIdFragment : Fragment() {
                     dismissLoading()
                     Log.d("ddddd", "initview: "+it.data)
                     if (it.data!!.message == null) {
-                        Toast.makeText(requireActivity(),"입력한 정보에 맞는 아이디가 없습니다", Toast.LENGTH_SHORT).show()
-                    } else {
+                        Toast.makeText(requireActivity(),"입력한 정보에 맞는 아이디가 없어요",
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.home_frame, FindPwFragment())
-                            .commit()
+                            .commit())
                     }
                 }
                 Status.LOADING -> {
@@ -108,7 +107,7 @@ class FindIdFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     dismissLoading()
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(),"입력한 정보에 맞는 아이디가 없어요.", Toast.LENGTH_SHORT).show()
                 }
             }
         }

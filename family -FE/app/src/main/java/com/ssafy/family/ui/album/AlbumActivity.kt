@@ -119,6 +119,13 @@ class AlbumActivity : AppCompatActivity() {
                         detailAlbumViewModel.hashTag = arrayListOf()
                         detailAlbumViewModel.date = ""
                         detailAlbumViewModel.mainIndex = 0
+                    }else if(detailAlbumViewModel.paths.size==0) {
+                        Toast.makeText(this, "돌아가셔서 사진을 골라주세요!", Toast.LENGTH_SHORT).show()
+                    }else if(hashTag.isNullOrEmpty()) {
+                        Toast.makeText(this, "해시태그를 입력해주세요!", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this, "사진을 너무 많이 골랐어요. 나눠서 다시 시도해주세요!", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
                 }
             }
@@ -146,6 +153,13 @@ class AlbumActivity : AppCompatActivity() {
                         detailAlbumViewModel.hashTag = arrayListOf()
                         detailAlbumViewModel.date = ""
                         detailAlbumViewModel.mainIndex = 0
+                    }else if(detailAlbumViewModel.paths.size==0) {
+                        Toast.makeText(this, "사진을 골라주세요!", Toast.LENGTH_SHORT).show()
+                    }else if(hashTag.isNullOrEmpty()) {
+                        Toast.makeText(this, "해시태그를 입력해주세요!", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this, "사진을 너무 많이 골랐어요. 나눠서 다시 시도해주세요!", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
                 }
             }
@@ -154,11 +168,14 @@ class AlbumActivity : AppCompatActivity() {
             when(it.status){
                 Status.SUCCESS->{
                     Log.d("ddddd", "SUCCESS: ")
+                    Toast.makeText(this, "앨범 등록이 완료되었어요!", Toast.LENGTH_SHORT).show()
                     dismissLoading()
+                    finish()
                 }
                 Status.ERROR->{
-                    Log.d("ddddd", "ERROR: ")
+                    Toast.makeText(this, "앨범 등록이 실패했어요. 다시 시도해주세요!", Toast.LENGTH_SHORT).show()
                     dismissLoading()
+                    finish()
                 }
                 Status.LOADING->{
                     Log.d("ddddd", "LOADING: ")
@@ -169,13 +186,14 @@ class AlbumActivity : AppCompatActivity() {
        detailAlbumViewModel.updateAlbumRequestLiveData.observe(this){
            when(it.status){
                Status.SUCCESS -> {
-                   finish()
+                   Toast.makeText(this, "앨범 수정이 완료되었어요!", Toast.LENGTH_SHORT).show()
                    dismissLoading()
+                   finish()
                }
                Status.ERROR -> {
-                   Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                       .show()
+                   Toast.makeText(this, "앨범 수정이 실패했어요. 다시 시도해주세요!", Toast.LENGTH_SHORT).show()
                    dismissLoading()
+                   finish()
                }
                Status.LOADING -> {
                    setLoading()
@@ -185,25 +203,25 @@ class AlbumActivity : AppCompatActivity() {
                }
            }
        }
-        detailAlbumViewModel.addAlbumRequestLiveData.observe(this){
-            when(it.status){
-                Status.SUCCESS -> {
-                    finish()
-                    dismissLoading()
-                }
-                Status.ERROR -> {
-                    Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
-                    dismissLoading()
-                }
-                Status.LOADING -> {
-                    setLoading()
-                }
-                Status.EXPIRED -> {
-                    dismissLoading()
-                }
-            }
-        }
+//        detailAlbumViewModel.addAlbumRequestLiveData.observe(this){
+//            when(it.status){
+//                Status.SUCCESS -> {
+//                    finish()
+//                    dismissLoading()
+//                }
+//                Status.ERROR -> {
+//                    Toast.makeText(this, ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+//                        .show()
+//                    dismissLoading()
+//                }
+//                Status.LOADING -> {
+//                    setLoading()
+//                }
+//                Status.EXPIRED -> {
+//                    dismissLoading()
+//                }
+//            }
+//        }
     }
     private fun setLoading() {
         binding.progressBarLoginFLoading.visibility = View.VISIBLE

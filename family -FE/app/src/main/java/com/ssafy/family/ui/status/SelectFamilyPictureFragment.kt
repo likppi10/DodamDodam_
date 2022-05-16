@@ -4,10 +4,12 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSelectFamilyPictureBinding
 import com.ssafy.family.ui.Adapter.SinglePhotoRecyclerViewAdapter
+import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -64,7 +67,7 @@ class SelectFamilyPictureFragment : Fragment() {
             // 사진 변경 api 요청
             val imageFile = statusViewModel.selectedImgUri.value
             statusViewModel.editFamilyPicture(imageUriToFile(imageFile))
-            requireActivity().finish()
+
         })
         // 리사이클러뷰 설정
         photoRecyclerViewAdapter = SinglePhotoRecyclerViewAdapter().apply {
@@ -87,6 +90,19 @@ class SelectFamilyPictureFragment : Fragment() {
             val imageView = binding.selectedFamilyPicture
             if (it != null){
                 Glide.with(imageView).load(it).into(imageView)
+            }
+        }
+        statusViewModel.editFamilyPictureResponse.observe(requireActivity()){
+            when(it.status){
+                Status.SUCCESS->{
+                    requireActivity().finish()
+                }
+                Status.ERROR->{
+                    Toast.makeText(requireActivity(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    requireActivity().finish()
+                }
+                Status.LOADING->{
+                }
             }
         }
     }

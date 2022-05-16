@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.SendPushReq
+import com.ssafy.family.data.remote.res.AlarmListRes
 import com.ssafy.family.data.remote.res.FamilyProfileRes
 import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.repository.MainFamilyRepository
@@ -30,6 +31,10 @@ class MainFamilyViewModel @Inject constructor(private val mainFamilyRepository: 
     val sendAlarmRequestLiveData: LiveData<Resource<BaseResponse>>
         get() = _sendAlarmRequestLiveData
 
+    private val _getAlarmListRequestLiveData = MutableLiveData<Resource<AlarmListRes>>()
+    val getAlarmListRequestLiveData: LiveData<Resource<AlarmListRes>>
+        get() = _getAlarmListRequestLiveData
+
     fun getTodayMission() = viewModelScope.launch {
         _todayMissionRequestLiveData.postValue(Resource.loading(null))
         _todayMissionRequestLiveData.postValue(mainFamilyRepository.getTodayMission())
@@ -41,5 +46,9 @@ class MainFamilyViewModel @Inject constructor(private val mainFamilyRepository: 
     fun sendAlarm(sendPushReq: SendPushReq) = viewModelScope.launch {
         _sendAlarmRequestLiveData.postValue(Resource.loading(null))
         _sendAlarmRequestLiveData.postValue(mainFamilyRepository.sendAlarm(sendPushReq))
+    }
+    fun getAlarmList(targetProfileId: Int) = viewModelScope.launch {
+        _getAlarmListRequestLiveData.postValue(Resource.loading(null))
+        _getAlarmListRequestLiveData.postValue(mainFamilyRepository.getAlarmList(targetProfileId))
     }
 }

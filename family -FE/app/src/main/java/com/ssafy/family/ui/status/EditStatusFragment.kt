@@ -89,6 +89,7 @@ class EditStatusFragment : Fragment() {
                             if(emojis[i] == it.data.data.emotion){
                                 emojiAdapter.datas.add(emojis[i])
                                 emojiAdapter.checkSelected.add(true)
+                                emojiAdapter.emojiSelected = it.data.data.emotion
                             }else{
                                 emojiAdapter.datas.add(emojis[i])
                                 emojiAdapter.checkSelected.add(false)

@@ -151,7 +151,7 @@ class AccountRepositoryImpl(
                         Resource.success(response.body()!!)
                     }
                     response.code() == 409 -> {
-                        Resource.error(null, "중복된 아이디 입니다")
+                        Resource.error(null, "중복된 아이디에요.")
                     }
                     response.code() == 403 -> {
                         Resource.expired(response.body()!!)

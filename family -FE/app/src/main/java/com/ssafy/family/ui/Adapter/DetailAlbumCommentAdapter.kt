@@ -24,7 +24,10 @@ class DetailAlbumCommentAdapter(private val context: Context) :
         fun bind(item : AlbumReaction) {
             Glide.with(itemView).load(item.imagePath).into(binding.commentFamilyImg)
             Glide.with(itemView).load(item.emoticon).into(binding.commentFamilyEmoji)
+            binding.commentFamilyRole.text=item.role
             Log.d("dddd", ".: "+item.profileId)
+            Log.d("dddd", "itemitem: "+item)
+            Log.d("dddd", "LoginUtil.getUserInfo()!!.profileId.toInt(): "+LoginUtil.getUserInfo()!!.profileId.toInt())
             if(item.profileId!=LoginUtil.getUserInfo()!!.profileId.toInt()){
                 binding.commentFamilyDelete.visibility= View.GONE
             }

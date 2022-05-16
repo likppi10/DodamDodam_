@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.SignFragment">
+
     <include
         android:id="@+id/sign_page_top"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
         layout="@layout/schedule_top_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,9 +16,8 @@
 
     <ImageView
         android:id="@+id/sign_page_logo"
-        android:layout_width="283dp"
-        android:layout_height="228dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="250dp"
+        android:layout_height="300dp"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/main_logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,114 +27,267 @@
     <ImageView
         android:id="@+id/sign_page_form_box"
         android:layout_width="295dp"
-        android:layout_height="488dp"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="269dp"
+        android:layout_marginTop="-45dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/form_white_bg"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_page_logo" />
 
-    <LinearLayout
-        android:id="@+id/sign_page_Input_ID_box"
-        android:layout_width="250dp"
+    <TextView
+        android:id="@+id/login_page_welcome_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="320dp">
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/spoqahansans"
+        android:text="@string/SignUp"
+        android:textColor="@color/pink01"
+        android:textSize="36sp"
+        android:elevation="5dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/sign_page_form_box"
+        app:layout_constraintStart_toStartOf="@+id/sign_page_form_box"
+        app:layout_constraintTop_toTopOf="@+id/sign_page_form_box" />
 
-        <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_signupF_ID"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-12dp"
+        android:layout_weight="20"
+        android:elevation="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/spoqahansans"
+        android:hint="@string/ID"
+        app:boxStrokeColor="@color/pink01"
+        app:hintTextColor="@color/pink01"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_signupF_Name"
+        app:layout_constraintTop_toBottomOf="@+id/login_page_welcome_text">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sign_page_Input_ID"
-            android:layout_width="190dp"
+            style="@style/TextInputStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:textColor="@color/pink01"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPersonName"
-            android:hint="@string/ID"
-            android:textColorHint="@color/pink01"
-            android:textColor="@color/pink01"
-            android:textSize="20sp"
             android:textStyle="bold" />
-        <TextView
-            android:id="@+id/sign_page_checkID_btn"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:background="@drawable/box_roulette"
-            android:elevation="5dp"
-            android:gravity="center"
-            android:text="@string/duplication_check"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/spoqahansans"
-            android:textColor="@color/white"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/sign_page_checkID_btn"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:background="@drawable/box_roulette"
+        android:elevation="5dp"
+        android:fontFamily="@font/spoqahansans"
+        android:gravity="center"
+        android:text="@string/duplication_check"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_signupF_ID"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_signupF_Name"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textInputLayout_signupF_ID"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout_signupF_ID" />
 
-    <EditText
-        android:id="@+id/sign_page_Input_username"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_signupF_Name"
+        style="@style/TextInputLayoutStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:layout_marginTop="-12dp"
+        android:layout_weight="20"
+        android:elevation="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/spoqahansans"
         android:hint="@string/name"
-        android:textColorHint="@color/pink01"
-        android:textColor="@color/pink01"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="410dp"/>
-    <EditText
-        android:id="@+id/sign_page_Input_PW"
+        app:boxStrokeColor="@color/pink01"
+        app:hintTextColor="@color/pink01"
+        app:layout_constraintEnd_toEndOf="@+id/sign_page_form_box"
+        app:layout_constraintStart_toStartOf="@id/sign_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_signupF_ID">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sign_page_Input_username"
+            style="@style/TextInputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/pink01"
+            android:fontFamily="@font/spoqahansans"
+            android:inputType="textPersonName"
+            android:textStyle="bold" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_signupF_PW"
+        style="@style/TextInputLayoutStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textWebPassword"
+        android:layout_marginTop="-12dp"
+        android:elevation="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/spoqahansans"
         android:hint="@string/PW"
-        android:textColorHint="@color/pink01"
-        android:textColor="@color/pink01"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="490dp"/>
-    <EditText
-        android:id="@+id/sign_page_Input_PW_confirm"
+        app:boxStrokeColor="@color/pink01"
+        app:hintTextColor="@color/pink01"
+        app:layout_constraintEnd_toEndOf="@+id/sign_page_form_box"
+        app:layout_constraintStart_toStartOf="@id/sign_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_signupF_Name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sign_page_Input_PW"
+            style="@style/TextInputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/pink01"
+            android:fontFamily="@font/spoqahansans"
+            android:inputType="textPassword"
+            android:textStyle="bold" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_signupF_PW_confirm"
+        style="@style/TextInputLayoutStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textWebPassword"
-        android:hint="@string/PW_confirm"
-        android:textColorHint="@color/pink01"
-        android:textColor="@color/pink01"
-        android:textStyle="bold"
+        android:layout_marginTop="-12dp"
+        android:elevation="5dp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="570dp"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/spoqahansans"
+        android:hint="@string/PW_confirm"
+        app:boxStrokeColor="@color/pink01"
+        app:hintTextColor="@color/pink01"
+        app:layout_constraintEnd_toEndOf="@+id/sign_page_form_box"
+        app:layout_constraintStart_toStartOf="@id/sign_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_signupF_PW">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sign_page_Input_PW_confirm"
+            style="@style/TextInputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textColor="@color/pink01"
+            android:fontFamily="@font/spoqahansans"
+            android:inputType="textPassword"
+            android:textStyle="bold" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/sign_page_Input_ID_box"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:layout_marginTop="320dp">-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/sign_page_Input_ID"-->
+<!--            android:layout_width="190dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:ems="10"-->
+<!--            android:fontFamily="@font/spoqahansans"-->
+<!--            android:inputType="textPersonName"-->
+<!--            android:hint="@string/ID"-->
+<!--            android:textColorHint="@color/pink01"-->
+<!--            android:textColor="@color/pink01"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/sign_page_checkID_btn"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:background="@drawable/box_roulette"-->
+<!--            android:elevation="5dp"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/duplication_check"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:fontFamily="@font/spoqahansans"-->
+<!--            android:textColor="@color/white"/>-->
+
+<!--    </LinearLayout>-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/sign_page_Input_username"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:hint="@string/name"-->
+<!--        android:textColorHint="@color/pink01"-->
+<!--        android:textColor="@color/pink01"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:layout_marginTop="410dp"/>-->
+<!--    <EditText-->
+<!--        android:id="@+id/sign_page_Input_PW"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textWebPassword"-->
+<!--        android:hint="@string/PW"-->
+<!--        android:textColorHint="@color/pink01"-->
+<!--        android:textColor="@color/pink01"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:layout_marginTop="490dp"/>-->
+<!--    <EditText-->
+<!--        android:id="@+id/sign_page_Input_PW_confirm"-->
+<!--        android:layout_width="250dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textWebPassword"-->
+<!--        android:hint="@string/PW_confirm"-->
+<!--        android:textColorHint="@color/pink01"-->
+<!--        android:textColor="@color/pink01"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:layout_marginTop="570dp"/>-->
 
     <TextView
         android:id="@+id/sign_page_sign_btn"
         android:layout_width="233dp"
         android:layout_height="55dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/box_roulette"
         android:elevation="5dp"
+        android:fontFamily="@font/spoqahansans"
         android:gravity="center"
         android:text="@string/sign"
-        android:textSize="20sp"
         android:textColor="@color/white"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="@font/spoqahansans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="645dp"/>
+        app:layout_constraintBottom_toBottomOf="@+id/sign_page_form_box"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_signupF_PW_confirm"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_signupF_PW_confirm" />
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"
         android:layout_width="48dp"

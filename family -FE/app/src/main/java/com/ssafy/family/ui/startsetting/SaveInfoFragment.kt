@@ -194,7 +194,7 @@ class SaveInfoFragment : Fragment() {
                 Log.d(TAG, "datadatadatadata: ${it.data!!.data!!}")
                 setMyProfile(it.data.data!!)
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "프로필 생성에 실패했어요.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -207,7 +207,7 @@ class SaveInfoFragment : Fragment() {
                 getFCM()
 
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "프로필 생성에 실패했어요.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -217,7 +217,7 @@ class SaveInfoFragment : Fragment() {
                 Toast.makeText(requireContext(), "오늘의 상태 수정 완료!", Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "상태 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "상태 수정에 실패했어요.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -226,7 +226,7 @@ class SaveInfoFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> { // 로그인 성공
                     // 토스트메시지 띄우고 화면 이동
-                    Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "프로필 생성에 성공했어요.", Toast.LENGTH_SHORT).show()
                     var intent = Intent(requireContext(), StatusActivity::class.java)
                     if(first){
                         intent.putExtra("to", "first")

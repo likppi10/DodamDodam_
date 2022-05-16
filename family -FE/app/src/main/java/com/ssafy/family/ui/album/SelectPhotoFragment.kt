@@ -8,11 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSelectPhotoBinding
 import com.ssafy.family.ui.Adapter.PhotoPickAdapter
 import com.ssafy.family.ui.Adapter.PhotoRecyclerViewAdapter
@@ -23,20 +25,26 @@ class SelectPhotoFragment : Fragment() {
     private lateinit var binding: FragmentSelectPhotoBinding
     private lateinit var photoRecyclerViewAdapter: PhotoRecyclerViewAdapter
     private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
+    var map = hashMapOf<Uri, Boolean>()
 
     private lateinit var pickAdapter: PhotoPickAdapter
     private val itemClickListener = object : PhotoRecyclerViewAdapter.ItemClickListener {
         override fun onClick(uri: Uri, view: View, position: Int) {
 
-            if (view.tag == true) {
+            if (map[uri]==true) {
+                map[uri] = false
+                Log.d("ccccccccccc", "deClick: " + uri)
                 detailAlbumViewModel.deleteImgUri(uri)
                 pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
                 pickAdapter.notifyDataSetChanged()
+//                view.background = null
             } else {
-                Log.d("ddddd", "onClick: " + uri)
+                map[uri] = true
+                Log.d("ccccccccccc", "onClick: " + uri)
                 detailAlbumViewModel.setSelectedImgUri(uri)
                 pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
                 pickAdapter.notifyDataSetChanged()
+//                view.background = ResourcesCompat.getDrawable(view.resources, R.drawable.list_box_select, null)
             }
         }
     }
@@ -89,7 +97,7 @@ class SelectPhotoFragment : Fragment() {
         photoRecyclerViewAdapter.notifyDataSetChanged()
     }
 
-    fun setImageUrisFromCursor(cursor: Cursor): List<Uri> {
+    fun setImageUrisFromCursor(cursor: Cursor): MutableList<Uri> {
         val list = mutableListOf<Uri>()
         cursor.use {
             val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
@@ -99,15 +107,18 @@ class SelectPhotoFragment : Fragment() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     id.toString()
                 )
-                Log.d("dddd", "setImageUrisFromCursor: $uri")
-                Log.d("dddd", "setImageUrisFromCursor: ${cursor.getString(3)}")
+                Log.d("cccccccc", "setImageUrisFromCursor: $uri")
+                Log.d("cccccccc", "setImageUrisFromCursor: ${cursor.getString(3)}")
+                map[uri] = false
                 list.add(uri)
             }
         }
+        dismissLoading()
         return list
     }
 
     fun getPhotoCursor(): Cursor {
+        setLoading()
         val resolver = requireActivity().contentResolver
         var queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
@@ -122,5 +133,12 @@ class SelectPhotoFragment : Fragment() {
 
         queryUri = queryUri.buildUpon().build()
         return resolver.query(queryUri, img, null, null, orderBy)!!
+    }
+
+    private fun setLoading() {
+        binding.progressBarLoading.visibility = View.VISIBLE
+    }
+    private fun dismissLoading() {
+        binding.progressBarLoading.visibility = View.GONE
     }
 }

@@ -98,7 +98,7 @@ class WishTreeDialog(
         if (content == "") {
             binding.textInputLayoutInputWish.error = "소원을 입력해 주세요!"
         } else {
-            binding.textInputLayoutInputWish.error = "한글/영문/숫자 및 일부 특수문자(`~!?@#$%^&*()_=+)만 입력가능합니다."
+            binding.textInputLayoutInputWish.error = "한글/영문/숫자 및 일부 특수문자(`~!?@#$%^&*()_=+)만 입력가능해요."
         }
     }
 

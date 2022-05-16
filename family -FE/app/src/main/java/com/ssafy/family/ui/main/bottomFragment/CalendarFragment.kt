@@ -107,7 +107,7 @@ class CalendarFragment : Fragment() {
                     updateAdapterForDate()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "일정들을 읽어오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissMonthLoading()
                 }
                 Status.LOADING -> {
@@ -142,7 +142,7 @@ class CalendarFragment : Fragment() {
                     dismissDayLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "일정을 읽어오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissDayLoading()
                 }
                 Status.LOADING -> {

@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ssafy.family.data.remote.req.SendPushReq
+import com.ssafy.family.data.remote.res.AlarmInfo
 import com.ssafy.family.data.remote.res.FamilyProfile
 import com.ssafy.family.databinding.FragmentFamilyBinding
 import com.ssafy.family.ui.Adapter.AlarmAdapter
 import com.ssafy.family.ui.Adapter.StatusAdapter
 import com.ssafy.family.ui.roulette.RouletteSelectDialog
+import com.ssafy.family.util.LoginUtil.getUserInfo
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,14 +65,17 @@ class FamilyFragment : Fragment() {
 
         mainFamilyViewModel.getTodayMission()
         mainFamilyViewModel.getFamilyProfiles()
+        mainFamilyViewModel.getAlarmList(getUserInfo()!!.profileId.toInt())
 
         mainFamilyViewModel.sendAlarmRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
                     dismissLoading()
+                    Toast.makeText(requireActivity(), "알람 전송에 성공했어요!", Toast.LENGTH_SHORT).show()
                 }
                 Status.ERROR -> {
                     dismissLoading()
+                    Toast.makeText(requireActivity(), "알람 전송에 실패했어요.", Toast.LENGTH_SHORT).show()
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -100,6 +106,24 @@ class FamilyFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     statusAdapter.datas = it.data!!.dataSet as MutableList<FamilyProfile>
+                    statusAdapter.notifyDataSetChanged()
+                    dismissLoading()
+                }
+                Status.ERROR -> {
+                    dismissLoading()
+                }
+                Status.LOADING -> {
+                    setLoading()
+                }
+                Status.EXPIRED -> {
+                    dismissLoading()
+                }
+            }
+        }
+        mainFamilyViewModel.getAlarmListRequestLiveData.observe(requireActivity()) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    statusAdapter.alarmList = it.data!!.dataSet as MutableList<AlarmInfo>
                     statusAdapter.notifyDataSetChanged()
                     dismissLoading()
                 }

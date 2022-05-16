@@ -39,7 +39,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/spoqahansans"
         android:textColor="@color/black"
-        android:text="가족을 나가면 관련 정보가 삭제됩니다.\n 정말 나가시겠어요?"
+        android:text="가족을 나가면 관련 정보가 삭제되어요.\n 정말 나가시겠어요?"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/ok_dialog_text"

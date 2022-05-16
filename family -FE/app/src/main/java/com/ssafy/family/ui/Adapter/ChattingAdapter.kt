@@ -67,7 +67,7 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
             itemBinding.oppChatting.visibility = VISIBLE
             itemBinding.oppChattingText.text = datas[position].message.toString()
             itemBinding.oppTimeText.text = datas[position].time.toString()
-            itemBinding.oppWriterText.text = "존재하지 않는 회원입니다."
+            itemBinding.oppWriterText.text = "존재하지 않는 회원이어요."
             Glide.with(itemBinding.oppProfileButton).load(R.drawable.image_fail)
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                 .centerInside()

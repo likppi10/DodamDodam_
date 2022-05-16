@@ -123,7 +123,7 @@ class LoginFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "로그인에 실패했어요. 아이디, 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
                 }
@@ -150,8 +150,7 @@ class LoginFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireContext(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "회원가입을 완료하지 못했어요. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
                 Status.LOADING -> {

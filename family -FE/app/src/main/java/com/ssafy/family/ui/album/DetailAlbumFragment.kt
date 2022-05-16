@@ -132,9 +132,9 @@ class DetailAlbumFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "앨범을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
+                    requireActivity().finish()
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -165,6 +165,7 @@ class DetailAlbumFragment : Fragment() {
                     Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
                         .show()
                     dismissLoading()
+                    requireActivity().finish()
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -195,9 +196,9 @@ class DetailAlbumFragment : Fragment() {
 //                    )
 //                    commentAdapter.notifyDataSetChanged()
                     //테스트 끝
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "리액션을 추가하지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
+                    requireActivity().finish()
                 }
                 Status.LOADING -> {
                     setLoading()
@@ -217,9 +218,9 @@ class DetailAlbumFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "리액션을 삭제하지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
+                    requireActivity().finish()
                 }
                 Status.LOADING -> {
                     setLoading()

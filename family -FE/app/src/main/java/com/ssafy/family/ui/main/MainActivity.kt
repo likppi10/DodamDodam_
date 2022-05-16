@@ -107,13 +107,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (pressedTime === 0) {
-            Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료돼요.", Toast.LENGTH_LONG).show()
             pressedTime = System.currentTimeMillis().toInt()
         } else {
             val seconds = (System.currentTimeMillis().toInt() - pressedTime)
             Log.d("ddddd", "onBackPressed: "+seconds)
             if (seconds > 2000) {
-                Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료됩니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, " 한 번 더 누르면 종료돼요.", Toast.LENGTH_LONG).show()
                 pressedTime = 0
             } else {
                 super.onBackPressed()

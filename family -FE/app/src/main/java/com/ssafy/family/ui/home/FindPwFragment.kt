@@ -102,8 +102,11 @@ class FindPwFragment : Fragment() {
                     setLoading()
                 }
                 Status.ERROR -> {
+                    Toast.makeText(requireActivity(), "비밀번호를 바꾸지 못했어요. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.home_frame, LoginFragment())
+                        .commit()
                 }
             }
         }

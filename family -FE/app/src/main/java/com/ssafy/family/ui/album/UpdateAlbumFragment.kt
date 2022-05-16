@@ -59,7 +59,7 @@ class UpdateAlbumFragment : Fragment() {
                 photoAdapter.datas = detailAlbumViewModel.PhotoList
                 photoAdapter.notifyDataSetChanged()
             }else{
-                Toast.makeText(requireContext(),"최소 한장의 사진이 필요합니다",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"최소 한장의 사진이 필요해요",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -151,10 +151,10 @@ class UpdateAlbumFragment : Fragment() {
                         tagAdapter.notifyDataSetChanged()
                         binding.updateAlbumTagEditText.editText?.setText("")
                     } else {
-                        binding.updateAlbumTagEditText.error = "태그는 최대 3개입니다"
+                        binding.updateAlbumTagEditText.error = "태그는 최대 3개까지에요"
                     }
                 } else {
-                    binding.updateAlbumTagEditText.error = "특수문자는 사용불가합니다"
+                    binding.updateAlbumTagEditText.error = "특수문자는 사용불가해요"
                 }
             } else {
                 binding.updateAlbumTagEditText.error = "태그를 입력해주세요"

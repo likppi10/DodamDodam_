@@ -46,7 +46,7 @@ class RouletteSelectDialog(var context: Context, var selectedList: HashMap<Long,
                         selectedList[item.profileId] = true
                         familySelectAdapter.notifyDataSetChanged()
                     }else{
-                        Toast.makeText(context,"최소 2인 이상이여야합니다", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"최소 2인 이상이여야해요", Toast.LENGTH_SHORT).show()
                     }
                 }
 

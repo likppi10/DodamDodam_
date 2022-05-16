@@ -109,7 +109,7 @@ class AddScheduleFragment : Fragment() {
         addScheduleViewModel.addRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(), "일정 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "일정 등록이 완료되었어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }

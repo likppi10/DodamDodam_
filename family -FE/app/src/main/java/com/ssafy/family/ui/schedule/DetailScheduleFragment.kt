@@ -36,7 +36,7 @@ class DetailScheduleFragment : Fragment() {
         arguments?.let {
             scheduleId = it.getLong(ScheduleId)
             if(scheduleId == null){
-                Toast.makeText(requireActivity(), "존재하지 않는 일정입니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "존재하지 않는 일정이에요.", Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
             }
         }
@@ -83,7 +83,7 @@ class DetailScheduleFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), "존재하지 않는 일정입니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "존재하지 않는 일정이에요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }
@@ -102,7 +102,7 @@ class DetailScheduleFragment : Fragment() {
         detailScheduleViewModel.deleteRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(), "일정이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "일정이 삭제되었어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }

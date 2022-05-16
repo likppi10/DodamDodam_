@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.gson.Gson
 import com.ssafy.family.R
+import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.config.ApplicationClass.Companion.livePush
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentSettingBinding
@@ -77,7 +78,7 @@ class SettingFragment : Fragment() {
                     binding.familyCodeText.text = it.data!!.data!!.code
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "가족코드를 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                 }
                 Status.LOADING -> {
                 }
@@ -98,7 +99,7 @@ class SettingFragment : Fragment() {
                     }
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "프로필 이미지를 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                 }
                 Status.LOADING -> {
                 }
@@ -116,7 +117,7 @@ class SettingFragment : Fragment() {
                     logout()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "가족을 떠나지 못했어요.", Toast.LENGTH_SHORT).show()
                 }
                 Status.LOADING -> {
                 }
@@ -136,7 +137,7 @@ class SettingFragment : Fragment() {
                     }
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "내 상태를 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                 }
                 Status.LOADING -> {
                 }
@@ -150,12 +151,11 @@ class SettingFragment : Fragment() {
         settingViewModel.logoutRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
-
                     signOut()
                     logout()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "로그아웃 실패", Toast.LENGTH_SHORT).show()
                 }
                 Status.LOADING -> {
                 }
@@ -168,14 +168,14 @@ class SettingFragment : Fragment() {
 
         binding.copyImageButton.setOnClickListener {
             val clipboard = requireActivity().getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("label", binding.familyCodeText.toString())
+            val clip = ClipData.newPlainText("label", binding.familyCodeText.text.toString())
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(requireContext(), "클립보드에 복사되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "클립보드에 복사되었어요.", Toast.LENGTH_SHORT).show()
         }
 
         binding.shareImageButton.setOnClickListener {
             try {
-                val sendText = "Rolling Pictures 초대 방 코드 : ${binding.familyCodeText}"
+                val sendText = "Rolling Pictures 초대 방 코드 : ${binding.familyCodeText.text}"
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 sendIntent.putExtra(Intent.EXTRA_TEXT, sendText)
@@ -234,7 +234,7 @@ class SettingFragment : Fragment() {
     }
 
     private fun writeSharedPreference(key:String, value:ArrayList<String>){
-        val sp = requireActivity().getSharedPreferences(SP_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sp = requireContext().getSharedPreferences(SP_NAME, AppCompatActivity.MODE_PRIVATE)
         val editor = sp.edit()
         val gson = Gson()
         val json: String = gson.toJson(value)
@@ -245,7 +245,7 @@ class SettingFragment : Fragment() {
     fun logout() {
         livePush = MutableLiveData(0)
         writeSharedPreference("fcm", arrayListOf())
-        Toast.makeText(requireContext(), "로그아웃 했습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "로그아웃 했어요.", Toast.LENGTH_SHORT).show()
         val intent = Intent(requireContext(), HomeActivity::class.java)
         requireActivity().finishAffinity()
         startActivity(intent)

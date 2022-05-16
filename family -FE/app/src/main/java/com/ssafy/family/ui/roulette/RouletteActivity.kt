@@ -55,7 +55,7 @@ class RouletteActivity : AppCompatActivity() {
                     initRoulette()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(this, it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "가족을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
                 Status.LOADING -> {

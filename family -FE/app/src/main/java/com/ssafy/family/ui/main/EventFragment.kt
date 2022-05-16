@@ -126,7 +126,7 @@ class EventFragment : Fragment() {
                     dismissScheduleLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "일정을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissScheduleLoading()
                 }
                 Status.LOADING -> {
@@ -135,7 +135,6 @@ class EventFragment : Fragment() {
                 Status.EXPIRED -> {
                     dismissScheduleLoading()
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -153,8 +152,8 @@ class EventFragment : Fragment() {
                     dismissOpinionLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    Toast.makeText(requireActivity(), "의견들을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
+                    dismissScheduleLoading()
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
@@ -180,8 +179,8 @@ class EventFragment : Fragment() {
                     dismissOpinionLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    Toast.makeText(requireActivity(), "리액션을 추가하지 못했어요.", Toast.LENGTH_SHORT).show()
+                    dismissScheduleLoading()
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
@@ -201,8 +200,8 @@ class EventFragment : Fragment() {
                     eventViewModel.getOpinion()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    Toast.makeText(requireActivity(), "의견을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
+                    dismissScheduleLoading()
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
@@ -222,8 +221,8 @@ class EventFragment : Fragment() {
                     eventViewModel.getOpinion()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    Toast.makeText(requireActivity(), "의견을 삭제하지 못했어요.", Toast.LENGTH_SHORT).show()
+                    dismissScheduleLoading()
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
@@ -244,6 +243,10 @@ class EventFragment : Fragment() {
         binding.wishtreeIcon.setOnClickListener {
             val intent = Intent(requireContext(), WishTreeActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.surpriseIcon.setOnClickListener {
+            Toast.makeText(requireActivity(), "서비스 준비 중이에요. ^^", Toast.LENGTH_SHORT).show()
         }
     }
 
