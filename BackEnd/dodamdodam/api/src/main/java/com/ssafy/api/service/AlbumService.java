@@ -119,7 +119,7 @@ public class AlbumService {
                         .is_main(isMain)
                         .build();
                 pictureRepository.save(picture);
-
+                fileService.resizeImage("album",multipartFiles.get(i), picture);
             }
 
             for (int i = 0; i < hashTags.size(); i++) {
@@ -203,6 +203,7 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
+                    fileService.resizeImage("album",multipartFiles.get(j), picture);
                 }
             }
             //메인 사진 업데이트
