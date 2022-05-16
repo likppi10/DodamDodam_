@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -76,13 +77,13 @@ public class AlbumService {
 
 
     @Transactional(readOnly = true)
-    public AlbumMainResDto findMainPictureByAlbumId(long albumId) {
+    public AlbumMainResDto findMainPictureByAlbumId(Long albumId) {
 
         return pictureRepository.findMainPictureByAlbumId(albumId);
     }
 
     @Transactional
-    public void deleteAlbum(long albumId, long userPK) {
+    public void deleteAlbum(Long albumId, Long userPK) {
         long familyId = familyRepository.findFamilyIdByUserPk(userPK);
         Album album = albumRepository.findAlbumByAlbumId(albumId);
         if (album.getFamily().getId() != familyId) {
@@ -98,7 +99,7 @@ public class AlbumService {
 
         String familyCode = family.getCode();
 
-        List<String> hashTags = albumReqDto.getHashTags();
+        List<String> hashTags = albumReqDto.getHashTags().stream().distinct().collect(Collectors.toList());
 
         String[] originFileNames = new String[multipartFiles.size()];
 
@@ -139,7 +140,7 @@ public class AlbumService {
         album.updateLocalDate(albumUpdateReqDto.getDate());
         albumRepository.save(album);
         boolean flag;
-        List<String> updateHashTags = albumUpdateReqDto.getHashTags();
+        List<String> updateHashTags = albumUpdateReqDto.getHashTags().stream().distinct().collect(Collectors.toList());
         List<HashTag> hashTags = hashTagRepository.findHashTagsByAlbumId(album.getId());
         List<Picture> pictures = pictureRepository.findPicturesByAlbumId(album.getId());
         List<MultipartFile> multipartFiles = new ArrayList<>();
@@ -300,7 +301,7 @@ public class AlbumService {
 
 
     @Transactional
-    public void manageAlbumReaction(long userPk, Album album, AlbumReactionReqDto albumReactionReqDto) {
+    public void manageAlbumReaction(Long userPk, Album album, AlbumReactionReqDto albumReactionReqDto) {
         Profile profile = profileRepository.findProfileByUserPk(userPk);
 
         AlbumReaction albumReaction =
@@ -321,7 +322,7 @@ public class AlbumService {
     }
 
     @Transactional
-    public void deleteAlbumReaction(long userPk, long reactionId) {
+    public void deleteAlbumReaction(Long userPk, Long reactionId) {
 
         Profile profile = profileRepository.findProfileByUserPk(userPk);
         AlbumReaction albumReaction =
@@ -330,24 +331,6 @@ public class AlbumService {
         albumReactionRepository.delete(albumReaction);
     }
 
-    @Transactional
-    public List<AlbumReactionListResDto> findReactionList(List<AlbumReaction> albumReactions, long userPk) {
-
-        List<AlbumReactionListResDto> result = new ArrayList<>();
-        Profile profile = profileRepository.findProfileByUserPk(userPk);
-
-        for (int i = 0; i < albumReactions.size(); i++) {
-            AlbumReactionListResDto albumReactionListResDto = AlbumReactionListResDto.builder()
-                    .emoticon(albumReactions.get(i).getEmoticon())
-                    .imagePath(profile.getImagePath())
-                    .role(profile.getRole())
-                    .profileId(profile.getId())
-                    .reactionId(albumReactions.get(i).getId())
-                    .build();
-            result.add(albumReactionListResDto);
-        }
-        return result;
-    }
 
     @Transactional(readOnly = true)
     public List<Album> findAlbumsByHashTag(String keyword, Long albumId) {
@@ -362,4 +345,8 @@ public class AlbumService {
     }
 
 
+    @Transactional(readOnly = true)
+    public List<AlbumReactionListResDto> findAlbumReactionListResDtoByAlbumId(Long albumId) {
+        return albumReactionRepository.findAlbumReactionListResDtoByAlbumId(albumId);
+    }
 }
