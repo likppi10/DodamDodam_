@@ -1,5 +1,7 @@
 package com.ssafy.api.config.jwt;
 
+import com.ssafy.core.exception.CustomException;
+import com.ssafy.core.exception.ErrorCode;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.data.util.Pair;
 
@@ -9,6 +11,10 @@ import java.util.Map;
 import java.util.Random;
 
 public class JwtKey {
+
+    private JwtKey() {
+        throw new CustomException(ErrorCode.INTERVAL_SERVER_ERROR);
+    }
 
     private static final Map<String, String> SECRET_KEY_SET = Map.of(
             "key1", "SsafyTest1AndIwantToGet1prizeFromFinalProjectSoIHAVETOdoWorkVERYHARDefdkentl23kwmflobwWEKLNT3lwmEK",
