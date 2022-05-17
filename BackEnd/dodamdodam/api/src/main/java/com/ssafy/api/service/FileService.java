@@ -170,15 +170,15 @@ public class FileService {
             // 회전 시킨다.
             switch (orientation) {
                 case 6:
-                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
                     break;
                 case 1:
                     break;
                 case 3:
-                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
                     break;
                 case 8:
-                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
                     break;
                 default:
                     orientation=1;
