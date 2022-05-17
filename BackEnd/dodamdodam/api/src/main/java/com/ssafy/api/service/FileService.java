@@ -154,19 +154,10 @@ public class FileService {
     }
 
     public String resizeFile(String category, MultipartFile multipartFile){
-        System.out.println("여기까지는 옵니다!!");
-        System.out.println("여기까지는 옵니다!!");
 
-        if(multipartFile == null){
-            System.out.println("멀티파트 파일 null!!");
-        }
-        if(multipartFile.getContentType() == null){
-            System.out.println("컨텐츠 타입 null!");
-        }
-        if(multipartFile.getOriginalFilename() == null){
-            System.out.println("파일 이름 null!");
-        }
         try {
+            InputStream fileInputStream = multipartFile.getInputStream();
+
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
 
@@ -177,7 +168,7 @@ public class FileService {
             Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
 
             try {
-                metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
+                metadata = ImageMetadataReader.readMetadata(fileInputStream);
 
                 System.out.println("여기서 설마???");
                 directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
@@ -190,7 +181,7 @@ public class FileService {
 
             System.out.println("너무 많이 읽었나??");
             //imageFile
-            BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
+            BufferedImage inputImage = ImageIO.read(fileInputStream);
             System.out.println("또 읽으려니까 안되나?");
             // 회전 시킨다.
             switch (orientation) {
