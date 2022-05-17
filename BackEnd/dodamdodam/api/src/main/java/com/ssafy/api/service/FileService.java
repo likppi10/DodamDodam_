@@ -167,6 +167,7 @@ public class FileService {
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
 
+            System.out.println("여기는 통과 =========");
             int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
 
             Metadata metadata; // 이미지 메타 데이터 객체
@@ -174,6 +175,8 @@ public class FileService {
 
             try {
                 metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
+
+                System.out.println("여기서 설마???");
                 directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
                 if(directory != null){
                     orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
@@ -182,8 +185,10 @@ public class FileService {
                 orientation = 1;
             }
 
+            System.out.println("너무 많이 읽었나??");
             //imageFile
             BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
+            System.out.println("또 읽으려니까 안되나?");
             // 회전 시킨다.
             switch (orientation) {
                 case 6:
