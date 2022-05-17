@@ -118,8 +118,8 @@ public class AlbumService {
                     .path_name(filePath)
                     .is_main(isMain)
                     .build();
-            pictureRepository.save(picture);
-            fileService.resizeImage("album", multipartFiles.get(i), picture);
+            Picture pic = pictureRepository.save(picture);
+            fileService.resizeImage("album", multipartFiles.get(i), pic);
         }
 
         for (int i = 0; i < hashTags.size(); i++) {
