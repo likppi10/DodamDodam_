@@ -59,9 +59,7 @@ public class ProfileService {
 
         if (!multipartFile.isEmpty()) {
             String originFileName = multipartFile.getOriginalFilename();
-            String filePath = fileService.uploadFileV1("profile", multipartFile);
-            profile.updateImageName(originFileName);
-            profile.updateImagePath(filePath);
+            fileService.resizeImage("profile", multipartFile, profile); profile.updateImageName(originFileName);
         }
 
 //        updateImage(multipartFile, profile, request);
@@ -149,18 +147,6 @@ public class ProfileService {
         profile.updateComment(statusDto.getComment());
 
         profileRepository.save(profile);
-    }
-
-    @Transactional
-    public String enrollImage(MultipartFile multipartFile) {
-
-        if (!multipartFile.isEmpty()) {
-            String originFileName = multipartFile.getOriginalFilename();
-            String filePath = fileService.uploadFileV1("profile", multipartFile);
-            return filePath + "#" + originFileName;
-        }
-
-        return ".#.";
     }
 
     @Transactional

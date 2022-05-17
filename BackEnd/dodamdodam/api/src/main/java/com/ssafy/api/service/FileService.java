@@ -3,11 +3,9 @@ package com.ssafy.api.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
-import com.drew.metadata.jpeg.JpegDirectory;
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
@@ -28,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -113,14 +110,10 @@ public class FileService {
                 String filePath = resizeFile(category,file);
                 picture.updatePathName(filePath);
                 pictureRepository.save(picture);
-//            return new MockMultipartFile(fileName,baos.toByteArray());
-//                return new MockMultipartFile(fileName,"","image/"+fileFormatName, baos.toByteArray());
-//                return resizedFile;
+
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.INVALID_REQUEST);
             }
-        } else {
-//            return file;
         }
     }
 
@@ -131,14 +124,10 @@ public class FileService {
                 String filePath = resizeFile(category,file);
                 family.setPicture(filePath);
                 familyRepository.save(family);
-//            return new MockMultipartFile(fileName,baos.toByteArray());
-//                return new MockMultipartFile(fileName,"","image/"+fileFormatName, baos.toByteArray());
-//                return resizedFile;
+
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.INVALID_REQUEST);
             }
-        } else {
-//            return file;
         }
     }
     @Async
@@ -148,35 +137,27 @@ public class FileService {
                 String filePath = resizeFile(category,file);
                 profile.updateImagePath(filePath);
                 profileRepository.save(profile);
-//            return new MockMultipartFile(fileName,baos.toByteArray());
-//                return new MockMultipartFile(fileName,"","image/"+fileFormatName, baos.toByteArray());
-//                return resizedFile;
+
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.INVALID_REQUEST);
             }
-        } else {
-//            return file;
         }
     }
 
     public String resizeFile(String category, MultipartFile multipartFile){
+
         try {
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
 
-            this.rotateFromMetaInfo(multipartFile);
             int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
-            int width = 0;
-            int height = 0;
 
             Metadata metadata; // 이미지 메타 데이터 객체
             Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
-            JpegDirectory jpegDirectory; // JPG 이미지 정보를 읽기 위한 객체
 
             try {
                 metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
                 directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-                jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
                 if(directory != null){
                     orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
                 }
@@ -227,10 +208,5 @@ public class FileService {
         catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
-    }
-
-    private void rotateFromMetaInfo(MultipartFile multipartFile) {
-
-
     }
 }
