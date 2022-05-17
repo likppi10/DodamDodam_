@@ -109,6 +109,11 @@ public class FileService {
 
     @Async
     public void resizeImage(String category, MultipartFile file, Picture picture) {
+        System.out.println("파일 크기 체크!!");
+        System.out.println("파일 크기 체크!!");
+        System.out.println("파일 크기 체크!!");
+        System.out.println("파일 크기 체크!!");
+        System.out.println(file.getSize());
         if (file.getSize() > 1048576) {
             try {
                 String filePath = resizeFile(category,file);
@@ -149,8 +154,6 @@ public class FileService {
     }
 
     public String resizeFile(String category, MultipartFile multipartFile){
-        System.out.println("여기까지는 옵니다!!");
-        System.out.println("여기까지는 옵니다!!");
         System.out.println("여기까지는 옵니다!!");
         System.out.println("여기까지는 옵니다!!");
 
