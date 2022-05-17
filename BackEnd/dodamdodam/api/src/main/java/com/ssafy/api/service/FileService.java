@@ -55,17 +55,19 @@ public class FileService {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
+        String url;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+            url = amazonS3Client.getUrl(bucketName, fileName).toString();
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }finally{
             amazonS3Client.shutdown();
         }
 
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
+        return url;
     }
     public String uploadFileV2(String category, MultipartFile multipartFile) {
 
@@ -79,17 +81,19 @@ public class FileService {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
+        String url;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucketName, refileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+            url = amazonS3Client.getUrl(bucketName, fileName).toString();
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }finally{
             amazonS3Client.shutdown();
         }
 
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
+        return url;
     }
 
     private void validateFileExists(MultipartFile multipartFile) {
