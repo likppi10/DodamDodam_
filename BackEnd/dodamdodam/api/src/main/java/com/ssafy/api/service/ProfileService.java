@@ -59,7 +59,10 @@ public class ProfileService {
 
         if (!multipartFile.isEmpty()) {
             String originFileName = multipartFile.getOriginalFilename();
-            fileService.resizeImage("profile", multipartFile, profile); profile.updateImageName(originFileName);
+            String filePath = fileService.uploadFileV1("profile", multipartFile);
+            profile.updateImageName(originFileName);
+            profile.updateImagePath(filePath);
+            fileService.resizeImage("profile", multipartFile,profile);
         }
 
 //        updateImage(multipartFile, profile, request);
