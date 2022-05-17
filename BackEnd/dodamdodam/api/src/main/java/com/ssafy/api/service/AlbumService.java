@@ -111,7 +111,9 @@ public class AlbumService {
 
             if (albumReqDto.getMainIndex() == i) isMain = true;
             else isMain = false;
-            filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
+
+            MultipartFile multipartFile = multipartFiles.get(i);
+            filePath = fileService.uploadFileV1("album", multipartFile);
             Picture picture = Picture.builder()
                     .album(album)
                     .origin_name(multipartFiles.get(i).getOriginalFilename())
@@ -119,7 +121,7 @@ public class AlbumService {
                     .is_main(isMain)
                     .build();
             pictureRepository.save(picture);
-            fileService.resizeImage("album", multipartFiles.get(i), picture);
+            fileService.resizeImage("album", multipartFile, picture);
         }
 
         for (int i = 0; i < hashTags.size(); i++) {
