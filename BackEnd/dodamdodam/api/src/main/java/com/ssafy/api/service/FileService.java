@@ -2,6 +2,12 @@ package com.ssafy.api.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.jpeg.JpegMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.jpeg.JpegDirectory;
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
@@ -13,6 +19,7 @@ import com.ssafy.core.repository.PictureRepository;
 import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import marvin.image.MarvinImage;
+import org.imgscalr.Scalr;
 import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -101,7 +108,7 @@ public class FileService {
 
     @Async
     public void resizeImage(String category, MultipartFile file, Picture picture) {
-        if (file.getSize() > 1572864) {
+        if (file.getSize() > 1048576) {
             try {
                 String filePath = resizeFile(category,file);
                 picture.updatePathName(filePath);
@@ -119,7 +126,7 @@ public class FileService {
 
     @Async
     public void resizeImage(String category, MultipartFile file, Family family) {
-        if (file.getSize() > 1572864) {
+        if (file.getSize() > 1048576) {
             try {
                 String filePath = resizeFile(category,file);
                 family.setPicture(filePath);
@@ -136,7 +143,7 @@ public class FileService {
     }
     @Async
     public void resizeImage(String category, MultipartFile file, Profile profile) {
-        if (file.getSize() > 1572864) {
+        if (file.getSize() > 1048576) {
             try {
                 String filePath = resizeFile(category,file);
                 profile.updateImagePath(filePath);
@@ -156,18 +163,51 @@ public class FileService {
         try {
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
+
+            this.rotateFromMetaInfo(multipartFile);
+            int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
+            int width = 0;
+            int height = 0;
+
+            Metadata metadata; // 이미지 메타 데이터 객체
+            Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
+            JpegDirectory jpegDirectory; // JPG 이미지 정보를 읽기 위한 객체
+
+            try {
+                metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
+                directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+                jpegDirectory = metadata.getFirstDirectoryOfType(JpegDirectory.class);
+                if(directory != null){
+                    orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
+                }
+            }catch (Exception e) {
+                orientation=1;
+            }
+
+            //imageFile
             BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
+            // 회전 시킨다.
+            switch (orientation) {
+                case 6:
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
+                    break;
+                case 1:
+                    break;
+                case 3:
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
+                    break;
+                case 8:
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
+                    break;
+                default:
+                    orientation=1;
+                    break;
+            }
 
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
-            int originType = inputImage.getType();
 
-            BufferedImage rotateFixImage = new BufferedImage(originWidth, originHeight, originType);
-            Graphics2D graphics2D = rotateFixImage.createGraphics();
-            graphics2D.rotate(Math.toRadians(90), originWidth / 2, originHeight / 2);
-            graphics2D.drawImage(inputImage, null, 0, 0);
-
-            MarvinImage imageMarvin = new MarvinImage(rotateFixImage);
+            MarvinImage imageMarvin = new MarvinImage(inputImage);
 
             Scale scale = new Scale();
             scale.load();
@@ -176,6 +216,7 @@ public class FileService {
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
@@ -188,6 +229,8 @@ public class FileService {
         }
     }
 
+    private void rotateFromMetaInfo(MultipartFile multipartFile) {
 
 
+    }
 }
