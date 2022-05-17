@@ -153,6 +153,16 @@ public class FileService {
         System.out.println("여기까지는 옵니다!!");
         System.out.println("여기까지는 옵니다!!");
         System.out.println("여기까지는 옵니다!!");
+
+        if(multipartFile == null){
+            System.out.println("멀티파트 파일 null!!");
+        }
+        if(multipartFile.getContentType() == null){
+            System.out.println("컨텐츠 타입 null!");
+        }
+        if(multipartFile.getOriginalFilename() == null){
+            System.out.println("파일 이름 null!");
+        }
         try {
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
@@ -169,7 +179,7 @@ public class FileService {
                     orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
                 }
             }catch (Exception e) {
-                orientation=1;
+                orientation = 1;
             }
 
             //imageFile
@@ -179,8 +189,6 @@ public class FileService {
                 case 6:
                     inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
                     break;
-                case 1:
-                    break;
                 case 3:
                     inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
                     break;
@@ -188,7 +196,6 @@ public class FileService {
                     inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
                     break;
                 default:
-                    orientation=1;
                     break;
             }
             System.out.println("회전도 잘됨!!");
