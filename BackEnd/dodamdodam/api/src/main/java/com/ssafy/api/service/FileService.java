@@ -72,9 +72,9 @@ public class FileService {
     public String uploadFileV2(String category, MultipartFile multipartFile) {
 
         validateFileExists(multipartFile);
-
+        System.out.println(multipartFile == null);
+        System.out.println("쫌!");
         String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
-        String refileName = fileName.substring(category.length()+1);
 
         checkFileNameExtension(multipartFile);
 
@@ -84,15 +84,20 @@ public class FileService {
         String url;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, refileName, inputStream, objectMetadata)
+            System.out.println("야ㅕ야야야야야야야");
+            System.out.println(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead) == null);
+            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+
+            System.out.println("놨다!");
             url = amazonS3Client.getUrl(bucketName, fileName).toString();
+            System.out.println(url);
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
-        }finally{
-            amazonS3Client.shutdown();
         }
 
+        amazonS3Client.shutdown();
         return url;
     }
 
@@ -156,6 +161,7 @@ public class FileService {
 
         try {
             InputStream fileInputStream = multipartFile.getInputStream();
+            BufferedImage inputImage = ImageIO.read(fileInputStream);
 
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
@@ -180,7 +186,7 @@ public class FileService {
 
             System.out.println("너무 많이 읽었나??");
             //imageFile
-            BufferedImage inputImage = ImageIO.read(fileInputStream);
+
             System.out.println("또 읽으려니까 안되나?");
 
             // 회전 시킨다.
@@ -191,32 +197,35 @@ public class FileService {
                 System.out.println("6666666");
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
             }else if(orientation == 8){
-                System.out.println("8888888");
+                System.out.println("888888");
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
             }
 
-            System.out.println("회전도 잘됨!!");
-            System.out.println("회전도 잘됨!!");
-            System.out.println("회전도 잘됨!!");
-            System.out.println("회전도 잘됨!!");
-
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
-
+            System.out.println("여기는 된다.");
             MarvinImage imageMarvin = new MarvinImage(inputImage);
-
+            System.out.println("여긴가 설마");
             Scale scale = new Scale();
+            System.out.println(imageMarvin == null);
             scale.load();
             scale.setAttribute("newWidth", 712);
             scale.setAttribute("newHeight", 712 * originHeight / originWidth);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
+
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
 
+            System.out.println(imageNoAlpha == null);
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            System.out.println(baos == null);
+
             ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
+
+            System.out.println(resizedFile == null);
             String filePath = uploadFileV2(category, resizedFile);
 
             System.out.println("리사이징 완료");
