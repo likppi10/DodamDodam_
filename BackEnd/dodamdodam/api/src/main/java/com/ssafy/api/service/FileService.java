@@ -113,11 +113,6 @@ public class FileService {
 
     @Async
     public void resizeImage(String category, MultipartFile file, Picture picture) {
-        System.out.println("파일 크기 체크!!");
-        System.out.println("파일 크기 체크!!");
-        System.out.println("파일 크기 체크!!");
-        System.out.println("파일 크기 체크!!");
-        System.out.println(file.getSize());
         if (file.getSize() > 1048576) {
             try {
                 String filePath = resizeFile(category,file);
@@ -187,20 +182,19 @@ public class FileService {
             //imageFile
             BufferedImage inputImage = ImageIO.read(fileInputStream);
             System.out.println("또 읽으려니까 안되나?");
+
             // 회전 시킨다.
-            switch (orientation) {
-                case 6:
-                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
-                    break;
-                case 3:
-                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
-                    break;
-                case 8:
-                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
-                    break;
-                default:
-                    break;
+            if(orientation == 3){
+                System.out.println("3333333");
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
+            }else if(orientation == 6){
+                System.out.println("6666666");
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
+            }else if(orientation == 8){
+                System.out.println("8888888");
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
             }
+
             System.out.println("회전도 잘됨!!");
             System.out.println("회전도 잘됨!!");
             System.out.println("회전도 잘됨!!");
