@@ -186,13 +186,13 @@ public class FileService {
             // 회전 시킨다.
             if(orientation == 3){
                 System.out.println("3333333");
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
             }else if(orientation == 6){
                 System.out.println("6666666");
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
             }else if(orientation == 8){
                 System.out.println("8888888");
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
             }
 
             System.out.println("회전도 잘됨!!");
