@@ -55,10 +55,7 @@ public class FamilyService {
                 .user(user)
                 .family(family)
                 .build();
-//        if (!imageInfo[0].equals(".")) {
-//            profile.updateImagePath(imageInfo[0]);
-//            profile.updateImageName(imageInfo[1]);
-//        }
+
         profileRepository.save(profile);
         fileService.resizeImage("profile", multipartFile, profile);
         return profile;
@@ -70,10 +67,7 @@ public class FamilyService {
                 .user(user)
                 .family(family)
                 .build();
-//        if (!imageInfo[0].equals(".")) {
-//            profile.updateImagePath(imageInfo[0]);
-//            profile.updateImageName(imageInfo[1]);
-//        }
+
         profileRepository.save(profile);
         fileService.resizeImage("profile", multipartFile, profile);
         return profile;
@@ -115,27 +109,8 @@ public class FamilyService {
     }
 
     public void updateFamilyPicture(Family family, MultipartFile picture) {
-        String originFileName = picture.getOriginalFilename();
+
         String filePath = fileService.uploadFileV1("family",picture);
-//        String originFileName = picture.getOriginalFilename();
-//        UUID uuid = UUID.randomUUID();
-//        String saveFileName = "/resources/familyPicture/" + uuid.toString() + "_" + originFileName;
-//        File dir = new File(path + "/resources/familyPicture");
-//        if (!dir.exists()) {
-//            dir.mkdirs();
-//        }
-//        try {
-//            log.info(family.getPicture());
-//            if (family.getPicture() != null) {
-//                File file = new File(path + family.getPicture());
-//                log.info(file.toString());
-//                file.delete();
-//            }
-//            File file = new File(path + saveFileName);
-//            picture.transferTo(file);
-//        } catch (Exception e) {
-//            throw new CustomException(CustomErrorCode.INVALID_REQUEST, "파일이 없습니다.");
-//        }
         family.setPicture(filePath);
         familyRepository.save(family);
         fileService.resizeImage("family", picture,family);
