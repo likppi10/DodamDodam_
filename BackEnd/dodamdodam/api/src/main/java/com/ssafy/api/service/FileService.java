@@ -95,7 +95,7 @@ public class FileService {
         }
     }
 
-    @Async("applicationTaskExecutor")
+    @Async
     public void resizeImage(String category, MultipartFile file, Picture picture) {
         if (file.getSize() > 1572864) {
             try {
@@ -109,7 +109,7 @@ public class FileService {
         }
     }
 
-    @Async("applicationTaskExecutor")
+    @Async
     public void resizeImage(String category, MultipartFile file, Family family) {
         if (file.getSize() > 1572864) {
             try {
@@ -121,7 +121,7 @@ public class FileService {
             }
         }
     }
-    @Async("applicationTaskExecutor")
+    @Async
     public void resizeImage(String category, MultipartFile file, Profile profile) {
         if (file.getSize() > 1572864) {
             try {
