@@ -57,7 +57,7 @@ public class ProfileService {
     public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
 
-        if (multipartFile != null) {
+        if (!multipartFile.isEmpty()) {
             String originFileName = multipartFile.getOriginalFilename();
             String filePath = fileService.uploadFileV1("profile", multipartFile);
             profile.updateImageName(originFileName);
@@ -85,7 +85,7 @@ public class ProfileService {
             List<Profile> familyProfiles = profileRepository.findProfilesByFamilyIdExceptMe(familyId, profile.getId());
 
             //본인 뿐이 없다면, target은 비우고, content만 갱신
-            if (familyProfiles == null) {
+            if (familyProfiles.isEmpty()) {
                 profile.updateMissionContent("우리 가족을 초대해 주세요!");
                 return profile;
             }
