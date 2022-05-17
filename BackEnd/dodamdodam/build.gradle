@@ -46,12 +46,6 @@ subprojects {
 
     dependencies {
 
-        //metadata extractor
-        implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.18.0'
-
-        //image resize
-        implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
-
         //webMvc
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

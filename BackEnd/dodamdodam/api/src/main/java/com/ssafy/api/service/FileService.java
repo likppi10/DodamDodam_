@@ -2,10 +2,6 @@ package com.ssafy.api.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.exif.ExifIFD0Directory;
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
@@ -17,7 +13,6 @@ import com.ssafy.core.repository.PictureRepository;
 import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import marvin.image.MarvinImage;
-import org.imgscalr.Scalr;
 import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -63,18 +58,13 @@ public class FileService {
             url = amazonS3Client.getUrl(bucketName, fileName).toString();
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
-        }finally{
-            amazonS3Client.shutdown();
         }
 
         return url;
     }
-    public String uploadFileV2(String category, MultipartFile multipartFile) {
+    public String uploadFileV2(String fileName, MultipartFile multipartFile) {
 
         validateFileExists(multipartFile);
-        System.out.println(multipartFile == null);
-        System.out.println("쫌!");
-        String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
 
         checkFileNameExtension(multipartFile);
 
@@ -84,15 +74,11 @@ public class FileService {
         String url;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            System.out.println("야ㅕ야야야야야야야");
-            System.out.println(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead) == null);
             amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
-            System.out.println("놨다!");
             url = amazonS3Client.getUrl(bucketName, fileName).toString();
-            System.out.println(url);
+
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }
@@ -116,7 +102,7 @@ public class FileService {
         }
     }
 
-    @Async
+    @Async("applicationTaskExecutor")
     public void resizeImage(String category, MultipartFile file, Picture picture) {
         if (file.getSize() > 1048576) {
             try {
@@ -130,7 +116,7 @@ public class FileService {
         }
     }
 
-    @Async
+    @Async("applicationTaskExecutor")
     public void resizeImage(String category, MultipartFile file, Family family) {
         if (file.getSize() > 1048576) {
             try {
@@ -143,7 +129,7 @@ public class FileService {
             }
         }
     }
-    @Async
+    @Async("applicationTaskExecutor")
     public void resizeImage(String category, MultipartFile file, Profile profile) {
         if (file.getSize() > 1048576) {
             try {
@@ -163,51 +149,16 @@ public class FileService {
             InputStream fileInputStream = multipartFile.getInputStream();
             BufferedImage inputImage = ImageIO.read(fileInputStream);
 
-            String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
+            String fileName = FileUtil.buildResizedFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
 
-            System.out.println("여기는 통과 =========");
-            int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
-
-            Metadata metadata; // 이미지 메타 데이터 객체
-            Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
-
-            try {
-                metadata = ImageMetadataReader.readMetadata(fileInputStream);
-
-                System.out.println("여기서 설마???");
-                directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-                if(directory != null){
-                    orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
-                }
-            }catch (Exception e) {
-                orientation = 1;
-            }
-
-            System.out.println("너무 많이 읽었나??");
-            //imageFile
-
-            System.out.println("또 읽으려니까 안되나?");
-
-            // 회전 시킨다.
-            if(orientation == 3){
-                System.out.println("3333333");
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
-            }else if(orientation == 6){
-                System.out.println("6666666");
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
-            }else if(orientation == 8){
-                System.out.println("888888");
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
-            }
 
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
-            System.out.println("여기는 된다.");
+
             MarvinImage imageMarvin = new MarvinImage(inputImage);
-            System.out.println("여긴가 설마");
             Scale scale = new Scale();
-            System.out.println(imageMarvin == null);
+
             scale.load();
             scale.setAttribute("newWidth", 712);
             scale.setAttribute("newHeight", 712 * originHeight / originWidth);
@@ -215,23 +166,13 @@ public class FileService {
 
 
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
-
-            System.out.println(imageNoAlpha == null);
-
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            System.out.println(baos == null);
 
             ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
+            String filePath = uploadFileV2(fileName, resizedFile);
 
-            System.out.println(resizedFile == null);
-            String filePath = uploadFileV2(category, resizedFile);
-
-            System.out.println("리사이징 완료");
-            System.out.println("리사이징 완료");
-            System.out.println("리사이징 완료");
-            System.out.println("리사이징 완료");
             return filePath;
         }
         catch (Exception e) {
