@@ -50,17 +50,15 @@ public class FileService {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
-        String url;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
-            url = amazonS3Client.getUrl(bucketName, fileName).toString();
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }
 
-        return url;
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
     public String uploadFileV2(String fileName, MultipartFile multipartFile) {
 
@@ -71,20 +69,15 @@ public class FileService {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
-        String url;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
-
-            url = amazonS3Client.getUrl(bucketName, fileName).toString();
-
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }
 
-        amazonS3Client.shutdown();
-        return url;
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
     private void validateFileExists(MultipartFile multipartFile) {
@@ -104,7 +97,7 @@ public class FileService {
 
     @Async("applicationTaskExecutor")
     public void resizeImage(String category, MultipartFile file, Picture picture) {
-        if (file.getSize() > 1048576) {
+        if (file.getSize() > 1572864) {
             try {
                 String filePath = resizeFile(category,file);
                 picture.updatePathName(filePath);
@@ -118,12 +111,11 @@ public class FileService {
 
     @Async("applicationTaskExecutor")
     public void resizeImage(String category, MultipartFile file, Family family) {
-        if (file.getSize() > 1048576) {
+        if (file.getSize() > 1572864) {
             try {
                 String filePath = resizeFile(category,file);
                 family.setPicture(filePath);
                 familyRepository.save(family);
-
             } catch (Exception e) {
                 throw new CustomException(ErrorCode.INVALID_REQUEST);
             }
@@ -131,7 +123,7 @@ public class FileService {
     }
     @Async("applicationTaskExecutor")
     public void resizeImage(String category, MultipartFile file, Profile profile) {
-        if (file.getSize() > 1048576) {
+        if (file.getSize() > 1572864) {
             try {
                 String filePath = resizeFile(category,file);
                 profile.updateImagePath(filePath);
@@ -144,39 +136,31 @@ public class FileService {
     }
 
     public String resizeFile(String category, MultipartFile multipartFile){
-
         try {
-            InputStream fileInputStream = multipartFile.getInputStream();
-            BufferedImage inputImage = ImageIO.read(fileInputStream);
-
             String fileName = FileUtil.buildResizedFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
-
-
+            BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
 
             MarvinImage imageMarvin = new MarvinImage(inputImage);
             Scale scale = new Scale();
-
             scale.load();
             scale.setAttribute("newWidth", 712);
             scale.setAttribute("newHeight", 712 * originHeight / originWidth);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
-
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
             ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
             String filePath = uploadFileV2(fileName, resizedFile);
-
             return filePath;
         }
         catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
     }
+
 }
