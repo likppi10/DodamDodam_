@@ -61,6 +61,8 @@ public class FileService {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
+        }finally{
+            amazonS3Client.shutdown();
         }
 
         return amazonS3Client.getUrl(bucketName, fileName).toString();
@@ -83,6 +85,8 @@ public class FileService {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
+        }finally{
+            amazonS3Client.shutdown();
         }
 
         return amazonS3Client.getUrl(bucketName, fileName).toString();
@@ -145,7 +149,10 @@ public class FileService {
     }
 
     public String resizeFile(String category, MultipartFile multipartFile){
-
+        System.out.println("여기까지는 옵니다!!");
+        System.out.println("여기까지는 옵니다!!");
+        System.out.println("여기까지는 옵니다!!");
+        System.out.println("여기까지는 옵니다!!");
         try {
             String fileName = FileUtil.buildFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
@@ -184,6 +191,10 @@ public class FileService {
                     orientation=1;
                     break;
             }
+            System.out.println("회전도 잘됨!!");
+            System.out.println("회전도 잘됨!!");
+            System.out.println("회전도 잘됨!!");
+            System.out.println("회전도 잘됨!!");
 
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
@@ -203,6 +214,11 @@ public class FileService {
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
             String filePath = uploadFileV2(category, resizedFile);
+
+            System.out.println("리사이징 완료");
+            System.out.println("리사이징 완료");
+            System.out.println("리사이징 완료");
+            System.out.println("리사이징 완료");
             return filePath;
         }
         catch (Exception e) {
