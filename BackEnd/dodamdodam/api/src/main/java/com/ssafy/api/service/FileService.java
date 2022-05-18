@@ -67,6 +67,8 @@ public class FileService {
             int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
 
             Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
+            System.out.println("metadata 체크");
+            System.out.println(metadata == null);
 
             Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 
@@ -76,10 +78,13 @@ public class FileService {
 
             if (orientation == 3) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
+                System.out.println("333333333");
             } else if (orientation == 6) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
+                System.out.println("6666666666");
             } else if (orientation == 8) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
+                System.out.println("888888888");
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -87,6 +92,9 @@ public class FileService {
             baos.flush();
 
             MultipartFile imageFile = new MockMultipartFile(fileName, baos.toByteArray());
+            System.out.println("imageFile size");
+            System.out.println(imageFile.getSize());
+
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(imageFile.getContentType());
@@ -153,12 +161,11 @@ public class FileService {
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
             int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
-            Metadata metadata; // 이미지 메타 데이터 객체
+            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream()); // 이미지 메타 데이터 객체
             Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
 
-            metadata = ImageMetadataReader.readMetadata(file.getInputStream());
             System.out.println("메타데이터");
-            System.out.println(metadata.toString());
+            System.out.println(metadata == null);
 
             directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
             if (directory != null) {
