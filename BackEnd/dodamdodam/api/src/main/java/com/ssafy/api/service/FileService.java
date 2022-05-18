@@ -2,6 +2,11 @@ package com.ssafy.api.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
+import org.imgscalr.Scalr;
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
@@ -122,11 +127,35 @@ public class FileService {
         }
     }
 
+
     public String resizeFile(String category, MultipartFile multipartFile) {
         try {
             String fileName = FileUtil.buildResizedFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
             BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
+
+            int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
+            Metadata metadata; // 이미지 메타 데이터 객체
+            Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
+
+            try {
+                metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
+                directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+                if(directory != null){
+                    orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
+                }
+            }catch (Exception e) {
+                orientation = 1;
+            }
+
+            if(orientation == 3){
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
+            }else if(orientation == 6){
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
+            }else if(orientation == 8){
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
+            }
+
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
 
@@ -143,20 +172,21 @@ public class FileService {
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
 
-            checkFileNameExtension(resizedFile);
-
             System.out.println("check point 1");
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(resizedFile.getContentType());
             objectMetadata.setContentLength(resizedFile.getSize());
             System.out.println("check point 2");
 
-            InputStream inputStream = resizedFile.getInputStream();
-
             System.out.println("check point 3");
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            System.out.println("check point 4");
+            try (InputStream inputStream = resizedFile.getInputStream()) {
+                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                System.out.println("check point 4");
+            } catch (IOException e) {
+                throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
+            }
+
 
             return amazonS3Client.getUrl(bucketName, fileName).toString();
 
@@ -165,5 +195,5 @@ public class FileService {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
     }
-
 }
+
