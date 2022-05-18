@@ -118,17 +118,22 @@ class AddAlbumFragment : Fragment() {
             val tagtext = binding.addAlbumTagEditText.editText?.text.toString()
             if (tagtext.length<15) {
                 if (tagtext.matches(regex)) {
-                    addtag = "#" + tagtext
-                    if (tagList.size < 3) {
-                        tagList.add(HashTag(addtag))
-                        detailAlbumViewModel.hashTag = tagList
-                        Log.d("ddddd", "tagList: " + detailAlbumViewModel.hashTag)
-                        tagAdapter.datas = detailAlbumViewModel.hashTag
-                        tagAdapter.notifyDataSetChanged()
-                        binding.addAlbumTagEditText.editText?.setText("")
-                    } else {
-                        binding.addAlbumTagEditText.error = "태그는 최대 3개까지에요."
+                    if(tagtext.length == 0){
+                        Toast.makeText(requireActivity(), "태그를 입력해주세요!", Toast.LENGTH_SHORT).show()
+                    }else{
+                        addtag = "#" + tagtext
+                        if (tagList.size < 3) {
+                            tagList.add(HashTag(addtag))
+                            detailAlbumViewModel.hashTag = tagList
+                            Log.d("ddddd", "tagList: " + detailAlbumViewModel.hashTag)
+                            tagAdapter.datas = detailAlbumViewModel.hashTag
+                            tagAdapter.notifyDataSetChanged()
+                            binding.addAlbumTagEditText.editText?.setText("")
+                        } else {
+                            binding.addAlbumTagEditText.error = "태그는 최대 3개까지에요."
+                        }
                     }
+
                 } else {
                     binding.addAlbumTagEditText.error = "특수문자랑 공백은 사용불가해요."
                 }

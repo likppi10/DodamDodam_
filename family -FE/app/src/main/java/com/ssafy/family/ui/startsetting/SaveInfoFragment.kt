@@ -367,7 +367,7 @@ class SaveInfoFragment : Fragment() {
             if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
                 characterPath = imageUri.toString()
             } else { // 폰에 저장된 사진이면
-                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+                imageFile = getRealFile(imageUri!!)
             }
         }
         first = true
@@ -384,7 +384,7 @@ class SaveInfoFragment : Fragment() {
             if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
                 characterPath = imageUri.toString()
             } else { // 폰에 저장된 사진이면
-                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+                imageFile = getRealFile(imageUri!!)
             }
         }
         familyViewModel.joinFamily(FamilyReq(selectedRole, nickname, birthday, characterPath), familyId, imageFile)
@@ -401,7 +401,7 @@ class SaveInfoFragment : Fragment() {
             if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
                 characterPath = imageUri.toString()
             } else { // 폰에 저장된 사진이면
-                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+                imageFile = getRealFile(imageUri!!)
             }
         }
         familyViewModel.updateMyProfile(FamilyReq(selectedRole, nickname, birthday, characterPath), imageFile)
@@ -445,5 +445,34 @@ class SaveInfoFragment : Fragment() {
             binding.saveInfoSpinner.visibility = View.GONE
             binding.saveInfoDoubleSpinnerLayout.visibility = View.VISIBLE
         }
+    }
+
+    private fun getRealFile(uri: Uri): File? {
+        var uri: Uri? = uri
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        if (uri == null) {
+            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+        var cursor: Cursor? = uri?.let {
+            context?.contentResolver?.query(
+                it,
+                projection,
+                null,
+                null,
+                MediaStore.Images.Media.DATE_MODIFIED + " desc"
+            )
+        }
+        if (cursor == null || cursor.columnCount < 1) {
+            return null
+        }
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path = cursor.getString(column_index)
+//        File(path).length()
+        if (cursor != null) {
+            cursor.close()
+            cursor = null
+        }
+        return File(path)
     }
 }
