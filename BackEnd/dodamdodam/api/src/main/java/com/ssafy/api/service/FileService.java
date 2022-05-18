@@ -166,11 +166,17 @@ public class FileService {
             scale.setAttribute("newHeight", 712 * originHeight / originWidth);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
+
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
             ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
+            System.out.println("baos 파일 사이즈 체크");
+            System.out.println(baos.size());
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
+            System.out.println("resizeFile 파일 사이즈 체크");
+            System.out.println(resizedFile.getSize());
 
             System.out.println("check point 1");
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -180,6 +186,8 @@ public class FileService {
 
             System.out.println("check point 3");
             try (InputStream inputStream = resizedFile.getInputStream()) {
+                System.out.println("inputstream 파일 사이즈 체크");
+                System.out.println(inputStream.available());
                 amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
                 System.out.println("check point 4");
