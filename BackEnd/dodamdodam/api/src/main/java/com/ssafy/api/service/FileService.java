@@ -89,7 +89,76 @@ public class FileService {
         System.out.println(picture.is_main());
         if (file.getSize() > 1572864) {
             try {
-                String filePath = resizeFile(category, file);
+                System.out.println("multipartfile size");
+                System.out.println(file.getSize());
+                String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
+                String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
+                BufferedImage inputImage = ImageIO.read(file.getInputStream());
+
+                System.out.println("multipartfile size");
+                System.out.println(inputImage);
+                int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
+                Metadata metadata; // 이미지 메타 데이터 객체
+                Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
+
+                try {
+                    metadata = ImageMetadataReader.readMetadata(file.getInputStream());
+                    directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+                    if(directory != null){
+                        orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
+                    }
+                }catch (Exception e) {
+                    orientation = 1;
+                }
+
+                if(orientation == 3){
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
+                }else if(orientation == 6){
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
+                }else if(orientation == 8){
+                    inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
+                }
+
+                int originWidth = inputImage.getWidth();
+                int originHeight = inputImage.getHeight();
+
+                MarvinImage imageMarvin = new MarvinImage(inputImage);
+                Scale scale = new Scale();
+                scale.load();
+                scale.setAttribute("newWidth", 712);
+                scale.setAttribute("newHeight", 712 * originHeight / originWidth);
+                scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
+
+
+                BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                ImageIO.write(imageNoAlpha, fileFormatName, baos);
+                baos.flush();
+                System.out.println("baos 파일 사이즈 체크");
+                System.out.println(baos.size());
+                MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
+                System.out.println("resizeFile 파일 사이즈 체크");
+                System.out.println(resizedFile.getSize());
+
+                System.out.println("check point 1");
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentType(resizedFile.getContentType());
+                objectMetadata.setContentLength(resizedFile.getSize());
+                System.out.println("check point 2");
+
+                System.out.println("check point 3");
+                try (InputStream inputStream = resizedFile.getInputStream()) {
+                    System.out.println("inputstream 파일 사이즈 체크");
+                    System.out.println(inputStream.available());
+                    amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+                    System.out.println("check point 4");
+                } catch (IOException e) {
+                    throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
+                }
+
+                String filePath = amazonS3Client.getUrl(bucketName, fileName).toString();
                 picture.updatePathName(filePath);
                 pictureRepository.save(picture);
 
