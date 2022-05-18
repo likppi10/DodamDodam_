@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.common.KoreanUtil;
 import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
@@ -62,7 +63,9 @@ public class ProfileService {
             String filePath = fileService.uploadFileV1("profile", multipartFile);
             profile.updateImageName(originFileName);
             profile.updateImagePath(filePath);
-            fileService.resizeImage("profile", multipartFile, profile);
+            if (multipartFile.getSize() > FileUtil.FILE_MAX_SIZE) {
+                fileService.resizeImage("profile", multipartFile, profile);
+            }
         }
 
 //        updateImage(multipartFile, profile, request);
