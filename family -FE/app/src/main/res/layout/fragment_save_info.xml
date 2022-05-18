@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/box_white_button"
+        android:elevation="5dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,6 +48,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:background="@drawable/box_spinner"
+                android:elevation="5dp"
                 android:spinnerMode="dialog"
                 android:textAlignment="center"
                 android:visibility="gone" />
@@ -64,6 +65,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/box_spinner"
+                    android:elevation="5dp"
                     android:spinnerMode="dialog"
                     android:textAlignment="center" />
 
@@ -74,6 +76,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/box_spinner"
+                    android:elevation="5dp"
                     android:spinnerMode="dialog"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -101,6 +104,7 @@
         android:background="@drawable/box_white_button"
         android:gravity="center_vertical"
         android:orientation="vertical"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linear_layout_select_my_role">
@@ -192,6 +196,7 @@
         android:textColor="@color/pink01"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linear_layout_input_nickname_birthday" />

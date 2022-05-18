@@ -1,7 +1,6 @@
 package com.ssafy.family.ui.Adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -16,8 +15,8 @@ import com.ssafy.family.data.remote.res.FamilyProfile
 import com.ssafy.family.databinding.ItemFamilyStatusBinding
 
 // mainactivity - familyfragment : 우리가족(상태)
-class StatusAdapter(private val context: Context) :
-    RecyclerView.Adapter<StatusAdapter.ViewHolder>() {
+class StatusAdapter(private val context: Context) : RecyclerView.Adapter<StatusAdapter.ViewHolder>() {
+
     lateinit var itemClickListener: AlarmAdapter.ItemClickListener
     var datas = mutableListOf<FamilyProfile>()
     var alarmList = mutableListOf<AlarmInfo>()
@@ -31,8 +30,6 @@ class StatusAdapter(private val context: Context) :
     override fun getItemCount(): Int = datas.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(datas[position])
-//        val currentBook = getItemId(position)
         holder.bind((datas[position]))
     }
 
@@ -40,7 +37,6 @@ class StatusAdapter(private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FamilyProfile) {
             if (item.imagePath.isNullOrEmpty()) {
-                // TODO: 디폴트이미지
                 Glide.with(itemView).load(R.drawable.image_fail).into(binding.familyProfileImage)
             } else {
                 Glide.with(itemView).load(item.imagePath).into(binding.familyProfileImage)
@@ -60,10 +56,8 @@ class StatusAdapter(private val context: Context) :
 
             binding.statusLayout.setOnClickListener {
                 if (binding.alarmRecycler.visibility == VISIBLE) {
-                    Log.d("log닷", "onBindViewHolder: 1")
                     binding.alarmRecycler.visibility = GONE
                 } else {
-                    Log.d("log닷", "onBindViewHolder: 2")
 
                     binding.alarmRecycler.visibility = VISIBLE
                     val adapter = AlarmAdapter(context).apply {

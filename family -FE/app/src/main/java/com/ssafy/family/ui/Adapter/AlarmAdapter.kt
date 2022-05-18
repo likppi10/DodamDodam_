@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.family.data.remote.res.Alarm
 import com.ssafy.family.data.remote.res.FamilyProfile
-import com.ssafy.family.data.remote.res.HashTag
 import com.ssafy.family.databinding.ItemAlarmBinding
 
 // mainactivity - familyfragment : 알림 보내기 메시지 리스트
@@ -14,6 +13,7 @@ class AlarmAdapter(private val context: Context) : RecyclerView.Adapter<AlarmAda
 
     var datas = mutableListOf<Alarm>()
     lateinit var itemClickListener: ItemClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemAlarmBinding.inflate(inflater, parent, false)

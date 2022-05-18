@@ -12,7 +12,6 @@ data class AlbumPicture(
     var main: Boolean,
     @SerializedName("pictureId")
     var pictureId:Int
-
 ): Parcelable
 
 

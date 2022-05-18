@@ -9,6 +9,5 @@ data class RefreshJWT(
     @SerializedName("jwtToken")
     val jwtToken: String,
     @SerializedName("refreshToken")
-    val refreshToken: String,
-
-    ): Parcelable
+    val refreshToken: String
+): Parcelable

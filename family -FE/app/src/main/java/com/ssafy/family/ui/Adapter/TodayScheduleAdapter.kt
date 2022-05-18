@@ -34,4 +34,5 @@ class TodayScheduleAdapter(val onClick: (ScheduleInfo) -> Unit) : RecyclerView.A
             binding.scheduleTextView.text = "${scheduleInfo.role} / ${scheduleInfo.title}"
         }
     }
+
 }

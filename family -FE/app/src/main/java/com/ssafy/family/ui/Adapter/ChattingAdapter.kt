@@ -21,7 +21,7 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemChattingBinding.inflate(inflater, parent, false)
-            return ViewHolder(binding)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int = datas.size
@@ -29,7 +29,6 @@ class ChattingAdapter(var memberList:List<MemberInfo>, var datas: MutableList<Ch
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val itemBinding = holder.binding as ItemChattingBinding
 
-        Log.d("XXXX", "memberList: $memberList")
         var user: MemberInfo? = null
         for(a in memberList){
             if(a.profileId == datas[position].id){

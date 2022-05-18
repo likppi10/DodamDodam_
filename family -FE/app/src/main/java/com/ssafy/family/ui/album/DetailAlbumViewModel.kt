@@ -69,6 +69,7 @@ class DetailAlbumViewModel @Inject constructor(private val albumRepository: Albu
 
     var selectedImgUriList = arrayListOf<Uri>()
 
+    var photosSize = 0
     var isUpdate = false
     var paths = arrayListOf<String>()
     var hashTag = arrayListOf<HashTag>()

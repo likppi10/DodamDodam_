@@ -20,8 +20,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FindIdFragment : Fragment() {
+
     lateinit var binding: FragmentFindIdBinding
     private val loginViewModel by activityViewModels<LoginViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -30,7 +32,6 @@ class FindIdFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentFindIdBinding.inflate(inflater, container, false)
         return binding.root
     }

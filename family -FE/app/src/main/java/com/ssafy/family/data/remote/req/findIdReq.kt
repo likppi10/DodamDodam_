@@ -11,6 +11,6 @@ data class findIdReq(
     @SerializedName("birthday")
     val birthday: String,
     @SerializedName("familyCode")
-    val familyCode: String,
+    val familyCode: String
 ) : Parcelable
 

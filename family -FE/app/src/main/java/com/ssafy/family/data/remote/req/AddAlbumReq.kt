@@ -12,6 +12,6 @@ data class AddAlbumReq(
     @SerializedName("date")
     val date: String,
     @SerializedName("mainIndex")
-    val mainIndex: Int,
+    val mainIndex: Int
 ) : Parcelable
 

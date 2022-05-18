@@ -28,6 +28,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_album_title_text" />
 
+
+
     <TextView
         android:id="@+id/update_album_time_text"
         android:layout_width="wrap_content"
@@ -100,7 +102,6 @@
         android:id="@+id/update_add_button"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
         android:background="@drawable/box_roulette"
         android:fontFamily="@font/spoqahansans"
         android:text="사진추가"
@@ -108,6 +109,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/update_album_title_text"
         app:layout_constraintEnd_toEndOf="@+id/update_album_photo_recycler"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/update_album_title_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

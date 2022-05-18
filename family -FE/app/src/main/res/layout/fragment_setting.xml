@@ -12,46 +12,69 @@
         android:layout_height="80dp"
         android:layout_marginTop="16dp"
         android:src="@color/gray01"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/status_view"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/status_view_box"
         android:layout_width="330dp"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/box_my_state"
+        android:elevation="40dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image"
+        app:strokeColor="@color/gray01"
+        app:strokeWidth="0.5dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/my_status_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/status_view"
-        app:layout_constraintStart_toStartOf="@+id/status_view"
-        app:layout_constraintTop_toTopOf="@+id/status_view" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/my_status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/spoqahansans"
-        android:maxLines="2"
-        android:text="오늘은 너무 피곤해요 그냥 쉬고 싶어요."
-        android:textColor="@color/pink01"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/status_view"
-        app:layout_constraintEnd_toEndOf="@+id/status_view"
-        app:layout_constraintStart_toEndOf="@+id/my_status_image"
-        app:layout_constraintTop_toTopOf="@+id/status_view" />
+            <View
+                android:id="@+id/status_view"
+                android:layout_width="330dp"
+                android:layout_height="100dp"
+                android:background="@color/beige01"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/my_status_image"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/status_view"
+                app:layout_constraintStart_toStartOf="@+id/status_view"
+                app:layout_constraintTop_toTopOf="@+id/status_view" />
+
+            <TextView
+                android:id="@+id/my_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/spoqahansans"
+                android:maxLines="2"
+                android:text="오늘은 너무 피곤해요 그냥 쉬고 싶어요."
+                android:textColor="@color/pink01"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/status_view"
+                app:layout_constraintEnd_toEndOf="@+id/status_view"
+                app:layout_constraintStart_toEndOf="@+id/my_status_image"
+                app:layout_constraintTop_toTopOf="@+id/status_view" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/text"
@@ -64,64 +87,79 @@
         android:textColor="@color/black"
         android:textSize="10sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/status_view"
-        app:layout_constraintTop_toBottomOf="@+id/status_view" />
+        app:layout_constraintEnd_toEndOf="@+id/status_view_box"
+        app:layout_constraintTop_toBottomOf="@+id/status_view_box" />
 
-    <View
-        android:id="@+id/my_info_edit_button"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/my_info_edit_button_box"
         android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/box_setting"
-        app:layout_constraintBottom_toTopOf="@+id/my_status_edit_button"
+        android:elevation="40dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/my_status_edit_button_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_view" />
+        app:layout_constraintTop_toBottomOf="@+id/text"
+        app:strokeColor="@color/gray01"
+        app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/my_info_edit_text"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/spoqahansans"
-        android:gravity="center"
-        android:text="@string/setting_info_edit"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/my_info_edit_button"
-        app:layout_constraintEnd_toEndOf="@+id/my_info_edit_button"
-        app:layout_constraintStart_toStartOf="@+id/my_info_edit_button"
-        app:layout_constraintTop_toTopOf="@+id/my_info_edit_button" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/my_status_edit_button"
+            <TextView
+                android:id="@+id/my_info_edit_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:fontFamily="@font/spoqahansans"
+                android:gravity="center"
+                android:text="@string/setting_info_edit"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@color/pink03"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/my_status_edit_button_box"
         android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/box_setting"
-        app:layout_constraintBottom_toTopOf="@+id/text1"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_info_edit_button" />
+        app:layout_constraintTop_toBottomOf="@+id/my_info_edit_button_box"
+        app:strokeColor="@color/gray01"
+        app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/my_status_edit_text"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/spoqahansans"
-        android:gravity="center"
-        android:text="@string/setting_status_edit"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/my_status_edit_button"
-        app:layout_constraintEnd_toEndOf="@+id/my_status_edit_button"
-        app:layout_constraintStart_toStartOf="@+id/my_status_edit_button"
-        app:layout_constraintTop_toTopOf="@+id/my_status_edit_button" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/my_status_edit_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/spoqahansans"
+                android:gravity="center"
+                android:text="@string/setting_status_edit"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@color/pink03"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/text1"
@@ -136,111 +174,136 @@
         android:textColor="@color/pink01"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/family_code"
+        app:layout_constraintBottom_toTopOf="@+id/family_code_text_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_status_edit_button" />
+        app:layout_constraintTop_toBottomOf="@+id/my_status_edit_button_box" />
 
-    <View
-        android:id="@+id/family_code"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/family_code_text_box"
         android:layout_width="330dp"
         android:layout_height="70dp"
-        android:background="@drawable/box_setting"
-        app:layout_constraintBottom_toTopOf="@+id/exit_group_button"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text1" />
+        app:layout_constraintTop_toBottomOf="@+id/text1"
+        app:strokeColor="@color/gray01"
+        app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/family_code_text"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:fontFamily="@font/spoqahansans"
-        android:gravity="center"
-        android:text="8384kf3rs"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/family_code"
-        app:layout_constraintEnd_toEndOf="@+id/family_code"
-        app:layout_constraintStart_toStartOf="@+id/family_code"
-        app:layout_constraintTop_toTopOf="@+id/family_code" />
+            <TextView
+                android:id="@+id/family_code_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/spoqahansans"
+                android:gravity="center"
+                android:text="8384kf3rs"
 
-    <ImageButton
-        android:id="@+id/shareImageButton"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/family_code"
-        app:layout_constraintEnd_toEndOf="@+id/family_code"
-        app:layout_constraintTop_toTopOf="@+id/family_code"
-        app:srcCompat="@drawable/ic_outline_share" />
+                android:background="@color/pink03"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/shareImageButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_outline_share" />
 
 
-    <ImageButton
-        android:id="@+id/copyImageButton"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/family_code"
-        app:layout_constraintEnd_toStartOf="@+id/shareImageButton"
-        app:layout_constraintTop_toTopOf="@+id/family_code"
-        app:srcCompat="@drawable/ic_baseline_content_copy" />
+            <ImageButton
+                android:id="@+id/copyImageButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/family_code_text"
+                app:layout_constraintEnd_toStartOf="@+id/shareImageButton"
+                app:layout_constraintTop_toTopOf="@+id/family_code_text"
+                app:srcCompat="@drawable/ic_baseline_content_copy" />
 
-    <View
-        android:id="@+id/exit_group_button"
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/exit_group_button_box"
         android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/box_setting"
-        app:layout_constraintBottom_toTopOf="@+id/logout_button"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/logout_button_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/family_code" />
+        app:layout_constraintTop_toBottomOf="@+id/family_code_text_box"
+        app:strokeColor="@color/gray01"
+        app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/exit_group_text"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/spoqahansans"
-        android:gravity="center"
-        android:text="@string/setting_exit_group"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/exit_group_button"
-        app:layout_constraintEnd_toEndOf="@+id/exit_group_button"
-        app:layout_constraintStart_toStartOf="@+id/exit_group_button"
-        app:layout_constraintTop_toTopOf="@+id/exit_group_button" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/exit_group_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/spoqahansans"
+                android:gravity="center"
+                android:text="@string/setting_exit_group"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@color/pink03"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    <View
-        android:id="@+id/logout_button"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/logout_button_box"
         android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/box_setting"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exit_group_button" />
+        app:layout_constraintTop_toBottomOf="@+id/exit_group_button_box"
+        app:strokeColor="@color/gray01"
+        app:strokeWidth="0.5dp">
 
-    <TextView
-        android:id="@+id/logout_text"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/spoqahansans"
-        android:gravity="center"
-        android:text="@string/setting_logout"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/logout_button"
-        app:layout_constraintEnd_toEndOf="@+id/logout_button"
-        app:layout_constraintStart_toStartOf="@+id/logout_button"
-        app:layout_constraintTop_toTopOf="@+id/logout_button" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/logout_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/spoqahansans"
+                android:gravity="center"
+                android:text="@string/setting_logout"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@color/pink03"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -86,8 +86,8 @@
 
     <string name="edit_status_guide">오늘 나의 상태를 표현해주세요.</string>
     <string name="select_family_picture_guide">변경할 가족 사진을 선택해주세요.</string>
-    <string name="todays_condition">오늘 기분</string>
-    <string name="todays_message">오늘 한마디</string>
+    <string name="todays_condition">오늘의 기분</string>
+    <string name="todays_message">오늘의 한마디</string>
     <string name="confirm">확인</string>
     <string name="sample_message">Sample Message</string>
     <string name="save_yourself">\'나\'를 저장하세요!</string>

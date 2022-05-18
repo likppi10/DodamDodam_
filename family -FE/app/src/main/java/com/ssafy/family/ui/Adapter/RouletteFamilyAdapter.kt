@@ -33,6 +33,7 @@ class RouletteFamilyAdapter (private val context: Context) : RecyclerView.Adapte
 
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RouletteFamilyListBinding.inflate(inflater, parent, false)
@@ -44,4 +45,5 @@ class RouletteFamilyAdapter (private val context: Context) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position])
     }
+
 }

@@ -26,7 +26,6 @@ import com.ssafy.family.ui.main.MainActivity
 
 class FcmService: FirebaseMessagingService() {
 
-
     val SP_NAME = "fcm_message"
     var fcmList = ArrayList<String>()
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -174,8 +173,6 @@ class FcmService: FirebaseMessagingService() {
         val obj: ArrayList<String> = gson.fromJson(json, type) ?: ArrayList()
         return obj
     }
-
-
 
     companion object {
         private const val TAG = "FAMILY"

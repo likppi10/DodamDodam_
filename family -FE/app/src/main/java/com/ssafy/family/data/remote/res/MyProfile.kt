@@ -14,4 +14,4 @@ data class MyProfile(
     val nickname: String,
     @SerializedName("birthday")
     val birthday: String
-    ): Parcelable
+): Parcelable

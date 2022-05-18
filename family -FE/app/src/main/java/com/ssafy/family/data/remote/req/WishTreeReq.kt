@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class WishTreeReq(
     @SerializedName("content")
-    val content: String,
+    val content: String
 ): Parcelable

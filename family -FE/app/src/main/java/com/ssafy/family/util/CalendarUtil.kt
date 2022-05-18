@@ -2,7 +2,6 @@ package com.ssafy.family.util
 
 import android.content.Context
 import android.os.Build
-import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView

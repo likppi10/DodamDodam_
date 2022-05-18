@@ -19,4 +19,5 @@ interface CalendarRepository {
     suspend fun editSchedule(scheduleId:Long, scheduleReq: ScheduleReq): Resource<BaseResponse>
 
     suspend fun deleteSchedule(scheduleId:Long): Resource<BaseResponse>
+
 }

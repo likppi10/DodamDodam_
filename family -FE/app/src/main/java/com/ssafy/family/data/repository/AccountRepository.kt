@@ -9,9 +9,9 @@ import com.ssafy.family.data.remote.res.LoginRes
 import com.ssafy.family.data.remote.res.MissionRes
 import com.ssafy.family.data.remote.res.RefreshTokenRes
 import com.ssafy.family.util.Resource
-import retrofit2.Response
 
 interface AccountRepository {
+
     suspend fun login(user: LoginReq): Resource<LoginRes>
 
     suspend fun addFcm(fcmToken:AddFcmReq): Resource<BaseResponse>
@@ -33,4 +33,5 @@ interface AccountRepository {
     suspend fun socialLogin(): Resource<LoginRes>
 
     suspend fun logout(): Resource<BaseResponse>
+
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.ssafy.family.config.ApplicationClass
 
 class SharedPreferencesUtil(context: Context) {
+
     private var preferences: SharedPreferences = context.getSharedPreferences(ApplicationClass.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     fun addUserCookie(cookies: HashSet<String>) {
@@ -41,4 +42,5 @@ class SharedPreferencesUtil(context: Context) {
         val editor = preferences.edit()
         editor.remove(key).apply()
     }
+
 }

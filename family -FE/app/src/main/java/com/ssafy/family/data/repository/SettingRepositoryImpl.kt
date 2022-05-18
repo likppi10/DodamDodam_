@@ -1,9 +1,7 @@
 package com.ssafy.family.data.repository
 
 import com.ssafy.family.config.BaseResponse
-import com.ssafy.family.data.remote.api.CalendarAPI
 import com.ssafy.family.data.remote.api.SettingAPI
-import com.ssafy.family.data.remote.req.*
 import com.ssafy.family.data.remote.res.*
 import com.ssafy.family.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -91,6 +89,5 @@ class SettingRepositoryImpl(
             Resource.error(null, "서버와 연결오류")
         }
     }
-
 
 }

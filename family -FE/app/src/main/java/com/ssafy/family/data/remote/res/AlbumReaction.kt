@@ -16,6 +16,4 @@ data class AlbumReaction(
     val role: String,
     @SerializedName("profileId")
     val profileId: Int
-
-
 ) : Parcelable

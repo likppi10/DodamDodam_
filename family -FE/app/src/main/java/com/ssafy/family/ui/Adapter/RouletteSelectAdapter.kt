@@ -33,6 +33,7 @@ class RouletteSelectAdapter (private val context: Context) : RecyclerView.Adapte
             }
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = RouletteFamilyListBinding.inflate(inflater, parent, false)
@@ -48,4 +49,5 @@ class RouletteSelectAdapter (private val context: Context) : RecyclerView.Adapte
     interface ItemClickListener {
         fun onClick(item: MemberInfo)
     }
+
 }

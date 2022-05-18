@@ -13,11 +13,11 @@ import com.ssafy.family.data.remote.res.AllAlbum
 import com.ssafy.family.databinding.ItemMonthAlbumBinding
 
 // mainactivity - albumfragment : 월 리스트 (2021.06, 1,2,3 ...)
-class AlbumMonthAdapter(private val context: Context) :
-    RecyclerView.Adapter<AlbumMonthAdapter.ViewHolder>() {
+class AlbumMonthAdapter(private val context: Context) : RecyclerView.Adapter<AlbumMonthAdapter.ViewHolder>() {
 
     var datas = mutableListOf<AllAlbum>()
     lateinit var itemClickListener: ItemClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemMonthAlbumBinding.inflate(inflater, parent, false)
@@ -28,9 +28,7 @@ class AlbumMonthAdapter(private val context: Context) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position])
-
         val itemBinding = holder.binding as ItemMonthAlbumBinding
-
     }
 
     inner class ViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {

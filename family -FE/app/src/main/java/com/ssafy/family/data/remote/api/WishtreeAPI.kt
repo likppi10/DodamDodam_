@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface WishtreeAPI {
+
     @GET("/api/event/wish-tree")
     suspend fun getWishTree(): Response<WishtreeRes>
 
@@ -20,7 +21,6 @@ interface WishtreeAPI {
     ): Response<BaseResponse>
 
     @DELETE("/api/event/wish-tree/{wishTreeId}")
-    suspend fun deleteWishTree(
-        @Path("wishTreeId") wishTreeId: Int
-    ): Response<BaseResponse>
+    suspend fun deleteWishTree(@Path("wishTreeId") wishTreeId: Int): Response<BaseResponse>
+
 }

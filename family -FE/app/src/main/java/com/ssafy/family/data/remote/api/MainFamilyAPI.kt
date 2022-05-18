@@ -12,6 +12,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface MainFamilyAPI {
+
     @GET("/api/main/mission")
     suspend fun getTodayMission():Response<MissionRes>
 
@@ -23,4 +24,5 @@ interface MainFamilyAPI {
 
     @GET("/api/main/alarm/{targetProfileId}")
     suspend fun getAlarmList(@Path("targetProfileId") targetProfileId: Int):Response<AlarmListRes>
+
 }

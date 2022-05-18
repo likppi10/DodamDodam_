@@ -51,6 +51,7 @@ class UpdateAlbumFragment : Fragment() {
     private val deleteClickListener = object : DetailAlbumPhotoAdapter.DeleteClickListener {
         override fun onClick(item: AlbumPicture) {
             if( detailAlbumViewModel.PhotoList.size>1){
+                detailAlbumViewModel.photosSize -= 1
                 Log.d("dddd", "detailAlbumViewModel.PhotoList: "+detailAlbumViewModel.PhotoList)
                 detailAlbumViewModel.pictureIdList.add(item.pictureId)
                 Log.d("dddd", "detailAlbumViewModel.pictureIdList "+detailAlbumViewModel.pictureIdList)
@@ -129,7 +130,13 @@ class UpdateAlbumFragment : Fragment() {
         val albumpictureList =
             detailAlbumViewModel.detailAlbumRequestLiveData.value!!.data!!.dataSet!!.pictures as ArrayList<AlbumPicture>
         Log.d("dddd", "initView:1 "+albumpictureList)
-        uriList.forEach { albumpictureList.add(AlbumPicture(getAbsolutePath(it) ?: "", false,0)) }
+        uriList.forEach {
+            Log.d("dddd", "initView:3 "+it)
+            albumpictureList.add(AlbumPicture(getAbsolutePath(it) ?: "", false,0))
+
+        }
+        detailAlbumViewModel.photosSize = albumpictureList.size
+        Log.d("dddd", "albumpictureList.size:3 "+albumpictureList.size)
         Log.d("dddd", "initView:2 "+albumpictureList)
         detailAlbumViewModel.PhotoList = albumpictureList
         photoAdapter.datas = detailAlbumViewModel.PhotoList

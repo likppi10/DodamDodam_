@@ -11,6 +11,7 @@ class AlbumTagAdapter(private val context: Context) : RecyclerView.Adapter<Album
 
     var datas = mutableListOf<HashTag>()
     lateinit var itemClickListener: ItemClickListener
+
     inner class ViewHolder(val binding: AddAlbumTagListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item:HashTag){
             binding.addAlbumTagButton.text = item.text
@@ -20,7 +21,6 @@ class AlbumTagAdapter(private val context: Context) : RecyclerView.Adapter<Album
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        //val view = LayoutInflater.from(context).inflate(R.layout.item_family_status,parent,false)
         val inflater = LayoutInflater.from(parent.context)
         val binding = AddAlbumTagListBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
@@ -31,7 +31,9 @@ class AlbumTagAdapter(private val context: Context) : RecyclerView.Adapter<Album
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(datas[position])
     }
+
     interface ItemClickListener {
         fun onClick(item: HashTag)
     }
+
 }

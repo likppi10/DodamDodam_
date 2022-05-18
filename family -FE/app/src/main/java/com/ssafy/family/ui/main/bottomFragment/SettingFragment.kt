@@ -184,29 +184,29 @@ class SettingFragment : Fragment() {
             } catch (ignored: ActivityNotFoundException) { }
         }
 
-        binding.statusView.setOnClickListener {
+        binding.statusViewBox.setOnClickListener {
             val intent = Intent(requireContext(), StatusActivity::class.java)
             intent.putExtra("to", "edit")
             startActivity(intent)
         }
 
-        binding.myInfoEditButton.setOnClickListener {
+        binding.myInfoEditButtonBox.setOnClickListener {
             val intent = Intent(requireContext(), StartSettingActivity::class.java)
             intent.putExtra("to", "edit")
             startActivity(intent)
         }
 
-        binding.myStatusEditButton.setOnClickListener {
+        binding.myStatusEditButtonBox.setOnClickListener {
             val intent = Intent(requireContext(), StatusActivity::class.java)
             intent.putExtra("to", "change")
             startActivity(intent)
         }
 
-        binding.exitGroupButton.setOnClickListener {
+        binding.exitGroupButtonBox.setOnClickListener {
             showExitDialog()
         }
 
-        binding.logoutButton.setOnClickListener {
+        binding.logoutButtonBox.setOnClickListener {
             showLogoutDialog()
         }
     }

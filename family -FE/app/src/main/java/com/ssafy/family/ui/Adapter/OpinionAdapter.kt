@@ -43,9 +43,11 @@ class OpinionAdapter() : RecyclerView.Adapter<OpinionAdapter.ViewHolder>() {
             binding.likeUnlike.unlikeCnt.text = opinion.dislikeCount.toString()
         }
     }
+
     interface ItemClickListener {
         fun deleteClick(opinion: Opinion)
         fun likeClick(opinion: Opinion)
         fun unlikeClick(opinion: Opinion)
     }
+
 }

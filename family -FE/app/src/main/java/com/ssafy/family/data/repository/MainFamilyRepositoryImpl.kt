@@ -15,6 +15,7 @@ class MainFamilyRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher,
     private val mainDispatcher: CoroutineDispatcher
 ) : MainFamilyRepository {
+
     override suspend fun getTodayMission(): Resource<MissionRes> = withContext(ioDispatcher) {
         try {
             val response = api.getTodayMission()
@@ -34,61 +35,58 @@ class MainFamilyRepositoryImpl(
         }
     }
 
-    override suspend fun getFamilyProfileList(): Resource<FamilyProfileRes> =
-        withContext(ioDispatcher) {
-            try {
-                val response = api.getFamilyProfileList()
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    response.code() == 403 -> {
-                        Resource.expired(response.body()!!)
-                    }
-                    else -> {
-                        Resource.error(null, response.message())
-                    }
+    override suspend fun getFamilyProfileList(): Resource<FamilyProfileRes> = withContext(ioDispatcher) {
+        try {
+            val response = api.getFamilyProfileList()
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
                 }
-            } catch (e: Exception) {
-                Resource.error(null, "서버와 연결오류")
-            }
-        }
-
-    override suspend fun sendAlarm(sendPushReq: SendPushReq): Resource<BaseResponse> =
-        withContext(ioDispatcher) {
-            try {
-                val response = api.sendAlarm(sendPushReq)
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    response.code() == 403 -> {
-                        Resource.expired(response.body()!!)
-                    }
-                    else -> {
-                        Resource.error(null, response.message())
-                    }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
                 }
-            } catch (e: Exception) {
-                Resource.error(null, "서버와 연결오류")
-            }
-        }
-
-    override suspend fun getAlarmList(targetProfileId: Int): Resource<AlarmListRes> =
-        withContext(ioDispatcher) {
-            try {
-                val response = api.getAlarmList(targetProfileId)
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    else -> {
-
-                        Resource.error(null, "응답 에러")
-                    }
+                else -> {
+                    Resource.error(null, response.message())
                 }
-            } catch (e: java.lang.Exception) {
-                Resource.error(null, "통신 에러 $e")
             }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
         }
+    }
+
+    override suspend fun sendAlarm(sendPushReq: SendPushReq): Resource<BaseResponse> = withContext(ioDispatcher) {
+        try {
+            val response = api.sendAlarm(sendPushReq)
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, response.message())
+                }
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
+    override suspend fun getAlarmList(targetProfileId: Int): Resource<AlarmListRes> = withContext(ioDispatcher) {
+        try {
+            val response = api.getAlarmList(targetProfileId)
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, "응답 에러")
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            Resource.error(null, "통신 에러 $e")
+        }
+    }
+
 }

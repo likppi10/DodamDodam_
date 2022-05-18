@@ -1,5 +1,6 @@
 package com.ssafy.family.ui.album
 
+import android.annotation.SuppressLint
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,10 +19,12 @@ import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSelectPhotoBinding
 import com.ssafy.family.ui.Adapter.PhotoPickAdapter
 import com.ssafy.family.ui.Adapter.PhotoRecyclerViewAdapter
+import com.ssafy.family.util.CalendarUtil.setTextColorRes
+import java.io.File
 
-
+@SuppressLint("ResourceAsColor")
 class SelectPhotoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private lateinit var binding: FragmentSelectPhotoBinding
     private lateinit var photoRecyclerViewAdapter: PhotoRecyclerViewAdapter
     private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
@@ -29,6 +32,7 @@ class SelectPhotoFragment : Fragment() {
 
     private lateinit var pickAdapter: PhotoPickAdapter
     private val itemClickListener = object : PhotoRecyclerViewAdapter.ItemClickListener {
+
         override fun onClick(uri: Uri, view: View, position: Int) {
 
             if (map[uri]==true) {
@@ -37,14 +41,25 @@ class SelectPhotoFragment : Fragment() {
                 detailAlbumViewModel.deleteImgUri(uri)
                 pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
                 pickAdapter.notifyDataSetChanged()
+                detailAlbumViewModel.photosSize -= 1
+                binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
 //                view.background = null
             } else {
-                map[uri] = true
-                Log.d("ccccccccccc", "onClick: " + uri)
-                detailAlbumViewModel.setSelectedImgUri(uri)
-                pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
-                pickAdapter.notifyDataSetChanged()
+                if(getRealFile(uri)!!.length() > 3000000){
+                    Toast.makeText(requireContext(), "이 사진은 용량이 너무 커요!", Toast.LENGTH_SHORT).show()
+                }else if(detailAlbumViewModel.photosSize==10){
+                    Toast.makeText(requireContext(), "10장을 전부 골랐어요!", Toast.LENGTH_SHORT).show()
+                }else{
+                    map[uri] = true
+
+                    detailAlbumViewModel.setSelectedImgUri(uri)
+                    pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
+                    pickAdapter.notifyDataSetChanged()
+                    detailAlbumViewModel.photosSize += 1
+                    binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
 //                view.background = ResourcesCompat.getDrawable(view.resources, R.drawable.list_box_select, null)
+                }
+
             }
         }
     }
@@ -85,6 +100,7 @@ class SelectPhotoFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+        binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
     }
 
     override fun onResume() {
@@ -107,7 +123,7 @@ class SelectPhotoFragment : Fragment() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     id.toString()
                 )
-                Log.d("cccccccc", "setImageUrisFromCursor: $uri")
+                Log.d("cccccccc", "setImageUrisFromCursor: ${uri.path!!.length}")
                 Log.d("cccccccc", "setImageUrisFromCursor: ${cursor.getString(3)}")
                 map[uri] = false
                 list.add(uri)
@@ -133,6 +149,35 @@ class SelectPhotoFragment : Fragment() {
 
         queryUri = queryUri.buildUpon().build()
         return resolver.query(queryUri, img, null, null, orderBy)!!
+    }
+
+    private fun getRealFile(uri: Uri): File? {
+        var uri: Uri? = uri
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        if (uri == null) {
+            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+        var cursor: Cursor? = uri?.let {
+            context?.contentResolver?.query(
+                it,
+                projection,
+                null,
+                null,
+                MediaStore.Images.Media.DATE_MODIFIED + " desc"
+            )
+        }
+        if (cursor == null || cursor.columnCount < 1) {
+            return null
+        }
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path = cursor.getString(column_index)
+//        File(path).length()
+        if (cursor != null) {
+            cursor.close()
+            cursor = null
+        }
+        return File(path)
     }
 
     private fun setLoading() {

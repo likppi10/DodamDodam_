@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.family.data.remote.res.ScheduleInfo
 import com.ssafy.family.databinding.ItemScheduleBinding
 
-class ScheduleAdapter(val onClick: (ScheduleInfo) -> Unit) :
-    RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
+class ScheduleAdapter(val onClick: (ScheduleInfo) -> Unit) : RecyclerView.Adapter<ScheduleAdapter.ScheduleViewHolder>() {
 
     var scheduleList = mutableListOf<ScheduleInfo>()
 
@@ -38,4 +37,5 @@ class ScheduleAdapter(val onClick: (ScheduleInfo) -> Unit) :
             binding.itemScheduleRole.text = scheduleInfo.role
         }
     }
+
 }

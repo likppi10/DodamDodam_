@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.family.R
 
 class SinglePhotoRecyclerViewAdapter(): RecyclerView.Adapter<SinglePhotoRecyclerViewAdapter.ViewHolder>() {
+
     lateinit var itemClickListener: ItemClickListener
     var uris = listOf<Uri>()
 
@@ -35,4 +35,5 @@ class SinglePhotoRecyclerViewAdapter(): RecyclerView.Adapter<SinglePhotoRecycler
     interface ItemClickListener {
         fun onClick(uri: Uri, view: View, position: Int)
     }
+
 }
