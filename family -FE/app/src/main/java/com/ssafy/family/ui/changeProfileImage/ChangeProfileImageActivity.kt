@@ -87,8 +87,8 @@ class ChangeProfileImageActivity : AppCompatActivity() {
         binding.characterTab.setOnClickListener {
             if (recyclerViewMode == "album") {
                 // 앨범에서 넘어오면 배경색 글씨색 바꾸기
-                binding.characterTab.setBackgroundResource(R.color.pink01)
-                binding.characterTab.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.characterTab.setBackgroundResource(R.color.beige02)
+                binding.characterTab.setTextColor(ContextCompat.getColor(this, R.color.black))
                 binding.myAlbumTab.setBackgroundResource(R.color.white)
                 binding.myAlbumTab.setTextColor(ContextCompat.getColor(this, R.color.black_text))
                 // 모드 바꾸고 reload
@@ -98,8 +98,8 @@ class ChangeProfileImageActivity : AppCompatActivity() {
         }
         binding.myAlbumTab.setOnClickListener {
             if (recyclerViewMode == "character") {
-                binding.myAlbumTab.setBackgroundResource(R.color.pink01)
-                binding.myAlbumTab.setTextColor(ContextCompat.getColor(this, R.color.white))
+                binding.myAlbumTab.setBackgroundResource(R.color.beige02)
+                binding.myAlbumTab.setTextColor(ContextCompat.getColor(this, R.color.black))
                 binding.characterTab.setBackgroundResource(R.color.white)
                 binding.characterTab.setTextColor(ContextCompat.getColor(this, R.color.black_text))
                 recyclerViewMode = "album"
