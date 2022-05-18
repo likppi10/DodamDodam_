@@ -78,6 +78,12 @@ project(':api') {
     dependencies {
         implementation project(':core')
 
+        //metadata extractor
+        implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.18.0'
+
+        //image rotate
+        implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
+
         // WebClient
         implementation 'org.springframework.boot:spring-boot-starter-webflux'
         implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
