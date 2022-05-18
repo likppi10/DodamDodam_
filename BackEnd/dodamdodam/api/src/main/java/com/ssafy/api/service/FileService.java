@@ -66,13 +66,16 @@ public class FileService {
 
         checkFileNameExtension(multipartFile);
 
+        System.out.println("check point 1");
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
         objectMetadata.setContentLength(multipartFile.getSize());
-
+        System.out.println("check point 2");
         try (InputStream inputStream = multipartFile.getInputStream()) {
+            System.out.println("check point 3");
             amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+            System.out.println("check point 4");
         } catch (IOException e) {
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }
@@ -80,13 +83,13 @@ public class FileService {
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-    private void validateFileExists(MultipartFile multipartFile) {
+    public void validateFileExists(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
             throw new CustomException(ErrorCode.FILE_DOES_NOT_EXIST);
         }
     }
 
-    private void checkFileNameExtension(MultipartFile multipartFile) {
+    public void checkFileNameExtension(MultipartFile multipartFile) {
         String originFilename = Objects.requireNonNull(multipartFile.getOriginalFilename()).replaceAll(" ", "");
         String formatName = originFilename.substring(originFilename.lastIndexOf(".") + 1).toLowerCase();
         String[] supportFormat = { "bmp", "jpg", "jpeg", "png" };
@@ -97,6 +100,10 @@ public class FileService {
 
     @Async
     public void resizeImage(String category, MultipartFile file, Picture picture) {
+        System.out.println("===========시작=============");
+        System.out.println(picture.getId());
+        System.out.println(picture.getPath_name());
+        System.out.println(picture.is_main());
         if (file.getSize() > 1572864) {
             try {
                 String filePath = resizeFile(category,file);
@@ -155,8 +162,8 @@ public class FileService {
             ImageIO.write(imageNoAlpha, fileFormatName, baos);
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
-            String filePath = uploadFileV2(fileName, resizedFile);
-            return filePath;
+
+            return uploadFileV2(fileName, resizedFile);
         }
         catch (Exception e) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);

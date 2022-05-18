@@ -111,15 +111,20 @@ public class AlbumService {
 
             if (albumReqDto.getMainIndex() == i) isMain = true;
             else isMain = false;
+            System.out.println("3");
             filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
+            System.out.println("2");
             Picture picture = Picture.builder()
                     .album(album)
                     .origin_name(multipartFiles.get(i).getOriginalFilename())
                     .path_name(filePath)
                     .is_main(isMain)
                     .build();
-            Picture pic = pictureRepository.save(picture);
-            fileService.resizeImage("album", multipartFiles.get(i), pic);
+            System.out.println("1");
+            System.out.println(picture.getId());
+            pictureRepository.save(picture);
+            System.out.println("==================비동기 시작================");
+            fileService.resizeImage("album", multipartFiles.get(i), picture);
         }
 
         for (int i = 0; i < hashTags.size(); i++) {
