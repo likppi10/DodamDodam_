@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.schedule.DetailScheduleFragment">
 
-
     <TextView
         android:id="@+id/schedule_title"
         android:layout_width="0dp"
@@ -81,7 +80,6 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
-
 
     <ImageView
         android:id="@+id/imageView2"

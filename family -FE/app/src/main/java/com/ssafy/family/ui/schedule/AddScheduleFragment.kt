@@ -63,10 +63,7 @@ class AddScheduleFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -279,7 +276,9 @@ class AddScheduleFragment : Fragment() {
     private fun setLoading() {
         binding.progressBarAddSLoading.visibility = View.VISIBLE
     }
+
     private fun dismissLoading() {
         binding.progressBarAddSLoading.visibility = View.GONE
     }
+
 }

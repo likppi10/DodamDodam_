@@ -1,7 +1,6 @@
 package com.ssafy.family.ui.album
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -68,7 +67,6 @@ class DetailAlbumViewModel @Inject constructor(private val albumRepository: Albu
         get() = _deleteAlbumRequestLiveData
 
     var selectedImgUriList = arrayListOf<Uri>()
-
     var photosSize = 0
     var isUpdate = false
     var paths = arrayListOf<String>()
@@ -123,20 +121,13 @@ class DetailAlbumViewModel @Inject constructor(private val albumRepository: Albu
     }
 
     fun updateAlbum(updateAlbum: UpdateAlbumReq, albumId: Int) = viewModelScope.launch {
-
         _updateAlbumRequestLiveData.postValue(Resource.loading(null))
         _updateAlbumRequestLiveData.postValue(
-            albumRepository.updateAlbum(
-                updateAlbum,
-                albumId,
-                makeMultiPart()
-            )
+            albumRepository.updateAlbum(updateAlbum, albumId, makeMultiPart())
         )
-
     }
 
     fun deleteAlbum(albumId: Int) = viewModelScope.launch {
-        Log.d("dddddd", "deleteAlbum: " + albumId)
         _deleteAlbumRequestLiveData.postValue(Resource.loading(null))
         _deleteAlbumRequestLiveData.postValue(albumRepository.deleteAlbum(albumId))
     }
@@ -144,18 +135,14 @@ class DetailAlbumViewModel @Inject constructor(private val albumRepository: Albu
     private fun makeMultiPart(): ArrayList<MultipartBody.Part>  {
         val list = arrayListOf<MultipartBody.Part>()
         for (path in paths) {
-            Log.d("dddddd", "makeMultiPart: ")
             val imgFile = File(path)
             list.add(
-                MultipartBody.Part.createFormData(
-                    "multipartFiles",
-                    imgFile.name,
-                    imgFile.asRequestBody("image/*".toMediaType())
+                MultipartBody.Part.createFormData("multipartFiles", imgFile.name
+                    , imgFile.asRequestBody("image/*".toMediaType())
                 )
             )
         }
         return list
-
     }
 
 }

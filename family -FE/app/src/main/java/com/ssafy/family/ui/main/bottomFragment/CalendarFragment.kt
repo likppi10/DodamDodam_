@@ -236,6 +236,7 @@ class CalendarFragment : Fragment() {
             currentMonth = currentMonth.plusMonths(1)
             binding.calendar.scrollToMonth(currentMonth)
         }
+
         binding.claendarBeforeButton.setOnClickListener {
             currentMonth = currentMonth.minusMonths(1)
             binding.calendar.scrollToMonth(currentMonth)
@@ -245,6 +246,7 @@ class CalendarFragment : Fragment() {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = CalendarHeaderBinding.bind(view).legendLayout
         }
+
         binding.calendar.monthHeaderBinder = object :
             MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
@@ -292,6 +294,7 @@ class CalendarFragment : Fragment() {
     private fun setMonthLoading() {
         binding.progressBarMonthLoading.visibility = View.VISIBLE
     }
+
     private fun dismissMonthLoading() {
         binding.progressBarMonthLoading.visibility = View.GONE
     }
@@ -300,6 +303,7 @@ class CalendarFragment : Fragment() {
     private fun setDayLoading() {
         binding.progressBarDayLoading.visibility = View.VISIBLE
     }
+
     private fun dismissDayLoading() {
         binding.progressBarDayLoading.visibility = View.GONE
     }
@@ -308,4 +312,5 @@ class CalendarFragment : Fragment() {
         super.onDetach()
         mContext = null
     }
+
 }

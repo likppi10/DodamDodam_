@@ -13,7 +13,6 @@ import com.ssafy.family.data.remote.res.FamilyProfile
 import com.ssafy.family.databinding.FragmentFamilyBinding
 import com.ssafy.family.ui.Adapter.AlarmAdapter
 import com.ssafy.family.ui.Adapter.StatusAdapter
-import com.ssafy.family.ui.roulette.RouletteSelectDialog
 import com.ssafy.family.util.LoginUtil.getUserInfo
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,24 +21,21 @@ import dagger.hilt.android.AndroidEntryPoint
 class FamilyFragment : Fragment() {
 
     private lateinit var binding: FragmentFamilyBinding
-    private lateinit var statusAdapter: StatusAdapter
     private val mainFamilyViewModel by activityViewModels<MainFamilyViewModel>()
 
-    private val alarmClickListener = object :AlarmAdapter.ItemClickListener{
+    private lateinit var statusAdapter: StatusAdapter
 
+    private val alarmClickListener = object :AlarmAdapter.ItemClickListener{
         override fun onClick(item: String, familyProfile: FamilyProfile) {
            mainFamilyViewModel.sendAlarm(SendPushReq(familyProfile.profileId.toString(),item))
         }
-
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentFamilyBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,12 +43,9 @@ class FamilyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-
     }
 
     private fun initView() {
-
-//        showSelectDialog("main")
 
         if(requireActivity().intent.getStringExtra("to") == "first"){
             showSelectDialog()
@@ -85,6 +78,7 @@ class FamilyFragment : Fragment() {
                 }
             }
         }
+
         mainFamilyViewModel.todayMissionRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -102,6 +96,7 @@ class FamilyFragment : Fragment() {
                 }
             }
         }
+
         mainFamilyViewModel.familyProfileRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -120,6 +115,7 @@ class FamilyFragment : Fragment() {
                 }
             }
         }
+
         mainFamilyViewModel.getAlarmListRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -152,4 +148,5 @@ class FamilyFragment : Fragment() {
     private fun dismissLoading() {
         binding.progressBarLoginFLoading.visibility = View.GONE
     }
+
 }

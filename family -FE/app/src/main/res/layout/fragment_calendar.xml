@@ -113,6 +113,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
@@ -145,6 +146,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/recycler_schedule"
                 app:layout_constraintStart_toStartOf="@+id/recycler_schedule"
                 app:layout_constraintTop_toTopOf="@+id/recycler_schedule" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

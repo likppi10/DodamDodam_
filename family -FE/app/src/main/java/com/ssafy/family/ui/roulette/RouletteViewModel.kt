@@ -9,9 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RouletteViewModel @Inject constructor(
-    private val chatRepository: ChatRepository
-): ViewModel() {
+class RouletteViewModel @Inject constructor(private val chatRepository: ChatRepository): ViewModel() {
 
     private val _getMemberRequestLiveData = MutableLiveData<Resource<ChattingRes>>()
     val getMemberRequestLiveData: LiveData<Resource<ChattingRes>>
@@ -21,4 +19,5 @@ class RouletteViewModel @Inject constructor(
         _getMemberRequestLiveData.postValue(Resource.loading(null))
         _getMemberRequestLiveData.postValue(chatRepository.getMember())
     }
+
 }

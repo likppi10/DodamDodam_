@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,35 +14,32 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentSelectPhotoBinding
 import com.ssafy.family.ui.Adapter.PhotoPickAdapter
 import com.ssafy.family.ui.Adapter.PhotoRecyclerViewAdapter
-import com.ssafy.family.util.CalendarUtil.setTextColorRes
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
+@AndroidEntryPoint
 @SuppressLint("ResourceAsColor")
 class SelectPhotoFragment : Fragment() {
 
     private lateinit var binding: FragmentSelectPhotoBinding
-    private lateinit var photoRecyclerViewAdapter: PhotoRecyclerViewAdapter
     private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
+
     var map = hashMapOf<Uri, Boolean>()
-
+    private lateinit var photoRecyclerViewAdapter: PhotoRecyclerViewAdapter
     private lateinit var pickAdapter: PhotoPickAdapter
+
     private val itemClickListener = object : PhotoRecyclerViewAdapter.ItemClickListener {
-
         override fun onClick(uri: Uri, view: View, position: Int) {
-
             if (map[uri]==true) {
                 map[uri] = false
-                Log.d("ccccccccccc", "deClick: " + uri)
                 detailAlbumViewModel.deleteImgUri(uri)
                 pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
                 pickAdapter.notifyDataSetChanged()
                 detailAlbumViewModel.photosSize -= 1
                 binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
-//                view.background = null
             } else {
                 if(getRealFile(uri)!!.length() > 3000000){
                     Toast.makeText(requireContext(), "이 사진은 용량이 너무 커요!", Toast.LENGTH_SHORT).show()
@@ -51,15 +47,12 @@ class SelectPhotoFragment : Fragment() {
                     Toast.makeText(requireContext(), "10장을 전부 골랐어요!", Toast.LENGTH_SHORT).show()
                 }else{
                     map[uri] = true
-
                     detailAlbumViewModel.setSelectedImgUri(uri)
                     pickAdapter.uris = detailAlbumViewModel.selectedImgUriList
                     pickAdapter.notifyDataSetChanged()
                     detailAlbumViewModel.photosSize += 1
                     binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
-//                view.background = ResourcesCompat.getDrawable(view.resources, R.drawable.list_box_select, null)
                 }
-
             }
         }
     }
@@ -69,11 +62,7 @@ class SelectPhotoFragment : Fragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSelectPhotoBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -87,19 +76,24 @@ class SelectPhotoFragment : Fragment() {
 
         detailAlbumViewModel.setTitle("사진 선택")
         detailAlbumViewModel.setBottomButton("취소", "완료")
+
         photoRecyclerViewAdapter = PhotoRecyclerViewAdapter().apply {
             itemClickListener = this@SelectPhotoFragment.itemClickListener
         }
+
         binding.recyclerViewAlbumF.apply {
             adapter = photoRecyclerViewAdapter
             layoutManager = GridLayoutManager(requireActivity(), 4, RecyclerView.VERTICAL, false)
         }
+
         pickAdapter = PhotoPickAdapter()
+
         binding.recyclerViewPick.apply {
             adapter = pickAdapter
             layoutManager =
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
+
         binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
     }
 
@@ -120,11 +114,8 @@ class SelectPhotoFragment : Fragment() {
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val uri = Uri.withAppendedPath(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    id.toString()
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id.toString()
                 )
-                Log.d("cccccccc", "setImageUrisFromCursor: ${uri.path!!.length}")
-                Log.d("cccccccc", "setImageUrisFromCursor: ${cursor.getString(3)}")
                 map[uri] = false
                 list.add(uri)
             }
@@ -144,7 +135,6 @@ class SelectPhotoFragment : Fragment() {
             MediaStore.Images.ImageColumns.DATE_TAKEN,
             MediaStore.Images.ImageColumns.DATA
         )
-
         val orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
 
         queryUri = queryUri.buildUpon().build()
@@ -158,12 +148,8 @@ class SelectPhotoFragment : Fragment() {
             uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
         var cursor: Cursor? = uri?.let {
-            context?.contentResolver?.query(
-                it,
-                projection,
-                null,
-                null,
-                MediaStore.Images.Media.DATE_MODIFIED + " desc"
+            context?.contentResolver?.query(it, projection, null,
+                null, MediaStore.Images.Media.DATE_MODIFIED + " desc"
             )
         }
         if (cursor == null || cursor.columnCount < 1) {
@@ -172,7 +158,6 @@ class SelectPhotoFragment : Fragment() {
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         cursor.moveToFirst()
         val path = cursor.getString(column_index)
-//        File(path).length()
         if (cursor != null) {
             cursor.close()
             cursor = null
@@ -186,4 +171,5 @@ class SelectPhotoFragment : Fragment() {
     private fun dismissLoading() {
         binding.progressBarLoading.visibility = View.GONE
     }
+
 }

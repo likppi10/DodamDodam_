@@ -1,6 +1,5 @@
 package com.ssafy.family.ui.wishtree
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,17 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.res.WishtreeRes
 import com.ssafy.family.data.repository.WishtreeRepository
-import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.Resource
 import com.ssafy.family.util.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
-class WishTreeViewModel @Inject constructor(private val wishtreeRepository: WishtreeRepository) :
-    ViewModel() {
+class WishTreeViewModel @Inject constructor(private val wishtreeRepository: WishtreeRepository) : ViewModel() {
+
     private val _getWishTreeResLiveData = MutableLiveData<Resource<WishtreeRes>>()
     val getWishTreeResLiveData: LiveData<Resource<WishtreeRes>>
         get() = _getWishTreeResLiveData
@@ -45,7 +42,7 @@ class WishTreeViewModel @Inject constructor(private val wishtreeRepository: Wish
         _getWishTreeResLiveData.postValue(Resource.loading(null))
         val res = wishtreeRepository.getWishTree()
         _getWishTreeResLiveData.postValue(res)
-        Log.d(TAG, "WishTreeViewModel - getWishTree() called ${res.data!!.dataSet!!.wishTree.size}")
+
         // 요청 성공에 내가 등록한 소원이 있으면 기본 데이터 입력
         if (res.status == Status.SUCCESS && res.data!!.dataSet!!.myWishPosition != -1) {
             val myWishPosition = res.data.dataSet!!.myWishPosition

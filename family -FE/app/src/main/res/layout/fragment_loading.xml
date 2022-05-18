@@ -40,6 +40,7 @@
             android:src="@drawable/astonished" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,6 +55,7 @@
             android:textColor="@color/pink01"
             android:textSize="20sp"
             android:textStyle="bold" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/loading_page_todays_message"
             android:layout_width="match_parent"

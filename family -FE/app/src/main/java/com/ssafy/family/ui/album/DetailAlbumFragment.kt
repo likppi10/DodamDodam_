@@ -7,14 +7,11 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
-import android.widget.AdapterView.OnItemSelectedListener
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,40 +32,34 @@ import com.ssafy.family.util.ErrUtil
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class DetailAlbumFragment : Fragment() {
     private lateinit var binding: FragmentDetailAlbumBinding
+    private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
+
     private lateinit var photoAdapter: DetailAlbumPhotoAdapter
     private lateinit var emojiAdapter: DetailAlbumEmojiAdapter
     private lateinit var tagAdapter: AlbumTagAdapter
     private lateinit var commentAdapter: DetailAlbumCommentAdapter
-    private var DetailAlbumId by Delegates.notNull<Int>()
-    private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
-    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     //이모지 누르는버튼
     private val photoClickListener = object : DetailAlbumPhotoAdapter.ItemClickListener {
         override fun onClick(item: AlbumPicture) {
             showStyleDialog(item.imagePath)
         }
-
     }
+
     private val tagItemClickListener = object : AlbumTagAdapter.ItemClickListener {
         override fun onClick(item: HashTag) {
-
         }
-
     }
+
     private val emojiItemClickListener = object : DetailAlbumEmojiAdapter.ItemClickListener {
         override fun onClick(item: String) {
-            Log.d("dddd", "onClick: " + LoginUtil.getUserInfo()!!.profileId)
             detailAlbumViewModel.addReaction(
-                AlbumReactionReq(
-                    item,
-                    detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture!!.albumId
-                )
+                AlbumReactionReq(item, detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture!!.albumId)
             )
         }
     }
@@ -76,7 +67,6 @@ class DetailAlbumFragment : Fragment() {
     //이모지 삭제버튼
     private val commentItemClickListener = object : DetailAlbumCommentAdapter.ItemClickListener {
         override fun onClick(reactionId: Int) {
-            Log.d("dddddd", "onClick: " + reactionId)
             detailAlbumViewModel.deleteReaction(reactionId)
         }
     }
@@ -86,10 +76,7 @@ class DetailAlbumFragment : Fragment() {
     }
 
     //detail 어댑터 3개있는거 싹다 새로
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDetailAlbumBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -101,33 +88,30 @@ class DetailAlbumFragment : Fragment() {
     }
 
     private fun detailAlbumView() {
+
         detailAlbumViewModel.setTitle("앨범 상세")
         detailAlbumViewModel.detailAlbum(detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture.albumId)
         detailAlbumViewModel.setBottomButton("", "")
+
         detailAlbumViewModel.detailAlbumRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
                     val pathlist = arrayListOf<String>()
                     it.data!!.dataSet!!.pictures.forEach { pathlist.add(it.imagePath) }
                     detailAlbumViewModel.paths = pathlist
-                    detailAlbumViewModel.hashTag =
-                        detailAlbumViewModel.saveAlbumLiveData.value!!.hashTags as ArrayList<HashTag>
-                    detailAlbumViewModel.date =
-                        detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture!!.date
+                    detailAlbumViewModel.hashTag = detailAlbumViewModel.saveAlbumLiveData.value!!.hashTags as ArrayList<HashTag>
+                    detailAlbumViewModel.date = detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture!!.date
 
-                    Log.d("dddddddddd", "detailAlbumView: " + it.data!!.dataSet)
                     binding.detailAlbumTitleText.text = it.data!!.dataSet!!.date
                     photoAdapter.datas = it.data!!.dataSet!!.pictures as MutableList<AlbumPicture>
                     photoAdapter.notifyDataSetChanged()
-                    tagAdapter.datas =
-                        detailAlbumViewModel.hashTag
+                    tagAdapter.datas = detailAlbumViewModel.hashTag
                     tagAdapter.notifyDataSetChanged()
 
                     emojiAdapter.datas = mutableListOf()
                     emojiAdapter.datas.addAll(resources.getStringArray(R.array.emoticon))
                     emojiAdapter.notifyDataSetChanged()
-                    commentAdapter.datas =
-                        it.data!!.dataSet!!.albumReactions as MutableList<AlbumReaction>
+                    commentAdapter.datas = it.data!!.dataSet!!.albumReactions as MutableList<AlbumReaction>
                     commentAdapter.notifyDataSetChanged()
                     dismissLoading()
                 }
@@ -146,6 +130,7 @@ class DetailAlbumFragment : Fragment() {
                 }
             }
         }
+
         detailAlbumViewModel.deleteReactionRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -162,8 +147,7 @@ class DetailAlbumFragment : Fragment() {
                     }
                     commentAdapter.notifyDataSetChanged()
                     //테스트 끝
-                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), ErrUtil.setErrorMsg(it.message), Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }
@@ -172,30 +156,18 @@ class DetailAlbumFragment : Fragment() {
                 }
                 Status.EXPIRED -> {
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
             }
         }
+
         detailAlbumViewModel.addReactionRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
                     detailAlbumViewModel.detailAlbum(detailAlbumViewModel.saveAlbumLiveData.value!!.mainPicture.albumId)
                 }
                 Status.ERROR -> {
-                    //테스트
-//                    commentAdapter.datas.add(
-//                        AlbumReaction(
-//                            1,
-//                            "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png",
-//                            "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png",
-//                            "아들",
-//                            1
-//                        )
-//                    )
-//                    commentAdapter.notifyDataSetChanged()
-                    //테스트 끝
                     Toast.makeText(requireActivity(), "리액션을 추가하지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
@@ -205,12 +177,12 @@ class DetailAlbumFragment : Fragment() {
                 }
                 Status.EXPIRED -> {
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
             }
         }
+
         detailAlbumViewModel.deleteAlbumRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -227,8 +199,7 @@ class DetailAlbumFragment : Fragment() {
                 }
                 Status.EXPIRED -> {
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
             }
@@ -240,37 +211,40 @@ class DetailAlbumFragment : Fragment() {
         binding.spinner.setOnClickListener {
             showSpinnerDialog()
         }
+
         binding.detailAlbumTitleText.text = ""
+
         photoAdapter = DetailAlbumPhotoAdapter(requireActivity(), 0).apply {
             itemClickListener = this@DetailAlbumFragment.photoClickListener
         }
+
         binding.detailAlbumPhotoRecycler.apply {
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = photoAdapter
         }
 
         emojiAdapter = DetailAlbumEmojiAdapter(requireActivity()).apply {
             itemClickListener = this@DetailAlbumFragment.emojiItemClickListener
         }
+
         binding.detailAlbumEmojiRecycler.apply {
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = emojiAdapter
         }
 
         tagAdapter = AlbumTagAdapter(requireActivity()).apply {
             itemClickListener = this@DetailAlbumFragment.tagItemClickListener
         }
+
         binding.detailAlbumTagRecycler.apply {
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = tagAdapter
         }
 
         commentAdapter = DetailAlbumCommentAdapter(requireActivity()).apply {
             itemClickListener = this@DetailAlbumFragment.commentItemClickListener
         }
+
         binding.detailAlbumCommentRecycler.apply {
             layoutManager = LinearLayoutManager(requireActivity())
             adapter = commentAdapter
@@ -294,8 +268,7 @@ class DetailAlbumFragment : Fragment() {
             .centerInside()
             .into(dialogphoto)
 
-        val adb = android.app.AlertDialog.Builder(requireContext(), R.style.MyDialogTheme)
-            .setView(dialogView)
+        val adb = AlertDialog.Builder(requireContext(), R.style.MyDialogTheme).setView(dialogView)
         val dialog = adb.create()
         val params: WindowManager.LayoutParams = dialog.window!!.attributes;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -303,23 +276,21 @@ class DetailAlbumFragment : Fragment() {
         dialog.window!!.attributes = params
 
         //나오는부분말고는 투명하게 해주는것
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
-
     }
+
     fun showSpinnerDialog() {
         val dialogView = layoutInflater.inflate(R.layout.setting_spinner_item, null)
-        val adb = android.app.AlertDialog.Builder(requireContext(), R.style.MyDialogTheme)
-            .setView(dialogView)
+        val adb = AlertDialog.Builder(requireContext(), R.style.MyDialogTheme).setView(dialogView)
         val dialog = adb.create()
         val params: WindowManager.LayoutParams = dialog.window!!.attributes;
 
         dialogView.findViewById<TextView>(R.id.spinner_album_update).setOnClickListener {
             dialog.dismiss()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.album_frame, UpdateAlbumFragment())
-                .commit()
+            parentFragmentManager.beginTransaction().replace(R.id.album_frame, UpdateAlbumFragment()).commit()
         }
+
         dialogView.findViewById<TextView>(R.id.spinner_album_delete).setOnClickListener {
             dialog.dismiss()
             AlertDialog.Builder(requireContext())
@@ -331,9 +302,7 @@ class DetailAlbumFragment : Fragment() {
                     }
                 })
                 .setNegativeButton("아니요", object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, which: Int) {
-                        Log.d("MyTag", "negative")
-                    }
+                    override fun onClick(dialog: DialogInterface, which: Int) {}
                 })
                 .create()
                 .show()
@@ -345,6 +314,6 @@ class DetailAlbumFragment : Fragment() {
         //나오는부분말고는 투명하게 해주는것
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         dialog.show()
-
     }
+
 }

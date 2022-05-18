@@ -60,10 +60,7 @@ class EventFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentEventBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -76,12 +73,11 @@ class EventFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
-
     }
 
     private fun initView() {
+
         eventsAdapter = TodayScheduleAdapter {
             val intent = Intent(requireContext(),ScheduleActivity::class.java)
             intent.putExtra("sID", it.scheduleId)
@@ -275,6 +271,7 @@ class EventFragment : Fragment() {
     private fun setScheduleLoading() {
         binding.progressBarDayLoading.visibility = VISIBLE
     }
+
     private fun dismissScheduleLoading() {
         binding.progressBarDayLoading.visibility = GONE
     }
@@ -282,7 +279,9 @@ class EventFragment : Fragment() {
     private fun setOpinionLoading() {
         binding.progressBarOpinionLoading.visibility = VISIBLE
     }
+
     private fun dismissOpinionLoading() {
         binding.progressBarOpinionLoading.visibility = GONE
     }
+
 }

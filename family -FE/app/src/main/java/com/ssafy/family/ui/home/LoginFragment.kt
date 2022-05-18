@@ -1,9 +1,5 @@
 package com.ssafy.family.ui.home
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,21 +18,12 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.ssafy.family.R
-import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.remote.req.AddFcmReq
 import com.ssafy.family.data.remote.req.LoginReq
 import com.ssafy.family.databinding.FragmentLoginBinding
-import com.ssafy.family.ui.main.MainActivity
-import com.ssafy.family.ui.main.MainActivity.Companion.channel_id
-import com.ssafy.family.ui.startsetting.StartSettingActivity
-import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
 import com.ssafy.family.util.LoginUtil.setScocialToken
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
@@ -56,14 +42,9 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -84,25 +65,27 @@ class LoginFragment : Fragment() {
                 login()
             }
         }
+
         binding.loginPageInputID.addTextChangedListener {
             val input = it.toString()
             if (InputValidUtil.isValidId(input)) {
                 dismissErrorOnId()
             }
         }
+
         binding.loginPageInputPW.addTextChangedListener {
             val input = it.toString()
             if (InputValidUtil.isValidPassword(input)) {
                 dismissErrorOnPassword()
             }
         }
+
         binding.loginPageFindUserBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.home_frame, FindIdFragment())
-                .commit()
+            parentFragmentManager.beginTransaction().replace(R.id.home_frame, FindIdFragment()).commit()
         }
+
         binding.loginPageSignBtn.setOnClickListener {
-            parentFragmentManager.beginTransaction().replace(R.id.home_frame, SignFragment())
-                .commit()
+            parentFragmentManager.beginTransaction().replace(R.id.home_frame, SignFragment()).commit()
         }
 
         loginViewModel.loginRequestLiveData.observe(requireActivity()) {
@@ -110,12 +93,8 @@ class LoginFragment : Fragment() {
                 Status.SUCCESS -> {
                     LoginUtil.setAutoLogin(loginViewModel.isAutoLogin)
                     LoginUtil.saveUserInfo(it.data!!.dataSet!!)
-                    Log.d("dddd", "initView: " + it.data!!.dataSet!!)
-                    // TODO: 에러나는지 확인 attach
                     dismissLoading()
-                    Log.d("ddddddddddddd", "i왜 안와1 ")
                     getFCM()
-                    Log.d("ddddddddddddd", "i왜 안와2 ")
                 }
                 Status.EXPIRED->{
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
@@ -123,15 +102,13 @@ class LoginFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireContext(), "로그인에 실패했어요. 아이디, 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireContext(), "로그인에 실패했어요. 아이디, 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
                 Status.LOADING -> {
                     setLoading()
                 }
             }
-
         }
 
         loginViewModel.socialLoginLiveData.observe(requireActivity()) {
@@ -139,8 +116,6 @@ class LoginFragment : Fragment() {
                 Status.SUCCESS -> {
                     LoginUtil.setAutoLogin(loginViewModel.isAutoLogin)
                     LoginUtil.saveUserInfo(it.data!!.dataSet!!)
-                    Log.d("dddd", "ddddinitView: " + it.data!!.dataSet!!)
-                    // TODO: 에러나는지 확인 attach
                     dismissLoading()
                     getFCM()
                 }
@@ -157,10 +132,7 @@ class LoginFragment : Fragment() {
                     setLoading()
                 }
             }
-
         }
-
-
     }
 
     private fun addFCM(fcmToken: AddFcmReq) {
@@ -216,40 +188,24 @@ class LoginFragment : Fragment() {
     }
 
     private fun setErrorOnPassword() {
-        binding.textInputLayoutLoginFPW.error =
-            resources.getString(R.string.passwordErrorMessage)
+        binding.textInputLayoutLoginFPW.error = resources.getString(R.string.passwordErrorMessage)
     }
+
     fun getFCM() {
         // FCM 토큰 수신
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
-            Log.d("ddddddddddddd", "i안와1 "+task.result!!)
-            Log.d("ddddddddddddd", "i안와2 "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
-//        createNotificationChannel(channel_id, "ssafy")
     }
-
-//    // NotificationChannel 설정
-//    private fun createNotificationChannel(id: String, name: String) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val importance = NotificationManager.IMPORTANCE_DEFAULT
-//            val channel = NotificationChannel(id, name, importance)
-//
-//            val notificationManager = context?.getSystemService(
-//                Context.NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//        }
-//    }
 
     fun kakaoLogin(){
         // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
             UserApiClient.instance.loginWithKakaoTalk(requireContext()) { token, error ->
                 if (error != null) {
-                    Log.e("TAG", "카카오톡으로 로그인 실패 $error", error)
                     // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
@@ -266,4 +222,5 @@ class LoginFragment : Fragment() {
             UserApiClient.instance.loginWithKakaoAccount(requireContext(), callback = callback)
         }
     }
+
 }

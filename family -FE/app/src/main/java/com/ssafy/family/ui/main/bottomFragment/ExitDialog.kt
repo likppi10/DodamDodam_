@@ -5,28 +5,21 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.view.Gravity
 import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.family.R
-import com.ssafy.family.data.remote.res.MemberInfo
-import com.ssafy.family.ui.Adapter.RouletteSelectAdapter
-import com.ssafy.family.ui.roulette.RouletteSelectDialog
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 class ExitDialog(var context: Context) {
+
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
 
     fun setOnClickListener(listener: OnDialogClickListener) {
         onClickListener = listener
     }
-
 
     fun showDialog() {
         dialog.setContentView(R.layout.dialog_exit)
@@ -51,8 +44,10 @@ class ExitDialog(var context: Context) {
             dialog.dismiss()
         }
     }
+
     interface OnDialogClickListener {
         fun onClicked()
         fun onClosed()
     }
+
 }

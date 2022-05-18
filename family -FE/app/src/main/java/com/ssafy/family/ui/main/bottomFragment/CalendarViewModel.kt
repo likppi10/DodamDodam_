@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CalendarViewModel @Inject constructor(private val calendarRepository: CalendarRepository) :
-    ViewModel() {
+class CalendarViewModel @Inject constructor(private val calendarRepository: CalendarRepository) : ViewModel() {
 
     private val _getDayRequestLiveData = MutableLiveData<Resource<SchedulesRes>>()
     val getDayRequestLiveData: LiveData<Resource<SchedulesRes>>
@@ -32,4 +31,5 @@ class CalendarViewModel @Inject constructor(private val calendarRepository: Cale
         _getMonthRequestLiveData.postValue(Resource.loading(null))
         _getMonthRequestLiveData.postValue(calendarRepository.getMonthSchedule(month))
     }
+
 }

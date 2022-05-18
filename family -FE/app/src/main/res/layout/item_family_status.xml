@@ -64,8 +64,6 @@
                 app:layout_constraintStart_toEndOf="@+id/family_status_image"
                 app:layout_constraintTop_toTopOf="@+id/family_status_image" />
 
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/alarm_recycler"
                 android:layout_width="match_parent"
@@ -80,6 +78,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
 
 </layout>

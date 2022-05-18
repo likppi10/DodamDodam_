@@ -20,10 +20,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val accountRepository: AccountRepository) :
-    ViewModel() {
+class LoginViewModel @Inject constructor(private val accountRepository: AccountRepository) : ViewModel() {
 
-    //    val accountRepository = AccountRepositoryImpl()
     var isAutoLogin = LoginUtil.isAutoLogin()
 
     private val _loginRequestLiveData = MutableLiveData<Resource<LoginRes>>()
@@ -54,7 +52,6 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     val socialLoginLiveData: LiveData<Resource<LoginRes>>
         get() = _socialLoginLiveData
 
-
     // 오늘 첫 로그인 체크
     private val _checkFirstLoginToday = MutableLiveData<Resource<MissionRes>>()
     val checkFirstLoginToday: LiveData<Resource<MissionRes>>
@@ -78,19 +75,16 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
     fun findId(findIdReq: findIdReq) = viewModelScope.launch {
         _findLiveData.postValue(Resource.loading(null))
         _findLiveData.postValue(accountRepository.findId(findIdReq))
-
     }
 
     fun newPassword(newIdPwReq: LoginReq) = viewModelScope.launch {
         _baseResLiveData.postValue(Resource.loading(null))
         _baseResLiveData.postValue(accountRepository.newPassword(newIdPwReq))
-
     }
 
     fun idCheck(userId: String) = viewModelScope.launch {
         _idCheckLiveData.postValue(Resource.loading(null))
         _idCheckLiveData.postValue(accountRepository.idCheck(userId))
-
     }
 
     fun signUp(signUpReq: SignUpReq) = viewModelScope.launch {
@@ -107,4 +101,5 @@ class LoginViewModel @Inject constructor(private val accountRepository: AccountR
         _socialLoginLiveData.postValue(Resource.loading(null))
         _socialLoginLiveData.postValue(accountRepository.socialLogin())
     }
+
 }

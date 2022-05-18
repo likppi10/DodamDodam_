@@ -1,9 +1,7 @@
 package com.ssafy.family.ui.main.bottomFragment
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,20 +15,18 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.ssafy.family.config.ApplicationClass
+import com.ssafy.family.config.ApplicationClass.Companion.isChatting
 import com.ssafy.family.data.remote.res.ChatData
 import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentChattingBinding
 import com.ssafy.family.ui.Adapter.ChattingAdapter
 import com.ssafy.family.ui.home.LoginViewModel
-import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.LoginUtil.getUserInfo
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 @AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
@@ -51,23 +47,19 @@ class ChattingFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        ApplicationClass.isChatting = MutableLiveData(true)
-        Log.d("dddddddd", "onAttach: "+ ApplicationClass.isChatting.value)
+        isChatting = MutableLiveData(true)
     }
 
     override fun onPause() {
-        ApplicationClass.isChatting= MutableLiveData(false)
-        Log.d("dddddddd", "onDetach: "+ ApplicationClass.isChatting.value)
+        isChatting= MutableLiveData(false)
         super.onPause()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChattingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -82,14 +74,12 @@ class ChattingFragment : Fragment() {
 
         val manager = LinearLayoutManager(requireContext())
         manager.stackFromEnd = true
+
         binding.chattingRecyclerView.layoutManager = manager
         chattingAdapter = ChattingAdapter(listOf(), mutableListOf())
+
         binding.chattingRecyclerView.adapter = chattingAdapter
-
         chattingAdapter.datas = datas
-
-
-
 
         viewModel.getMemberRequestLiveData.observe(requireActivity()){
             when (it.status) {
@@ -105,7 +95,6 @@ class ChattingFragment : Fragment() {
                     if(!check){
                         setChatListener()
                     }
-
                     dismissLoading()
                 }
                 Status.ERROR -> {
@@ -145,10 +134,8 @@ class ChattingFragment : Fragment() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val data = snapshot.getValue(ChatData::class.java)
                 datas.add(data!!)
-//                binding.chattingRecyclerView.adapter = chattingAdapter
                 binding.chattingRecyclerView.adapter!!.notifyDataSetChanged()
                 binding.chattingRecyclerView.scrollToPosition(chattingAdapter.itemCount-1)
-                Log.d("chattingAdapter.itemCount-1", "chattingAdapter.itemCount-1: "+ (chattingAdapter.itemCount-1))
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -156,14 +143,8 @@ class ChattingFragment : Fragment() {
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
             override fun onCancelled(error: DatabaseError) {}
         }
-        Log.d("1111111111111", "chattingAdapter.itemCount-1: "+ 1111111111111)
+
         myRef.addChildEventListener(childEventListener)
-//        chattingAdapter.datas = datas
-//        binding.chattingRecyclerView.adapter!!.notifyDataSetChanged()
-//        val manager = LinearLayoutManager(requireContext())
-//        manager.stackFromEnd = true
-//        binding.chattingRecyclerView.layoutManager = manager
-//        binding.chattingRecyclerView.adapter = chattingAdapter
     }
 
     //로딩바
@@ -173,4 +154,5 @@ class ChattingFragment : Fragment() {
     private fun dismissLoading() {
         binding.progressBarLoading.visibility = View.GONE
     }
+
 }

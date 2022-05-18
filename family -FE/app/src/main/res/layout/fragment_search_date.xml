@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".ui.album.SearchDateFragment">
+
     <View
         android:id="@+id/free_icon_g"
         android:layout_width="match_parent"
@@ -15,8 +16,7 @@
         android:background="@drawable/box_search_album"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/search_button"

@@ -32,8 +32,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_status_family_image"
-        />
+        app:layout_constraintTop_toBottomOf="@id/edit_status_family_image" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/edit_status_emotion_input_layout"
@@ -75,7 +74,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_status_guide_msg_2" />
 
-
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +99,7 @@
                 android:textColor="@color/gray03"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

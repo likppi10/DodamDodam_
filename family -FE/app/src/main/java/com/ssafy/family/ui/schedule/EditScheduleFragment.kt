@@ -70,10 +70,7 @@ class EditScheduleFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentEditScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -316,6 +313,7 @@ class EditScheduleFragment : Fragment() {
     private fun setLoading() {
         binding.progressBarAddSLoading.visibility = View.VISIBLE
     }
+
     private fun dismissLoading() {
         binding.progressBarAddSLoading.visibility = View.GONE
     }
@@ -329,4 +327,5 @@ class EditScheduleFragment : Fragment() {
                 }
             }
     }
+
 }

@@ -7,26 +7,14 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
-import android.widget.EditText
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.activityViewModels
-import com.google.android.material.textfield.TextInputLayout
-import com.ssafy.family.R
 import com.ssafy.family.databinding.WishTreeCreateDialogBinding
-import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.InputValidUtil
-import com.ssafy.family.util.Resource
 
 @RequiresApi(Build.VERSION_CODES.O)
-class WishTreeDialog(
-    context: Context,
-    wishTreeDialogInterface: WishTreeDialogInterface,
-    private val myWishListId: Int? = null,
-    private val defaultContent: String? = null
-) : Dialog(context) {
+class WishTreeDialog(context: Context, wishTreeDialogInterface: WishTreeDialogInterface, private val myWishListId: Int? = null, private val defaultContent: String? = null) : Dialog(context) {
+
     private lateinit var binding: WishTreeCreateDialogBinding
     private var wishTreeDialogInterface: WishTreeDialogInterface? = null
 
@@ -36,6 +24,7 @@ class WishTreeDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = WishTreeCreateDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -45,6 +34,7 @@ class WishTreeDialog(
         } else {
             mode = "update"
         }
+
         if (mode == "create") {
             // 버튼 text 입력
             binding.wishTreeCreteDialogConfirmBtn.text = "소원 생성"
@@ -80,7 +70,6 @@ class WishTreeDialog(
         }
     }
 
-
     // 데이터 유효성 검사
     private fun isValidForm(): Boolean {
         val content = binding.wishTreeCreateDialogInputWish.text.toString().trim()
@@ -105,6 +94,5 @@ class WishTreeDialog(
     private fun dismissErrorOnWish() {
         binding.textInputLayoutInputWish.error = null
     }
-
 
 }

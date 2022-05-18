@@ -13,26 +13,28 @@ import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentWriteFamilyCodeBinding
 import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.InputValidUtil
-import com.ssafy.family.util.Status
 import com.ssafy.family.util.UiMode
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WriteFamilyCodeFragment : Fragment() {
+
     private lateinit var binding: FragmentWriteFamilyCodeBinding
     private val familyViewModel by activityViewModels<StartSettingViewModel>()
+
     lateinit var familyCode: String
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentWriteFamilyCodeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // 상단 텍스트 수정
         (activity as StartSettingActivity).changeTopMessage("가족 코드를 입력해주세요!")
+
         // 클릭 이벤트 등록
         binding.writeFamilyCodeMoveNextBtn.setOnClickListener{
             familyCode = binding.writeFamilyCodeInputText.text.toString()
@@ -48,19 +50,18 @@ class WriteFamilyCodeFragment : Fragment() {
                 Log.d(TAG, "WriteFamilyCodeFragment - onViewCreated() called $familyCode")
             }
         }
+
         // 뷰모델 데이터 변화 감지
         familyViewModel.isChecked.observe(requireActivity()){
             // 가족코드 검증 성공 시 화면 전환
             if (it == UiMode.READY) {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_in_start_setting, SaveInfoFragment())
-                    .commit()
-
+                parentFragmentManager.beginTransaction().replace(R.id.fragment_in_start_setting, SaveInfoFragment()).commit()
             } else if (it == UiMode.FAIL) {
                 Toast.makeText(requireContext(), "가족 코드를 다시 확인해주세요", Toast.LENGTH_SHORT).show()
                 handleButtonUI(UiMode.READY)
             }
         }
+
         // 유효성 검사
         binding.writeFamilyCodeInputText.addTextChangedListener {
             val input = it.toString()
@@ -85,6 +86,7 @@ class WriteFamilyCodeFragment : Fragment() {
             }
         }
     }
+
     // 유효성 검사
     private fun checkFamilyCode(familyCode: String): Boolean {
         var flag = 1
@@ -96,11 +98,13 @@ class WriteFamilyCodeFragment : Fragment() {
         }
         return flag == 1
     }
+
     private fun dismissErrorOnFamilyCode() {
         binding.writeFamilyCodeInputText.error = null
     }
+
     private fun setErrorOnFamilyCode() {
-        binding.writeFamilyCodeInputText.error =
-            resources.getString(R.string.familyCodeErrorMessage)
+        binding.writeFamilyCodeInputText.error = resources.getString(R.string.familyCodeErrorMessage)
     }
+
 }

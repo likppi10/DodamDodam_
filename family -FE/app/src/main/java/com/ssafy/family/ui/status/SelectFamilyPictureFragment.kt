@@ -4,7 +4,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +23,11 @@ import java.io.File
 
 @AndroidEntryPoint
 class SelectFamilyPictureFragment : Fragment() {
-    private lateinit var binding: FragmentSelectFamilyPictureBinding
-    private lateinit var photoRecyclerViewAdapter: SinglePhotoRecyclerViewAdapter
+
     private val statusViewModel by activityViewModels<StatusViewModel>()
+    private lateinit var binding: FragmentSelectFamilyPictureBinding
+
+    private lateinit var photoRecyclerViewAdapter: SinglePhotoRecyclerViewAdapter
     var selectedPicturePosition: Int = -1
 
     private val itemClickListener = object : SinglePhotoRecyclerViewAdapter.ItemClickListener {
@@ -45,38 +46,40 @@ class SelectFamilyPictureFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSelectFamilyPictureBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // 하단 버튼 텍스트 설정
         binding.selectFamilyPictureButtonInclude.button.text = "취소"
         binding.selectFamilyPictureButtonInclude.button2.text = "완료"
+
         // 하단 버튼 클릭리스너 등록
         binding.selectFamilyPictureButtonInclude.button.setOnClickListener(View.OnClickListener {
             requireActivity().finish()
         })
+
         binding.selectFamilyPictureButtonInclude.button2.setOnClickListener(View.OnClickListener {
             // 사진 변경 api 요청
             val imageFile = statusViewModel.selectedImgUri.value
             statusViewModel.editFamilyPicture(imageUriToFile(imageFile))
 
         })
+
         // 리사이클러뷰 설정
         photoRecyclerViewAdapter = SinglePhotoRecyclerViewAdapter().apply {
             itemClickListener = this@SelectFamilyPictureFragment.itemClickListener
         }
+
         binding.recyclerViewAlbumF.apply {
             adapter = photoRecyclerViewAdapter
             layoutManager = GridLayoutManager(requireActivity(), 4, RecyclerView.VERTICAL, false)
         }
+
         // 선택된 이미지 Uri에 따른 상단 이미지뷰 UI 설정
         statusViewModel.selectedImgUri.observe(requireActivity()) {
             val imageView = binding.selectedFamilyPicture
@@ -86,12 +89,14 @@ class SelectFamilyPictureFragment : Fragment() {
                 Glide.with(imageView).load(it).into(imageView)
             }
         }
+
         statusViewModel.selectedImgUri.observe(requireActivity()) {
             val imageView = binding.selectedFamilyPicture
             if (it != null){
                 Glide.with(imageView).load(it).into(imageView)
             }
         }
+
         statusViewModel.editFamilyPictureResponse.observe(requireActivity()){
             when(it.status){
                 Status.SUCCESS->{
@@ -101,8 +106,7 @@ class SelectFamilyPictureFragment : Fragment() {
                     Toast.makeText(requireActivity(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     requireActivity().finish()
                 }
-                Status.LOADING->{
-                }
+                Status.LOADING->{}
             }
         }
     }
@@ -110,7 +114,6 @@ class SelectFamilyPictureFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         reloadImages()
-
         if(requireActivity().intent.getStringExtra("to") == "change"){
             statusViewModel.getFamilyPicture()
         }
@@ -128,15 +131,13 @@ class SelectFamilyPictureFragment : Fragment() {
             val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
-                val uri = Uri.withAppendedPath(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    id.toString()
-                )
+                val uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id.toString())
                 list.add(uri)
             }
         }
         return list
     }
+
     fun getPhotoCursor(): Cursor {
         val resolver = requireActivity().contentResolver
         var queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -162,11 +163,7 @@ class SelectFamilyPictureFragment : Fragment() {
             uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         }
         var cursor: Cursor? = (activity as StatusActivity).contentResolver.query(
-            uri!!,
-            projection,
-            null,
-            null,
-            MediaStore.Images.Media.DATE_MODIFIED + " desc"
+            uri!!, projection, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc"
         )
         if (cursor == null || cursor.columnCount < 1) {
             return null
@@ -180,4 +177,5 @@ class SelectFamilyPictureFragment : Fragment() {
         }
         return File(path)
     }
+
 }

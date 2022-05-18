@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.album.DetailAlbumFragment">
 
-
     <TextView
         android:id="@+id/detail_album_title_text"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/detail_album_photo_recycler"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_album_photo_recycler"
@@ -121,4 +119,5 @@
         android:spinnerMode="dialog"
         app:layout_constraintBottom_toTopOf="@+id/detail_album_photo_recycler"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

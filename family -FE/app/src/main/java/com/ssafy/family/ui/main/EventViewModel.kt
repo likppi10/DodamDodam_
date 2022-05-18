@@ -17,8 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EventViewModel @Inject constructor(private val calendarRepository: CalendarRepository, private val mainEventRepository: MainEventRepository) :
-    ViewModel() {
+class EventViewModel @Inject constructor(private val calendarRepository: CalendarRepository, private val mainEventRepository: MainEventRepository) : ViewModel() {
 
     private val _getDayRequestLiveData = MutableLiveData<Resource<SchedulesRes>>()
     val getDayRequestLiveData: LiveData<Resource<SchedulesRes>>
@@ -65,4 +64,5 @@ class EventViewModel @Inject constructor(private val calendarRepository: Calenda
         _deleteOpinionRequestLiveData.postValue(Resource.loading(null))
         _deleteOpinionRequestLiveData.postValue(mainEventRepository.deleteOpinion(suggestionId))
     }
+
 }

@@ -80,6 +80,7 @@
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPersonName"
             android:textStyle="bold" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -128,6 +129,7 @@
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPersonName"
             android:textStyle="bold" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -157,6 +159,7 @@
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPassword"
             android:textStyle="bold" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -188,90 +191,6 @@
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/sign_page_Input_ID_box"-->
-<!--        android:layout_width="250dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:gravity="center"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:layout_marginTop="320dp">-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/sign_page_Input_ID"-->
-<!--            android:layout_width="190dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:ems="10"-->
-<!--            android:fontFamily="@font/spoqahansans"-->
-<!--            android:inputType="textPersonName"-->
-<!--            android:hint="@string/ID"-->
-<!--            android:textColorHint="@color/pink01"-->
-<!--            android:textColor="@color/pink01"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold" />-->
-<!--        <TextView-->
-<!--            android:id="@+id/sign_page_checkID_btn"-->
-<!--            android:layout_width="60dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:background="@drawable/box_roulette"-->
-<!--            android:elevation="5dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/duplication_check"-->
-<!--            android:textSize="12sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:fontFamily="@font/spoqahansans"-->
-<!--            android:textColor="@color/white"/>-->
-
-<!--    </LinearLayout>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/sign_page_Input_username"-->
-<!--        android:layout_width="250dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textPersonName"-->
-<!--        android:hint="@string/name"-->
-<!--        android:textColorHint="@color/pink01"-->
-<!--        android:textColor="@color/pink01"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:layout_marginTop="410dp"/>-->
-<!--    <EditText-->
-<!--        android:id="@+id/sign_page_Input_PW"-->
-<!--        android:layout_width="250dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textWebPassword"-->
-<!--        android:hint="@string/PW"-->
-<!--        android:textColorHint="@color/pink01"-->
-<!--        android:textColor="@color/pink01"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:layout_marginTop="490dp"/>-->
-<!--    <EditText-->
-<!--        android:id="@+id/sign_page_Input_PW_confirm"-->
-<!--        android:layout_width="250dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="textWebPassword"-->
-<!--        android:hint="@string/PW_confirm"-->
-<!--        android:textColorHint="@color/pink01"-->
-<!--        android:textColor="@color/pink01"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        android:layout_marginTop="570dp"/>-->
-
     <TextView
         android:id="@+id/sign_page_sign_btn"
         android:layout_width="233dp"
@@ -288,6 +207,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/sign_page_form_box"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_signupF_PW_confirm"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout_signupF_PW_confirm" />
+
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"
         android:layout_width="48dp"
@@ -297,4 +217,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

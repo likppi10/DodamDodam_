@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,6 @@ import com.ssafy.family.R
 import com.ssafy.family.databinding.FragmentEditStatusBinding
 import com.ssafy.family.ui.Adapter.StatusEmojiAdapter
 import com.ssafy.family.ui.main.MainActivity
-import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,10 +33,7 @@ class EditStatusFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentEditStatusBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,6 +46,7 @@ class EditStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // 가족사진 조회
         statusViewModel.selectedImgUri.observe(requireActivity()) {
             val imageView = binding.editStatusFamilyImage
@@ -60,11 +56,11 @@ class EditStatusFragment : Fragment() {
                 Glide.with(imageView).load(it).into(imageView)
             }
         }
+
         // 이모지 어댑터 설정
         emojiAdapter = StatusEmojiAdapter(requireActivity())
         binding.statusEmojiRecycler.apply {
-            layoutManager =
-                LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = emojiAdapter
         }
         emojiAdapter.datas = mutableListOf()
@@ -108,14 +104,12 @@ class EditStatusFragment : Fragment() {
                     statusViewModel.getMyStatus()
                 }
             }
-
         }
 
         // 확인 버튼 클릭이벤트 리스너 등록
         binding.editStatusConfirmBtn.setOnClickListener {
             val emojiSelected = emojiAdapter.emojiSelected
             val todaysMessage = binding.editStatusInputTodaysMessage.text.toString()
-            Log.d(TAG, "EditStatusFragment - onViewCreated() input text : $todaysMessage")
             if (emojiSelected == null) {
                 Toast.makeText(requireContext(), "오늘의 기분을 선택해주세요!", Toast.LENGTH_SHORT).show()
             } else if(todaysMessage.length>30 || todaysMessage.length<1){
@@ -141,4 +135,5 @@ class EditStatusFragment : Fragment() {
             }
         }
     }
+
 }

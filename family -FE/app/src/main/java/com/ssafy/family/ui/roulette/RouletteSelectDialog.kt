@@ -18,6 +18,7 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 class RouletteSelectDialog(var context: Context, var selectedList: HashMap<Long, Boolean>, var memberList: MutableList<MemberInfo>) {
+
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
     private lateinit var familySelectAdapter: RouletteSelectAdapter
@@ -55,6 +56,7 @@ class RouletteSelectDialog(var context: Context, var selectedList: HashMap<Long,
     }
 
     fun showDialog() {
+
         dialog.setContentView(R.layout.select_dialog)
         dialog.window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
@@ -67,7 +69,6 @@ class RouletteSelectDialog(var context: Context, var selectedList: HashMap<Long,
         familySelectAdapter = RouletteSelectAdapter(context)
         familySelectAdapter.datas = memberList
         familySelectAdapter.selected = selectedList
-
 
         val recycle = dialog.findViewById<RecyclerView>(R.id.roulette_family_recycler)
         val cancle = dialog.findViewById<TextView>(R.id.cancle_dialog_text)

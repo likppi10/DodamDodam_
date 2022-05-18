@@ -105,10 +105,7 @@ class FamilyRepositoryImpl(
         }
     }
 
-    override suspend fun updateMyProfile(
-        profile: FamilyReq,
-        imageFile: File?
-    ): Resource<BaseResponse> = withContext(ioDispatcher){
+    override suspend fun updateMyProfile(profile: FamilyReq, imageFile: File?): Resource<BaseResponse> = withContext(ioDispatcher){
         try {
             val map = HashMap<String, RequestBody>()
             map.put("role", getRequestBody(profile.role))

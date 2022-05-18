@@ -28,8 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_album_title_text" />
 
-
-
     <TextView
         android:id="@+id/update_album_time_text"
         android:layout_width="wrap_content"
@@ -73,7 +71,6 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginEnd="16dp"
-
         android:hint="#태그"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/update_album_tag_edit_button"
@@ -110,5 +107,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/update_album_title_text"
         app:layout_constraintEnd_toEndOf="@+id/update_album_photo_recycler"
         app:layout_constraintTop_toTopOf="@+id/update_album_title_text" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

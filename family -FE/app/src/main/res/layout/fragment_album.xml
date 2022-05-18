@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.bottomFragment.AlbumFragment">
 
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
@@ -37,7 +36,6 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabs"
@@ -71,6 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add"
         app:tint="@color/white" />
+
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"
         android:layout_width="48dp"
@@ -80,4 +79,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

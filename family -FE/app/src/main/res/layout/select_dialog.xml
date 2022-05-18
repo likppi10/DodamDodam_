@@ -30,8 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roulette_family_recycler"
         android:layout_width="match_parent"
@@ -67,4 +65,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ok_dialog_text" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

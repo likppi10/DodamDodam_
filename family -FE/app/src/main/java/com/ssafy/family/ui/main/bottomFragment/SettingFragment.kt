@@ -6,7 +6,6 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,25 +16,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
-import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.gson.Gson
 import com.ssafy.family.R
-import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.config.ApplicationClass.Companion.livePush
-import com.ssafy.family.data.remote.res.MemberInfo
 import com.ssafy.family.databinding.FragmentSettingBinding
 import com.ssafy.family.ui.home.HomeActivity
 import com.ssafy.family.ui.home.LoginViewModel
-import com.ssafy.family.ui.main.GuideDialog
-import com.ssafy.family.ui.main.MainActivity
-import com.ssafy.family.ui.roulette.RouletteSelectDialog
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.LoginUtil.signOut
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.HashMap
 
 @AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
@@ -49,13 +41,9 @@ class SettingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSettingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -67,10 +55,8 @@ class SettingFragment : Fragment() {
         settingViewModel.getProfileImage()
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         settingViewModel.getFamilyCodeRequestLiveData.observe(requireActivity()){
             when (it.status) {
@@ -250,10 +236,5 @@ class SettingFragment : Fragment() {
         requireActivity().finishAffinity()
         startActivity(intent)
     }
-
-//    private fun showSelectDialog(){
-//        var dialog = GuideDialog(requireContext())
-//        dialog.showDialog()
-//    }
 
 }

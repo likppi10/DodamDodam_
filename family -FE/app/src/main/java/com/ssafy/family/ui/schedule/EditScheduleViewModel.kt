@@ -14,8 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditScheduleViewModel @Inject constructor(private val calendarRepository: CalendarRepository) :
-    ViewModel() {
+class EditScheduleViewModel @Inject constructor(private val calendarRepository: CalendarRepository) : ViewModel() {
 
     private val _editRequestLiveData = MutableLiveData<Resource<BaseResponse>>()
     val editRequestLiveData: LiveData<Resource<BaseResponse>>

@@ -1,14 +1,11 @@
 package com.ssafy.family.ui.changeProfileImage
 
-import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +13,11 @@ import com.bumptech.glide.Glide
 import com.ssafy.family.R
 import com.ssafy.family.databinding.ActivityChangeProfileImageBinding
 import com.ssafy.family.ui.Adapter.SinglePhotoRecyclerViewAdapter
-import com.ssafy.family.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChangeProfileImageActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityChangeProfileImageBinding
     private lateinit var photoRecyclerViewAdapter: SinglePhotoRecyclerViewAdapter
 
@@ -28,61 +25,57 @@ class ChangeProfileImageActivity : AppCompatActivity() {
     private var selectedImagePosition: Int = -1
     private var recyclerViewMode: String = "character"
 
-
     private val itemClickListener = object: SinglePhotoRecyclerViewAdapter.ItemClickListener {
         override fun onClick(uri: Uri, view: View, position: Int) {
             if (selectedImagePosition == position) { // 사진 같은거 선택 시 선택 취소
                 selectedImageUri = null
                 selectedImagePosition = -1
-                Glide
-                    .with(this@ChangeProfileImageActivity)
+                Glide.with(this@ChangeProfileImageActivity)
                     .load(ContextCompat.getDrawable(this@ChangeProfileImageActivity, R.drawable.image_fail))
                     .into(binding.checkPhotoImg)
             } else {
                 selectedImageUri = uri
                 selectedImagePosition = position
-                Glide
-                    .with(this@ChangeProfileImageActivity)
-                    .load(uri)
-                    .into(binding.checkPhotoImg)
+                Glide.with(this@ChangeProfileImageActivity).load(uri).into(binding.checkPhotoImg)
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityChangeProfileImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         // 상단 바 설정
         binding.changeProfileTop.scheduleTitle.text = "프로필 이미지 변경"
+
         // 뒤로가기 버튼 설정
         binding.changeProfileTop.topLayout.setOnClickListener {
             finish()
         }
+
         // 리사이클러뷰 설정
         photoRecyclerViewAdapter = SinglePhotoRecyclerViewAdapter().apply {
             itemClickListener = this@ChangeProfileImageActivity.itemClickListener
         }
+
         binding.selectRecyclerView.apply {
             adapter = photoRecyclerViewAdapter
             layoutManager = GridLayoutManager(this@ChangeProfileImageActivity, 4, RecyclerView.VERTICAL, false)
         }
+
         // 초기 이미지 받아오기
         val defaultImage = this@ChangeProfileImageActivity.intent.getStringExtra("imageUri")
         if (defaultImage == "null") {
             selectedImageUri = null
-            Glide
-                .with(this)
-                .load(ContextCompat.getDrawable(this, R.drawable.image_fail))
-                .into(binding.checkPhotoImg)
+            Glide.with(this).load(ContextCompat.getDrawable(this, R.drawable.image_fail)).into(binding.checkPhotoImg)
         } else {
             val imageUri = Uri.parse(defaultImage)
             selectedImageUri = imageUri
-            Glide
-                .with(this)
-                .load(imageUri)
-                .into(binding.checkPhotoImg)
+            Glide.with(this).load(imageUri).into(binding.checkPhotoImg)
         }
+
         // 탭 설정
         binding.characterTab.setOnClickListener {
             if (recyclerViewMode == "album") {
@@ -96,6 +89,7 @@ class ChangeProfileImageActivity : AppCompatActivity() {
                 reloadImages()
             }
         }
+
         binding.myAlbumTab.setOnClickListener {
             if (recyclerViewMode == "character") {
                 binding.myAlbumTab.setBackgroundResource(R.color.beige02)
@@ -106,6 +100,7 @@ class ChangeProfileImageActivity : AppCompatActivity() {
                 reloadImages()
             }
         }
+
         // 하단 선택 버튼 설정
         binding.changeProfileConfirmBtn.setOnClickListener {
             intent.putExtra("imageUri", selectedImageUri.toString())
@@ -149,6 +144,7 @@ class ChangeProfileImageActivity : AppCompatActivity() {
         }
         return list
     }
+
     fun getPhotoCursor(): Cursor {
         val resolver = contentResolver
         var queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -161,8 +157,8 @@ class ChangeProfileImageActivity : AppCompatActivity() {
         )
 
         val orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
-
         queryUri = queryUri.buildUpon().build()
         return resolver.query(queryUri, img, null, null, orderBy)!!
     }
+
 }

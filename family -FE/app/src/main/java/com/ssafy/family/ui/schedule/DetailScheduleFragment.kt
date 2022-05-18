@@ -42,10 +42,7 @@ class DetailScheduleFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDetailScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,9 +54,7 @@ class DetailScheduleFragment : Fragment() {
         (activity as ScheduleActivity).apply {
             changeHeader("일정 상세","수정", "삭제")
             binding.scheduleButtonInclude.button.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.schedule_frame, EditScheduleFragment.newInstance(scheduleId!!))
-                    .commit()
+                parentFragmentManager.beginTransaction().replace(R.id.schedule_frame, EditScheduleFragment.newInstance(scheduleId!!)).commit()
             }
             binding.scheduleButtonInclude.button2.setOnClickListener {
                 detailScheduleViewModel.deleteSchedule(scheduleId!!)
@@ -126,6 +121,7 @@ class DetailScheduleFragment : Fragment() {
     private fun setLoading() {
         binding.progressBarDetailSLoading.visibility = View.VISIBLE
     }
+
     private fun dismissLoading() {
         binding.progressBarDetailSLoading.visibility = View.GONE
     }
@@ -139,4 +135,5 @@ class DetailScheduleFragment : Fragment() {
                 }
             }
     }
+
 }

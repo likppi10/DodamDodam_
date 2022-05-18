@@ -21,6 +21,7 @@ class RoulettetResultDialog(var context: Context, var memberInfo: MemberInfo) {
     private val winDialog = Dialog(context)
 
     fun showDialog() {
+
         winDialog.setContentView(R.layout.win_dialog)
         winDialog.window!!.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
@@ -33,7 +34,6 @@ class RoulettetResultDialog(var context: Context, var memberInfo: MemberInfo) {
         val win_dialog_img = winDialog.findViewById<ImageView>(R.id.win_dialog_img)
         val win_dialog_text = winDialog.findViewById<TextView>(R.id.win_dialog_text)
 
-
         if (memberInfo.profileImage.isNullOrEmpty()) {
             Glide.with(win_dialog_img).load(R.drawable.image_fail)
                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
@@ -45,8 +45,6 @@ class RoulettetResultDialog(var context: Context, var memberInfo: MemberInfo) {
                 .centerInside()
                 .into(win_dialog_img)
         }
-
-
 
         win_dialog_text.text = memberInfo.nickname
     }

@@ -140,6 +140,7 @@
             android:inputType="textPassword"
             android:textColor="@color/pink01"
             android:textStyle="bold" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -157,6 +158,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/findID_page_form_box"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_findPWF_PW_confirm_new"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout_findPWF_PW_confirm_new" />
+
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"
         android:layout_width="48dp"
@@ -166,4 +168,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

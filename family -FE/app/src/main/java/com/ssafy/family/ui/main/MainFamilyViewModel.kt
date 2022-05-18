@@ -16,8 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainFamilyViewModel @Inject constructor(private val mainFamilyRepository: MainFamilyRepository) :
-    ViewModel() {
+class MainFamilyViewModel @Inject constructor(private val mainFamilyRepository: MainFamilyRepository) : ViewModel() {
 
     private val _todayMissionRequestLiveData = MutableLiveData<Resource<MissionRes>>()
     val todayMissionRequestLiveData: LiveData<Resource<MissionRes>>
@@ -39,16 +38,20 @@ class MainFamilyViewModel @Inject constructor(private val mainFamilyRepository: 
         _todayMissionRequestLiveData.postValue(Resource.loading(null))
         _todayMissionRequestLiveData.postValue(mainFamilyRepository.getTodayMission())
     }
+
     fun getFamilyProfiles()=viewModelScope.launch {
         _familyProfileRequestLiveData.postValue(Resource.loading(null))
         _familyProfileRequestLiveData.postValue(mainFamilyRepository.getFamilyProfileList())
     }
+
     fun sendAlarm(sendPushReq: SendPushReq) = viewModelScope.launch {
         _sendAlarmRequestLiveData.postValue(Resource.loading(null))
         _sendAlarmRequestLiveData.postValue(mainFamilyRepository.sendAlarm(sendPushReq))
     }
+
     fun getAlarmList(targetProfileId: Int) = viewModelScope.launch {
         _getAlarmListRequestLiveData.postValue(Resource.loading(null))
         _getAlarmListRequestLiveData.postValue(mainFamilyRepository.getAlarmList(targetProfileId))
     }
+
 }
