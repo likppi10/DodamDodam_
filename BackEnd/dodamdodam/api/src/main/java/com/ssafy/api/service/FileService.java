@@ -59,8 +59,21 @@ public class FileService {
 
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            if(category.equals("profile")) {
+            int orientation = 0;
+            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
+
+            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+
+            if (directory != null) {
+                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
+            }
+
+            if (orientation == 3) {
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
+            } else if (orientation == 6) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
+            } else if (orientation == 8) {
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -132,31 +145,25 @@ public class FileService {
 
             String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
             String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-            BufferedImage inputImage = ImageIO.read(file.getInputStream());
+
+            InputStream inputStream = file.getInputStream();
+            BufferedImage inputImage = ImageIO.read(inputStream);
 
             int orientation = 0;
-            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
+            Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
 
             Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 
-            System.out.println("directory null 체크");
-            System.out.println(directory == null);
             if (directory != null) {
                 orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
             }
 
-            System.out.println("회전방향 정보");
-            System.out.println(orientation);
-
             if (orientation == 3) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
-                System.out.println("333333");
             } else if (orientation == 6) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
-                System.out.println("66666");
             } else if (orientation == 8) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
-                System.out.println("88888");
             }
 
             int originWidth = inputImage.getWidth();
@@ -183,8 +190,8 @@ public class FileService {
             objectMetadata.setContentType(resizedFile.getContentType());
             objectMetadata.setContentLength(resizedFile.getSize());
 
-            try (InputStream inputStream = resizedFile.getInputStream()) {
-                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+            try (InputStream fileInputStream = resizedFile.getInputStream()) {
+                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, fileInputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
             } catch (IOException e) {
                 throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
