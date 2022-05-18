@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
@@ -66,7 +65,7 @@ public class ProfileService {
 
         }else if(multipartFile != null){
             String originFileName = multipartFile.getOriginalFilename();
-            String filePath = fileService.uploadFileV1("profile", multipartFile);
+            String filePath = fileService.uploadOriginFile("profile", multipartFile);
 
             profile.updateImageName(originFileName);
             profile.updateImagePath(filePath);

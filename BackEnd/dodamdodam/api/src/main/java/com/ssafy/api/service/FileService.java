@@ -6,7 +6,6 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
-import org.imgscalr.Scalr;
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
@@ -18,6 +17,7 @@ import com.ssafy.core.repository.PictureRepository;
 import com.ssafy.core.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import marvin.image.MarvinImage;
+import org.imgscalr.Scalr;
 import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -49,7 +49,7 @@ public class FileService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    public String uploadFileV1(String category, MultipartFile file) {
+    public String uploadOriginFile(String category, MultipartFile file) {
         try {
             validateFileExists(file);
             checkFileNameExtension(file);
@@ -57,7 +57,7 @@ public class FileService {
             String fileName = FileUtil.buildFileName(category, file.getOriginalFilename());
             String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
 
-            BufferedImage inputImage = ImageIO.read(file.getInputStream());
+            BufferedImage inputImage = rotateAndGetBufferedImageByInputStream(file.getInputStream());
 
             return s3SaveAndGetUrl(fileName, fileFormatName, inputImage);
 
@@ -122,7 +122,6 @@ public class FileService {
         String filePath = resizeFile(category, file);
         profile.updateImagePath(filePath);
         profileRepository.save(profile);
-
     }
 
 
@@ -130,7 +129,7 @@ public class FileService {
         try {
             String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
             String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-            BufferedImage inputImage = ImageIO.read(file.getInputStream());
+            BufferedImage inputImage = rotateAndGetBufferedImageByInputStream(file.getInputStream());
 
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
@@ -150,6 +149,33 @@ public class FileService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
+    }
+
+    public BufferedImage rotateAndGetBufferedImageByInputStream(InputStream inputStream){
+
+        try {
+            int orientation = 1;
+            Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
+            BufferedImage inputImage = ImageIO.read(inputStream);
+
+            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+
+            if (directory != null) {
+                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
+            }
+
+            if (orientation == 3) {
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
+            } else if (orientation == 6) {
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
+            } else if (orientation == 8) {
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
+            }
+
+            return inputImage;
+        }catch (Exception e){
+            throw new CustomException(FILE_UPLOAD_FAIL);
         }
     }
 }
