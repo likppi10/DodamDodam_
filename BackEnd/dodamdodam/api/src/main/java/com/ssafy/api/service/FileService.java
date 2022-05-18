@@ -60,29 +60,6 @@ public class FileService {
 
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
-    public String uploadResizedFile(String fileName, MultipartFile multipartFile) {
-
-        validateFileExists(multipartFile);
-
-        checkFileNameExtension(multipartFile);
-
-        System.out.println("check point 1");
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(multipartFile.getContentType());
-        objectMetadata.setContentLength(multipartFile.getSize());
-        System.out.println("check point 2");
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            System.out.println("check point 3");
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            System.out.println("check point 4");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
-        }
-
-        return amazonS3Client.getUrl(bucketName, fileName).toString();
-    }
 
     public void validateFileExists(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
@@ -93,7 +70,7 @@ public class FileService {
     public void checkFileNameExtension(MultipartFile multipartFile) {
         String originFilename = Objects.requireNonNull(multipartFile.getOriginalFilename()).replaceAll(" ", "");
         String formatName = originFilename.substring(originFilename.lastIndexOf(".") + 1).toLowerCase();
-        String[] supportFormat = { "bmp", "jpg", "jpeg", "png" };
+        String[] supportFormat = {"bmp", "jpg", "jpeg", "png"};
         if (!Arrays.asList(supportFormat).contains(formatName)) {
             throw new CustomException(ErrorCode.WRONG_FILE_EXTENSION);
         }
@@ -107,7 +84,7 @@ public class FileService {
         System.out.println(picture.is_main());
         if (file.getSize() > 1572864) {
             try {
-                String filePath = resizeFile(category,file);
+                String filePath = resizeFile(category, file);
                 picture.updatePathName(filePath);
                 pictureRepository.save(picture);
 
@@ -121,7 +98,7 @@ public class FileService {
     public void resizeImage(String category, MultipartFile file, Family family) {
         if (file.getSize() > 1572864) {
             try {
-                String filePath = resizeFile(category,file);
+                String filePath = resizeFile(category, file);
                 family.setPicture(filePath);
                 familyRepository.save(family);
             } catch (Exception e) {
@@ -130,11 +107,12 @@ public class FileService {
             }
         }
     }
+
     @Async
     public void resizeImage(String category, MultipartFile file, Profile profile) {
         if (file.getSize() > 1572864) {
             try {
-                String filePath = resizeFile(category,file);
+                String filePath = resizeFile(category, file);
                 profile.updateImagePath(filePath);
                 profileRepository.save(profile);
 
@@ -144,7 +122,7 @@ public class FileService {
         }
     }
 
-    public String resizeFile(String category, MultipartFile multipartFile){
+    public String resizeFile(String category, MultipartFile multipartFile) {
         try {
             String fileName = FileUtil.buildResizedFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
@@ -165,9 +143,24 @@ public class FileService {
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
 
-            return uploadResizedFile(fileName, resizedFile);
-        }
-        catch (Exception e) {
+            checkFileNameExtension(resizedFile);
+
+            System.out.println("check point 1");
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(resizedFile.getContentType());
+            objectMetadata.setContentLength(resizedFile.getSize());
+            System.out.println("check point 2");
+
+            InputStream inputStream = resizedFile.getInputStream();
+
+            System.out.println("check point 3");
+            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            System.out.println("check point 4");
+
+            return amazonS3Client.getUrl(bucketName, fileName).toString();
+
+        } catch (Exception e) {
             e.printStackTrace();
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
