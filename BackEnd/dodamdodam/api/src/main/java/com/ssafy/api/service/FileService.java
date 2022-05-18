@@ -92,8 +92,8 @@ public class FileService {
                 System.out.println("multipartfile size");
                 System.out.println(file.getSize());
                 String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
-                System.out.println(file.getContentType());
-                String fileFormatName = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+                System.out.println(file.getOriginalFilename());
+                String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
                 BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
                 System.out.println("버퍼 이미지 사이즈");
