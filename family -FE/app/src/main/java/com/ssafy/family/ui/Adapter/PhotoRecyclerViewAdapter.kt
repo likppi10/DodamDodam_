@@ -24,7 +24,7 @@ class PhotoRecyclerViewAdapter(): RecyclerView.Adapter<PhotoRecyclerViewAdapter.
             Glide.with(imageView).load(item).centerCrop().into(imageView)
             itemView.tag = itemView.tag == false
             itemView.setOnClickListener{
-                itemClickListener.onClick(item, itemView, adapterPosition)
+                itemClickListener.onClick(item, itemView, absoluteAdapterPosition)
                 itemView.tag = itemView.tag == false
                 if(itemView.tag == true) {
                     itemView.background = ResourcesCompat.getDrawable(itemView.resources, R.drawable.list_box_select, null)

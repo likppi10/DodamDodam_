@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Family"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.changeProfileImage.ChangeProfileImageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.wishtree.WishTreeActivity"
             android:exported="true" />
         <activity
@@ -27,16 +30,16 @@
             android:exported="true" />
         <activity
             android:name=".ui.startsetting.StartSettingActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.album.AlbumActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.chagephoto.ChangePhotoActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.roulette.RouletteActivity"
             android:exported="true" />
@@ -53,18 +56,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data android:host="oauth"
-                    android:scheme="kakaoa1f1fa77f90e70af62243eda95593018"  />
+                <data
+                    android:host="oauth"
+                    android:scheme="kakaoa1f1fa77f90e70af62243eda95593018" />
             </intent-filter>
         </activity>
 

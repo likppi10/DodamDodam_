@@ -23,7 +23,7 @@ class FamilyRepositoryImpl(
     private val api: FamilyAPI,
     private val ioDispatcher: CoroutineDispatcher,
     private val mainDispatcher: CoroutineDispatcher
-): FamilyRepository {
+) : FamilyRepository {
     override suspend fun createFamily(
         profile: FamilyReq,
         imageFile: File?
@@ -34,6 +34,9 @@ class FamilyRepositoryImpl(
                 map.put("role", getRequestBody(profile.role))
                 map.put("nickname", getRequestBody(profile.nickname))
                 map.put("birthday", getRequestBody(profile.birthday))
+                if (profile.characterPath != null) {
+                    map.put("characterPath", getRequestBody(profile.characterPath))
+                }
                 val image = convertFileToMultipart(imageFile)
                 val response = api.createFamily(data = map, image)
                 when {
@@ -41,7 +44,9 @@ class FamilyRepositoryImpl(
                         Resource.success(response.body()!!)
                     }
                     else -> {
-
+                        Log.d(TAG, "FamilyRepositoryImpl - createFamily() called ${response.code()}")
+                        Log.d(TAG, "FamilyRepositoryImpl - createFamily() called ${response.message()}")
+                        Log.d(TAG, "FamilyRepositoryImpl - createFamily() called ${response.errorBody()}")
                         Resource.error(null, "응답 에러")
                     }
                 }
@@ -50,7 +55,11 @@ class FamilyRepositoryImpl(
             }
         }
 
-    override suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyInfoRes> =
+    override suspend fun joinFamily(
+        profile: FamilyReq,
+        familyId: Int,
+        imageFile: File?
+    ): Resource<FamilyInfoRes> =
         withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
@@ -58,6 +67,9 @@ class FamilyRepositoryImpl(
                 map.put("nickname", getRequestBody(profile.nickname))
                 map.put("birthday", getRequestBody(profile.birthday))
                 map.put("familyId", getRequestBody(familyId))
+                if (profile.characterPath != null) {
+                    map.put("characterPath", getRequestBody(profile.characterPath))
+                }
                 val image = convertFileToMultipart(imageFile)
                 val response = api.joinFamily(data = map, image)
                 when {
@@ -74,12 +86,15 @@ class FamilyRepositoryImpl(
         }
 
     override suspend fun checkFamilyCode(familyCode: String): Resource<FamilyIdRes> =
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             try {
                 val response = api.checkFamilyCode(familyCode)
                 when {
                     response.isSuccessful -> {
-                        Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")
+                        Log.d(
+                            TAG,
+                            "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}"
+                        )
                         Resource.success(response.body()!!)
                     }
                     else -> {
@@ -99,12 +114,15 @@ class FamilyRepositoryImpl(
         }
 
     override suspend fun getMyProfile(): Resource<MyProfileRes> =
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             try {
                 val response = api.getMyProfile()
                 when {
                     response.isSuccessful -> {
-                        Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")
+                        Log.d(
+                            TAG,
+                            "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}"
+                        )
                         Resource.success(response.body()!!)
                     }
                     else -> {
@@ -127,25 +145,31 @@ class FamilyRepositoryImpl(
         profile: FamilyReq,
         imageFile: File?
     ): Resource<BaseResponse> =
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             try {
                 val map = HashMap<String, RequestBody>()
                 map.put("role", getRequestBody(profile.role))
                 map.put("nickname", getRequestBody(profile.nickname))
                 map.put("birthday", getRequestBody(profile.birthday))
+                if (profile.characterPath != null) {
+                    map.put("characterPath", getRequestBody(profile.characterPath))
+                }
                 val image = convertFile(imageFile)
                 val response = api.updateMyProfile(map, image)
                 when {
                     response.isSuccessful -> {
-                        Log.d(TAG, "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}")
+                        Log.d(
+                            TAG,
+                            "FamilyRepositoryImpl - checkFamilyCode() ${Resource.success(response.body()!!)}"
+                        )
                         Resource.success(response.body()!!)
                     }
                     else -> {
                         Log.d(
                             TAG,
-                            "FamilyRepositoryImpl - createFamily() ErrorCode:${
+                            "FamilyRepositoryImpl ErrorCode:${
                                 response.code().toString()
-                            }"
+                            } : ${response.body()!!.message.toString()}"
                         )
                         Resource.error(null, "응답 에러")
                     }
@@ -174,7 +198,7 @@ class FamilyRepositoryImpl(
         }
     }
 
-    private fun getRequestBody(value: Any): RequestBody{
+    private fun getRequestBody(value: Any): RequestBody {
         return value.toString().toRequestBody("text/plain".toMediaTypeOrNull());
     }
 }
