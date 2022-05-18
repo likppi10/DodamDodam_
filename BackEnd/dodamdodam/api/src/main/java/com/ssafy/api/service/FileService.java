@@ -163,11 +163,11 @@ public class FileService {
             }
 
             if (orientation == 3) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180, null);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
             } else if (orientation == 6) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90, null);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
             } else if (orientation == 8) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270, null);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
             }
 
             int originWidth = inputImage.getWidth();
