@@ -95,8 +95,8 @@ public class FileService {
                 String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
                 BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-                System.out.println("multipartfile size");
-                System.out.println(inputImage);
+                System.out.println("버퍼 이미지 사이즈");
+                System.out.println(inputImage.getData().getDataBuffer().getSize());
                 int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
                 Metadata metadata; // 이미지 메타 데이터 객체
                 Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
@@ -123,6 +123,7 @@ public class FileService {
                 int originHeight = inputImage.getHeight();
 
                 MarvinImage imageMarvin = new MarvinImage(inputImage);
+
                 Scale scale = new Scale();
                 scale.load();
                 scale.setAttribute("newWidth", 712);
@@ -131,12 +132,18 @@ public class FileService {
 
 
                 BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
+                System.out.println("버퍼 이미지 사이즈");
+                System.out.println(imageNoAlpha.getData().getDataBuffer().getSize());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(imageNoAlpha, fileFormatName, baos);
                 baos.flush();
+
+                byte[] bytes = baos.toByteArray();
+                int size = bytes.length;
                 System.out.println("baos 파일 사이즈 체크");
-                System.out.println(baos.size());
+                System.out.println(size);
+
                 MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
                 System.out.println("resizeFile 파일 사이즈 체크");
                 System.out.println(resizedFile.getSize());
