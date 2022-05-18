@@ -59,32 +59,8 @@ public class FileService {
 
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            System.out.println("가로 사이즈");
-            System.out.println(inputImage.getWidth());
-            System.out.println("세로 사이즈");
-            System.out.println(inputImage.getHeight());
-
-            int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
-
-            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
-            System.out.println("metadata 체크");
-            System.out.println(metadata == null);
-
-            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-
-            if (directory != null) {
-                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
-            }
-
-            if (orientation == 3) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
-                System.out.println("333333333");
-            } else if (orientation == 6) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
-                System.out.println("6666666666");
-            } else if (orientation == 8) {
+            if(category.equals("profile")) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
-                System.out.println("888888888");
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

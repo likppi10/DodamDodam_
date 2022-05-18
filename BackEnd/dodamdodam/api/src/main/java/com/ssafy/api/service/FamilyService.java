@@ -55,10 +55,10 @@ public class FamilyService {
         String imagePath = null;
         String imageName = null;
 
-        if (characterPath == null) {
-            imageName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+        if (characterPath != null) {
+            imageName = characterPath.substring(characterPath.lastIndexOf("/") + 1).toLowerCase();
             imagePath = characterPath;
-        }else if(file != null){
+        } else if (file != null) {
             imageName = file.getOriginalFilename();
             imagePath = fileService.uploadFileV1("profile", file);
         }
@@ -73,7 +73,7 @@ public class FamilyService {
                 .build();
 
         profileRepository.save(profile);
-        if (file.getSize() > FILE_MAX_SIZE) {
+        if (file != null && file.getSize() > FILE_MAX_SIZE) {
             fileService.resizeImage("profile", file, profile);
         }
         return profile;
@@ -83,10 +83,10 @@ public class FamilyService {
         String imagePath = null;
         String imageName = null;
 
-        if (characterPath == null) {
-            imageName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+        if (characterPath != null) {
+            imageName = characterPath.substring(characterPath.lastIndexOf("/") + 1).toLowerCase();
             imagePath = characterPath;
-        }else if(file != null){
+        } else if (file != null) {
             imageName = file.getOriginalFilename();
             imagePath = fileService.uploadFileV1("profile", file);
         }
@@ -101,7 +101,7 @@ public class FamilyService {
                 .build();
 
         profileRepository.save(profile);
-        if (file.getSize() > FILE_MAX_SIZE) {
+        if (file != null && file.getSize() > FILE_MAX_SIZE) {
             fileService.resizeImage("profile", file, profile);
         }
         return profile;
