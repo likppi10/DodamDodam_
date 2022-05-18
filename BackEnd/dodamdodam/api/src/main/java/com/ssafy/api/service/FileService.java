@@ -59,30 +59,27 @@ public class FileService {
 
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
+            System.out.println("가로 사이즈");
+            System.out.println(inputImage.getWidth());
+            System.out.println("세로 사이즈");
+            System.out.println(inputImage.getHeight());
+
             int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
-            Metadata metadata; // 이미지 메타 데이터 객체
-            Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
 
-            metadata = ImageMetadataReader.readMetadata(file.getInputStream());
-            System.out.println("메타데이터");
-            System.out.println(metadata.toString());
+            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
 
-            directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+
             if (directory != null) {
                 orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
             }
-            System.out.println("회전방향 정보");
-            System.out.println(orientation);
 
             if (orientation == 3) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
-                System.out.println("333333");
             } else if (orientation == 6) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
-                System.out.println("66666");
             } else if (orientation == 8) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
-                System.out.println("88888");
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

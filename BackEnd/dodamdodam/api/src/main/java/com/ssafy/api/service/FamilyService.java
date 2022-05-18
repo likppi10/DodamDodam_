@@ -51,12 +51,28 @@ public class FamilyService {
     }
 
     // profile 생성
-    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, MultipartFile file) {
+    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest) {
+        MultipartFile file = familyRequest.getImage();
+        String characterPath = familyRequest.getCharacterPath();
+
+        String imagePath = null;
+        String imageName = null;
+
+        if (characterPath == null) {
+            imageName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+            imagePath = characterPath;
+        }else if(file != null){
+            imageName = file.getOriginalFilename();
+            imagePath = fileService.uploadFileV1("profile", file);
+        }
+
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
                 .user(user)
                 .family(family)
+                .imageName(imageName)
+                .imagePath(imagePath)
                 .build();
 
         profileRepository.save(profile);
@@ -66,12 +82,28 @@ public class FamilyService {
         return profile;
     }
 
-    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, MultipartFile file) {
+    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest) {
+        MultipartFile file = familyRequest.getImage();
+        String characterPath = familyRequest.getCharacterPath();
+
+        String imagePath = null;
+        String imageName = null;
+
+        if (characterPath == null) {
+            imageName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+            imagePath = characterPath;
+        }else if(file != null){
+            imageName = file.getOriginalFilename();
+            imagePath = fileService.uploadFileV1("profile", file);
+        }
+
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
                 .user(user)
                 .family(family)
+                .imageName(imageName)
+                .imagePath(imagePath)
                 .build();
 
         profileRepository.save(profile);
