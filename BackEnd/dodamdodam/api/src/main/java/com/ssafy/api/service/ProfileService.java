@@ -62,7 +62,7 @@ public class ProfileService {
             String filePath = fileService.uploadFileV1("profile", multipartFile);
             profile.updateImageName(originFileName);
             profile.updateImagePath(filePath);
-            fileService.resizeImage("profile", multipartFile,profile);
+            fileService.resizeImage("profile", multipartFile, profile);
         }
 
 //        updateImage(multipartFile, profile, request);
