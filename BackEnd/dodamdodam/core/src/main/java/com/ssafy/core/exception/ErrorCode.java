@@ -16,7 +16,7 @@ public enum ErrorCode {
 
     //Profile
     DUPLICATE_ROLE(409, "P101", "이미 다른 가족 구성원이 설정한 역할입니다."),
-    DUPLICATE_NICKNAME(409, "P102", "이미 다른 가족 구성원이 사용중인 닉네임입니다."),
+    DUPLICATE_NICKNAME(410, "P102", "이미 다른 가족 구성원이 사용중인 닉네임입니다."),
 
     //Family
     NOT_FOUND_FAMILY(404, "F101", "가입된 가족 그룹이 없습니다."),
