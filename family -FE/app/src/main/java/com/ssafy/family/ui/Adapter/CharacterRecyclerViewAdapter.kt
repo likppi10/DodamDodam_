@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.family.R
 
-class SinglePhotoRecyclerViewAdapter(): RecyclerView.Adapter<SinglePhotoRecyclerViewAdapter.ViewHolder>() {
+class CharacterRecyclerViewAdapter(): RecyclerView.Adapter<CharacterRecyclerViewAdapter.ViewHolder>() {
     lateinit var itemClickListener: ItemClickListener
-    var uris = mutableListOf<Uri>()
+    var uris = listOf<Uri>()
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item: Uri) {
@@ -35,4 +35,5 @@ class SinglePhotoRecyclerViewAdapter(): RecyclerView.Adapter<SinglePhotoRecycler
     interface ItemClickListener {
         fun onClick(uri: Uri, view: View, position: Int)
     }
+
 }
