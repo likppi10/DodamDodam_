@@ -60,7 +60,7 @@ public class FileService {
 
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
-    public String uploadFileV2(String fileName, MultipartFile multipartFile) {
+    public String uploadResizedFile(String fileName, MultipartFile multipartFile) {
 
         validateFileExists(multipartFile);
 
@@ -77,6 +77,7 @@ public class FileService {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             System.out.println("check point 4");
         } catch (IOException e) {
+            e.printStackTrace();
             throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
         }
 
@@ -124,6 +125,7 @@ public class FileService {
                 family.setPicture(filePath);
                 familyRepository.save(family);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new CustomException(ErrorCode.INVALID_REQUEST);
             }
         }
@@ -163,9 +165,10 @@ public class FileService {
             baos.flush();
             MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
 
-            return uploadFileV2(fileName, resizedFile);
+            return uploadResizedFile(fileName, resizedFile);
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
     }
