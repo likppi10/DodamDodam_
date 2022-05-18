@@ -72,11 +72,9 @@ public class Profile extends BaseEntity {
     @OneToMany(mappedBy = "me", cascade = CascadeType.ALL)
     private List<Alarm> alarms;
 
-//
-//
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id")
-//    private Profile profileParent;
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    private List<WishTree> wishTrees;
+
 
     public void updateEmotion(String emotion) {
         this.emotion = emotion;
