@@ -154,20 +154,28 @@ public class FileService {
 
             try {
                 metadata = ImageMetadataReader.readMetadata(file.getInputStream());
+                System.out.println("메타데이터");
+                System.out.println(metadata.toString());
+
                 directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
                 if (directory != null) {
                     orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
                 }
+                System.out.println("회전방향 정보");
+                System.out.println(orientation);
             } catch (Exception e) {
                 orientation = 1;
             }
 
             if (orientation == 3) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
+                System.out.println("333333");
             } else if (orientation == 6) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
+                System.out.println("66666");
             } else if (orientation == 8) {
                 inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
+                System.out.println("88888");
             }
 
             int originWidth = inputImage.getWidth();
