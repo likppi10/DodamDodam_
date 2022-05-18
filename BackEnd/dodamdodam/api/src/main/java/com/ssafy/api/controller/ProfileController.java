@@ -43,8 +43,8 @@ public class ProfileController {
     @PatchMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult updateProfile(@ModelAttribute
                                       @Valid ProfileReqDto profileRequest,
-                                      Authentication authentication,
-                                      HttpServletRequest request) {
+                                      Authentication authentication
+                                     ) {
 
         Long userPk = Long.parseLong(authentication.getName());
         Long familyId = userService.getFamilyIdByUserPk(userPk);
@@ -52,10 +52,11 @@ public class ProfileController {
         profileService.checkNicknameByFamilyIdExceptMe(familyId, profileRequest.getNickname(), userPk);
         profileService.checkRoleByFamilyIdExceptMe(familyId, profileRequest.getRole(), userPk);
 
-        Profile updateResult = profileService.updateProfile(userPk, profileRequest, profileRequest.getMultipartFile(), request);
+        Profile updateResult = profileService.updateProfile(userPk, profileRequest, profileRequest.getMultipartFile(), profileRequest.getCharacterPath());
 
         userService.updateBirthdayByUserPk(userPk, profileRequest.getBirthday());
         profileService.enrollProfile(updateResult);
+
         return responseService.getSuccessResult();
     }
 
