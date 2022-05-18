@@ -130,10 +130,14 @@ public class FileService {
 
     public String resizeFile(String category, MultipartFile multipartFile) {
         try {
+            System.out.println("multipartfile size");
+            System.out.println(multipartFile.getSize());
             String fileName = FileUtil.buildResizedFileName(category, multipartFile.getOriginalFilename());
             String fileFormatName = multipartFile.getContentType().substring(multipartFile.getContentType().lastIndexOf("/") + 1);
             BufferedImage inputImage = ImageIO.read(multipartFile.getInputStream());
 
+            System.out.println("multipartfile size");
+            System.out.println(inputImage);
             int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
             Metadata metadata; // 이미지 메타 데이터 객체
             Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
