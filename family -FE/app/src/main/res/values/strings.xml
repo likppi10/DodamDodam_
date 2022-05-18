@@ -113,26 +113,61 @@
         <item>표현8</item>
     </string-array>
     <string-array name="emoticon">
-        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/worried_1651796157938.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/tongue_1651796200157.png</item>
-        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/thinking_1651796217293.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/sweat_1651796229546.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/sunglasses_1651796248926.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/smiling_1651796259441.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/determined_1651797027613.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/sleepy_1651796273416.png</item>
-        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/rolling%20eyes_1651796286143.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/worried_1651796157938.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/relieved_1651796300873.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/pouting_1651796318280.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/mask_1651796329279.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/thinking_1651796217293.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/laughing_1651796988741.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/kiss_1651796999956.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/hushed_1651797014053.png</item>
-        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/determined_1651797027613.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/rolling%20eyes_1651796286143.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/crying_1651797037512.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/astonished_1651797046845.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/amusing_1651797058209.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/3099549_face_expressionless_1651797073670.png</item>
         <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/3099548_face_confused_1651797084596.png</item>
     </string-array>
+
+    <string-array name="characters">
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231118_lady_cartoon_woman_family_person_aunt.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231119_son_family_kid_cartoon_baby_child.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231120_kid_cartoon_girl_child_young_sister.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231121_grandfather_grandparents_grandpa_family_man.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231122_family_mother_mommy_female_mom.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231123_senior_grandma_family_woman_grandparents_grandmother_women_senior_grandma_grandmother_grandparents_family.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231124_kid_cartoon_child_brother_family_boy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231125_man_daddy_father_family_dad_parent.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231126_kid_cartoon_baby_family_daughter_cute.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231127_man_family_cartoon_uncle_male.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267440_attendant_flight_travel_cartoon_tourism_person_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267441_hand drawn_raindow_guy_person_male_gay_avatar.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267442_young_avatar_education_hand drawn_african american_student_girl.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267443_businessman_avatar_person_teacher_hand drawn_salesman_man.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267444_young_avatar_person_african american_hand drawn_teenager_boy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267445_woman_admin_avatar_education_hand drawn_teacher_professor.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267446_avatar_scientist_hand drawn_woman_person.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267447_woman_law enforcement_avatar_law_police_person_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267448_travel_hand drawn_person_indian_avatar_captain_pilot.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267449_gamer_hand drawn_avatar_teenage_young_gaming_boy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267450_avatar_hand drawn_fashion_person_beard_style_hipster.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267451_asian_hand drawn_avatar_man_person_guy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267452_girl_hand drawn_person_avatar_female_agriculture_farmer.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267453_avatar_doctor_medicine_stethoscope_healthcare_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267454_person_hand drawn_avatar_painter_female_artist_designer_creative.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267455_hand drawn_cook_male_avatar_chef_apron.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267456_woman_hand drawn_avatar_business.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267457_bartender_barman_hand drawn_avatar_man.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267458_hand drawn_astronaut_avatar_science_space.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267459_male_culture_bboy_avatar_hip hop_boy_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267460_worker_construction_hand drawn_avatar_hard hat_building.png</item>
+    </string-array>
+
 </resources>
 

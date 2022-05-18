@@ -43,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/actuator/health",
                         "/swagger-ui/index.html",
                         "/api/file/**",
-                        "/docs/**"
+                        "/docs/**",
+                        "/"
                 ).permitAll()
                 .anyRequest().authenticated();
     }

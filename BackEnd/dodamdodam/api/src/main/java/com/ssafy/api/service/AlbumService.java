@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.dto.req.AlbumReactionReqDto;
 import com.ssafy.core.dto.req.AlbumReqDto;
 import com.ssafy.core.dto.req.AlbumUpdateReqDto;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.ssafy.core.common.FileUtil.FILE_MAX_SIZE;
 
 @Service
 @Slf4j
@@ -108,10 +111,10 @@ public class AlbumService {
         boolean isMain = false;
         for (int i = 0; i < multipartFiles.size(); i++) {
             originFileNames[i] = multipartFiles.get(i).getOriginalFilename();
-
+            MultipartFile file = multipartFiles.get(i);
             if (albumReqDto.getMainIndex() == i) isMain = true;
             else isMain = false;
-            filePath = fileService.uploadFileV1("album", multipartFiles.get(i));
+            filePath = fileService.uploadFileV1("album", file);
             Picture picture = Picture.builder()
                     .album(album)
                     .origin_name(multipartFiles.get(i).getOriginalFilename())
@@ -119,7 +122,9 @@ public class AlbumService {
                     .is_main(isMain)
                     .build();
             pictureRepository.save(picture);
-            fileService.resizeImage("album", multipartFiles.get(i), picture);
+            if(file.getSize()> FILE_MAX_SIZE) {
+                fileService.resizeImage("album", file, picture);
+            }
         }
 
         for (int i = 0; i < hashTags.size(); i++) {
@@ -189,9 +194,10 @@ public class AlbumService {
             }
             //추가된 사진 저장
             if (flag) {
-                for (int j = 0; j < multipartFiles.size(); j++) {
-                    String originFileName = multipartFiles.get(j).getOriginalFilename();
-                    String filePath = fileService.uploadFileV1("album", multipartFiles.get(j));
+                for (MultipartFile file : multipartFiles) {
+
+                    String originFileName = file.getOriginalFilename();
+                    String filePath = fileService.uploadFileV1("album", file);
 
                     Picture picture = Picture.builder()
                             .album(album)
@@ -199,7 +205,9 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
-                    fileService.resizeImage("album", multipartFiles.get(j), picture);
+                    if(file.getSize()> FILE_MAX_SIZE) {
+                        fileService.resizeImage("album", file, picture);
+                    }
                 }
             }
             //메인 사진 업데이트
@@ -217,9 +225,9 @@ public class AlbumService {
         else {
             //추가된 사진 저장
             if (flag) {
-                for (int j = 0; j < multipartFiles.size(); j++) {
-                    String originFileName = multipartFiles.get(j).getOriginalFilename();
-                    String filePath = fileService.uploadFileV1("album", multipartFiles.get(j));
+                for (MultipartFile file : multipartFiles) {
+                    String originFileName = file.getOriginalFilename();
+                    String filePath = fileService.uploadFileV1("album", file);
 
                     Picture picture = Picture.builder()
                             .album(album)
@@ -227,7 +235,9 @@ public class AlbumService {
                             .path_name(filePath)
                             .build();
                     pictureRepository.save(picture);
-                    fileService.resizeImage("album", multipartFiles.get(j), picture);
+                    if(file.getSize()> FILE_MAX_SIZE) {
+                        fileService.resizeImage("album", file, picture);
+                    }
                 }
             }
             //메인 사진 업데이트

@@ -20,6 +20,10 @@
         android:theme="@style/Theme.Family"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.changeProfileImage.ChangeProfileImageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.wishtree.WishTreeActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
@@ -76,8 +80,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data android:host="oauth"
-                    android:scheme="kakaoa1f1fa77f90e70af62243eda95593018"  />
+                <data
+                    android:host="oauth"
+                    android:scheme="kakaoa1f1fa77f90e70af62243eda95593018" />
             </intent-filter>
         </activity>
 

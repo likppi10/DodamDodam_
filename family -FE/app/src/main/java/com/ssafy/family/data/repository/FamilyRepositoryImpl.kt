@@ -29,6 +29,9 @@ class FamilyRepositoryImpl(
             map.put("role", getRequestBody(profile.role))
             map.put("nickname", getRequestBody(profile.nickname))
             map.put("birthday", getRequestBody(profile.birthday))
+            if (profile.characterPath != null) {
+                map.put("characterPath", getRequestBody(profile.characterPath))
+            }
             val image = convertFileToMultipart(imageFile)
             val response = api.createFamily(data = map, image)
             when {
@@ -52,6 +55,9 @@ class FamilyRepositoryImpl(
             map.put("nickname", getRequestBody(profile.nickname))
             map.put("birthday", getRequestBody(profile.birthday))
             map.put("familyId", getRequestBody(familyId))
+            if (profile.characterPath != null) {
+                map.put("characterPath", getRequestBody(profile.characterPath))
+            }
             val image = convertFileToMultipart(imageFile)
             val response = api.joinFamily(data = map, image)
             when {
@@ -108,6 +114,9 @@ class FamilyRepositoryImpl(
             map.put("role", getRequestBody(profile.role))
             map.put("nickname", getRequestBody(profile.nickname))
             map.put("birthday", getRequestBody(profile.birthday))
+            if (profile.characterPath != null) {
+                map.put("characterPath", getRequestBody(profile.characterPath))
+            }
             val image = convertFile(imageFile)
             val response = api.updateMyProfile(map, image)
             when {
@@ -141,7 +150,7 @@ class FamilyRepositoryImpl(
         }
     }
 
-    private fun getRequestBody(value: Any): RequestBody{
+    private fun getRequestBody(value: Any): RequestBody {
         return value.toString().toRequestBody("text/plain".toMediaTypeOrNull());
     }
 

@@ -3,6 +3,7 @@ package com.ssafy.core.dto.req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -33,8 +34,13 @@ public class FamilyJoinReqDto {
     @Schema(description = "생년월일", required = true, example = "1994-10-25")
     private LocalDate birthday;
 
-    @Schema(description = "이미지")
+    @Nullable
+    @Schema(description = "프로필사진")
     private MultipartFile image;
+
+    @Nullable
+    @Schema(description = "프로필사진 url")
+    private String characterPath;
 
     @Schema(description = "id", required = true, example = "1")
     private long familyId;

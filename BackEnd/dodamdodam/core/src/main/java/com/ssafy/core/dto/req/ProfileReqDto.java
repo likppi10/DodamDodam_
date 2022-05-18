@@ -3,6 +3,7 @@ package com.ssafy.core.dto.req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -36,6 +37,11 @@ public class ProfileReqDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
+    @Nullable
     @Schema(description = "프로필사진")
     private MultipartFile multipartFile;
+
+    @Nullable
+    @Schema(description = "프로필사진 url")
+    private String characterPath;
 }

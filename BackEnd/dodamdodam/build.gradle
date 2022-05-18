@@ -45,7 +45,7 @@ subprojects {
     }
 
     dependencies {
-        
+
         //webMvc
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -78,6 +78,12 @@ project(':api') {
     dependencies {
         implementation project(':core')
 
+        //metadata extractor
+        implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.18.0'
+
+        //image rotate
+        implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
+
         // WebClient
         implementation 'org.springframework.boot:spring-boot-starter-webflux'
         implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
@@ -101,6 +107,10 @@ project(':api') {
         // marvin
         implementation 'com.github.downgoon:marvin:1.5.5'
         implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+
+        //web
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
     }
 }

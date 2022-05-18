@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.family.R
 
-class SinglePhotoRecyclerViewAdapter(): RecyclerView.Adapter<SinglePhotoRecyclerViewAdapter.ViewHolder>() {
-
+class CharacterRecyclerViewAdapter(): RecyclerView.Adapter<CharacterRecyclerViewAdapter.ViewHolder>() {
     lateinit var itemClickListener: ItemClickListener
-    var uris = mutableListOf<Uri>()
+    var uris = listOf<Uri>()
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item: Uri) {

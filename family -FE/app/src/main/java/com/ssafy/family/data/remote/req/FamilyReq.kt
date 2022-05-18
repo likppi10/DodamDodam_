@@ -11,5 +11,7 @@ data class FamilyReq(
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("birthday")
-    val birthday: String
+    val birthday: String,
+    @SerializedName("characterPath")
+    val characterPath: String?
 ) : Parcelable

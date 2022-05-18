@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.common.KoreanUtil;
 import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
@@ -54,14 +55,28 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
+    public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, String characterPath) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
 
-        if (multipartFile != null) {
+        if(characterPath != null){
+            String originFileName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+
+            profile.updateImageName(originFileName);
+            profile.updateImagePath(characterPath);
+
+        }else if(multipartFile != null){
             String originFileName = multipartFile.getOriginalFilename();
             String filePath = fileService.uploadFileV1("profile", multipartFile);
+
             profile.updateImageName(originFileName);
             profile.updateImagePath(filePath);
+            if (multipartFile.getSize() > FileUtil.FILE_MAX_SIZE) {
+                fileService.resizeImage("profile", multipartFile, profile);
+            }
+
+        }else{
+            profile.updateImageName(null);
+            profile.updateImagePath(null);
         }
 
 //        updateImage(multipartFile, profile, request);
@@ -149,18 +164,6 @@ public class ProfileService {
         profile.updateComment(statusDto.getComment());
 
         profileRepository.save(profile);
-    }
-
-    @Transactional
-    public String enrollImage(MultipartFile multipartFile) {
-
-        if (!multipartFile.isEmpty()) {
-            String originFileName = multipartFile.getOriginalFilename();
-            String filePath = fileService.uploadFileV1("profile", multipartFile);
-            return filePath + "#" + originFileName;
-        }
-
-        return ".#.";
     }
 
     @Transactional

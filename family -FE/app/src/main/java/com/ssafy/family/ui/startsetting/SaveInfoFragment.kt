@@ -1,10 +1,8 @@
 package com.ssafy.family.ui.startsetting
 
 import android.app.Activity.RESULT_OK
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +16,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -31,8 +28,8 @@ import com.ssafy.family.data.remote.req.AddFcmReq
 import com.ssafy.family.data.remote.req.FamilyReq
 import com.ssafy.family.data.remote.res.MyProfile
 import com.ssafy.family.databinding.FragmentSaveInfoBinding
+import com.ssafy.family.ui.changeProfileImage.ChangeProfileImageActivity
 import com.ssafy.family.ui.home.LoginViewModel
-import com.ssafy.family.ui.main.MainActivity
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
 import com.ssafy.family.util.Constants.TAG
@@ -46,8 +43,8 @@ class SaveInfoFragment : Fragment() {
     private lateinit var binding: FragmentSaveInfoBinding
     private val familyViewModel by activityViewModels<StartSettingViewModel>()
     private val loginViewModel by activityViewModels<LoginViewModel>()
+    private lateinit var getProfileImage: ActivityResultLauncher<Intent>
 
-    // 이미지 업로드 관련 변수들
     var imageUri: Uri? = null
     var role: String = "아빠"
     lateinit var imagePickerLauncher : ActivityResultLauncher<Intent>
@@ -55,6 +52,22 @@ class SaveInfoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ChangeProfileImageActivity 런쳐 등록
+        getProfileImage = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val changedImage: String? = it.data?.getStringExtra("imageUri")
+                if (changedImage == "null") {
+                    imageUri = null
+                    Glide.with(binding.saveInfoProfileImage).load(R.drawable.image_fail).into(binding.saveInfoProfileImage)
+                } else {
+                    val changedImageUri = Uri.parse(changedImage)
+                    imageUri = changedImageUri
+                    Glide.with(binding.saveInfoProfileImage).load(changedImageUri).into(binding.saveInfoProfileImage)
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -86,7 +99,6 @@ class SaveInfoFragment : Fragment() {
                     binding.saveInfoSpinnerNumber.setSelection(0)
                     binding.saveInfoSpinnerRole.setSelection(position)
                     role = binding.saveInfoSpinner.selectedItem.toString()
-                    Log.d(TAG, "SaveInfoFragment - onItemSelected() 1: $role")
                     // vision toggle
                     spinnerToggle(position)
                 }
@@ -109,7 +121,6 @@ class SaveInfoFragment : Fragment() {
                     position: Int,
                     id: Long) {
                     role = binding.saveInfoSpinnerNumber.selectedItem.toString() + " " + binding.saveInfoSpinnerRole.selectedItem.toString()
-                    Log.d(TAG, "SaveInfoFragment - onItemSelected() 2: $role")
                 }
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                 }
@@ -126,28 +137,17 @@ class SaveInfoFragment : Fragment() {
                     // data setting
                     binding.saveInfoSpinner.setSelection(position)
                     role = binding.saveInfoSpinnerNumber.selectedItem.toString() + " " + binding.saveInfoSpinnerRole.selectedItem.toString()
-                    Log.d(TAG, "SaveInfoFragment - onItemSelected() 3: $role")
                     // vision toggle
                     spinnerToggle(position)
                 }
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                 }
             }
-        // 이미지 선택 런처 등록
-        imagePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    Log.d(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx : ${ it.data?.data}")
-                    imageUri = it.data?.data
-                    Glide.with(activity as StartSettingActivity)
-                        .load(imageUri)
-                        .placeholder(R.drawable.default_profile)
-                        .into(binding.saveInfoProfileImage)
-                }
-            }
-        // 이미지 선택 리스너 등록
+        // 이미지 선택 페이지 이동
         binding.saveInfoProfileImage.setOnClickListener {
-            getProfileImage()
+            val intent = Intent(requireContext(), ChangeProfileImageActivity::class.java)
+            intent.putExtra("imageUri", imageUri.toString())
+            getProfileImage.launch(intent)
         }
         // Data 관련 코드
         initView()
@@ -191,8 +191,7 @@ class SaveInfoFragment : Fragment() {
         // LiveData observe
         familyViewModel.getMyProfileRes.observe(requireActivity()) {
             if (it.status == Status.SUCCESS){
-                Log.d(TAG, "datadatadatadata: ${it.data!!.data!!}")
-                setMyProfile(it.data.data!!)
+                setMyProfile(it.data!!.data!!)
             } else if(it.status == Status.ERROR) {
                 Toast.makeText(requireContext(), "프로필 생성에 실패했어요.", Toast.LENGTH_SHORT).show()
             }
@@ -255,9 +254,9 @@ class SaveInfoFragment : Fragment() {
                 dismissErrorOnBirthday()
             }
         }
-
     } // initView
 
+    // 초기 데이터 세팅
     private fun setMyProfile(data: MyProfile) {
         binding.saveInfoInputNickname.setText(data.nickname)
         var birth = data.birthday.split("-")
@@ -268,6 +267,7 @@ class SaveInfoFragment : Fragment() {
             Glide.with(binding.saveInfoProfileImage).load(R.drawable.image_fail).into(binding.saveInfoProfileImage)
         }else{
             Glide.with(binding.saveInfoProfileImage).load(data.imagePath).into(binding.saveInfoProfileImage)
+            imageUri = Uri.parse(data.imagePath)
         }
         if(role == "아빠"){
             binding.saveInfoSpinner.setSelection(0)
@@ -355,45 +355,56 @@ class SaveInfoFragment : Fragment() {
         binding.textInputLayoutSaveInfoBirthday.error = null
     }
 
-    private fun updateProfile(role: String) {
-        val selectedRole = role.trim()
-        val nickname = binding.saveInfoInputNickname.text.toString()
-        val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
-//        familyViewModel.path = imageUri
-        var imageFile: File? = null
-        Log.d(TAG, "SaveInfoFragment - createFamily() imageUri : $imageUri ")
-        if (imageUri != null) {
-            imageFile = FileUtils.getFile(requireContext(), imageUri!!)
-        }
-
-        familyViewModel.updateMyProfile(FamilyReq(selectedRole, nickname, birthday), imageFile)
-    }
-
     // ***중요*** 네트워크(profile 데이터 보내고 familyId 받아오는 함수)
     private fun createFamily(role: String) {
         val selectedRole = role.trim()
         val nickname = binding.saveInfoInputNickname.text.toString()
         val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
         var imageFile: File? = null
-        Log.d(TAG, "SaveInfoFragment - createFamily() imageUri : $imageUri ")
-        if (imageUri != null) {
-            imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+        var characterPath: String? = null
+        if (imageUri != null) { // Uri가 있고
+            // 일러스트면
+            if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
+                characterPath = imageUri.toString()
+            } else { // 폰에 저장된 사진이면
+                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+            }
         }
-
         first = true
-        familyViewModel.createFamily(FamilyReq(selectedRole, nickname, birthday), imageFile)
+        familyViewModel.createFamily(FamilyReq(selectedRole, nickname, birthday, characterPath), imageFile)
     }
     private fun joinFamily(role: String, familyId: Int) {
         val selectedRole = role.trim()
         val nickname = binding.saveInfoInputNickname.text.toString()
         val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
         var imageFile: File? = null
-        Log.d(TAG, "SaveInfoFragment - joinFamily() imageUri : $imageUri ")
-        if (imageUri != null) {
-            imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+        var characterPath: String? = null
+        if (imageUri != null) { // Uri가 있고
+            // 일러스트면
+            if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
+                characterPath = imageUri.toString()
+            } else { // 폰에 저장된 사진이면
+                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+            }
         }
+        familyViewModel.joinFamily(FamilyReq(selectedRole, nickname, birthday, characterPath), familyId, imageFile)
+    }
 
-        familyViewModel.joinFamily(FamilyReq(selectedRole, nickname, birthday), familyId, imageFile)
+    private fun updateProfile(role: String) {
+        val selectedRole = role.trim()
+        val nickname = binding.saveInfoInputNickname.text.toString()
+        val birthday = InputValidUtil.makeDay(binding.saveInfoInputBirthday.text.toString())
+        var imageFile: File? = null
+        var characterPath: String? = null
+        if (imageUri != null) { // Uri가 있고
+            // 일러스트면
+            if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
+                characterPath = imageUri.toString()
+            } else { // 폰에 저장된 사진이면
+                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+            }
+        }
+        familyViewModel.updateMyProfile(FamilyReq(selectedRole, nickname, birthday, characterPath), imageFile)
     }
 
     private fun addFCM(fcmToken: AddFcmReq) {
@@ -435,43 +446,4 @@ class SaveInfoFragment : Fragment() {
             binding.saveInfoDoubleSpinnerLayout.visibility = View.VISIBLE
         }
     }
-
-
-    // 이미지 선택 런쳐 실행 함수
-    private fun getProfileImage() {
-        val chooserIntent = Intent(Intent.ACTION_CHOOSER)
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        chooserIntent.putExtra(Intent.EXTRA_INTENT, intent)
-        chooserIntent.putExtra(Intent.EXTRA_TITLE, "사용할 앱을 선택해주세요.")
-        imagePickerLauncher.launch(chooserIntent)
-    }
-
-
-    // 이미지 Uri -> File
-//    private fun imageUriToFile(uri: Uri?): File? {
-//        var uri: Uri? = uri
-//        val projection = arrayOf(MediaStore.Images.Media.DATA)
-//        if (uri == null) {
-//            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//        }
-//        var cursor: Cursor? = (activity as StartSettingActivity).contentResolver.query(
-//            uri!!,
-//            projection,
-//            null,
-//            null,
-//            MediaStore.Images.Media.DATE_MODIFIED + " desc"
-//        )
-//        if (cursor == null || cursor.columnCount < 1) {
-//            return null
-//        }
-//        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//        cursor.moveToFirst()
-//        val path: String = cursor.getString(column_index)
-//        if (cursor != null) {
-//            cursor.close()
-//            cursor = null
-//        }
-//        return File(path)
-//    }
 }

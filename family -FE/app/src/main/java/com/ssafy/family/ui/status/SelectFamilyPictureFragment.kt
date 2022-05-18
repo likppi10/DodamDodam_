@@ -122,7 +122,7 @@ class SelectFamilyPictureFragment : Fragment() {
     }
 
     // 갤러리 이미지 가져오는 함수 : setImageUrisFromCursor(getPhotoCursor())
-    fun setImageUrisFromCursor(cursor: Cursor): List<Uri> {
+    fun setImageUrisFromCursor(cursor: Cursor): MutableList<Uri> {
         val list = mutableListOf<Uri>()
         cursor.use {
             val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
@@ -180,5 +180,4 @@ class SelectFamilyPictureFragment : Fragment() {
         }
         return File(path)
     }
-
 }
