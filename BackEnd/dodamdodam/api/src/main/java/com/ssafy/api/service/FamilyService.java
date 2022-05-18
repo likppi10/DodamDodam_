@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.dto.req.FamilyCreateReqDto;
 import com.ssafy.core.dto.req.FamilyJoinReqDto;
 import com.ssafy.core.entity.Family;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.Random;
+
+import static com.ssafy.core.common.FileUtil.FILE_MAX_SIZE;
 
 @Service
 @Slf4j
@@ -48,7 +51,7 @@ public class FamilyService {
     }
 
     // profile 생성
-    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, MultipartFile multipartFile) {
+    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, MultipartFile file) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
@@ -57,10 +60,13 @@ public class FamilyService {
                 .build();
 
         profileRepository.save(profile);
-        fileService.resizeImage("profile", multipartFile, profile);
+        if (file.getSize() > FILE_MAX_SIZE) {
+            fileService.resizeImage("profile", file, profile);
+        }
         return profile;
     }
-    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, MultipartFile multipartFile) {
+
+    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, MultipartFile file) {
         Profile profile = Profile.builder()
                 .role(familyRequest.getRole())
                 .nickname(familyRequest.getNickname())
@@ -69,7 +75,9 @@ public class FamilyService {
                 .build();
 
         profileRepository.save(profile);
-        fileService.resizeImage("profile", multipartFile, profile);
+        if (file.getSize() > FILE_MAX_SIZE) {
+            fileService.resizeImage("profile", file, profile);
+        }
         return profile;
     }
 
@@ -110,10 +118,11 @@ public class FamilyService {
 
     public void updateFamilyPicture(Family family, MultipartFile picture) {
 
-        String filePath = fileService.uploadFileV1("family",picture);
+        String filePath = fileService.uploadFileV1("family", picture);
         family.setPicture(filePath);
         familyRepository.save(family);
-        fileService.resizeImage("family", picture,family);
+        if (picture.getSize() > FILE_MAX_SIZE) {
+            fileService.resizeImage("family", picture, family);
+        }
     }
-
 }
