@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.dto.req.AlbumReactionReqDto;
 import com.ssafy.core.dto.req.AlbumReqDto;
 import com.ssafy.core.dto.req.AlbumUpdateReqDto;
@@ -113,7 +114,7 @@ public class AlbumService {
             MultipartFile file = multipartFiles.get(i);
             if (albumReqDto.getMainIndex() == i) isMain = true;
             else isMain = false;
-            filePath = fileService.uploadOriginFile("album", file);
+            filePath = fileService.uploadFileV1("album", file);
             Picture picture = Picture.builder()
                     .album(album)
                     .origin_name(multipartFiles.get(i).getOriginalFilename())
@@ -196,7 +197,7 @@ public class AlbumService {
                 for (MultipartFile file : multipartFiles) {
 
                     String originFileName = file.getOriginalFilename();
-                    String filePath = fileService.uploadOriginFile("album", file);
+                    String filePath = fileService.uploadFileV1("album", file);
 
                     Picture picture = Picture.builder()
                             .album(album)
@@ -226,7 +227,7 @@ public class AlbumService {
             if (flag) {
                 for (MultipartFile file : multipartFiles) {
                     String originFileName = file.getOriginalFilename();
-                    String filePath = fileService.uploadOriginFile("album", file);
+                    String filePath = fileService.uploadFileV1("album", file);
 
                     Picture picture = Picture.builder()
                             .album(album)
