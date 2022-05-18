@@ -92,7 +92,7 @@ public class FileService {
                 System.out.println("multipartfile size");
                 System.out.println(file.getSize());
                 String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
-                String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
+                String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf(".") + 1);
                 BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
                 System.out.println("버퍼 이미지 사이즈");
@@ -135,6 +135,7 @@ public class FileService {
 
                 System.out.println("버퍼 이미지 사이즈");
                 System.out.println(imageNoAlpha.getData().getDataBuffer().getSize());
+                System.out.println(fileFormatName);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(imageNoAlpha, fileFormatName, baos);
                 baos.flush();
@@ -144,7 +145,7 @@ public class FileService {
                 System.out.println("baos 파일 사이즈 체크");
                 System.out.println(size);
 
-                MultipartFile resizedFile = new MockMultipartFile(fileName, fileName, "image/" + fileFormatName, baos.toByteArray());
+                MultipartFile resizedFile = new MockMultipartFile(fileName, baos.toByteArray());
                 System.out.println("resizeFile 파일 사이즈 체크");
                 System.out.println(resizedFile.getSize());
 
