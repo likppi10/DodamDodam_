@@ -51,10 +51,7 @@ public class FamilyService {
     }
 
     // profile 생성
-    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest) {
-        MultipartFile file = familyRequest.getImage();
-        String characterPath = familyRequest.getCharacterPath();
-
+    public Profile createProfileForFirst(Family family, User user, FamilyCreateReqDto familyRequest, MultipartFile file, String characterPath) {
         String imagePath = null;
         String imageName = null;
 
@@ -82,10 +79,7 @@ public class FamilyService {
         return profile;
     }
 
-    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest) {
-        MultipartFile file = familyRequest.getImage();
-        String characterPath = familyRequest.getCharacterPath();
-
+    public Profile createProfileForJoin(Family family, User user, FamilyJoinReqDto familyRequest, MultipartFile file, String characterPath) {
         String imagePath = null;
         String imageName = null;
 
