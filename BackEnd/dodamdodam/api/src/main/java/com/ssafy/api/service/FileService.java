@@ -60,7 +60,7 @@ public class FileService {
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
             if(category.equals("profile")) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
+                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
             }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -68,9 +68,6 @@ public class FileService {
             baos.flush();
 
             MultipartFile imageFile = new MockMultipartFile(fileName, baos.toByteArray());
-            System.out.println("imageFile size");
-            System.out.println(imageFile.getSize());
-
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(imageFile.getContentType());
@@ -84,6 +81,7 @@ public class FileService {
             return amazonS3Client.getUrl(bucketName, fileName).toString();
 
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CustomException(FILE_UPLOAD_FAIL);
         }
     }
@@ -136,17 +134,17 @@ public class FileService {
             String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            int orientation = 1; // 회전정보, 1. 0도, 3. 180도, 6. 270도, 8. 90도 회전한 정보
-            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream()); // 이미지 메타 데이터 객체
-            Directory directory; // 이미지의 Exif 데이터를 읽기 위한 객체
+            int orientation = 0;
+            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
 
-            System.out.println("메타데이터");
-            System.out.println(metadata == null);
+            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 
-            directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            System.out.println("directory null 체크");
+            System.out.println(directory == null);
             if (directory != null) {
                 orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
             }
+
             System.out.println("회전방향 정보");
             System.out.println(orientation);
 
