@@ -20,8 +20,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    final int JWT_TOKEN_EXPIRATION_TIME =  30 * 60 * 1000 * 600;
-    final int REFRESH_TOKEN_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
+    static final int JWT_TOKEN_EXPIRATION_TIME =  30 * 60 * 1000 * 600;
+    static final int REFRESH_TOKEN_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000;
 
     private final UserDetailsService userDetailsService;
 
@@ -75,7 +75,6 @@ public class JwtProvider {
                     .build().parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

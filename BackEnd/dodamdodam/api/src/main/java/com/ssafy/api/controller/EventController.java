@@ -43,6 +43,7 @@ public class EventController {
                                            @io.swagger.v3.oas.annotations.parameters.RequestBody
                                            @Valid WishTreeReqDto wishListReq,
                                        Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Profile profile = profileService.findProfileByUserPk(userPk);
         Family family = familyService.fromUserIdToFamily(userPk);
@@ -56,6 +57,7 @@ public class EventController {
             })
     @GetMapping(value = "/wish-tree")
     public SingleResult<WishTreeResDto> getWishTree(Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Profile profile = profileService.findProfileByUserPk(userPk);
         Family family = familyService.fromUserIdToFamily(userPk);
@@ -72,6 +74,7 @@ public class EventController {
                                            @io.swagger.v3.oas.annotations.parameters.RequestBody
                                            @Valid WishTreeReqDto wishListReq,
                                        Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Profile profile = profileService.findProfileByUserPk(userPk);
         eventService.updateWishTree(profile, wishListReq, wishTreeId);
@@ -85,6 +88,7 @@ public class EventController {
     @DeleteMapping(value = "/wish-tree/{wishTreeId}")
     public CommonResult deleteWishList(@PathVariable long wishTreeId,
                                        Authentication authentication) {
+
         Long userPk = Long.parseLong(authentication.getName());
         Profile profile = profileService.findProfileByUserPk(userPk);
         eventService.deleteWishTree(profile, wishTreeId);

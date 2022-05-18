@@ -56,8 +56,8 @@ public class FamilyController {
         familyService.familyExistCheck(userPk);
         userService.updateBirthdayByUserPk(userPk, familyReq.getBirthday());
         Family family = familyService.createFamily();
-        String[] imageInfo = profileService.enrollImage(familyReq.getImage()).split("#");
-        Profile profile = familyService.createProfileForFirst(family, user, familyReq, imageInfo);
+//        String[] imageInfo = profileService.enrollImage(familyReq.getImage()).split("#");
+        Profile profile = familyService.createProfileForFirst(family, user, familyReq, familyReq.getImage(), familyReq.getCharacterPath());
         ProfileIdAndFamilyIdResDto res = ProfileIdAndFamilyIdResDto.builder()
                 .familyId(family.getId())
                 .profileId(profile.getId())
@@ -86,8 +86,8 @@ public class FamilyController {
 
         userService.updateBirthdayByUserPk(userPk, familyRequest.getBirthday());
         Family family = familyService.getFamily(familyRequest.getFamilyId());
-        String[] imageInfo = profileService.enrollImage(familyRequest.getImage()).split("#");
-        Profile profile = familyService.createProfileForJoin(family, user, familyRequest, imageInfo);
+//        String[] imageInfo = profileService.enrollImage(familyRequest.getImage()).split("#");
+        Profile profile = familyService.createProfileForJoin(family, user, familyRequest, familyRequest.getImage(), familyRequest.getCharacterPath());
         ProfileIdAndFamilyIdResDto res = ProfileIdAndFamilyIdResDto.builder()
                 .familyId(family.getId())
                 .profileId(profile.getId())

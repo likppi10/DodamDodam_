@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.common.KoreanUtil;
 import com.ssafy.core.common.MissionList;
 import com.ssafy.core.dto.req.ProfileReqDto;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,6 @@ import static com.ssafy.core.exception.ErrorCode.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
@@ -39,8 +40,8 @@ public class ProfileService {
     private final FamilyRepository familyRepository;
     private final FileService fileService;
     private final MainService mainService;
-    private final Random random = new Random();
-    final Map<String, String[][]> missionList = MissionList.missionList;
+    private final Random random = new SecureRandom();
+    static final Map<String, String[][]> missionList = MissionList.missionList;
 
     //[나][대상]
     final String[][] call = {
@@ -48,42 +49,34 @@ public class ProfileService {
             {"오빠", "언니"}
     };
 
-
-    @Transactional(readOnly = false)
+    @Transactional
     public void enrollProfile(Profile profile) {
         profileRepository.save(profile);
     }
 
-    //    @Transactional(readOnly = false)
-//    public void enrollProfile(String userId){
-//        User user = userService.findByUserId(userId);
-//
-//        String[] imageInfo  = enrollImage(multipartFile, request).split("#");
-//        //family코드로 넣을 부분 필요
-//        Profile profile = Profile.builder()
-//                .role(profileRequest.getRole())
-//                .nickname(profileRequest.getNickname())
-//                .user(user)
-//                .imagePath(imageInfo[0])
-//                .imageName(imageInfo[1])
-////                .family()
-//                .build();
-//
-//        profileService.enrollProfile(profile);
-//
-//    }
-    @Transactional(readOnly = false)
-    public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, HttpServletRequest request) {
+    @Transactional
+    public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, String characterPath) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
-        try {
-            if (!multipartFile.isEmpty()) {
-                String originFileName = multipartFile.getOriginalFilename();
-                String filePath = fileService.uploadFileV1("profile", multipartFile);
-                profile.updateImageName(originFileName);
-                profile.updateImagePath(filePath);
+
+        if(characterPath != null){
+            String originFileName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+
+            profile.updateImageName(originFileName);
+            profile.updateImagePath(characterPath);
+
+        }else if(multipartFile != null){
+            String originFileName = multipartFile.getOriginalFilename();
+            String filePath = fileService.uploadFileV1("profile", multipartFile);
+
+            profile.updateImageName(originFileName);
+            profile.updateImagePath(filePath);
+            if (multipartFile.getSize() > FileUtil.FILE_MAX_SIZE) {
+                fileService.resizeImage("profile", multipartFile, profile);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        }else{
+            profile.updateImageName(null);
+            profile.updateImagePath(null);
         }
 
 //        updateImage(multipartFile, profile, request);
@@ -107,7 +100,7 @@ public class ProfileService {
             List<Profile> familyProfiles = profileRepository.findProfilesByFamilyIdExceptMe(familyId, profile.getId());
 
             //본인 뿐이 없다면, target은 비우고, content만 갱신
-            if (familyProfiles.size() == 0) {
+            if (familyProfiles.isEmpty()) {
                 profile.updateMissionContent("우리 가족을 초대해 주세요!");
                 return profile;
             }
@@ -150,77 +143,27 @@ public class ProfileService {
             StringBuilder missionContent = new StringBuilder();
 
             //미션 대상 호칭 선택
-            switch (randomIndex) {
-                case 0:
-                    missionContent.append(missionTargetCall);
-                    missionContent.append("에게 ");
-                    break;
-                case 1:
-                    String caseParticle = KoreanUtil.getCompleteWord(targetRole, "을 ", "를 ");
-                    missionContent.append(caseParticle);
-                    break;
+            if (randomIndex == 0) {
+                missionContent.append(missionTargetCall);
+                missionContent.append("에게 ");
+            } else if (randomIndex == 1) {
+                String caseParticle = KoreanUtil.getCompleteWord(targetRole, "을 ", "를 ");
+                missionContent.append(caseParticle);
             }
 
             missionContent.append(missionSelect);
-
             profile.updateMissionContent(missionContent.toString());
         }
         return profile;
     }
 
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void updateStatus(Profile profile, StatusReqDto statusDto) {
         profile.updateEmotion(statusDto.getEmotion());
         profile.updateComment(statusDto.getComment());
 
         profileRepository.save(profile);
-    }
-//
-//    @Transactional(readOnly = false)
-//    public void updateImage(MultipartFile multipartFile, Profile profile, HttpServletRequest request){
-//        try{
-//            String separ = File.separator;
-//            String today= new SimpleDateFormat("yyMMdd").format(new Date());
-//
-//            File file = new File("");
-////            String rootPath = file.getAbsolutePath().split("src")[0];
-//
-////            String savePath = "../"+"profileImg"+separ+today;
-//            String savePath = request.getServletContext().getRealPath("/resources/profileImage");
-//            log.info(savePath);
-//            if(!new File(savePath).exists()){
-//                try{
-//                    new File(savePath).mkdirs();
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//            String originFileName = multipartFile.getOriginalFilename();
-//            String saveFileName = UUID.randomUUID().toString() + originFileName.substring(originFileName.lastIndexOf("."));
-//
-//            String filePath = savePath+separ+saveFileName;
-//            multipartFile.transferTo(new File(filePath));
-//            profile.updateImagePath("/resources/profileImage/"+saveFileName);
-//            profile.updateImageName(originFileName);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
-    @Transactional
-    public String enrollImage(MultipartFile multipartFile) {
-
-        try {
-            if (!multipartFile.isEmpty()) {
-                String originFileName = multipartFile.getOriginalFilename();
-                String filePath = fileService.uploadFileV1("profile", multipartFile);
-                return filePath + "#" + originFileName;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ".#.";
     }
 
     @Transactional
@@ -236,14 +179,18 @@ public class ProfileService {
     }
 
 
+    @Transactional(readOnly = true)
     public void checkRoleByFamilyIdExceptMe(Long familyId, String role, Long userPk) {
+
         Long profileId = profileRepository.findProfileIdByUserPk(userPk);
         if (profileRepository.checkRoleByFamilyIdExceptMe(familyId, role, profileId) != 0) {
             throw new CustomException(DUPLICATE_ROLE);
         }
     }
 
+    @Transactional(readOnly = true)
     public void checkNicknameByFamilyIdExceptMe(Long familyId, String nickname, Long userPk) {
+
         Long profileId = profileRepository.findProfileIdByUserPk(userPk);
         if (profileRepository.checkNicknameByFamilyIdExceptMe(familyId, nickname, profileId) != 0) {
             throw new CustomException(DUPLICATE_NICKNAME);
@@ -258,14 +205,14 @@ public class ProfileService {
         if (profileRepository.findChattingMemberListByFamilyId(familyId) == null) {
             throw new CustomException(INVALID_REQUEST);
         }
-
         return profileRepository.findChattingMemberListByFamilyId(familyId);
     }
 
+    @Transactional(readOnly = true)
     public TodayConditionResDto getTodayCondition(Long userPk) {
 
         Profile myProfile = profileRepository.findProfileByUserPk(userPk);
-        if(myProfile == null){
+        if (myProfile == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
         return TodayConditionResDto.builder()
@@ -274,16 +221,17 @@ public class ProfileService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public MyProfileResDto getMyProfile(Long userPk) {
-        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
 
-        if(myProfile == null){
+        Profile myProfile = profileRepository.findProfileByUserPk(userPk);
+        if (myProfile == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
 
         LocalDate birthday = userRepository.findBirthdayByProfileId(myProfile.getId());
 
-        if(birthday == null){
+        if (birthday == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
 
@@ -296,10 +244,10 @@ public class ProfileService {
     }
 
     @Transactional
-    public void deleteProfile(Long userPk){
+    public void deleteProfile(Long userPk) {
         Profile profile = findProfileByUserPk(userPk);
         List<MainProfileResDto> familyProfileList = mainService.getProfileListExceptMe(userPk);
-        if(familyProfileList.isEmpty()){
+        if (familyProfileList.isEmpty()) {
             Family family = familyRepository.findFamilyByUserPk(userPk);
             familyRepository.delete(family);
         }

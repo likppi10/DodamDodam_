@@ -18,8 +18,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtProvider jwtProvider;
 
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         // basic authentication
         http
                 .httpBasic().disable() // BasicAuthenticationFilter 비활성화
@@ -43,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/actuator/health",
                         "/swagger-ui/index.html",
                         "/api/file/**",
-                        "/docs/**"
+                        "/docs/**",
+                        "/"
                 ).permitAll()
                 .anyRequest().authenticated();
     }

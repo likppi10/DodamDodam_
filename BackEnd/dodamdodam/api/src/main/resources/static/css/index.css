@@ -1,0 +1,101 @@
+.main-container {
+  margin: 3rem 20rem;
+  height: 500px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-intro {
+  margin-top: 2rem;
+  font-size: 3.5rem;
+  font-family: 'SpoqaHanSansNeo-Bold';
+  color: #ff9382;
+}
+
+.main-content {
+  font-size: 2rem;
+  font-family: 'SpoqaHanSansNeo-Bold';
+  color: #ff9382;
+  text-align: center;
+  margin-top: 0.5rem;
+  align-items: flex-start;
+}
+
+.nav-container {
+  background-color: #ffead7;
+  padding: 0 20rem;
+  height: 5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 2px 2px #ffe1c3;
+}
+
+.nav-title {
+  color: #ff9382;
+  font-family: 'SpoqaHanSansNeo-Bold';
+  font-size: 2.5rem;
+  padding-right: 2rem;
+}
+
+.nav-title-two {
+  color: #ff9382;
+  font-family: 'SpoqaHanSansNeo-Bold';
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.nav-title-sub {
+  color: #ff9382;
+  font-family: 'SpoqaHanSansNeo-Bold';
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.nav-download {
+  color: #ff9382;
+  font-family: 'SpoqaHanSansNeo-Bold';
+  font-size: 1rem;
+  padding: 0 2rem;
+}
+
+.nav-content-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.app-btn {
+  cursor: pointer;
+  height: 3rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: bold;
+  background-color:#ff9382;
+  margin: 2rem 0;
+  width: 8em;
+  height: 3rem;
+}
+
+.app-btn:focus {
+  border: none;
+  outline:none;
+}
+
+@font-face {
+  font-family: 'SpoqaHanSansNeo-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SpoqaHanSansNeo-Medium';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
