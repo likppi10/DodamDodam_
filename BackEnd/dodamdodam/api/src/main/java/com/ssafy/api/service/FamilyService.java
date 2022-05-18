@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.dto.req.FamilyCreateReqDto;
 import com.ssafy.core.dto.req.FamilyJoinReqDto;
 import com.ssafy.core.entity.Family;
@@ -59,7 +60,7 @@ public class FamilyService {
             imagePath = characterPath;
         } else if (file != null) {
             imageName = file.getOriginalFilename();
-            imagePath = fileService.uploadOriginFile("profile", file);
+            imagePath = fileService.uploadFileV1("profile", file);
         }
 
         Profile profile = Profile.builder()
@@ -87,7 +88,7 @@ public class FamilyService {
             imagePath = characterPath;
         } else if (file != null) {
             imageName = file.getOriginalFilename();
-            imagePath = fileService.uploadOriginFile("profile", file);
+            imagePath = fileService.uploadFileV1("profile", file);
         }
 
         Profile profile = Profile.builder()
@@ -143,7 +144,7 @@ public class FamilyService {
 
     public void updateFamilyPicture(Family family, MultipartFile picture) {
 
-        String filePath = fileService.uploadOriginFile("family", picture);
+        String filePath = fileService.uploadFileV1("family", picture);
         family.setPicture(filePath);
         familyRepository.save(family);
         if (picture.getSize() > FILE_MAX_SIZE) {
