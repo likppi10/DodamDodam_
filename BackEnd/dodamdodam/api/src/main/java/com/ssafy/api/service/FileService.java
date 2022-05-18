@@ -59,44 +59,32 @@ public class FileService {
 
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            int orientation = 0;
-            Metadata metadata = ImageMetadataReader.readMetadata(file.getInputStream());
-
-            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-
-            if (directory != null) {
-                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
-            }
-
-            if (orientation == 3) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
-            } else if (orientation == 6) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
-            } else if (orientation == 8) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
-            }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(inputImage, fileFormatName, baos);
-            baos.flush();
-
-            MultipartFile imageFile = new MockMultipartFile(fileName, baos.toByteArray());
-
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(imageFile.getContentType());
-            objectMetadata.setContentLength(imageFile.getSize());
-
-            InputStream inputStream = imageFile.getInputStream();
-
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-
-            return amazonS3Client.getUrl(bucketName, fileName).toString();
+            return s3SaveAndGetUrl(fileName, fileFormatName, inputImage);
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new CustomException(FILE_UPLOAD_FAIL);
         }
+    }
+
+    private String s3SaveAndGetUrl(String fileName, String fileFormatName, BufferedImage inputImage) throws IOException {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(inputImage, fileFormatName, baos);
+        baos.flush();
+
+        MultipartFile imageFile = new MockMultipartFile(fileName, baos.toByteArray());
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(imageFile.getContentType());
+        objectMetadata.setContentLength(imageFile.getSize());
+
+        InputStream inputStream = imageFile.getInputStream();
+
+        amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
     public void validateFileExists(MultipartFile multipartFile) {
@@ -140,31 +128,9 @@ public class FileService {
 
     public String resizeFile(String category, MultipartFile file) {
         try {
-            validateFileExists(file);
-            checkFileNameExtension(file);
-
             String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
             String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-
-            InputStream inputStream = file.getInputStream();
-            BufferedImage inputImage = ImageIO.read(inputStream);
-
-            int orientation = 0;
-            Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
-
-            Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
-
-            if (directory != null) {
-                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION); // 회전정보
-            }
-
-            if (orientation == 3) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_180);
-            } else if (orientation == 6) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_90);
-            } else if (orientation == 8) {
-                inputImage = Scalr.rotate(inputImage, Scalr.Rotation.CW_270);
-            }
+            BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
             int originWidth = inputImage.getWidth();
             int originHeight = inputImage.getHeight();
@@ -177,27 +143,9 @@ public class FileService {
             scale.setAttribute("newHeight", 712 * originHeight / originWidth);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
-
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(imageNoAlpha, fileFormatName, baos);
-            baos.flush();
-
-            MultipartFile resizedFile = new MockMultipartFile(fileName, baos.toByteArray());
-
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(resizedFile.getContentType());
-            objectMetadata.setContentLength(resizedFile.getSize());
-
-            try (InputStream fileInputStream = resizedFile.getInputStream()) {
-                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, fileInputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                throw new CustomException(ErrorCode.FILE_SIZE_EXCEED);
-            }
-
-            return amazonS3Client.getUrl(bucketName, fileName).toString();
+            return s3SaveAndGetUrl(fileName, fileFormatName, imageNoAlpha);
 
         } catch (Exception e) {
             e.printStackTrace();
