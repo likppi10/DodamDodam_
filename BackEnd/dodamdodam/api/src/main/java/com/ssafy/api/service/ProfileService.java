@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
@@ -174,8 +173,7 @@ public class ProfileService {
 
     @Transactional
     public Profile findProfileByUserPk(Long userPk) {
-        Profile profile = profileRepository.findProfileByUserPk(userPk);
-        return profile;
+        return  profileRepository.findProfileByUserPk(userPk);
     }
 
 
