@@ -270,15 +270,13 @@ class CalendarFragment : Fragment() {
 
     //날짜를 선택 : 해당 날짜로 텍스트들도 바꿔준다.
     fun selectDate(date: LocalDate) {
-//        if (selectedDate != date) {
-            calendarViewModel.getDaySchedule(dayLocalDateToString(date))
-            val oldDate = selectedDate
-            selectedDate = date
-            oldDate?.let { binding.calendar.notifyDateChanged(it) }
-            binding.calendar.notifyDateChanged(date)
-            binding.selectedMonthText.text = "${date.year}년 ${date.monthValue}월 "
-            binding.selectedDateText.text = selectionFormatter.format(date)
-//        }
+        calendarViewModel.getDaySchedule(dayLocalDateToString(date))
+        val oldDate = selectedDate
+        selectedDate = date
+        oldDate?.let { binding.calendar.notifyDateChanged(it) }
+        binding.calendar.notifyDateChanged(date)
+        binding.selectedMonthText.text = "${date.year}년 ${date.monthValue}월 "
+        binding.selectedDateText.text = selectionFormatter.format(date)
     }
 
     //선택된 날짜로 리사이클러뷰에 일정 표시하는 어댑터

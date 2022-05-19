@@ -35,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val loginViewModel by viewModels<LoginViewModel>()
 
+    var pressedTime =0
     lateinit var dialog: Dialog
     lateinit var permissionUtil: PermissionUtil
 
@@ -165,6 +166,21 @@ class HomeActivity : AppCompatActivity() {
     private fun dismissLoading() {
         binding.progressBarLoginFLoading.visibility = GONE
         binding.homePageAppName.visibility = GONE
+    }
+
+    override fun onBackPressed() {
+        if (pressedTime === 0) {
+            Toast.makeText(this@HomeActivity, " 한 번 더 누르면 종료돼요.", Toast.LENGTH_LONG).show()
+            pressedTime = System.currentTimeMillis().toInt()
+        } else {
+            val seconds = (System.currentTimeMillis().toInt() - pressedTime)
+            if (seconds > 2000) {
+                Toast.makeText(this@HomeActivity, " 한 번 더 누르면 종료돼요.", Toast.LENGTH_LONG).show()
+                pressedTime = 0
+            } else {
+                super.onBackPressed()
+            }
+        }
     }
 
 }
