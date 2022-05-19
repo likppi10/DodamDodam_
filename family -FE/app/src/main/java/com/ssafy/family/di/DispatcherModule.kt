@@ -12,12 +12,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DispatcherModule {
+
     @Provides
     @IoDispatcher
     @Singleton
     fun provideIODispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
     }
+
     @Provides
     @MainDispatcher
     @Singleton
@@ -32,4 +34,5 @@ object DispatcherModule {
     @Retention(AnnotationRetention.BINARY)
     @Qualifier
     annotation class MainDispatcher
+
 }

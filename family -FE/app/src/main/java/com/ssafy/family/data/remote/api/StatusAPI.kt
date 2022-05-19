@@ -4,12 +4,12 @@ import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.EditStatusReq
 import com.ssafy.family.data.remote.res.FamilyPictureRes
 import com.ssafy.family.data.remote.res.MyStatusRes
-import com.ssafy.family.data.remote.res.StatusRes
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
 interface StatusAPI {
+
     @GET("/api/family/picture")
     suspend fun getFamilyPicture(): Response<FamilyPictureRes>
 
@@ -18,9 +18,7 @@ interface StatusAPI {
 
     @Multipart
     @PATCH("/api/family/picture")
-    suspend fun editFamilyPicture(
-        @Part picture: MultipartBody.Part?
-    ): Response<BaseResponse>
+    suspend fun editFamilyPicture(@Part picture: MultipartBody.Part?): Response<BaseResponse>
 
     @GET("/api/profile/condition")
     suspend fun getMyStatus(): Response<MyStatusRes>

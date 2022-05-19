@@ -1,6 +1,5 @@
 package com.ssafy.family.data.repository
 
-
 import android.util.Log
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.AlbumAPI
@@ -26,6 +25,7 @@ class AlbumRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher,
     private val mainDispatcher: CoroutineDispatcher
 ) : AlbumRepository {
+
     override suspend fun findAllAlbum(): Resource<AlbumRes> = withContext(ioDispatcher) {
         try {
             val response = api.allAlbum()
@@ -85,141 +85,9 @@ class AlbumRepositoryImpl(
             }
         }
 
-    override suspend fun addReaction(albumReactionReq: AlbumReactionReq): Resource<BaseResponse> =
-        withContext(ioDispatcher) {
-            try {
-                val response = api.addReaction(albumReactionReq)
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    response.code() == 403 -> {
-                        Resource.expired(response.body()!!)
-                    }
-                    else -> {
-                        Resource.error(null, response.message())
-                    }
-                }
-            } catch (e: Exception) {
-                Resource.error(null, "서버와 연결오류")
-            }
-        }
-
-    override suspend fun searchAlbum(keyword: String): Resource<AlbumRes> =
-        withContext(ioDispatcher) {
-            try {
-                val response = api.searchAlbum(keyword)
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    response.code() == 403 -> {
-                        Resource.expired(response.body()!!)
-                    }
-                    else -> {
-                        Resource.error(null, response.message())
-                    }
-                }
-            } catch (e: Exception) {
-                Resource.error(null, "서버와 연결오류")
-            }
-        }
-
-    override suspend fun addAlbum(
-        addAlbum: AddAlbumReq,
-        imagefiles: ArrayList<MultipartBody.Part>
-    ): Resource<BaseResponse> =
-        withContext(ioDispatcher) {
-//            try {
-                val map = HashMap<String,RequestBody>()
-                var data = ""
-                for(i in addAlbum.hashTags.indices){
-                    if(i!=0){
-                        data+=","
-                    }
-                    data+=addAlbum.hashTags[i].text
-                }
-                map.put("hashTags",getBody(data))
-                map.put("date",getBody(addAlbum.date))
-                map.put("mainIndex",getBody(addAlbum.mainIndex))
-                Log.d("ddddd", "addAlbum: "+map)
-                val response =
-                    api.addAlbum(data = map, imagefiles)
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    response.code() == 403 -> {
-                        Resource.expired(response.body()!!)
-                    }
-                    else -> {
-                        Log.d("ddddd", "addAlbum: err")
-                        Resource.error(null, response.message())
-                    }
-                }
-//            } catch (e: Exception) {
-//                Log.d("ddddd", "addAlbum: exception")
-//                Resource.error(null, "서버와 연결오류")
-//            }
-        }
-
-    override suspend fun seachDateAlbum(date: String): Resource<AlbumRes> =
-        withContext(ioDispatcher) {
-            try {
-                val response = api.seachDateAlbum(date)
-                when {
-                    response.isSuccessful -> {
-                        Resource.success(response.body()!!)
-                    }
-                    response.code() == 403 -> {
-                        Resource.expired(response.body()!!)
-                    }
-                    else -> {
-                        Resource.error(null, response.message())
-                    }
-                }
-            } catch (e: Exception) {
-                Resource.error(null, "서버와 연결오류")
-            }
-    }
-
-    override suspend fun updateAlbum(updateAlbumReq: UpdateAlbumReq, albumId: Int,
-                                     imagefiles: ArrayList<MultipartBody.Part>
-    ): Resource<BaseResponse> =
-        withContext(ioDispatcher) {
-//            try {
-            val map = HashMap<String,RequestBody>()
-            var hashtagdata = ""
-            for(i in updateAlbumReq.hashTags.indices){
-                if(i!=0){
-                    hashtagdata+=","
-                }
-                hashtagdata+=updateAlbumReq.hashTags[i].text
-            }
-            var pictureIddata=""
-
-            for(i  in updateAlbumReq.pictureIdList.indices){
-                if(i!=0){
-                    pictureIddata+=","
-                }
-                pictureIddata+=updateAlbumReq.pictureIdList[i]
-            }
-            map.put("hashTags",getBody(hashtagdata))
-            map.put("date",getBody(updateAlbumReq.date))
-            map.put("mainIndex",getBody(updateAlbumReq.mainIndex))
-            map.put("albumId",getBody(albumId))
-            map.put("pictureIdList",getBody(pictureIddata))
-            Log.d("ddddd", "updateAlbum: "+map)
-            Log.d("ddddd", "updateAlbum: "+imagefiles)
-            val response:Response<BaseResponse>
-            if(imagefiles.isEmpty()){
-                response =
-                    api.updateAlbum(data = map, null)
-            }else{
-                response =
-                    api.updateAlbum(data = map, imagefiles)
-            }
-
+    override suspend fun addReaction(albumReactionReq: AlbumReactionReq): Resource<BaseResponse> = withContext(ioDispatcher) {
+        try {
+            val response = api.addReaction(albumReactionReq)
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
@@ -228,14 +96,128 @@ class AlbumRepositoryImpl(
                     Resource.expired(response.body()!!)
                 }
                 else -> {
-                    Log.d("ddddd", "addAlbum: err")
                     Resource.error(null, response.message())
                 }
             }
-//            } catch (e: Exception) {
-//                Log.d("ddddd", "addAlbum: exception")
-//                Resource.error(null, "서버와 연결오류")
-//            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
+    override suspend fun searchAlbum(keyword: String): Resource<AlbumRes> = withContext(ioDispatcher) {
+        try {
+            val response = api.searchAlbum(keyword)
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, response.message())
+                }
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
+    override suspend fun addAlbum(
+        addAlbum: AddAlbumReq,
+        imagefiles: ArrayList<MultipartBody.Part>
+    ): Resource<BaseResponse> = withContext(ioDispatcher) {
+        val map = HashMap<String,RequestBody>()
+        var data = ""
+        for(i in addAlbum.hashTags.indices){
+            if(i!=0){
+                data+=","
+            }
+            data+=addAlbum.hashTags[i].text
+        }
+        map.put("hashTags",getBody(data))
+        map.put("date",getBody(addAlbum.date))
+        map.put("mainIndex",getBody(addAlbum.mainIndex))
+        val response =
+            api.addAlbum(data = map, imagefiles)
+        when {
+            response.isSuccessful -> {
+                Resource.success(response.body()!!)
+            }
+            response.code() == 403 -> {
+                Resource.expired(response.body()!!)
+            }
+            else -> {
+                Resource.error(null, response.message())
+            }
+        }
+    }
+
+    override suspend fun seachDateAlbum(date: String): Resource<AlbumRes> = withContext(ioDispatcher) {
+        try {
+            val response = api.seachDateAlbum(date)
+            when {
+                response.isSuccessful -> {
+                    Resource.success(response.body()!!)
+                }
+                response.code() == 403 -> {
+                    Resource.expired(response.body()!!)
+                }
+                else -> {
+                    Resource.error(null, response.message())
+                }
+            }
+        } catch (e: Exception) {
+            Resource.error(null, "서버와 연결오류")
+        }
+    }
+
+    override suspend fun updateAlbum(
+        updateAlbumReq: UpdateAlbumReq,
+        albumId: Int,
+        imagefiles: ArrayList<MultipartBody.Part>
+    ): Resource<BaseResponse> = withContext(ioDispatcher) {
+        val map = HashMap<String,RequestBody>()
+        var hashtagdata = ""
+        for(i in updateAlbumReq.hashTags.indices){
+            if(i!=0){
+                hashtagdata+=","
+            }
+            hashtagdata+=updateAlbumReq.hashTags[i].text
+        }
+        var pictureIddata=""
+
+        for(i  in updateAlbumReq.pictureIdList.indices){
+            if(i!=0){
+                pictureIddata+=","
+            }
+            pictureIddata+=updateAlbumReq.pictureIdList[i]
+        }
+        map.put("hashTags",getBody(hashtagdata))
+        map.put("date",getBody(updateAlbumReq.date))
+        map.put("mainIndex",getBody(updateAlbumReq.mainIndex))
+        map.put("albumId",getBody(albumId))
+        map.put("pictureIdList",getBody(pictureIddata))
+        val response:Response<BaseResponse>
+        if(imagefiles.isEmpty()){
+            response =
+                api.updateAlbum(data = map, null)
+        }else{
+            response =
+                api.updateAlbum(data = map, imagefiles)
+        }
+        when {
+            response.isSuccessful -> {
+                Resource.success(response.body()!!)
+            }
+            response.code() == 403 -> {
+                Resource.expired(response.body()!!)
+            }
+            else -> {
+                Log.d("ddddd", "addAlbum: err")
+                Resource.error(null, response.message())
+            }
+        }
     }
 
     override suspend fun deleteAlbum(albumId: Int): Resource<BaseResponse>  = withContext(ioDispatcher) {
@@ -280,6 +262,5 @@ class AlbumRepositoryImpl(
         }
         return list
     }
-
 
 }

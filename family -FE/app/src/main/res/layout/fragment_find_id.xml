@@ -9,8 +9,6 @@
     <include
         android:id="@+id/findId_page_top"
         layout="@layout/schedule_top_list"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,9 +16,8 @@
 
     <ImageView
         android:id="@+id/findID_page_logo"
-        android:layout_width="300dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="250dp"
+        android:layout_height="300dp"
         android:foregroundGravity="center_horizontal"
         android:src="@drawable/main_logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,38 +27,57 @@
     <ImageView
         android:id="@+id/findID_page_form_box"
         android:layout_width="295dp"
-        android:layout_height="390dp"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="-45dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/form_white_bg"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/findID_page_logo" />
+
+    <TextView
+        android:id="@+id/findID_page_welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/spoqahansans"
+        android:text="@string/FindID"
+        android:textColor="@color/pink01"
+        android:textSize="36sp"
+        android:elevation="5dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toTopOf="@+id/findID_page_form_box" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout_findIDF_name"
         style="@style/TextInputLayoutStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="330dp"
-        android:layout_weight="20"
         android:hint="@string/name"
+        android:elevation="5dp"
         app:boxStrokeColor="@color/pink01"
         app:hintTextColor="@color/pink01"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="@id/findID_page_form_box"
+        app:layout_constraintStart_toStartOf="@id/findID_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/findID_page_welcome_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/findID_page_input_name"
             style="@style/TextInputStyle"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/pink01"
-            android:inputType="textPersonName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:maxLength="10"
+            android:textColor="@color/pink01"
+            android:fontFamily="@font/spoqahansans"
+            android:inputType="textPersonName"
+            android:textStyle="bold" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -69,25 +85,27 @@
         style="@style/TextInputLayoutStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="410dp"
         android:layout_weight="20"
+        android:elevation="5dp"
         android:hint="@string/birthday"
         app:boxStrokeColor="@color/pink01"
         app:hintTextColor="@color/pink01"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findIDF_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/findID_page_input_birthday"
             style="@style/TextInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:inputType="number"
+            android:ems="10"
             android:textColor="@color/pink01"
-            android:inputType="number" />
+            android:fontFamily="@font/spoqahansans"
+            android:textStyle="bold"  />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -95,25 +113,26 @@
         style="@style/TextInputLayoutStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="490dp"
         android:layout_weight="20"
+        android:elevation="5dp"
         android:hint="@string/family_code"
         app:boxStrokeColor="@color/pink01"
         app:hintTextColor="@color/pink01"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findIDF_birthday">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/findID_page_input_family_code"
             style="@style/TextInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/pink01"
-            android:inputType="text" />
+            android:inputType="text"
+            android:ems="10"
+            android:fontFamily="@font/spoqahansans"
+            android:textStyle="bold"  />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -124,13 +143,13 @@
         android:elevation="5dp"
         android:gravity="center"
         android:text="@string/find_user"
-        android:textSize="20sp"
         android:textColor="@color/white"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="590dp"/>
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_findIDF_family_code"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_findIDF_family_code"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findIDF_family_code" />
+
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"
         android:layout_width="48dp"
@@ -140,4 +159,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

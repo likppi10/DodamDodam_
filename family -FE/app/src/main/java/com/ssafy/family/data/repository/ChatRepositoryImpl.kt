@@ -19,7 +19,6 @@ class ChatRepositoryImpl (
 
     override fun send(data: ChatData, myRef: DatabaseReference) {
          try{
-             Log.d("datadatadata", "onMessageReceived: "+data)
              myRef.push().setValue(data)
         }catch (e:Exception){
             Resource.error(null,"서버와 연결오류")
@@ -50,7 +49,6 @@ class ChatRepositoryImpl (
             val response = api.sendChattingFCM(text)
             when {
                 response.isSuccessful -> {
-                    Log.d("datadatadata", "한번만 보내")
                     Resource.success(response.body()!!)
                 }
                 response.code() == 403 -> {

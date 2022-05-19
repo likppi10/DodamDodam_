@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-
-
     <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
@@ -26,8 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/nav_main"
-        >
+        app:menu="@menu/nav_main">
 
         <com.nex3z.notificationbadge.NotificationBadge
             android:id="@+id/badge"
@@ -39,6 +36,7 @@
             android:layout_marginTop="4dp"
             android:visibility="visible"
             tools:visibility="visible" />
+
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@
         android:textColor="@color/pink01"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,9 +35,9 @@
         android:textColor="@color/pink01"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ask_family_code_answer_yes_btn" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

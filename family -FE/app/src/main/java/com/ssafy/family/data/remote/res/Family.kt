@@ -11,7 +11,6 @@ data class Family(
     @SerializedName("code")
     val code: String,
     @SerializedName("picture")
-    val picture: String,
-
-    ): Parcelable
+    val picture: String
+): Parcelable
 

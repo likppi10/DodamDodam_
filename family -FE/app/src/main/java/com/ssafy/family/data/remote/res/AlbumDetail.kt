@@ -14,4 +14,4 @@ data class AlbumDetail(
     val hashTags: List<HashTag>,
     @SerializedName("albumReactions")
     val albumReactions: List<AlbumReaction>
-    ) : Parcelable
+) : Parcelable

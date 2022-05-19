@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.family.R
 
 class CharacterRecyclerViewAdapter(): RecyclerView.Adapter<CharacterRecyclerViewAdapter.ViewHolder>() {
+
     lateinit var itemClickListener: ItemClickListener
     var uris = listOf<Uri>()
 

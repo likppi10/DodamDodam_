@@ -6,28 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.album.DetailAlbumFragment">
 
-
     <TextView
         android:id="@+id/detail_album_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
         android:fontFamily="@font/spoqahansans"
         android:text="대표 사진을 선택해 주세요"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/detail_album_photo_recycler"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_album_photo_recycler"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,39 +32,62 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_album_tag_recycler"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="40dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_album_photo_recycler" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/spoqahansans"
+        android:text="이때의 감정을 남겨보세요!"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/detail_album_emoji_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/line" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_album_emoji_recycler"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/box_emoji"
         android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/spoqahansans"
+        android:text="우리 가족은 이때.."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/detail_album_emoji_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/detail_album_emoji_recycler" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_album_comment_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_album_emoji_recycler" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"
@@ -85,24 +102,22 @@
     <View
         android:id="@+id/line"
         android:layout_width="0dp"
-        android:layout_height="7dp"
-        android:layout_marginLeft="16dp"
+        android:layout_height="3dp"
         android:layout_marginTop="4dp"
-        android:layout_marginRight="16dp"
         android:background="@color/pink04"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/detail_album_emoji_recycler"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/detail_album_tag_recycler"
         app:layout_constraintTop_toBottomOf="@+id/detail_album_tag_recycler" />
 
     <View
         android:id="@+id/spinner"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:background="@drawable/ic_baseline_more_horiz"
         android:spinnerMode="dialog"
-        android:background="@drawable/ic_baseline_settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/detail_album_photo_recycler"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

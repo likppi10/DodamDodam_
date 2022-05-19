@@ -15,6 +15,5 @@ data class FamilyProfile(
     @SerializedName("emotion")
     val emotion: String,
     @SerializedName("comment")
-    val comment: String,
-
-    ): Parcelable
+    val comment: String
+): Parcelable

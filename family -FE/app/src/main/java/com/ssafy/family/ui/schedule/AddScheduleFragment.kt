@@ -63,10 +63,7 @@ class AddScheduleFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -87,10 +84,10 @@ class AddScheduleFragment : Fragment() {
 
         //일정 추가 버튼
         (activity as ScheduleActivity).binding.scheduleButtonInclude.button2.setOnClickListener {
-            if(binding.scheduleTitle.text.isEmpty()){
-                Toast.makeText(requireContext(), "일정 제목을 입력해주세요", Toast.LENGTH_SHORT).show()
-            } else if(binding.scheduleContent.text!!.isEmpty()){
-                Toast.makeText(requireContext(), "일정 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
+            if(binding.scheduleTitle.text.length < 2 || binding.scheduleTitle.text.length > 20){
+                Toast.makeText(requireContext(), "일정 제목을 2~20자로 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else if(binding.scheduleContent.text!!.length < 2){
+                Toast.makeText(requireContext(), "일정 내용을 2자 이상 입력해주세요", Toast.LENGTH_SHORT).show()
             }else if(startDate == null && endDate == null){
                 Toast.makeText(requireContext(), "일정 날짜를 선택해주세요", Toast.LENGTH_SHORT).show()
             }else{
@@ -109,7 +106,7 @@ class AddScheduleFragment : Fragment() {
         addScheduleViewModel.addRequestLiveData.observe(requireActivity()) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(), "일정 등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "일정 등록이 완료되었어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }
@@ -279,7 +276,9 @@ class AddScheduleFragment : Fragment() {
     private fun setLoading() {
         binding.progressBarAddSLoading.visibility = View.VISIBLE
     }
+
     private fun dismissLoading() {
         binding.progressBarAddSLoading.visibility = View.GONE
     }
+
 }

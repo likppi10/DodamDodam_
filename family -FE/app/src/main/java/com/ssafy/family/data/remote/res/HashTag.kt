@@ -7,6 +7,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class HashTag(
     @SerializedName("text")
-    val text: String,
-
+    val text: String
 ): Parcelable

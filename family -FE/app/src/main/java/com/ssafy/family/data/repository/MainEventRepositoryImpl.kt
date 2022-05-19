@@ -3,7 +3,6 @@ package com.ssafy.family.data.repository
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.MainEventAPI
 import com.ssafy.family.data.remote.req.*
-import com.ssafy.family.data.remote.res.OpinionReactionRes
 import com.ssafy.family.data.remote.res.OpinionRes
 import com.ssafy.family.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher

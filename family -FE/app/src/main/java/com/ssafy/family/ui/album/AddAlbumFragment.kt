@@ -4,10 +4,10 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,46 +18,40 @@ import com.ssafy.family.ui.Adapter.AlbumTagAdapter
 import com.ssafy.family.ui.Adapter.DetailAlbumPhotoAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.util.regex.Pattern
-
 
 @AndroidEntryPoint
 class AddAlbumFragment : Fragment() {
+
     private lateinit var binding: FragmentAddAlbumBinding
+    private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
+
     private lateinit var photoAdapter: DetailAlbumPhotoAdapter
     private lateinit var tagAdapter: AlbumTagAdapter
     private lateinit var addtag: String
-    private val detailAlbumViewModel by activityViewModels<DetailAlbumViewModel>()
 
     private val tagItemClickListener = object :AlbumTagAdapter.ItemClickListener{
         override fun onClick(item: HashTag) {
             detailAlbumViewModel.hashTag.remove(item)
-            Log.d("ddddd", "tagList: " + detailAlbumViewModel.hashTag)
             tagAdapter.datas = detailAlbumViewModel.hashTag
             tagAdapter.notifyDataSetChanged()
         }
-
     }
+
     private val photoClickListener = object : DetailAlbumPhotoAdapter.ItemClickListener {
         override fun onClick(item: AlbumPicture) {
             photoAdapter.datas.forEach { it.main = false }
             detailAlbumViewModel.mainIndex = photoAdapter.datas.indexOf(item)
-            Log.d("ddddd", "mainIndex: " + detailAlbumViewModel.mainIndex)
             photoAdapter.notifyDataSetChanged()
             item.main = true
             photoAdapter.notifyDataSetChanged()
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddAlbumBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,9 +74,7 @@ class AddAlbumFragment : Fragment() {
         ) { view, year, monthOfYear, dayOfMonth ->
             binding.addAlbumTimeText.text = "날짜 : ${year}년 ${monthOfYear+1}월 ${dayOfMonth}일"
             detailAlbumViewModel.date = "${year}-${monthOfYear+1}-${dayOfMonth}"
-            Log.d("ddddd", "date: " + detailAlbumViewModel.date)
         }
-
     }
 
     private fun initView() {
@@ -104,6 +96,7 @@ class AddAlbumFragment : Fragment() {
                 LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
             adapter = photoAdapter
         }
+
         val uriList = detailAlbumViewModel.selectedImgUriList
         val albumpictureList = arrayListOf<AlbumPicture>()
         uriList.forEach { albumpictureList.add(AlbumPicture(getAbsolutePath(it) ?: "", false,0)) }
@@ -113,34 +106,36 @@ class AddAlbumFragment : Fragment() {
         val tagList = arrayListOf<HashTag>()
         tagAdapter.datas = tagList
         binding.addAlbumTagEditButton.setOnClickListener {
-            val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9]*$")
+            val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9\\s]*$")
             val tagtext = binding.addAlbumTagEditText.editText?.text.toString()
-            if (!tagtext.isNullOrBlank()) {
+            if (tagtext.length<15) {
                 if (tagtext.matches(regex)) {
-                    addtag = "#" + tagtext
-                    if (tagList.size < 3) {
-                        tagList.add(HashTag(addtag))
-                        detailAlbumViewModel.hashTag = tagList
-                        Log.d("ddddd", "tagList: " + detailAlbumViewModel.hashTag)
-                        tagAdapter.datas = detailAlbumViewModel.hashTag
-                        tagAdapter.notifyDataSetChanged()
-                        binding.addAlbumTagEditText.editText?.setText("")
-                    } else {
-                        binding.addAlbumTagEditText.error = "태그는 최대 3개입니다"
+                    if(tagtext.length == 0){
+                        Toast.makeText(requireActivity(), "태그를 입력해주세요!", Toast.LENGTH_SHORT).show()
+                    }else{
+                        addtag = "#" + tagtext
+                        if (tagList.size < 3) {
+                            tagList.add(HashTag(addtag))
+                            detailAlbumViewModel.hashTag = tagList
+                            tagAdapter.datas = detailAlbumViewModel.hashTag
+                            tagAdapter.notifyDataSetChanged()
+                            binding.addAlbumTagEditText.editText?.setText("")
+                        } else {
+                            Toast.makeText(requireActivity(), "태그는 최대 3개까지에요.", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                } else {
-                    binding.addAlbumTagEditText.error = "특수문자는 사용불가합니다"
+                }  else {
+                    Toast.makeText(requireActivity(), "특수문자는 사용불가해요", Toast.LENGTH_SHORT).show()
                 }
+            } else if(tagtext.length>15) {
+                Toast.makeText(requireActivity(), "태그는 15자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
-                binding.addAlbumTagEditText.error = "태그를 입력해주세요"
+                Toast.makeText(requireActivity(), "태그를 입력해주세요", Toast.LENGTH_SHORT).show()
             }
-
-
         }
         val fileList = arrayListOf<File>()
         uriList.forEach { getRealFile(it)?.let { it1 -> fileList.add(it1) } }
         detailAlbumViewModel.files = fileList
-        Log.d("ddddd", "fileList: " + detailAlbumViewModel.files)
         val pathList = arrayListOf<String>()
         uriList.forEach { getAbsolutePath(it)?.let { it1 -> pathList.add(it1) } }
         detailAlbumViewModel.paths = pathList

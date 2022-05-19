@@ -52,10 +52,16 @@ class RouletteActivity : AppCompatActivity() {
                         rouletteData.add(a.nickname)
                     }
                     dismissLoading()
-                    initRoulette()
+                    if(memberFixList.size == 1){
+                        Toast.makeText(this, "가족 인원이 2명이상이어야 이용이 가능해요.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }else{
+                        initRoulette()
+                    }
+
                 }
                 Status.ERROR -> {
-                    Toast.makeText(this, it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "가족을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
                 Status.LOADING -> {
@@ -71,12 +77,12 @@ class RouletteActivity : AppCompatActivity() {
     }
 
     private fun initRoulette(){
+
         familyAdapter = RouletteFamilyAdapter(this)
         familyAdapter.datas = memberSelectedList
 
         binding.rouletteFamilyRecycler.apply {
-            layoutManager = LinearLayoutManager(this@RouletteActivity,
-                LinearLayoutManager.HORIZONTAL,false)
+            layoutManager = LinearLayoutManager(this@RouletteActivity, LinearLayoutManager.HORIZONTAL,false)
             adapter =  familyAdapter
         }
 
@@ -95,8 +101,10 @@ class RouletteActivity : AppCompatActivity() {
     }
 
     private fun showSelectDialog(){
+
         var dialog = RouletteSelectDialog(this, selectedCheck, memberFixList)
         dialog.showDialog()
+
         dialog.setOnClickListener(object : RouletteSelectDialog.OnDialogClickListener {
             override fun onClicked(selectedList: HashMap<Long, Boolean>) {
 
@@ -119,10 +127,8 @@ class RouletteActivity : AppCompatActivity() {
                             rouletteData.add(memberInfo.nickname)
                             memberSelectedList.add(memberInfo)
                         }
-
                     }
                 }
-
                 familyAdapter.notifyDataSetChanged()
                 binding.roulette.apply {
                     setRouletteSize(rouletteData.size)
@@ -167,7 +173,9 @@ class RouletteActivity : AppCompatActivity() {
     private fun setLoading() {
         binding.progressBarLoading.visibility = View.VISIBLE
     }
+
     private fun dismissLoading() {
         binding.progressBarLoading.visibility = View.GONE
     }
+
 }

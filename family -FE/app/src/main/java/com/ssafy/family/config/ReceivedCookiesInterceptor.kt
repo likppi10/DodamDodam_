@@ -5,7 +5,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-private const val TAG = "ReceivedCookies_해협"
 class ReceivedCookiesInterceptor : Interceptor {
 
     @Throws(IOException::class)

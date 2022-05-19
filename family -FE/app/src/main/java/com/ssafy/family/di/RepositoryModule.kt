@@ -1,6 +1,5 @@
 package com.ssafy.family.di
 
-import com.google.firebase.database.FirebaseDatabase
 import com.ssafy.family.data.remote.api.*
 import com.ssafy.family.data.repository.*
 import com.ssafy.family.data.remote.api.AccountAPI
@@ -110,9 +109,5 @@ object RepositoryModule {
         @DispatcherModule.MainDispatcher mainDispatcher: CoroutineDispatcher
     ): WishtreeRepository
             = WishtreeRepositoryImpl(apiAPI,ioDispatcher,mainDispatcher)
-
-//    @Singleton
-//    @Provides
-//    fun provideRoomRepository(covidDao: CovidDao): RoomRepository = RoomRepositoryImpl(covidDao)
 
 }

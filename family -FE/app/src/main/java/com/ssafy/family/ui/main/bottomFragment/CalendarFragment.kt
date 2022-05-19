@@ -52,7 +52,6 @@ class CalendarFragment : Fragment() {
 
     private var mContext: Context? = null
     private var selectedDate: LocalDate? = null
-    private val today = LocalDate.now()
     private val selectionFormatter = DateTimeFormatter.ofPattern("MMM d일")
     private var scheduleMonthList = mutableMapOf<LocalDate, MutableList<ScheduleInfo>>()
     private var scheduleDayList = mutableListOf<ScheduleInfo>()
@@ -75,7 +74,7 @@ class CalendarFragment : Fragment() {
         super.onResume()
         //월 단위 일정 요청
         scheduleMonthList = mutableMapOf()
-        calendarViewModel.getMonthSchedule(monthLocalDateToString(today))
+        calendarViewModel.getMonthSchedule(monthLocalDateToString(calendarViewModel.today))
         initCalendar()
     }
 
@@ -103,11 +102,11 @@ class CalendarFragment : Fragment() {
                     }
                     dismissMonthLoading()
                     initCalendar()
-                    selectDate(today)
+                    selectDate(calendarViewModel.today)
                     updateAdapterForDate()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "일정들을 읽어오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissMonthLoading()
                 }
                 Status.LOADING -> {
@@ -142,7 +141,7 @@ class CalendarFragment : Fragment() {
                     dismissDayLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "일정을 읽어오지 못했어요.", Toast.LENGTH_SHORT).show()
                     dismissDayLoading()
                 }
                 Status.LOADING -> {
@@ -198,7 +197,7 @@ class CalendarFragment : Fragment() {
                 if (day.owner == DayOwner.THIS_MONTH) {
                     textView.makeVisible()
                     when (day.date) {
-                        today -> {
+                        LocalDate.now() -> {
                             textView.setTextColorRes(R.color.white)
                             textView.setBackgroundResource(R.drawable.circle_schedule)
                             dotView.makeInVisible()
@@ -223,8 +222,8 @@ class CalendarFragment : Fragment() {
 
         //달력 스크롤 리스너
         binding.calendar.monthScrollListener = {
-            if(it.yearMonth.month==today.month){
-                selectDate(today)
+            if(it.yearMonth.month==calendarViewModel.today.month){
+                selectDate(calendarViewModel.today)
                 updateAdapterForDate()
             }else{
                 selectDate(it.yearMonth.atDay(1))
@@ -236,6 +235,7 @@ class CalendarFragment : Fragment() {
             currentMonth = currentMonth.plusMonths(1)
             binding.calendar.scrollToMonth(currentMonth)
         }
+
         binding.claendarBeforeButton.setOnClickListener {
             currentMonth = currentMonth.minusMonths(1)
             binding.calendar.scrollToMonth(currentMonth)
@@ -245,6 +245,7 @@ class CalendarFragment : Fragment() {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = CalendarHeaderBinding.bind(view).legendLayout
         }
+
         binding.calendar.monthHeaderBinder = object :
             MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
@@ -260,7 +261,8 @@ class CalendarFragment : Fragment() {
         init {
             view.setOnClickListener {
                 if (day.owner == DayOwner.THIS_MONTH) {
-                    selectDate(day.date)
+                    calendarViewModel.today = day.date
+                    selectDate(calendarViewModel.today)
                 }
             }
         }
@@ -268,15 +270,13 @@ class CalendarFragment : Fragment() {
 
     //날짜를 선택 : 해당 날짜로 텍스트들도 바꿔준다.
     fun selectDate(date: LocalDate) {
-        if (selectedDate != date) {
-            calendarViewModel.getDaySchedule(dayLocalDateToString(date))
-            val oldDate = selectedDate
-            selectedDate = date
-            oldDate?.let { binding.calendar.notifyDateChanged(it) }
-            binding.calendar.notifyDateChanged(date)
-            binding.selectedMonthText.text = "${date.year}년 ${date.monthValue}월 "
-            binding.selectedDateText.text = selectionFormatter.format(date)
-        }
+        calendarViewModel.getDaySchedule(dayLocalDateToString(date))
+        val oldDate = selectedDate
+        selectedDate = date
+        oldDate?.let { binding.calendar.notifyDateChanged(it) }
+        binding.calendar.notifyDateChanged(date)
+        binding.selectedMonthText.text = "${date.year}년 ${date.monthValue}월 "
+        binding.selectedDateText.text = selectionFormatter.format(date)
     }
 
     //선택된 날짜로 리사이클러뷰에 일정 표시하는 어댑터
@@ -292,6 +292,7 @@ class CalendarFragment : Fragment() {
     private fun setMonthLoading() {
         binding.progressBarMonthLoading.visibility = View.VISIBLE
     }
+
     private fun dismissMonthLoading() {
         binding.progressBarMonthLoading.visibility = View.GONE
     }
@@ -300,6 +301,7 @@ class CalendarFragment : Fragment() {
     private fun setDayLoading() {
         binding.progressBarDayLoading.visibility = View.VISIBLE
     }
+
     private fun dismissDayLoading() {
         binding.progressBarDayLoading.visibility = View.GONE
     }
@@ -308,4 +310,5 @@ class CalendarFragment : Fragment() {
         super.onDetach()
         mContext = null
     }
+
 }

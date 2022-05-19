@@ -6,17 +6,12 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.ssafy.family.databinding.DialogPermissionDeleteBinding
-import com.ssafy.family.util.Constants.TAG
 
 @RequiresApi(Build.VERSION_CODES.O)
-class WishTreeDeleteDialog(
-    context: Context,
-    wishTreeDialogInterface: WishTreeDialogInterface,
-    private val wishTreeId: Int,
-) : Dialog(context){
+class WishTreeDeleteDialog(context: Context, wishTreeDialogInterface: WishTreeDialogInterface, private val wishTreeId: Int, ) : Dialog(context){
+
     private lateinit var binding: DialogPermissionDeleteBinding
     private var wishTreeDialogInterface: WishTreeDialogInterface? = null
 
@@ -40,4 +35,5 @@ class WishTreeDeleteDialog(
         // 배경 투명
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
+
 }

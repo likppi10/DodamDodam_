@@ -29,4 +29,5 @@ interface CalendarAPI {
 
     @HTTP(method = "DELETE", path = "/api/schedule/{scheduleId}")
     suspend fun deleteSchedule(@Path("scheduleId") scheduleId:Long): Response<BaseResponse>
+
 }

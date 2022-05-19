@@ -19,8 +19,7 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class StartSettingViewModel @Inject constructor(private val familyRepository: FamilyRepository) :
-    ViewModel() {
+class StartSettingViewModel @Inject constructor(private val familyRepository: FamilyRepository) : ViewModel() {
 
     // 가족 생성/가입 시 받아온 id
     private val _familyResponseLiveData = MutableLiveData<Resource<FamilyInfoRes>>()
@@ -77,4 +76,5 @@ class StartSettingViewModel @Inject constructor(private val familyRepository: Fa
             _isChecked.postValue((UiMode.FAIL))
         }
     }
+
 }

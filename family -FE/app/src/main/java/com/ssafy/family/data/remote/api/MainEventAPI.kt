@@ -3,11 +3,7 @@ package com.ssafy.family.data.remote.api
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.req.OpinionReactionReq
 import com.ssafy.family.data.remote.req.OpinionReq
-import com.ssafy.family.data.remote.req.ScheduleReq
-import com.ssafy.family.data.remote.res.OpinionReactionRes
 import com.ssafy.family.data.remote.res.OpinionRes
-import com.ssafy.family.data.remote.res.ScheduleRes
-import com.ssafy.family.data.remote.res.SchedulesRes
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -24,4 +20,5 @@ interface MainEventAPI {
 
     @HTTP(method = "DELETE", path = "/api/main/{suggestionId}")
     suspend fun deleteOpinion(@Path("suggestionId") suggestionId :Long): Response<BaseResponse>
+
 }

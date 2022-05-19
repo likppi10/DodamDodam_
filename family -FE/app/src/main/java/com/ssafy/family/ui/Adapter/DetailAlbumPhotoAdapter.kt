@@ -12,12 +12,12 @@ import com.ssafy.family.data.remote.res.AlbumPicture
 import com.ssafy.family.databinding.AlbumPhotoListBinding
 
 //detail: 0 ,add: 1, update :2
-class DetailAlbumPhotoAdapter(private val context: Context, private val where: Int) :
-    RecyclerView.Adapter<DetailAlbumPhotoAdapter.ViewHolder>() {
+class DetailAlbumPhotoAdapter(private val context: Context, private val where: Int) : RecyclerView.Adapter<DetailAlbumPhotoAdapter.ViewHolder>() {
 
     var datas = mutableListOf<AlbumPicture>()
     lateinit var itemClickListener: ItemClickListener
     lateinit var deleteClickListener: DeleteClickListener
+
     inner class ViewHolder(val binding: AlbumPhotoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: AlbumPicture) {
@@ -59,7 +59,6 @@ class DetailAlbumPhotoAdapter(private val context: Context, private val where: I
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        //val view = LayoutInflater.from(context).inflate(R.layout.item_family_status,parent,false)
         val inflater = LayoutInflater.from(parent.context)
         val binding = AlbumPhotoListBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
@@ -78,6 +77,5 @@ class DetailAlbumPhotoAdapter(private val context: Context, private val where: I
     interface DeleteClickListener {
         fun onClick(item: AlbumPicture)
     }
-
 
 }

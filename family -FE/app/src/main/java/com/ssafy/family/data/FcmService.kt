@@ -1,5 +1,6 @@
 package com.ssafy.family.data
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,6 +12,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.gms.tasks.OnCompleteListener
@@ -25,7 +27,6 @@ import com.ssafy.family.ui.home.HomeActivity
 import com.ssafy.family.ui.main.MainActivity
 
 class FcmService: FirebaseMessagingService() {
-
 
     val SP_NAME = "fcm_message"
     var fcmList = ArrayList<String>()
@@ -42,19 +43,19 @@ class FcmService: FirebaseMessagingService() {
         // 메시지 유형이 데이터 메시지일 경우
         // Check if message contains a data payload.
 
-        Log.d("datadatadata", "onMessageReceived: "+remoteMessage.data)
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d("datadatadata", "Message data payload: ${remoteMessage.data}")
 
-            sendDataMessage(remoteMessage.data)
+//            sendDataMessage(remoteMessage.data)
 
             if(remoteMessage.data["title"]?.contains("채팅") == true&&ApplicationClass.isChatting.value!=true){
-                //sendDataMessage(remoteMessage.data)
+                sendDataMessage(remoteMessage.data)
                 fcmList = readSharedPreference("fcm")
                 fcmList.add(remoteMessage.data["body"].toString())
                 writeSharedPreference("fcm", fcmList)
                 Log.d("datadatadata", "readSharedPreference(\"fcm\").size: "+readSharedPreference("fcm").size)
                 ApplicationClass.livePush.postValue(readSharedPreference("fcm").size)
+            }else if(remoteMessage.data["title"]?.contains("채팅") != true){
+                sendDataMessage(remoteMessage.data)
             }
         }
 
@@ -95,18 +96,26 @@ class FcmService: FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
         }
+
+        val fullScreenIntent = Intent(this, MainActivity::class.java)
+        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+            fullScreenIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
         notificationBuilder.setContentTitle(data["title"])
             .setSmallIcon(R.drawable.main_logo)
             .setContentText(data["body"])
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setDefaults(Notification.DEFAULT_VIBRATE)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
+            .setVisibility(VISIBILITY_PUBLIC)
+            .setChannelId(channelId)
         Log.d("sendDataMessagesendDataMessage", "sendDataMessagesendDataMessagesendDataMessagesendDataMessage: ")
         notificationManager.notify(100, notificationBuilder.build() )
 
@@ -130,6 +139,10 @@ class FcmService: FirebaseMessagingService() {
         val channelId = "FAMILY"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
+        val fullScreenIntent = Intent(this, ApplicationClass::class.java)
+        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+            fullScreenIntent, PendingIntent.FLAG_IMMUTABLE)
+
         // icon, color는 메타 데이터에서 설정한 것으로 설정해주면 된다.
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.main_logo)
@@ -139,6 +152,8 @@ class FcmService: FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
+            .setVisibility(VISIBILITY_PUBLIC)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -148,7 +163,7 @@ class FcmService: FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
         }
@@ -174,8 +189,6 @@ class FcmService: FirebaseMessagingService() {
         val obj: ArrayList<String> = gson.fromJson(json, type) ?: ArrayList()
         return obj
     }
-
-
 
     companion object {
         private const val TAG = "FAMILY"

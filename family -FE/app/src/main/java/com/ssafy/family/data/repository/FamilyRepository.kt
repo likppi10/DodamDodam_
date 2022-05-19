@@ -9,6 +9,7 @@ import com.ssafy.family.util.Resource
 import java.io.File
 
 interface FamilyRepository {
+
     suspend fun createFamily(profile: FamilyReq, imageFile: File?): Resource<FamilyInfoRes>
 
     suspend fun joinFamily(profile: FamilyReq, familyId: Int, imageFile: File?): Resource<FamilyInfoRes>
@@ -18,4 +19,5 @@ interface FamilyRepository {
     suspend fun getMyProfile(): Resource<MyProfileRes>
 
     suspend fun updateMyProfile(profile: FamilyReq, imageFile: File?): Resource<BaseResponse>
+
 }

@@ -56,32 +56,28 @@ class EventFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentEventBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onResume() {
         super.onResume()
         eventViewModel.getDaySchedule(CalendarUtil.dayLocalDateToString(today))
         eventViewModel.getOpinion()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentEventBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
-
     }
 
     private fun initView() {
+
         eventsAdapter = TodayScheduleAdapter {
             val intent = Intent(requireContext(),ScheduleActivity::class.java)
             intent.putExtra("sID", it.scheduleId)
@@ -106,10 +102,14 @@ class EventFragment : Fragment() {
         }
 
         binding.addOpinionButton.setOnClickListener {
-            eventViewModel.addOpinion(binding.opinionText.text.toString())
+            if(binding.opinionText.text.length<20){
+                eventViewModel.addOpinion(binding.opinionText.text.toString())
+            }else{
+                Toast.makeText(requireActivity(), "의견은 20자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        eventViewModel.getDayRequestLiveData.observe(requireActivity()){
+        eventViewModel.getDayRequestLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.SUCCESS -> {
                     if(!it.data!!.schedules.isNullOrEmpty()){
@@ -119,19 +119,17 @@ class EventFragment : Fragment() {
                         scheduleDayList = mutableListOf()
                         updateScheduleAdapter()
                     }
-                    dismissScheduleLoading()
+                    dismissScheduleLoading("getDay","success")
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissScheduleLoading()
+                    dismissScheduleLoading("getDay","error")
                 }
                 Status.LOADING -> {
                     setScheduleLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissScheduleLoading()
+                    dismissScheduleLoading("getDay","expired")
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -146,19 +144,17 @@ class EventFragment : Fragment() {
                         opinionsList = mutableListOf()
                         updateOpinionAdapter()
                     }
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("getOpinion","success")
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("getOpinion","error")
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("getOpinion","expired")
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -173,40 +169,37 @@ class EventFragment : Fragment() {
                         opinionsList = mutableListOf()
                         updateOpinionAdapter()
                     }
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("addOpinionReaction","success")
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("addOpinionReaction","error")
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("addOpinionReaction","expired")
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        eventViewModel.addOpinionRequestLiveData.observe(requireActivity()){
+        eventViewModel.addOpinionRequestLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.SUCCESS -> {
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("addOpinion","success")
                     eventViewModel.getOpinion()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("addOpinion","error")
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("addOpinion","expired")
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+
                 }
             }
         }
@@ -214,20 +207,18 @@ class EventFragment : Fragment() {
         eventViewModel.deleteOpinionRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("deleteOpinion","success")
                     eventViewModel.getOpinion()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), it.message!!, Toast.LENGTH_SHORT).show()
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("deleteOpinion","error")
                 }
                 Status.LOADING -> {
                     setOpinionLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissOpinionLoading()
+                    dismissOpinionLoading("deleteOpinion","expired")
                     loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -240,6 +231,10 @@ class EventFragment : Fragment() {
         binding.wishtreeIcon.setOnClickListener {
             val intent = Intent(requireContext(), WishTreeActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.surpriseIcon.setOnClickListener {
+            Toast.makeText(requireActivity(), "서비스 준비 중이에요. ^^", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -268,14 +263,62 @@ class EventFragment : Fragment() {
     private fun setScheduleLoading() {
         binding.progressBarDayLoading.visibility = VISIBLE
     }
-    private fun dismissScheduleLoading() {
-        binding.progressBarDayLoading.visibility = GONE
+
+    private fun dismissScheduleLoading(type: String, result: String) {
+        if(binding.progressBarOpinionLoading.visibility == VISIBLE) {
+            binding.progressBarDayLoading.visibility = GONE
+            if(type == "getDay"){
+                if(result == "error"){
+                    Toast.makeText(requireActivity(), "일정을 불러오지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }else if(result == "expired"){
+                    Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setOpinionLoading() {
         binding.progressBarOpinionLoading.visibility = VISIBLE
     }
-    private fun dismissOpinionLoading() {
-        binding.progressBarOpinionLoading.visibility = GONE
+
+    private fun dismissOpinionLoading(type: String, result: String) {
+        if(binding.progressBarOpinionLoading.visibility == VISIBLE) {
+            binding.progressBarOpinionLoading.visibility = GONE
+            when (type) {
+                "getOpinion" -> {
+                    if(result == "error"){
+                        Toast.makeText(requireActivity(), "의견들을 불러오지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "addOpinionReaction" -> {
+                    if(result == "error"){
+                        Toast.makeText(requireActivity(), "리액션을 추가하지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "addOpinion" -> {
+                    if(result == "success"){
+                        Toast.makeText(requireActivity(), "의견 등록이 완료되었어요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "error"){
+                        Toast.makeText(requireActivity(), "의견을 등록하지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "deleteOpinion" -> {
+                    if(result == "success"){
+                        Toast.makeText(requireActivity(), "의견 삭제가 완료되었어요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "error"){
+                        Toast.makeText(requireActivity(), "의견을 삭제하지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
+
 }

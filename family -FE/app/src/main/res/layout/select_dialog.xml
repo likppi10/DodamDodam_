@@ -24,13 +24,11 @@
         android:fontFamily="@font/spoqahansans"
         android:gravity="center"
         android:text="인원 선택"
-        android:textSize="48sp"
+        android:textSize="36dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/roulette_family_recycler"
@@ -67,4 +65,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ok_dialog_text" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

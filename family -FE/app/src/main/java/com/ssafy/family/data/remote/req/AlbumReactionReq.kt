@@ -9,7 +9,7 @@ data class AlbumReactionReq(
     @SerializedName("emoticon")
     val emoticon: String,
     @SerializedName("albumId")
-    val albumId: Int,
+    val albumId: Int
 ) : Parcelable
 
 

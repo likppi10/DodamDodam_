@@ -2,49 +2,42 @@ package com.ssafy.family.ui.home
 
 import android.Manifest
 import android.app.Dialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.activityViewModels
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.util.Utility
 import com.ssafy.family.R
 import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.data.remote.req.AddFcmReq
 import com.ssafy.family.databinding.ActivityHomeBinding
 import com.ssafy.family.ui.main.MainActivity
-import com.ssafy.family.ui.schedule.AddScheduleFragment
 import com.ssafy.family.ui.startsetting.StartSettingActivity
 import com.ssafy.family.util.*
 import com.ssafy.family.ui.status.StatusActivity
-import com.ssafy.family.util.Constants.TAG
 import com.ssafy.family.util.LoginUtil
 import com.ssafy.family.util.PermissionUtil
-import com.ssafy.family.util.SharedPreferencesUtil
 import com.ssafy.family.util.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.O)
 class HomeActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityHomeBinding
     private val loginViewModel by viewModels<LoginViewModel>()
+
+    var pressedTime =0
     lateinit var dialog: Dialog
     lateinit var permissionUtil: PermissionUtil
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +48,7 @@ class HomeActivity : AppCompatActivity() {
 //        Log.d("Hash", keyHash)
 
         permissionUtil = PermissionUtil(this)
-        Log.d("dddd", "onMessageReceived: "+readSharedPreference("fcm").size)
+
         // 오늘 첫 로그인 확인
         loginViewModel.getFirstLoginToday()
         permissionUtil.permissionListener = object : PermissionUtil.PermissionListener {
@@ -64,6 +57,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
+
     val SP_NAME = "fcm_message"
      private fun readSharedPreference(key:String): ArrayList<String>{
         val sp = getSharedPreferences(SP_NAME, MODE_PRIVATE)
@@ -75,17 +69,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun init(){
+
         if (ApplicationClass.sSharedPreferences.getString(ApplicationClass.JWT) != null) {
-            // TODO: 토큰 만료됐을시 분기 만들어야함
-            Log.d("XXXXXXXX", "LoginUtil.getUserInfo():${LoginUtil.getUserInfo()}")
             loginViewModel.MakeRefresh(LoginUtil.getUserInfo()!!.refreshToken)
-
-
         } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.home_frame, LoginFragment())
-                .commit()
+            supportFragmentManager.beginTransaction().replace(R.id.home_frame, LoginFragment()).commit()
         }
+
         loginViewModel.makeRefreshLiveData.observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -100,6 +90,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+
         loginViewModel.baseResponse.observe(this) {
             // fcm 받아와 졌는지 확인
             when (it.status) {
@@ -108,8 +99,6 @@ class HomeActivity : AppCompatActivity() {
                     // 분기처리
                     // 1) 가입 후 첫 로그인인가? = LoginUtil 내에 familyId가 있는가?
                     val familyId = LoginUtil.getFamilyId()
-                    Log.d(TAG, "HomeActivity - init() familyId : $familyId")
-                    Log.d("XXXXXXXXXX", "HomeActivity - LoginUtil.getFamilyId() : ${LoginUtil.getUserInfo()}")
                     if (familyId == "0") { // 가입한 Family 없음
                         startActivity(Intent(this, StartSettingActivity::class.java))
                         finishAffinity()
@@ -120,8 +109,6 @@ class HomeActivity : AppCompatActivity() {
                             startActivity(Intent(this, StatusActivity::class.java))
                             finishAffinity()
                         } else { // 첫 로그인 아님
-                            Log.d("ddddddddddddd", "왜 안와1 ")
-                            Log.d("ddddddddddddd", "왜 안와2 ")
                             startActivity(Intent(this, MainActivity::class.java))
                             finishAffinity()
                         }
@@ -138,10 +125,12 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onStart() {
         super.onStart()
         checkPermissions()
     }
+
     private fun checkPermissions() {
         if(!permissionUtil.checkPermissions(listOf(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -154,6 +143,7 @@ class HomeActivity : AppCompatActivity() {
             init()
         }
     }
+
     private fun addFCM(fcmToken: AddFcmReq) {
         loginViewModel.addFCM(fcmToken)
     }
@@ -164,36 +154,33 @@ class HomeActivity : AppCompatActivity() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
-            Log.d("dddd", "getFCM: "+task.result!!)
-            Log.d("ddddddddddddd", "안와1 "+task.result!!)
-            Log.d("ddddddddddddd", "안와2 "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
-//        createNotificationChannel(MainActivity.channel_id, "ssafy")
     }
 
-//    // NotificationChannel 설정
-//    private fun createNotificationChannel(id: String, name: String) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val importance = NotificationManager.IMPORTANCE_DEFAULT
-//            val channel = NotificationChannel(id, name, importance)
-//
-//            val notificationManager = getSystemService(
-//                Context.NOTIFICATION_SERVICE
-//            ) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//        }
-//    }
-
     private fun setLoading() {
-        binding.progressBarLoginFLoading.visibility = View.VISIBLE
-//        binding.homePageLogo.visibility = View.VISIBLE
-        binding.homePageAppName.visibility = View.VISIBLE
+        binding.progressBarLoginFLoading.visibility = VISIBLE
+        binding.homePageAppName.visibility = VISIBLE
     }
 
     private fun dismissLoading() {
-        binding.progressBarLoginFLoading.visibility = View.GONE
-//        binding.homePageLogo.visibility = View.GONE
-        binding.homePageAppName.visibility = View.GONE
+        binding.progressBarLoginFLoading.visibility = GONE
+        binding.homePageAppName.visibility = GONE
     }
+
+    override fun onBackPressed() {
+        if (pressedTime === 0) {
+            Toast.makeText(this@HomeActivity, " 한 번 더 누르면 종료돼요.", Toast.LENGTH_LONG).show()
+            pressedTime = System.currentTimeMillis().toInt()
+        } else {
+            val seconds = (System.currentTimeMillis().toInt() - pressedTime)
+            if (seconds > 2000) {
+                Toast.makeText(this@HomeActivity, " 한 번 더 누르면 종료돼요.", Toast.LENGTH_LONG).show()
+                pressedTime = 0
+            } else {
+                super.onBackPressed()
+            }
+        }
+    }
+
 }

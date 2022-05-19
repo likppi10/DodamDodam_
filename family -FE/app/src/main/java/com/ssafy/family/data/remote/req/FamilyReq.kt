@@ -3,10 +3,6 @@ package com.ssafy.family.data.remote.req
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import okhttp3.MultipartBody
-import retrofit2.http.Multipart
-import retrofit2.http.Part
-import java.io.File
 
 @Parcelize
 data class FamilyReq(
@@ -17,5 +13,5 @@ data class FamilyReq(
     @SerializedName("birthday")
     val birthday: String,
     @SerializedName("characterPath")
-    val characterPath: String?,
+    val characterPath: String?
 ) : Parcelable

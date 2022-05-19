@@ -15,6 +15,6 @@ data class Opinion(
     @SerializedName("dislikeCount")
     val dislikeCount: Int,
     @SerializedName("suggestionReactions")
-    val suggestionReactions: List<Reaction>,
+    val suggestionReactions: List<Reaction>
 ): Parcelable
 

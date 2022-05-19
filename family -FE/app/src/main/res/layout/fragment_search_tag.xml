@@ -16,8 +16,8 @@
         android:background="@drawable/box_search_album"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/search_edit_text"
         android:layout_width="0dp"
@@ -40,4 +40,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/free_icon_g"
         app:layout_constraintEnd_toEndOf="@+id/free_icon_g"
         app:layout_constraintTop_toTopOf="@+id/free_icon_g" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

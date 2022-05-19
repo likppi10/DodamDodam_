@@ -50,6 +50,7 @@
                 android:textColor="@color/pink01"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView

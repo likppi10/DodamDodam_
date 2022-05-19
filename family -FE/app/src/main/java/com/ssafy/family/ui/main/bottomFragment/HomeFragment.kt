@@ -10,8 +10,9 @@ import com.ssafy.family.ui.Adapter.PagerAdapter
 import com.ssafy.family.databinding.FragmentHomeBinding
 import com.ssafy.family.ui.main.EventFragment
 import com.ssafy.family.ui.main.FamilyFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private lateinit var binding:FragmentHomeBinding
@@ -20,10 +21,7 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,6 +38,8 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(binding.tabs, binding.viewpager) { tab, position ->
             tab.text = adapter.getTabTitle(position)
         }.attach()
+
         binding.viewpager.isUserInputEnabled = false
     }
+
 }

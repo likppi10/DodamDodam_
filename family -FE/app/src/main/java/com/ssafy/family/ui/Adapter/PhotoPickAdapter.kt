@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ssafy.family.R
 
 class PhotoPickAdapter(): RecyclerView.Adapter<PhotoPickAdapter.ViewHolder>()  {
+
     lateinit var itemClickListener: ItemClickListener
     var uris = arrayListOf<Uri>()
 
@@ -35,4 +33,5 @@ class PhotoPickAdapter(): RecyclerView.Adapter<PhotoPickAdapter.ViewHolder>()  {
     interface ItemClickListener {
         fun onClick(uri: Uri, view: View, position: Int)
     }
+
 }

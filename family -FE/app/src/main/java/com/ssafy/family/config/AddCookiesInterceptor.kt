@@ -1,12 +1,10 @@
 package com.ssafy.family.config
 
-
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-private const val TAG = "AddCoIncep_해협"
 class AddCookiesInterceptor : Interceptor{
 
     @Throws(IOException::class)

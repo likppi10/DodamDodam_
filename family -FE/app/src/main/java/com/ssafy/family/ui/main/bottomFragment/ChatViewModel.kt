@@ -4,20 +4,14 @@ import androidx.lifecycle.*
 import com.google.firebase.database.*
 import com.ssafy.family.data.remote.res.ChatData
 import com.ssafy.family.data.remote.res.ChattingRes
-import com.ssafy.family.data.repository.AccountRepository
 import com.ssafy.family.data.repository.ChatRepository
 import com.ssafy.family.util.Resource
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(private val chatRepository: ChatRepository) :
-    ViewModel() {
-
+class ChatViewModel @Inject constructor(private val chatRepository: ChatRepository) : ViewModel() {
 
     var datas = mutableListOf<ChatData>()
     var database = FirebaseDatabase.getInstance()

@@ -36,16 +36,13 @@ class DetailScheduleFragment : Fragment() {
         arguments?.let {
             scheduleId = it.getLong(ScheduleId)
             if(scheduleId == null){
-                Toast.makeText(requireActivity(), "존재하지 않는 일정입니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "존재하지 않는 일정이에요.", Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
             }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDetailScheduleBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,9 +54,7 @@ class DetailScheduleFragment : Fragment() {
         (activity as ScheduleActivity).apply {
             changeHeader("일정 상세","수정", "삭제")
             binding.scheduleButtonInclude.button.setOnClickListener {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.schedule_frame, EditScheduleFragment.newInstance(scheduleId!!))
-                    .commit()
+                parentFragmentManager.beginTransaction().replace(R.id.schedule_frame, EditScheduleFragment.newInstance(scheduleId!!)).commit()
             }
             binding.scheduleButtonInclude.button2.setOnClickListener {
                 detailScheduleViewModel.deleteSchedule(scheduleId!!)
@@ -83,7 +78,7 @@ class DetailScheduleFragment : Fragment() {
                     dismissLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), "존재하지 않는 일정입니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), "존재하지 않는 일정이에요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }
@@ -102,7 +97,7 @@ class DetailScheduleFragment : Fragment() {
         detailScheduleViewModel.deleteRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
-                    Toast.makeText(requireContext(), "일정이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "일정이 삭제되었어요.", Toast.LENGTH_SHORT).show()
                     dismissLoading()
                     requireActivity().finish()
                 }
@@ -126,6 +121,7 @@ class DetailScheduleFragment : Fragment() {
     private fun setLoading() {
         binding.progressBarDetailSLoading.visibility = View.VISIBLE
     }
+
     private fun dismissLoading() {
         binding.progressBarDetailSLoading.visibility = View.GONE
     }
@@ -139,4 +135,5 @@ class DetailScheduleFragment : Fragment() {
                 }
             }
     }
+
 }

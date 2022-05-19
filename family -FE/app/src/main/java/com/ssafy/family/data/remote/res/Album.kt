@@ -11,7 +11,6 @@ data class Album(
     @SerializedName("family")
     val family: List<Family>,
     @SerializedName("date")
-    val date: String,
-
+    val date: String
 ): Parcelable
 

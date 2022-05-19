@@ -11,23 +11,20 @@
         layout="@layout/schedule_top_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/check_photo_img"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/change_profile_tab"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/change_profile_tab" />
+        app:layout_constraintTop_toBottomOf="@+id/change_profile_top" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/change_profile_tab"
@@ -49,8 +46,8 @@
             android:text="추천 이미지"
             android:textStyle="bold"
             android:textSize="24sp"
-            android:textColor="@color/white"
-            android:background="@color/pink01" />
+            android:textColor="@color/black"
+            android:background="@color/beige02" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/my_album_tab"
@@ -71,7 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="15dp"
-        android:background="@color/pink01"
+        android:background="@color/beige02"
         app:layout_constraintBottom_toTopOf="@+id/change_profile_confirm_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,16 +79,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="32dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/box_roulette"
+        android:elevation="5dp"
+        android:fontFamily="@font/spoqahansans"
+        android:gravity="center"
+        android:text="선택 완료"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:fontFamily="@font/spoqahansans"
-        android:text="선택 완료"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

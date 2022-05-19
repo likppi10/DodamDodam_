@@ -8,9 +8,7 @@ import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.res.FamilyCodeRes
 import com.ssafy.family.data.remote.res.MyStatusRes
 import com.ssafy.family.data.remote.res.ProfileImageRes
-import com.ssafy.family.data.remote.res.SchedulesRes
 import com.ssafy.family.data.repository.AccountRepository
-import com.ssafy.family.data.repository.CalendarRepository
 import com.ssafy.family.data.repository.SettingRepository
 import com.ssafy.family.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingViewModel @Inject constructor(private val settingRepository: SettingRepository, private val accountRepository: AccountRepository) :
-    ViewModel() {
+class SettingViewModel @Inject constructor(private val settingRepository: SettingRepository, private val accountRepository: AccountRepository) : ViewModel() {
 
     private val _getProfileImageRequestLiveData = MutableLiveData<Resource<ProfileImageRes>>()
     val getProfileImageRequestLiveData: LiveData<Resource<ProfileImageRes>>

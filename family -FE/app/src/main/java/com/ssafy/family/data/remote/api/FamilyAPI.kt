@@ -10,6 +10,7 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface FamilyAPI {
+
     @Multipart
     @POST("/api/family/create")
     suspend fun createFamily(
@@ -36,4 +37,5 @@ interface FamilyAPI {
         @PartMap data: HashMap<String, RequestBody>,
         @Part multipartFile: MultipartBody.Part?
     ): Response<BaseResponse>
+
 }

@@ -32,7 +32,6 @@ import com.ssafy.family.ui.changeProfileImage.ChangeProfileImageActivity
 import com.ssafy.family.ui.home.LoginViewModel
 import com.ssafy.family.ui.status.StatusActivity
 import com.ssafy.family.util.*
-import com.ssafy.family.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -43,10 +42,11 @@ class SaveInfoFragment : Fragment() {
     private lateinit var binding: FragmentSaveInfoBinding
     private val familyViewModel by activityViewModels<StartSettingViewModel>()
     private val loginViewModel by activityViewModels<LoginViewModel>()
-    private lateinit var getProfileImage: ActivityResultLauncher<Intent>
 
+    private lateinit var getProfileImage: ActivityResultLauncher<Intent>
     var imageUri: Uri? = null
     var role: String = "아빠"
+    var first = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,12 +68,8 @@ class SaveInfoFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentSaveInfoBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -85,8 +81,7 @@ class SaveInfoFragment : Fragment() {
         val Adapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item, Data)
         binding.saveInfoSpinner.adapter = Adapter
         binding.saveInfoSpinner.setSelection(0)
-        binding.saveInfoSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
+        binding.saveInfoSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
@@ -103,6 +98,7 @@ class SaveInfoFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+
         // 스피너(다이얼로그 형) 두개짜리 설정
         val numberData = resources.getStringArray(R.array.family_number)
         val numberAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item, numberData)
@@ -124,8 +120,7 @@ class SaveInfoFragment : Fragment() {
                 }
             }
         // 위에서 첫쨰~넷째 선택 후 role 선택
-        binding.saveInfoSpinnerRole.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
+        binding.saveInfoSpinnerRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
@@ -141,17 +136,20 @@ class SaveInfoFragment : Fragment() {
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                 }
             }
+
         // 이미지 선택 페이지 이동
         binding.saveInfoProfileImage.setOnClickListener {
             val intent = Intent(requireContext(), ChangeProfileImageActivity::class.java)
             intent.putExtra("imageUri", imageUri.toString())
             getProfileImage.launch(intent)
         }
+
         // Data 관련 코드
         initView()
-    } // onViewCreated
+    }
 
     private fun initView() {
+
         // "다음" 버튼 클릭 리스너 등록
         // 가족 생성
         binding.saveInfoMoveNextBtn.setOnClickListener {
@@ -162,10 +160,8 @@ class SaveInfoFragment : Fragment() {
                     val viewModelFamilyId = familyViewModel.checkFamilyCodeInfoRes.value?.data?.dataset?.familyId
                     // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
                     if (viewModelFamilyId is Int) {
-                        Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
                         joinFamily(role, viewModelFamilyId)
-                    } else { // 바로 온 경우 가족 및 프로필 생성
-                        Log.d(TAG, "viewModelFamilyId : $viewModelFamilyId")
+                    } else { // 바로 온 경우 가족 및 프로필 생성)
                         createFamily(role)
                     }
                 }
@@ -187,7 +183,7 @@ class SaveInfoFragment : Fragment() {
             if (it.status == Status.SUCCESS){
                 setMyProfile(it.data!!.data!!)
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "프로필 생성에 실패했어요.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -198,9 +194,8 @@ class SaveInfoFragment : Fragment() {
                 LoginUtil.setFamilyId(it.data!!.dataset!!.familyId.toString())
                 LoginUtil.setProfileId(it.data.dataset!!.profileId.toString())
                 getFCM()
-
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "프로필 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -210,7 +205,7 @@ class SaveInfoFragment : Fragment() {
                 Toast.makeText(requireContext(), "오늘의 상태 수정 완료!", Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "상태 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -219,8 +214,12 @@ class SaveInfoFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> { // 로그인 성공
                     // 토스트메시지 띄우고 화면 이동
-                    Toast.makeText(requireContext(), "프로필 생성에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(requireContext(), StatusActivity::class.java))
+                    Toast.makeText(requireContext(), "프로필 생성에 성공했어요.", Toast.LENGTH_SHORT).show()
+                    var intent = Intent(requireContext(), StatusActivity::class.java)
+                    if(first){
+                        intent.putExtra("to", "first")
+                    }
+                    startActivity(intent)
                     requireActivity().finish()
                 }
                 Status.ERROR -> {
@@ -237,6 +236,7 @@ class SaveInfoFragment : Fragment() {
                 dismissErrorOnNickName()
             }
         }
+
         // 생년월일 유효성 검사 통과 시 에러메시지 삭제
         binding.saveInfoInputBirthday.addTextChangedListener {
             val input = it.toString()
@@ -244,7 +244,7 @@ class SaveInfoFragment : Fragment() {
                 dismissErrorOnBirthday()
             }
         }
-    } // initView
+    }
 
     // 초기 데이터 세팅
     private fun setMyProfile(data: MyProfile) {
@@ -328,8 +328,7 @@ class SaveInfoFragment : Fragment() {
 
     // 에러메시지 표시와 관련된 함수들
     private fun setErrorOnNickName() {
-        binding.textInputLayoutSaveInfoNickname.error =
-            resources.getString(R.string.nickNameErrorMessage)
+        binding.textInputLayoutSaveInfoNickname.error = resources.getString(R.string.nickNameErrorMessage)
     }
 
     private fun dismissErrorOnNickName() {
@@ -337,8 +336,7 @@ class SaveInfoFragment : Fragment() {
     }
 
     private fun setErrorOnBirthday() {
-        binding.textInputLayoutSaveInfoBirthday.error =
-            resources.getString(R.string.birthdayErrorMessage)
+        binding.textInputLayoutSaveInfoBirthday.error = resources.getString(R.string.birthdayErrorMessage)
     }
 
     private fun dismissErrorOnBirthday() {
@@ -357,11 +355,13 @@ class SaveInfoFragment : Fragment() {
             if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
                 characterPath = imageUri.toString()
             } else { // 폰에 저장된 사진이면
-                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+                imageFile = getRealFile(imageUri!!)
             }
         }
+        first = true
         familyViewModel.createFamily(FamilyReq(selectedRole, nickname, birthday, characterPath), imageFile)
     }
+
     private fun joinFamily(role: String, familyId: Int) {
         val selectedRole = role.trim()
         val nickname = binding.saveInfoInputNickname.text.toString()
@@ -373,7 +373,7 @@ class SaveInfoFragment : Fragment() {
             if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
                 characterPath = imageUri.toString()
             } else { // 폰에 저장된 사진이면
-                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+                imageFile = getRealFile(imageUri!!)
             }
         }
         familyViewModel.joinFamily(FamilyReq(selectedRole, nickname, birthday, characterPath), familyId, imageFile)
@@ -390,7 +390,7 @@ class SaveInfoFragment : Fragment() {
             if (imageUri.toString().contains("https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples")) {
                 characterPath = imageUri.toString()
             } else { // 폰에 저장된 사진이면
-                imageFile = FileUtils.getFile(requireContext(), imageUri!!)
+                imageFile = getRealFile(imageUri!!)
             }
         }
         familyViewModel.updateMyProfile(FamilyReq(selectedRole, nickname, birthday, characterPath), imageFile)
@@ -406,23 +406,9 @@ class SaveInfoFragment : Fragment() {
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }
-            Log.d("dddd", "getFCM: "+task.result!!)
             addFCM(AddFcmReq(task.result!!))
         })
-//        createNotificationChannel(MainActivity.channel_id, "ssafy")
     }
-
-//    // NotificationChannel 설정
-//    private fun createNotificationChannel(id: String, name: String) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val importance = NotificationManager.IMPORTANCE_DEFAULT
-//            val channel = NotificationChannel(id, name, importance)
-//
-//            val notificationManager = context?.getSystemService(
-//                Context.NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//        }
-//    }
 
     // 스피너 UI 토글 함수 (한개 or 두개)
     fun spinnerToggle(role: Int) {
@@ -435,4 +421,29 @@ class SaveInfoFragment : Fragment() {
             binding.saveInfoDoubleSpinnerLayout.visibility = View.VISIBLE
         }
     }
+
+    private fun getRealFile(uri: Uri): File? {
+        var uri: Uri? = uri
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        if (uri == null) {
+            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+        var cursor: Cursor? = uri?.let {
+            context?.contentResolver?.query(
+                it, projection, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc"
+            )
+        }
+        if (cursor == null || cursor.columnCount < 1) {
+            return null
+        }
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val path = cursor.getString(column_index)
+        if (cursor != null) {
+            cursor.close()
+            cursor = null
+        }
+        return File(path)
+    }
+
 }

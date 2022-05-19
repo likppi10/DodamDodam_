@@ -5,8 +5,8 @@ import java.util.*
 
 private const val TAG = "InputValidUtil_strait"
 object InputValidUtil {
-    val nameRegex = "^[가-힣a-zA-Z]{2,20}$".toRegex()
-    val nickNameRegex = "^[가-힣a-zA-Zㄱ-ㅎㅏ-ㅞ]{2,10}$".toRegex()
+    val nameRegex = "^[가-힣a-zA-Z]{2,10}$".toRegex()
+    val nickNameRegex = "^[가-힣a-zA-Zㄱ-ㅎㅏ-ㅞ\\s]{2,10}$".toRegex()
     val idRegex = "^[0-9a-z]{4,20}".toRegex()
     //영문, 숫자
     val passRegex1 = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$".toRegex()
@@ -20,7 +20,7 @@ object InputValidUtil {
     val phoneRegex = "^\\d{3}\\d{3,4}\\d{4}$".toRegex()
 
     val familyCodeRegex = "^[0-9a-zA-Z]{15}$".toRegex()
-    val wishRegex = "^[가-힣a-zA-Z0-9`~!?@#$%^&*()_=+]{1,20}$".toRegex()
+    val wishRegex = "^[가-힣a-zA-Z0-9`~!?@#$%^&*()_=+\\s]{1,20}$".toRegex()
 
     fun isValidId(Id: String): Boolean {
         val result = Id.matches(idRegex)

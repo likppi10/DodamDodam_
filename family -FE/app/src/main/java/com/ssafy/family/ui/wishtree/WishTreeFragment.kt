@@ -1,9 +1,6 @@
 package com.ssafy.family.ui.wishtree
 
 import android.animation.Animator
-import android.animation.ValueAnimator
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,13 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.ssafy.family.R
 import com.ssafy.family.data.remote.res.WishTree
@@ -41,10 +35,7 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
         wishTreeViewModel.getWishTree()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentWishTreeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -55,12 +46,15 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
     }
 
     private fun initView() {
+
         // textViewList, imageViewList 채우기
         fillViewList()
+
         // 소원 등록 버튼 클릭 리스너 등록
         binding.wishTreeAddBtn.setOnClickListener {
             WishTreeDialog(requireContext(), this).show()
         }
+
         // 로티 에니메이션 리스너 등록
         val lottie = binding.lottieOpenBox
         lottie.addAnimatorListener(object : Animator.AnimatorListener{
@@ -84,19 +78,23 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
                 Log.d(TAG, "WishTreeFragment - onAnimationRepeat() called")
             }
         })
+
         // 데이터 들어오는지 확인
         wishTreeViewModel.getWishTreeResLiveData.observe(requireActivity()) {
             if (it.status == Status.SUCCESS) {
+
                 // 글쓰기 여부, 위시리스트, 총 길이 받기
                 val myWishPosition: Int = it.data!!.dataSet!!.myWishPosition
                 val wishTreeArray: List<WishTree> = it.data.dataSet!!.wishTree
                 val dataLength: Int = wishTreeArray.size
+
                 if (dataLength == 0) {
                     binding.wishTreeAddBtn.visibility = View.VISIBLE
                 }
                 for (i: Int in 0 until dataLength) {
-                    Log.d(TAG, "WishTreeFragment - initView() called $myWishPosition / ${wishTreeArray[0].position} / $dataLength")
+
                     val thisPosition = wishTreeArray[i].position
+
                     // 텍스트 뷰 설정
                     val selectedTextView: TextView = textViewList[thisPosition]
                     selectedTextView.visibility = View.VISIBLE
@@ -110,32 +108,24 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
                     } else {
                         binding.wishTreeAddBtn.visibility = View.GONE
                     }
+
                     // 2. 내가 쓴 글이면 수정/삭제 아니면 조회 클릭 리스너 등록
                     val selectedImageView: ImageView = imageViewList[thisPosition]
-                    Log.d(TAG, "WishTreeFragment - initView() selectedImageView $selectedImageView")
                     if (thisPosition == myWishPosition) { // 내 소원(수정/삭제)
                         // 클릭 시 수정 dialog 띄우기
                         selectedImageView.visibility = View.VISIBLE
                         selectedImageView.setOnClickListener(View.OnClickListener {
                             // dialog data 생성
                             wishTreeViewModel.selectWishBox(i)
-                            WishTreeDialog(
-                                requireContext(),
-                                this,
-                                wishTreeViewModel.wishTreeId,
-                                wishTreeViewModel.content
+                            WishTreeDialog(requireContext(), this, wishTreeViewModel.wishTreeId, wishTreeViewModel.content
                             ).show()
                         })
 
                         // 삭제 버튼
                         val deletedBtn: ImageView = deleteBtnList[thisPosition]
-                        Log.d(TAG, "WishTreeFragment - initView() ${wishTreeArray[i].wishTreeId}")
                         deletedBtn.visibility = View.VISIBLE
                         deletedBtn.setOnClickListener(View.OnClickListener {
-                            WishTreeDeleteDialog(
-                                requireContext(),
-                                this,
-                                wishTreeArray[i].wishTreeId
+                            WishTreeDeleteDialog(requireContext(), this, wishTreeArray[i].wishTreeId
                             ).show()
                         })
                     } else { // 다른 사람 소원(애니메이션 띄우기 -> 끝나면 다이얼로그 나옴)
@@ -155,18 +145,20 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
                 Toast.makeText(requireContext(), R.string.unknownErrorMessage, Toast.LENGTH_SHORT).show()
             }
         }
+
         wishTreeViewModel.createWishTreeResLiveData.observe(requireActivity()) {
             if (it.status == Status.SUCCESS) {
                 wishTreeViewModel.getWishTree()
             }
         }
+
         wishTreeViewModel.deleteWishTreeResLiveData.observe(requireActivity()) {
             if (it.status == Status.SUCCESS) {
-                Log.d(TAG, "ttttttttttttttttttttttt")
                 wishTreeViewModel.getWishTree()
             }
         }
     }
+
     // 소원 생성 버튼 클릭(WishTreeCreateDialogInterface implement -> dialog와 공유)
     override fun onCreateBtnClicked(content: String) {
         wishTreeViewModel.createWish(content)
@@ -220,4 +212,5 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
         deleteBtnList.add(binding.giftBox6.wishDeleteBtn)
         deleteBtnList.add(binding.giftBox7.wishDeleteBtn)
     }
+
 }

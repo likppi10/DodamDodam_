@@ -10,6 +10,5 @@ data class AllAlbum(
     val hashTags: List<HashTag>,
     @SerializedName("mainPicture")
     val mainPicture: Picture
-
 ): Parcelable
 

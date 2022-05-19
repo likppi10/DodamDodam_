@@ -36,4 +36,5 @@ class ScheduleActivity : AppCompatActivity() {
         binding.scheduleButtonInclude.button.text = left
         binding.scheduleButtonInclude.button2.text = right
     }
+
 }

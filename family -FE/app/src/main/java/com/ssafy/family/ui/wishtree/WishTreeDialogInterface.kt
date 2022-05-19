@@ -7,4 +7,5 @@ interface WishTreeDialogInterface {
     fun onUpdateBtnClicked(myWishListId: Int, content: String)
 
     fun onDeleteBtnClicked(wishTreeId: Int)
+
 }

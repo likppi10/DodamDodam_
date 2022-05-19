@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
 class PermissionUtil(val activity: AppCompatActivity) {
+
     private lateinit var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>
     private val notGrantedPermissions = mutableListOf<String>()
     lateinit var permissionListener: PermissionListener
@@ -98,4 +99,5 @@ class PermissionUtil(val activity: AppCompatActivity) {
     interface PermissionListener {
         fun run()
     }
+
 }

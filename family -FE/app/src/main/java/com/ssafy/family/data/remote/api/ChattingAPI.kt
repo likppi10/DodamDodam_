@@ -12,4 +12,5 @@ interface ChattingAPI {
 
     @POST("/api/chatting/send")
     suspend fun sendChattingFCM(@Query("text")text:String):Response<BaseResponse>
+
 }

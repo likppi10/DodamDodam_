@@ -1,38 +1,34 @@
 package com.ssafy.family.util
 
-import android.util.Log
-import com.ssafy.family.config.ApplicationClass
 import com.ssafy.family.config.ApplicationClass.Companion.JWT
+import com.ssafy.family.config.ApplicationClass.Companion.sSharedPreferences
 import com.ssafy.family.data.remote.res.RefreshJWT
 import com.ssafy.family.data.remote.res.UserInfo
 
 object LoginUtil {
+
     val REFRESH_TOKEN = "refreshToken"
     val NAME = "name"
     val PROFILE_ID = "profileId"
     val FAMILY_ID = "familyId"
 
-    private val preferences = ApplicationClass.sSharedPreferences
+    private val preferences = sSharedPreferences
 
     fun isAutoLogin(): Boolean {
         return preferences.getAutoLoginFlag()
     }
 
     fun signOut() {
-        preferences.deleteString(ApplicationClass.JWT)
+        preferences.deleteString(JWT)
         deleteUserInfo()
     }
-
-//    fun deleteFamily() {
-//        deleteUserFamilyInfo()
-//    }
 
     fun setAutoLogin(flag: Boolean) {
         preferences.setAutoLogin(flag)
     }
 
     fun isTokenExisted(): Boolean {
-        return !preferences.getString(ApplicationClass.JWT).isNullOrBlank()
+        return !preferences.getString(JWT).isNullOrBlank()
     }
 
     fun setScocialToken(socialtoken: String){
@@ -44,7 +40,6 @@ object LoginUtil {
         preferences.setString(REFRESH_TOKEN, refreshJWT.refreshToken)
     }
     fun saveUserInfo(userInfo: UserInfo) {
-
         preferences.setString(JWT, userInfo.jwtToken)
         preferences.setString(REFRESH_TOKEN, userInfo.refreshToken)
         preferences.setString(NAME, userInfo.name)
@@ -57,13 +52,8 @@ object LoginUtil {
         preferences.deleteString(REFRESH_TOKEN)
         preferences.deleteString(NAME)
         preferences.deleteString(PROFILE_ID)
-        preferences.deleteString(FAMILY_ID)
+        preferences.setString(FAMILY_ID, "0")
     }
-
-//    fun deleteUserFamilyInfo() {
-////        preferences.deleteString(PROFILE_ID)
-//        preferences.setString(FAMILY_ID, "0")
-//    }
 
     fun getUserInfo(): UserInfo? {
         val accessToken = preferences.getString(JWT)
@@ -77,7 +67,6 @@ object LoginUtil {
         } else {
             UserInfo(accessToken!!, refreshToken!!, name!!, profileId!!, familyId!!)
         }
-//        return UserInfo(accessToken ?: "", refreshToken ?: "", name ?: "", profileId ?: -1, familyId ?: -1)
     }
 
     fun setFamilyId(id: String) {
@@ -95,4 +84,5 @@ object LoginUtil {
     fun getProfileId(): String? {
         return preferences.getString(PROFILE_ID)
     }
+
 }
