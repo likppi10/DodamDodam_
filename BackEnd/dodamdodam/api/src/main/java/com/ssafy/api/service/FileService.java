@@ -2,11 +2,6 @@ package com.ssafy.api.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.exif.ExifIFD0Directory;
-import org.imgscalr.Scalr;
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.entity.Family;
 import com.ssafy.core.entity.Picture;
