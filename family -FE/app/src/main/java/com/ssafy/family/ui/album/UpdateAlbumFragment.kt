@@ -130,9 +130,9 @@ class UpdateAlbumFragment : Fragment() {
         val tagList = detailAlbumViewModel.hashTag
         tagAdapter.datas = tagList
         binding.updateAlbumTagEditButton.setOnClickListener {
-            val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9]*$")
+            val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9\\s]*$")
             val tagtext = binding.updateAlbumTagEditText.editText?.text.toString()
-            if (!tagtext.isNullOrBlank()) {
+            if (tagtext.length<15) {
                 if (tagtext.matches(regex)) {
                     addtag = "#" + tagtext
                     if (tagList.size < 3) {
@@ -142,13 +142,15 @@ class UpdateAlbumFragment : Fragment() {
                         tagAdapter.notifyDataSetChanged()
                         binding.updateAlbumTagEditText.editText?.setText("")
                     } else {
-                        binding.updateAlbumTagEditText.error = "태그는 최대 3개까지에요"
+                        Toast.makeText(requireActivity(), "태그는 최대 3개까지에요.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    binding.updateAlbumTagEditText.error = "특수문자랑 공백은 사용불가해요"
+                    Toast.makeText(requireActivity(), "특수문자는 사용불가해요", Toast.LENGTH_SHORT).show()
                 }
+            } else if(tagtext.length>15) {
+                Toast.makeText(requireActivity(), "태그는 15자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
-                binding.updateAlbumTagEditText.error = "태그를 입력해주세요"
+                Toast.makeText(requireActivity(), "태그를 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
 

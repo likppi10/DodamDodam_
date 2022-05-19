@@ -69,7 +69,8 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:fontFamily="@font/spoqahansans"
-            android:textColor="@color/pink01" />
+            android:textColor="@color/pink01"
+            android:maxLength="20"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,7 +98,8 @@
             android:background="@color/white"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPassword"
-            android:textColor="@color/pink01" />
+            android:textColor="@color/pink01"
+            android:maxLength="20"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

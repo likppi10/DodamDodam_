@@ -104,7 +104,7 @@ class SignFragment : Fragment() {
                     setLoading()
                 }
                 Status.ERROR -> {
-                    Toast.makeText(requireActivity(), "다시 한번 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
                     dismissLoading()
                 }
             }

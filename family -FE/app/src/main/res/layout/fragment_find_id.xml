@@ -72,6 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="10"
             android:textColor="@color/pink01"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPersonName"
@@ -138,7 +139,6 @@
         android:id="@+id/findID_page_findID_btn"
         android:layout_width="233dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/box_roulette"
         android:elevation="5dp"
         android:gravity="center"
@@ -146,9 +146,9 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/findID_page_form_box"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_findIDF_family_code"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout_findIDF_family_code" />
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_findIDF_family_code"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findIDF_family_code" />
 
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"

@@ -114,7 +114,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:textColor="@color/pink01"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLength="20"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -139,7 +140,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:textColor="@color/pink01"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLength="20"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +149,6 @@
         android:id="@+id/findPW_page_findPW_btn"
         android:layout_width="233dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/box_roulette"
         android:elevation="5dp"
         android:gravity="center"
@@ -155,9 +156,9 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/findID_page_form_box"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_findPWF_PW_confirm_new"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout_findPWF_PW_confirm_new" />
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_findPWF_PW_confirm_new"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findPWF_PW_confirm_new" />
 
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"

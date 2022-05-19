@@ -9,10 +9,13 @@ import com.ssafy.family.data.repository.CalendarRepository
 import com.ssafy.family.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(private val calendarRepository: CalendarRepository) : ViewModel() {
+
+    var today = LocalDate.now()
 
     private val _getDayRequestLiveData = MutableLiveData<Resource<SchedulesRes>>()
     val getDayRequestLiveData: LiveData<Resource<SchedulesRes>>

@@ -1,11 +1,13 @@
 package com.ssafy.family.ui.main.bottomFragment
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -161,12 +163,12 @@ class SettingFragment : Fragment() {
 
         binding.shareImageButton.setOnClickListener {
             try {
-                val sendText = "Rolling Pictures 초대 방 코드 : ${binding.familyCodeText.text}"
+                val sendText = "[도담도담 : DodamDodam]의 초대 방 코드 : ${binding.familyCodeText.text}"
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
                 sendIntent.putExtra(Intent.EXTRA_TEXT, sendText)
                 sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, "그룹 코드 공유"))
+                startActivity(Intent.createChooser(sendIntent, "가족 코드 공유"))
             } catch (ignored: ActivityNotFoundException) { }
         }
 
@@ -229,12 +231,20 @@ class SettingFragment : Fragment() {
     }
 
     fun logout() {
-        livePush = MutableLiveData(0)
-        writeSharedPreference("fcm", arrayListOf())
-        Toast.makeText(requireContext(), "로그아웃 했어요.", Toast.LENGTH_SHORT).show()
-        val intent = Intent(requireContext(), HomeActivity::class.java)
-        requireActivity().finishAffinity()
-        startActivity(intent)
+
+
+        Log.d("로그아웃 했설", "logout: 로그아웃 준비")
+        if(isAdded){
+            livePush = MutableLiveData(0)
+            writeSharedPreference("fcm", arrayListOf())
+            Toast.makeText(requireContext(), "로그아웃 했어요.", Toast.LENGTH_SHORT).show()
+            Log.d("로그아웃 했설", "logout: 액티비티에서 붙은채로로")
+            val intent = Intent(requireContext(), HomeActivity::class.java)
+            requireActivity().finishAffinity()
+            startActivity(intent)
+        }else{
+            Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

@@ -41,7 +41,7 @@ class SelectPhotoFragment : Fragment() {
                 detailAlbumViewModel.photosSize -= 1
                 binding.albumSizeText.text = "${detailAlbumViewModel.photosSize}장 / "
             } else {
-                if(getRealFile(uri)!!.length() > 3000000){
+                if(getRealFile(uri)!!.length() > 5000000){
                     Toast.makeText(requireContext(), "이 사진은 용량이 너무 커요!", Toast.LENGTH_SHORT).show()
                 }else if(detailAlbumViewModel.photosSize==10){
                     Toast.makeText(requireContext(), "10장을 전부 골랐어요!", Toast.LENGTH_SHORT).show()

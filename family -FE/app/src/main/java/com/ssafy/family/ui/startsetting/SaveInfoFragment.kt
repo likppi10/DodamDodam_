@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -153,19 +154,15 @@ class SaveInfoFragment : Fragment() {
         // 가족 생성
         binding.saveInfoMoveNextBtn.setOnClickListener {
             if (isValidForm()) {
-                if(binding.saveInfoInputNickname.text!!.contains(" ")){
-                    Toast.makeText(requireContext(), "닉네임에서 공백은 제거해주세요.", Toast.LENGTH_SHORT).show()
+                if(requireActivity().intent.getStringExtra("to") == "edit"){
+                    updateProfile(role)
                 }else{
-                    if(requireActivity().intent.getStringExtra("to") == "edit"){
-                        updateProfile(role)
-                    }else{
-                        val viewModelFamilyId = familyViewModel.checkFamilyCodeInfoRes.value?.data?.dataset?.familyId
-                        // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
-                        if (viewModelFamilyId is Int) {
-                            joinFamily(role, viewModelFamilyId)
-                        } else { // 바로 온 경우 가족 및 프로필 생성)
-                            createFamily(role)
-                        }
+                    val viewModelFamilyId = familyViewModel.checkFamilyCodeInfoRes.value?.data?.dataset?.familyId
+                    // 가족코드 검증을 하고 온 경우 : 뷰모델의 familyId가 존재 -> 기존 가족에 가입
+                    if (viewModelFamilyId is Int) {
+                        joinFamily(role, viewModelFamilyId)
+                    } else { // 바로 온 경우 가족 및 프로필 생성)
+                        createFamily(role)
                     }
                 }
             }
@@ -198,7 +195,7 @@ class SaveInfoFragment : Fragment() {
                 LoginUtil.setProfileId(it.data.dataset!!.profileId.toString())
                 getFCM()
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "프로필 생성에 실패했어요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -208,7 +205,7 @@ class SaveInfoFragment : Fragment() {
                 Toast.makeText(requireContext(), "오늘의 상태 수정 완료!", Toast.LENGTH_SHORT).show()
                 requireActivity().finish()
             } else if(it.status == Status.ERROR) {
-                Toast.makeText(requireContext(), "상태 수정에 실패했어요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -22,7 +22,6 @@ class FamilyFragment : Fragment() {
 
     private lateinit var binding: FragmentFamilyBinding
     private val mainFamilyViewModel by activityViewModels<MainFamilyViewModel>()
-
     private lateinit var statusAdapter: StatusAdapter
 
     private val alarmClickListener = object :AlarmAdapter.ItemClickListener{
@@ -63,18 +62,16 @@ class FamilyFragment : Fragment() {
         mainFamilyViewModel.sendAlarmRequestLiveData.observe(requireActivity()){
             when (it.status) {
                 Status.SUCCESS -> {
-                    dismissLoading()
-                    Toast.makeText(requireActivity(), "알람 전송에 성공했어요!", Toast.LENGTH_SHORT).show()
+                    dismissLoading("sendAlarm", "success")
                 }
                 Status.ERROR -> {
-                    dismissLoading()
-                    Toast.makeText(requireActivity(), "알람 전송에 실패했어요.", Toast.LENGTH_SHORT).show()
+                    dismissLoading("sendAlarm", "error")
                 }
                 Status.LOADING -> {
                     setLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissLoading()
+                    dismissLoading("sendAlarm", "expired")
                 }
             }
         }
@@ -83,16 +80,16 @@ class FamilyFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     binding.layoutTodayExpression.boxtextTextView.text = it.data!!.dataSet!!.missionContent
-                    dismissLoading()
+                    dismissLoading("todayMission", "success")
                 }
                 Status.ERROR -> {
-                    dismissLoading()
+                    dismissLoading("todayMission", "error")
                 }
                 Status.LOADING -> {
                     setLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissLoading()
+                    dismissLoading("todayMission", "expired")
                 }
             }
         }
@@ -102,16 +99,16 @@ class FamilyFragment : Fragment() {
                 Status.SUCCESS -> {
                     statusAdapter.datas = it.data!!.dataSet as MutableList<FamilyProfile>
                     statusAdapter.notifyDataSetChanged()
-                    dismissLoading()
+                    dismissLoading("familyProfile", "success")
                 }
                 Status.ERROR -> {
-                    dismissLoading()
+                    dismissLoading("familyProfile", "error")
                 }
                 Status.LOADING -> {
                     setLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissLoading()
+                    dismissLoading("familyProfile", "expired")
                 }
             }
         }
@@ -121,16 +118,16 @@ class FamilyFragment : Fragment() {
                 Status.SUCCESS -> {
                     statusAdapter.alarmList = it.data!!.dataSet as MutableList<AlarmInfo>
                     statusAdapter.notifyDataSetChanged()
-                    dismissLoading()
+                    dismissLoading("getAlarmList", "success")
                 }
                 Status.ERROR -> {
-                    dismissLoading()
+                    dismissLoading("getAlarmList", "error")
                 }
                 Status.LOADING -> {
                     setLoading()
                 }
                 Status.EXPIRED -> {
-                    dismissLoading()
+                    dismissLoading("getAlarmList", "expired")
                 }
             }
         }
@@ -145,8 +142,43 @@ class FamilyFragment : Fragment() {
         binding.progressBarLoginFLoading.visibility = View.VISIBLE
     }
 
-    private fun dismissLoading() {
-        binding.progressBarLoginFLoading.visibility = View.GONE
+    private fun dismissLoading(type: String, result: String) {
+        if(binding.progressBarLoginFLoading.visibility == View.VISIBLE) {
+            binding.progressBarLoginFLoading.visibility = View.GONE
+            when (type) {
+                "sendAlarm" -> {
+                    if(result == "success"){
+                        Toast.makeText(requireActivity(), "알람 전송에 성공했어요!", Toast.LENGTH_SHORT).show()
+                    }else if(result == "error"){
+                        Toast.makeText(requireActivity(), "알람 전송에 실패했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "todayMission" -> {
+                    if(result == "error"){
+                        Toast.makeText(requireActivity(), "표현하기를 불러오지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "familyProfile" -> {
+                    if(result == "error"){
+                        Toast.makeText(requireActivity(), "우리 가족을 불러오지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                "getAlarmList" -> {
+                    if(result == "error"){
+                        Toast.makeText(requireActivity(), "알람 리스트를 불러오지 못했어요. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }else if(result == "expired"){
+                        Toast.makeText(requireActivity(), "다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
     }
 
 }

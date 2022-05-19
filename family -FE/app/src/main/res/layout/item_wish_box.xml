@@ -31,7 +31,6 @@
         android:layout_width="95dp"
         android:layout_height="30dp"
         android:background="@drawable/round_bg"
-        android:elevation="@android:dimen/app_icon_size"
         android:fontFamily="@font/spoqahansans"
         android:gravity="center"
         android:textColor="@color/pink01"

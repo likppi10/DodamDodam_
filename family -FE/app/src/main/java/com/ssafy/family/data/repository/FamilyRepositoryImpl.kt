@@ -1,5 +1,6 @@
 package com.ssafy.family.data.repository
 
+import android.util.Log
 import com.ssafy.family.config.BaseResponse
 import com.ssafy.family.data.remote.api.FamilyAPI
 import com.ssafy.family.data.remote.req.FamilyReq
@@ -38,6 +39,12 @@ class FamilyRepositoryImpl(
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
                 }
+                response.code() == 409 -> {
+                    Resource.error(null, "이미 가족이 선택한 역할이에요.")
+                }
+                response.code() == 410 -> {
+                    Resource.error(null, "중복된 애칭이에요.")
+                }
                 else -> {
                     Resource.error(null, "응답 에러")
                 }
@@ -63,6 +70,12 @@ class FamilyRepositoryImpl(
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
+                }
+                response.code() == 409 -> {
+                    Resource.error(null, "이미 가족이 선택한 역할이에요.")
+                }
+                response.code() == 410 -> {
+                    Resource.error(null, "중복된 애칭이에요.")
                 }
                 else -> {
                     Resource.error(null, "응답 에러")
@@ -119,6 +132,12 @@ class FamilyRepositoryImpl(
             when {
                 response.isSuccessful -> {
                     Resource.success(response.body()!!)
+                }
+                response.code() == 409 -> {
+                    Resource.error(null, "이미 가족이 선택한 역할이에요.")
+                }
+                response.code() == 410 -> {
+                    Resource.error(null, "중복된 애칭이에요.")
                 }
                 else -> {
                     Resource.error(null, "응답 에러")

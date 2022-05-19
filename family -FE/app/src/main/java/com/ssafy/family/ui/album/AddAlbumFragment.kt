@@ -106,7 +106,7 @@ class AddAlbumFragment : Fragment() {
         val tagList = arrayListOf<HashTag>()
         tagAdapter.datas = tagList
         binding.addAlbumTagEditButton.setOnClickListener {
-            val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9]*$")
+            val regex = Regex("^[ㄱ-ㅎ가-힣A-Za-z0-9\\s]*$")
             val tagtext = binding.addAlbumTagEditText.editText?.text.toString()
             if (tagtext.length<15) {
                 if (tagtext.matches(regex)) {
@@ -121,16 +121,16 @@ class AddAlbumFragment : Fragment() {
                             tagAdapter.notifyDataSetChanged()
                             binding.addAlbumTagEditText.editText?.setText("")
                         } else {
-                            binding.addAlbumTagEditText.error = "태그는 최대 3개까지에요."
+                            Toast.makeText(requireActivity(), "태그는 최대 3개까지에요.", Toast.LENGTH_SHORT).show()
                         }
                     }
-                } else {
-                    binding.addAlbumTagEditText.error = "특수문자랑 공백은 사용불가해요."
+                }  else {
+                    Toast.makeText(requireActivity(), "특수문자는 사용불가해요", Toast.LENGTH_SHORT).show()
                 }
             } else if(tagtext.length>15) {
                 Toast.makeText(requireActivity(), "태그는 15자 미만으로 입력해주세요!", Toast.LENGTH_SHORT).show()
             } else {
-                binding.addAlbumTagEditText.error = "태그를 입력해주세요"
+                Toast.makeText(requireActivity(), "태그를 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
         val fileList = arrayListOf<File>()

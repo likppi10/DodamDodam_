@@ -76,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            maxlength="20"
             android:textColor="@color/pink01"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPersonName"
@@ -125,6 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="10"
             android:textColor="@color/pink01"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPersonName"
@@ -155,6 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="20"
             android:textColor="@color/pink01"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPassword"
@@ -185,6 +188,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:maxLength="20"
             android:textColor="@color/pink01"
             android:fontFamily="@font/spoqahansans"
             android:inputType="textPassword"
@@ -195,7 +199,6 @@
         android:id="@+id/sign_page_sign_btn"
         android:layout_width="233dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/box_roulette"
         android:elevation="5dp"
         android:fontFamily="@font/spoqahansans"
@@ -204,9 +207,9 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/sign_page_form_box"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_signupF_PW_confirm"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout_signupF_PW_confirm" />
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_signupF_PW_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_signupF_PW_confirm" />
 
     <ProgressBar
         android:id="@+id/progressBar_loginF_loading"

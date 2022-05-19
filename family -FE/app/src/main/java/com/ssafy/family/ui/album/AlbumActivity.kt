@@ -84,13 +84,13 @@ class AlbumActivity : AppCompatActivity() {
             if (it == "완료") {
                 binding.albumButtonInclude.button2.setOnClickListener {
                     if(detailAlbumViewModel.isUpdate){
-                        if(detailAlbumViewModel.photosSize > 30000000){
+                        if(detailAlbumViewModel.photosSize > 50000000){
                             Toast.makeText(this, "선택하신 사진들의 크기가 너무 큽니다!", Toast.LENGTH_SHORT).show()
                         }else{
                             supportFragmentManager.beginTransaction().replace(R.id.album_frame, UpdateAlbumFragment()).commit()
                         }
                     }else{
-                        if(detailAlbumViewModel.photosSize > 30000000){
+                        if(detailAlbumViewModel.photosSize > 50000000){
                             Toast.makeText(this, "선택하신 사진들의 크기가 너무 큽니다!", Toast.LENGTH_SHORT).show()
                         }else{
                             supportFragmentManager.beginTransaction().replace(R.id.album_frame, AddAlbumFragment()).commit()

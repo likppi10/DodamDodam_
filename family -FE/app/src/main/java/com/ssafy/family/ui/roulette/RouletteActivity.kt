@@ -52,7 +52,13 @@ class RouletteActivity : AppCompatActivity() {
                         rouletteData.add(a.nickname)
                     }
                     dismissLoading()
-                    initRoulette()
+                    if(memberFixList.size == 1){
+                        Toast.makeText(this, "가족 인원이 2명이상이어야 이용이 가능해요.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }else{
+                        initRoulette()
+                    }
+
                 }
                 Status.ERROR -> {
                     Toast.makeText(this, "가족을 불러오지 못했어요.", Toast.LENGTH_SHORT).show()
