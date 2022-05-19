@@ -25,7 +25,6 @@ public class Profile extends BaseEntity {
     private long id;
 
     @Nullable
-    @Column(length = 10)
     private String emotion;
 
     @Nullable
