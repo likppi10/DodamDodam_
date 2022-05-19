@@ -200,7 +200,9 @@ public class MainService {
     @Transactional(readOnly = true)
     public List<AlarmResDto> getAlarmList(Profile me, Profile target) {
 
-        ArrayList<String> contentList = new ArrayList<>(Arrays.asList("사랑해", "보고싶어", "감사해요!", "이따 봐용~", "오늘도 화이팅", "밥 먹자~"));
+        ArrayList<String> contentList = new ArrayList<>(Arrays.asList(
+                "사랑해", "보고싶어", "감사해요!", "이따 봐용~", "오늘도 화이팅", "밥 먹자~",
+                "나도 사랑해", "점심 같이 해요", "저녁 같이 해요", "괜찮아요", "미안해요", "지금 통화 돼?"));
         List<AlarmResDto> dtoList = alarmRepository.findAlarmByProfileAndTargetOrderByCount(me, target);
         for (AlarmResDto alarmResDto : dtoList) {
             contentList.remove(alarmResDto.getContent());
