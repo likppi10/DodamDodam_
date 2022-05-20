@@ -38,7 +38,7 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
     }
 
     @Override
-    public List<MainProfileResDto> findProfileListByFamilyId(Long familyId) {
+    public List<MainProfileResDto> findProfileListByFamilyIdExceptMe(Long familyId, Long profileId) {
         return queryFactory
                 .select(Projections.fields(MainProfileResDto.class,
                         profile.imagePath,
@@ -47,7 +47,7 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
                         profile.comment,
                         profile.id.as("profileId")))
                 .from(profile)
-                .where(profile.family.id.eq(familyId))
+                .where(profile.family.id.eq(familyId).and(profile.id.ne(profileId)))
                 .fetch();
     }
 
