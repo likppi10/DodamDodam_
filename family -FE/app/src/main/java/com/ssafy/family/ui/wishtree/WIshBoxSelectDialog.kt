@@ -28,7 +28,7 @@ class WIshBoxSelectDialog(context: Context, val profileImg: String?, val role: S
         // profileImg
         val imageView = binding.wishTreeDialogProfileImage
         if (profileImg == null) {
-            imageView.setImageResource(R.drawable.default_profile)
+            imageView.setImageResource(R.drawable.image_fail)
         } else {
             Glide.with(imageView).load(profileImg).into(imageView)
         }

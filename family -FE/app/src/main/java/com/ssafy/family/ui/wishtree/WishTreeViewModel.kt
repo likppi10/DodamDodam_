@@ -50,7 +50,7 @@ class WishTreeViewModel @Inject constructor(private val wishtreeRepository: Wish
             for (i in wishTree.indices) {
                 if (wishTree[i].position == myWishPosition) {
                     wishTreeId = wishTree[i].wishTreeId
-                    profileImg = wishTree[i].profileImg
+                    profileImg = wishTree[i].profileImage
                     role = wishTree[i].role
                     content = wishTree[i].content
                     break
@@ -67,7 +67,7 @@ class WishTreeViewModel @Inject constructor(private val wishtreeRepository: Wish
 
     fun selectWishBox(i: Int) {
         wishTreeId = getWishTreeResLiveData.value!!.data!!.dataSet!!.wishTree[i].wishTreeId
-        profileImg = getWishTreeResLiveData.value!!.data!!.dataSet!!.wishTree[i].profileImg
+        profileImg = getWishTreeResLiveData.value!!.data!!.dataSet!!.wishTree[i].profileImage
         role = getWishTreeResLiveData.value!!.data!!.dataSet!!.wishTree[i].role
         content = getWishTreeResLiveData.value!!.data!!.dataSet!!.wishTree[i].content
     }
