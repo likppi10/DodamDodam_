@@ -12,8 +12,8 @@ class WishTree (
     val content: String,
     @SerializedName("role")
     val role: String,
-    @SerializedName("profileImg")
-    val profileImg: String?,
+    @SerializedName("profileImage")
+    val profileImage: String?,
     @SerializedName("wishTreeId")
     val wishTreeId: Int
 ): Parcelable

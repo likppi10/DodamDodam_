@@ -58,11 +58,9 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
         // 로티 에니메이션 리스너 등록
         val lottie = binding.lottieOpenBox
         lottie.addAnimatorListener(object : Animator.AnimatorListener{
-            override fun onAnimationStart(p0: Animator?) {
-                Log.d(TAG, "WishTreeFragment - onAnimationStart() called")
-            }
+            override fun onAnimationStart(p0: Animator?) {}
+
             override fun onAnimationEnd(animation: Animator?) {
-                Log.d(TAG, "WishTreeFragment - onAnimationEnd() called")
                 lottie.visibility = View.GONE
                 // 애니메이션 끝나면 dialog 띄우기
                 val profileImg = wishTreeViewModel.profileImg
@@ -71,12 +69,10 @@ class WishTreeFragment : Fragment(), WishTreeDialogInterface {
                 val wishBoxSelectDialog = WIshBoxSelectDialog(requireContext(), profileImg, role, content)
                 wishBoxSelectDialog.show()
             }
-            override fun onAnimationCancel(p0: Animator?) {
-                Log.d(TAG, "WishTreeFragment - onAnimationCancel() called")
-            }
-            override fun onAnimationRepeat(p0: Animator?) {
-                Log.d(TAG, "WishTreeFragment - onAnimationRepeat() called")
-            }
+
+            override fun onAnimationCancel(p0: Animator?) {}
+
+            override fun onAnimationRepeat(p0: Animator?) {}
         })
 
         // 데이터 들어오는지 확인
