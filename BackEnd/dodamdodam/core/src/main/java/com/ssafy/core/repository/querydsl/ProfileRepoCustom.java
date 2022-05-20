@@ -11,7 +11,7 @@ public interface ProfileRepoCustom {
 
     Long findProfileIdByUserPk(Long userPk);
 
-    List<MainProfileResDto> findProfileListByFamilyId(Long familyId);
+    List<MainProfileResDto> findProfileListByFamilyIdExceptMe(Long familyId, Long profileId);
 
     ProfileIdAndFamilyIdResDto findProfileIdAndFamilyIdByUserPk(Long userPk);
 

@@ -29,9 +29,11 @@ public class SuggestionRepoCustomImpl implements SuggestionRepoCustom {
                 .leftJoin(suggestionReaction)
                 .on(suggestion.id.eq(suggestionReaction.suggestion.id))
                 .where(suggestion.family.id.eq(familyId))
+                .orderBy(suggestion.id.asc())
                 .transform(
                         GroupBy.groupBy(suggestion)
-                                .list(Projections.fields(SuggestionResDto.class,
+                                .list(Projections.fields(
+                                        SuggestionResDto.class,
                                         suggestion.id.as("suggestionId"),
                                         suggestion.text,
                                         suggestion.likeCount,
@@ -41,7 +43,7 @@ public class SuggestionRepoCustomImpl implements SuggestionRepoCustom {
                                                         SuggestionReactionListResDto.class,
                                                         suggestionReaction.profile.id.as("profileId"),
                                                         suggestionReaction.isLike
-                                                )
+                                                ).skipNulls()
                                         ).as("suggestionReactions")
                                 )));
     }
