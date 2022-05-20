@@ -118,25 +118,27 @@ public class MainService {
                     .isLike(request.getIsLike())
                     .build());
 
-            if (Boolean.TRUE.equals(request.getIsLike())) {
+            if (request.getIsLike()) {
                 suggestion.updateLikeCount(1);
             } else {
                 suggestion.updateDislikeCount(1);
             }
             suggestionRepository.save(suggestion);
 
+            //다른 리엑션으로 바꿀때
         } else if (!suggestionReaction.getIsLike().equals(request.getIsLike())) {
             suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            int updateCount = Boolean.TRUE.equals(request.getIsLike()) ? +1 : -1;
+            int updateCount = request.getIsLike() ? +1 : -1;
             suggestion.updateLikeCount(updateCount);
             suggestion.updateDislikeCount(updateCount * -1);
 
             suggestionRepository.save(suggestion);
+            //기존 리엑션 취소할때
         } else {
             suggestionReactionRepository.delete(suggestionReaction);
-            if (Boolean.TRUE.equals(request.getIsLike())) {
+            if (request.getIsLike()) {
                 suggestion.updateLikeCount(-1);
             } else {
                 suggestion.updateDislikeCount(-1);
