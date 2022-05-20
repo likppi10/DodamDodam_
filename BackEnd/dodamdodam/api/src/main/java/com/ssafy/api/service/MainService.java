@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ssafy.core.exception.ErrorCode.*;
 
@@ -37,9 +36,7 @@ public class MainService {
         if (ids == null) {
             throw new CustomException(NOT_FOUND_FAMILY);
         }
-        return profileRepository.findProfileListByFamilyId(ids.getFamilyId())
-                .stream().filter(profile -> !profile.getProfileId().equals(ids.getProfileId()))
-                .collect(Collectors.toList());
+        return profileRepository.findProfileListByFamilyIdExceptMe(ids.getFamilyId(), ids.getProfileId());
     }
 
 
@@ -79,12 +76,7 @@ public class MainService {
     public List<SuggestionResDto> getSuggestionList(Long userPk) {
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
-        return suggestionRepository.getSuggestionListByFamilyId(familyId)
-                .stream().peek(suggestion -> {
-                    if (suggestion.getSuggestionReactions().stream().allMatch(dto -> dto.getProfileId() == null)) {
-                        suggestion.setSuggestionReactions(null);
-                    }
-                }).collect(Collectors.toList());
+        return suggestionRepository.getSuggestionListByFamilyId(familyId);
     }
 
     @Transactional
@@ -126,17 +118,21 @@ public class MainService {
             suggestionRepository.save(suggestion);
 
             //다른 리엑션으로 바꿀때
-        } else if (!suggestionReaction.getIsLike().equals(request.getIsLike())) {
+        } else if (suggestionReaction.getIsLike() != request.getIsLike()) {
             suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            int updateCount = request.getIsLike() ? +1 : -1;
-            suggestion.updateLikeCount(updateCount);
-            suggestion.updateDislikeCount(updateCount * -1);
+            if(request.getIsLike()) {
+                suggestion.updateLikeCount(1);
+                suggestion.updateDislikeCount(-1);
+            }else{
+                suggestion.updateLikeCount(-1);
+                suggestion.updateDislikeCount(1);
+            }
 
             suggestionRepository.save(suggestion);
             //기존 리엑션 취소할때
-        } else {
+        } else if(suggestionReaction.getIsLike() == request.getIsLike()) {
             suggestionReactionRepository.delete(suggestionReaction);
             if (request.getIsLike()) {
                 suggestion.updateLikeCount(-1);
@@ -146,12 +142,7 @@ public class MainService {
             suggestionRepository.save(suggestion);
         }
 
-        return suggestionRepository.getSuggestionListByFamilyId(familyId)
-                .stream().peek(suggestionItem -> {
-                    if (suggestionItem.getSuggestionReactions().stream().allMatch(dto -> dto.getProfileId() == null)) {
-                        suggestionItem.setSuggestionReactions(null);
-                    }
-                }).collect(Collectors.toList());
+        return suggestionRepository.getSuggestionListByFamilyId(familyId);
     }
 
     @Transactional(readOnly = true)

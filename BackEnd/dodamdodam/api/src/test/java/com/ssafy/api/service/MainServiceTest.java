@@ -41,10 +41,6 @@ class MainServiceTest {
     private UserRepository userRepository;
     @Mock
     private SuggestionRepository suggestionRepository;
-    @Mock
-    private SuggestionReactionRepository suggestionReactionRepository;
-    @Mock
-    private AlarmRepository alarmRepository;
 
     final MainProfileResDto expectMainProfileDto = MainProfileResDto.builder()
             .profileId(1L)
@@ -90,7 +86,7 @@ class MainServiceTest {
         given(profileRepository.findProfileIdAndFamilyIdByUserPk(anyLong()))
                 .willReturn(getIds(2L));
 
-        given(profileRepository.findProfileListByFamilyId(anyLong()))
+        given(profileRepository.findProfileListByFamilyIdExceptMe(anyLong(), anyLong()))
                 .willReturn(List.of(expectMainProfileDto));
 
         //when
@@ -108,8 +104,8 @@ class MainServiceTest {
         given(profileRepository.findProfileIdAndFamilyIdByUserPk(anyLong()))
                 .willReturn(getIds(1L));
 
-        given(profileRepository.findProfileListByFamilyId(anyLong()))
-                .willReturn(List.of(expectMainProfileDto));
+        given(profileRepository.findProfileListByFamilyIdExceptMe(anyLong(), anyLong()))
+                .willReturn(Collections.emptyList());
 
         //when
         final List<MainProfileResDto> actualProfileList

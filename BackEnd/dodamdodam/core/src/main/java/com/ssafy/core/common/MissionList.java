@@ -6,31 +6,67 @@ import java.util.stream.Stream;
 
 public class MissionList {
 
-    //0 -> 에게 , 1 -> 을,를
+    //0 -> 에게 , 1 -> 을,를 . 2 -> 와
     public static String[][] common = {
             {
                     "사랑한다고 말해주세요",
-                    "보고싶다고 말해주세요"
+                    "보고싶다고 말해주세요",
+
             },
             {
                     "따뜻하게 안아주세요!"
             },
+            {
+                    "찍은 사진을 앨범에 올려보세요!"
+            }
     };
 
     public static String[][] mother = {
+            {
 
+            },
+            {
+
+            },
+            {
+
+            }
     };
 
     public static String[][] father = {
+            {
 
+            },
+            {
+
+            },
+            {
+
+            }
     };
 
     public static String[][] son = {
+            {
 
+            },
+            {
+
+            },
+            {
+
+            }
     };
 
     public static String[][] daughter = {
+            {
 
+            },
+            {
+
+            },
+            {
+
+            }
     };
 
     public static Map<String, String[][]> missionList = Map.of(
