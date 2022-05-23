@@ -269,7 +269,7 @@ public class AlbumService {
         this.updateHashTag(hashTagList, updateHashTagList, album);
 
         //3. 삭제할 사진 삭제
-        Integer[] deleteIndexList = albumUpdateReqDto.getPictureIdList();
+        int[] deleteIndexList = albumUpdateReqDto.getPictureIdList();
         if (deleteIndexList != null) {
             System.out.println("Index is not null!");
             List<Picture> pictureList = pictureRepository.findPictureListByAlbumId(album.getId());
