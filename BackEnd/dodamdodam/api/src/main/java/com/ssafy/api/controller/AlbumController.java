@@ -59,7 +59,7 @@ public class AlbumController {
     @Operation(summary = "앨범 등록", description = "<strong>앨범 등록</strong>", parameters = {
             @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
     })
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult createAlbum(@ModelAttribute
                                     @Valid AlbumReqDto albumReqDto,
                                     Authentication authentication) {
@@ -75,7 +75,7 @@ public class AlbumController {
             parameters = {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             })
-    @PostMapping(value = "/reaction", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "reaction", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult createReaction(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody
@@ -92,7 +92,7 @@ public class AlbumController {
             parameters = {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             })
-    @DeleteMapping(value = "/{reactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "{reactionid}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult deleteReaction(@PathVariable Long reactionid, Authentication authentication) {
 
         Long userPK = Long.parseLong(authentication.getName());
@@ -104,11 +104,12 @@ public class AlbumController {
             parameters = {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             })
-    @PatchMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult updateAlbum(
             @ModelAttribute
             @Valid AlbumUpdateReqDto albumUpdateReqDto) {
 
+        System.out.println("album controller success ===========");
         albumService.updateAlbum(albumUpdateReqDto);
         return responseService.getSuccessResult();
     }
