@@ -38,7 +38,7 @@ public class Album extends BaseEntity{
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Picture> pictures;
 
-    public void updateLocalDate(LocalDate date){
+    public void updateAlbumDate(LocalDate date){
         this.date = date;
     }
 }

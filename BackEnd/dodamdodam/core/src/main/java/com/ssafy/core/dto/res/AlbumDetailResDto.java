@@ -1,9 +1,13 @@
 package com.ssafy.core.dto.res;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
@@ -12,20 +16,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AlbumDetailResDto {
-//date 해시태그 사진 가족별 리액션
 
-    @Schema(description = "날짜", example = "")
-    private String date;
+    @NotNull
+    @Schema(description = "날짜", example = "2020-07-01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate date;
 
-    @Schema(description = "사진", example = "")
-    private List<AlbumPictureListResDto> pictures;
+    @NotNull
+    @Schema(description = "사진")
+    private List<PictureResDto> pictures;
 
-    @Schema(description = "해시태그", example = "")
-    private List<AlbumHashTagListResDto> hashTags;
+    @NotNull
+    @Schema(description = "해시태그")
+    private List<HashTagResDto> hashTags;
 
-    @Schema(description = "앨범 리액션", example = "")
-    private List<AlbumReactionListResDto> albumReactions;
-
-
+    @Nullable
+    @Schema(description = "앨범 리액션")
+    private List<AlbumReactionResDto> albumReactions;
 
 }
