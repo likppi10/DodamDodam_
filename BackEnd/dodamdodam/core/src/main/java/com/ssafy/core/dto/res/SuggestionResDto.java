@@ -25,6 +25,6 @@ public class SuggestionResDto {
     @Schema(description = "싫어요 갯수", example = "1")
     private Long dislikeCount;
 
-    private List<SuggestionReactionListResDto> suggestionReactions;
+    private List<SuggestionReactionResDto> suggestionReactions;
 
 }
