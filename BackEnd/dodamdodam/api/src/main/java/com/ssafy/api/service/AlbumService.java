@@ -274,24 +274,15 @@ public class AlbumService {
         if (deleteIndexList != null) {
 
             List<Long> deleteIdList = new ArrayList<>();
-
-            System.out.println(deleteIndexList.length);
-
             for(long id : deleteIndexList){
                 deleteIdList.add(id);
-                System.out.println(id);
             }
 
             List<Picture> deletePictureList =
                     pictureRepository.findPictureListByPictureIdList(deleteIdList);
-
-            System.out.println("delete picutre list");
-            System.out.println(deletePictureList.size());
-
             pictureRepository.deleteAll(deletePictureList);
         }
 
-        System.out.println("done delete pictures ===========");
         //4. 새로운 사진 저장
         List<MultipartFile> fileList = albumUpdateReqDto.getMultipartFiles();
 
@@ -313,7 +304,6 @@ public class AlbumService {
             }
         }
 
-        System.out.println("done new picture save ===========");
         //5. 메인 사진 변경
         List<Picture> pictureList = this.getPictureListByAlbumId(album.getId());
         int idx = 0;
@@ -321,7 +311,6 @@ public class AlbumService {
             picture.updateIsMain(idx == albumUpdateReqDto.getMainIndex());
             idx++;
         }
-        System.out.println("done main picutre update ===========");
         pictureRepository.saveAll(pictureList);
     }
 
