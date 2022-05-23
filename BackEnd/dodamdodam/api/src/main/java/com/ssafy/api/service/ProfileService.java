@@ -115,9 +115,6 @@ public class ProfileService {
             int randomIndex = random.nextInt(3);
             String missionSelect = missions[randomIndex][random.nextInt(missions[randomIndex].length)];
 
-            System.out.println(missions[randomIndex].length);
-            System.out.println(missionSelect);
-
             StringBuilder missionContent = new StringBuilder();
 
             //미션 대상 호칭 선택
