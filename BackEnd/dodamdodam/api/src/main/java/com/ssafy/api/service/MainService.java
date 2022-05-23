@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.core.common.AlarmListUtil;
 import com.ssafy.core.dto.req.AlarmReqDto;
 import com.ssafy.core.dto.req.CreateSuggestionReqDto;
 import com.ssafy.core.dto.req.SuggestionReactionReqDto;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -110,35 +110,36 @@ public class MainService {
                     .isLike(request.getIsLike())
                     .build());
 
-            if (request.getIsLike()) {
+            if (Boolean.TRUE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(1);
-            } else {
+            } else if (Boolean.FALSE.equals(request.getIsLike())) {
                 suggestion.updateDislikeCount(1);
+            }
+            suggestionRepository.save(suggestion);
+
+            //기존 리엑션 취소
+        } else if (suggestionReaction.getIsLike().equals(request.getIsLike())) {
+            suggestionReactionRepository.delete(suggestionReaction);
+            if (Boolean.TRUE.equals(request.getIsLike())) {
+                suggestion.updateLikeCount(-1);
+            } else if (Boolean.FALSE.equals(request.getIsLike())) {
+                suggestion.updateDislikeCount(-1);
             }
             suggestionRepository.save(suggestion);
 
             //다른 리엑션으로 바꿀때
-        } else if (suggestionReaction.getIsLike() != request.getIsLike()) {
+        } else {
             suggestionReaction.setIsLike(request.getIsLike());
             suggestionReactionRepository.save(suggestionReaction);
 
-            if(request.getIsLike()) {
+            if (Boolean.TRUE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(1);
                 suggestion.updateDislikeCount(-1);
-            }else{
+            } else if (Boolean.FALSE.equals(request.getIsLike())) {
                 suggestion.updateLikeCount(-1);
                 suggestion.updateDislikeCount(1);
             }
 
-            suggestionRepository.save(suggestion);
-            //기존 리엑션 취소할때
-        } else if(suggestionReaction.getIsLike() == request.getIsLike()) {
-            suggestionReactionRepository.delete(suggestionReaction);
-            if (request.getIsLike()) {
-                suggestion.updateLikeCount(-1);
-            } else {
-                suggestion.updateDislikeCount(-1);
-            }
             suggestionRepository.save(suggestion);
         }
 
@@ -193,10 +194,9 @@ public class MainService {
     @Transactional(readOnly = true)
     public List<AlarmResDto> getAlarmList(Profile me, Profile target) {
 
-        ArrayList<String> contentList = new ArrayList<>(Arrays.asList(
-                "사랑해", "보고싶어", "감사해요!", "이따 봐용~", "오늘도 화이팅", "밥 먹자~",
-                "나도 사랑해", "점심 같이 해요", "저녁 같이 해요", "괜찮아요", "미안해요", "지금 통화 돼?"));
+        List<String> contentList = new ArrayList<>(List.of(AlarmListUtil.alarmList));
         List<AlarmResDto> dtoList = alarmRepository.findAlarmByProfileAndTargetOrderByCount(me, target);
+
         for (AlarmResDto alarmResDto : dtoList) {
             contentList.remove(alarmResDto.getContent());
         }

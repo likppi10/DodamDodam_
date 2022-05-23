@@ -46,18 +46,20 @@ public class FileService {
 
     public String uploadFileV1(String category, MultipartFile file) {
         try {
+            System.out.println(file.getSize());
+            System.out.println(category);
             validateFileExists(file);
             checkFileNameExtension(file);
 
             String fileName = FileUtil.buildFileName(category, file.getOriginalFilename());
-            String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+            String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
 
+            System.out.println(fileFormatName);
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
             return s3SaveAndGetUrl(fileName, fileFormatName, inputImage);
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new CustomException(FILE_UPLOAD_FAIL);
         }
     }
@@ -89,8 +91,8 @@ public class FileService {
     }
 
     public void checkFileNameExtension(MultipartFile multipartFile) {
-        String originFilename = Objects.requireNonNull(multipartFile.getOriginalFilename()).replaceAll(" ", "");
-        String formatName = originFilename.substring(originFilename.lastIndexOf(".") + 1).toLowerCase();
+        String originFilename = Objects.requireNonNull(multipartFile.getOriginalFilename()).replace(" ", "");
+        String formatName = originFilename.substring(originFilename.lastIndexOf('.') + 1).toLowerCase();
         String[] supportFormat = {"bmp", "jpg", "jpeg", "png"};
         if (!Arrays.asList(supportFormat).contains(formatName)) {
             throw new CustomException(ErrorCode.WRONG_FILE_EXTENSION);
@@ -98,23 +100,23 @@ public class FileService {
     }
 
     @Async
-    public void resizeImage(String category, MultipartFile file, Picture picture) {
-        String filePath = resizeFile(category, file);
+    public void resizeImage(MultipartFile file, Picture picture) {
+        String filePath = resizeFile("album", file);
         picture.updatePathName(filePath);
         pictureRepository.save(picture);
     }
 
     @Async
-    public void resizeImage(String category, MultipartFile file, Family family) {
-        String filePath = resizeFile(category, file);
+    public void resizeImage(MultipartFile file, Family family) {
+        String filePath = resizeFile("family", file);
         family.setPicture(filePath);
         familyRepository.save(family);
 
     }
 
     @Async
-    public void resizeImage(String category, MultipartFile file, Profile profile) {
-        String filePath = resizeFile(category, file);
+    public void resizeImage(MultipartFile file, Profile profile) {
+        String filePath = resizeFile("profile", file);
         profile.updateImagePath(filePath);
         profileRepository.save(profile);
 
@@ -124,7 +126,7 @@ public class FileService {
     public String resizeFile(String category, MultipartFile file) {
         try {
             String fileName = FileUtil.buildResizedFileName(category, file.getOriginalFilename());
-            String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+            String fileFormatName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
             int originWidth = inputImage.getWidth();
@@ -143,7 +145,6 @@ public class FileService {
             return s3SaveAndGetUrl(fileName, fileFormatName, imageNoAlpha);
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
     }
