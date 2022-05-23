@@ -28,20 +28,16 @@ public class AlbumUpdateReqDto {
     @Schema(description = "앨범날짜", required = true, example = "2022-04-20")
     private LocalDate date;
 
-    @Schema(description = "앨범아이디", example = "")
-    private long albumId;
+    @Schema(description = "앨범아이디")
+    private Long albumId;
 
-    @Schema(description = "앨범삭제idList", example = "")
-    private int[] pictureIdList;
-
-//    @NotEmpty
-//    @Schema(value = "앨범 사진", required = true, example = "")
-//    private List<MultipartFile> multipartFiles;
+    @Schema(description = "앨범삭제 Id List")
+    private Integer[] pictureIdList;
 
     @NotNull
-    @Schema(description = "메인사진 index", required = true, example = "")
-    private int mainIndex;
+    @Schema(description = "메인사진 index", required = true, example = "1")
+    private Long mainIndex;
 
-    @Schema(description = "사진들", example = "")
+    @Schema(description = "사진들")
     private List<MultipartFile> multipartFiles;
 }
