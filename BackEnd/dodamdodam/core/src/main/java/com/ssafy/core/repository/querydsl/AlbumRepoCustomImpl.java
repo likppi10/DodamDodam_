@@ -42,7 +42,7 @@ public class AlbumRepoCustomImpl implements AlbumRepoCustom {
                 .join(picture)
                 .on(album.id.eq(picture.album.id))
                 .where(album.family.id.eq(familyId).and(picture.is_main.eq(true)))
-                .orderBy(album.id.asc())
+                .orderBy(album.date.desc())
                 .transform(
                         GroupBy.groupBy(album)
                                 .list(Projections.fields(

@@ -42,11 +42,6 @@ public class ProfileService {
     private final Random random = new SecureRandom();
     static final Map<String, String[][]> missionList = MissionListUtil.missionList;
 
-    //[나][대상]
-    final String[][] call = {
-            {"형", "누나"},
-            {"오빠", "언니"}
-    };
 
     @Transactional
     public void enrollProfile(Profile profile) {
@@ -116,17 +111,18 @@ public class ProfileService {
             //미션 대상에 맞는 미션 선정
             String[][] missions = missionList.get(targetRole);
 
-            String missionTargetCall = this.missionTargetCall(profile, missionTarget, targetRole);
-
             //미션 정하기 : 0번 -> 에게, 1번 -> 을/를, 2번 -> 와
-            int randomIndex = random.nextInt(4) - 1 ;
+            int randomIndex = random.nextInt(3);
             String missionSelect = missions[randomIndex][random.nextInt(missions[randomIndex].length)];
+
+            System.out.println(missions[randomIndex].length);
+            System.out.println(missionSelect);
 
             StringBuilder missionContent = new StringBuilder();
 
             //미션 대상 호칭 선택
             if (randomIndex == 0) {
-                missionContent.append(missionTargetCall);
+                missionContent.append(targetRole);
                 missionContent.append("에게 ");
             } else if (randomIndex == 1) {
                 String caseParticle = KoreanUtil.getCompleteWord(targetRole, "을 ", "를 ");
@@ -140,37 +136,6 @@ public class ProfileService {
             profile.updateMissionContent(missionContent.toString());
         }
         return profile;
-    }
-
-    private String missionTargetCall(Profile profile, Profile missionTarget, String targetRole) {
-
-        //본인, 미션 대상이 엄마 아빠가 아니라면
-        if (!(profile.getRole().equals("엄마") || profile.getRole().equals("아빠")
-                || targetRole.equals("엄마") || targetRole.equals("아빠"))) {
-            LocalDate targetBirthday = userRepository.findBirthdayByProfileId(missionTarget.getId());
-            LocalDate myBirthday = userRepository.findBirthdayByProfileId(profile.getId());
-
-            if (targetBirthday.isAfter(myBirthday)) {
-                int myGender;
-                int targetGender;
-                if (profile.getRole().equals("아들")) {
-                    myGender = 0;
-                } else {
-                    myGender = 1;
-                }
-                if (targetRole.equals("아들")) {
-                    targetGender = 0;
-                } else {
-                    targetGender = 1;
-                }
-                targetRole = call[myGender][targetGender];
-            } else {
-                targetRole = "동생";
-            }
-            return targetRole + "(" + missionTarget.getNickname() + ")";
-        } else {
-            return targetRole;
-        }
     }
 
 
