@@ -32,7 +32,7 @@ public class AlbumUpdateReqDto {
     private Long albumId;
 
     @Schema(description = "앨범삭제 Id List")
-    private Integer[] pictureIdList;
+    private int[] pictureIdList;
 
     @NotNull
     @Schema(description = "메인사진 index", required = true, example = "1")
