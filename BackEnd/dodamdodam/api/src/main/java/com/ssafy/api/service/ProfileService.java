@@ -118,17 +118,17 @@ public class ProfileService {
 
             String missionTargetCall = this.missionTargetCall(profile, missionTarget, targetRole);
 
-            //미션 정하기 : 1번 -> 에게, 2번 -> 을/를, 3번 -> 와
-            int randomIndex = random.nextInt(3);
+            //미션 정하기 : 0번 -> 에게, 1번 -> 을/를, 2번 -> 와
+            int randomIndex = random.nextInt(4) - 1 ;
             String missionSelect = missions[randomIndex][random.nextInt(missions[randomIndex].length)];
 
             StringBuilder missionContent = new StringBuilder();
 
             //미션 대상 호칭 선택
-            if (randomIndex == 1) {
+            if (randomIndex == 0) {
                 missionContent.append(missionTargetCall);
                 missionContent.append("에게 ");
-            } else if (randomIndex == 2) {
+            } else if (randomIndex == 1) {
                 String caseParticle = KoreanUtil.getCompleteWord(targetRole, "을 ", "를 ");
                 missionContent.append(caseParticle);
             }else{

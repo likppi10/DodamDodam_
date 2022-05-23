@@ -253,12 +253,13 @@ public class AlbumService {
 
     @Transactional
     public void updateAlbum(AlbumUpdateReqDto albumUpdateReqDto) {
-
+        System.out.println("updateAlbum Start ===========");
         //1. 앨범 날짜 업데이트
         Album album = getAlbumByAlbumId(albumUpdateReqDto.getAlbumId());
         album.updateAlbumDate(albumUpdateReqDto.getDate());
         album = albumRepository.save(album);
 
+        System.out.println("done update date ===========");
         //2. 해시태그 업데이트
         List<HashTag> hashTagList = hashTagRepository.findHashTagsByAlbumId(album.getId());
         List<String> updateHashTagList = albumUpdateReqDto.getHashTags()
@@ -267,6 +268,7 @@ public class AlbumService {
                 .collect(Collectors.toList());
 
         this.updateHashTag(hashTagList, updateHashTagList, album);
+        System.out.println("done hashtag update ===========");
 
         //3. 삭제할 사진 삭제
         Integer[] deletePictureListIndex = albumUpdateReqDto.getPictureIdList();
@@ -283,6 +285,7 @@ public class AlbumService {
             pictureRepository.deleteAll(deletePictureList);
         }
 
+        System.out.println("done delete pictures ===========");
         //4. 새로운 사진 저장
         List<MultipartFile> fileList = albumUpdateReqDto.getMultipartFiles();
 
@@ -303,6 +306,8 @@ public class AlbumService {
                 }
             }
         }
+
+        System.out.println("done new picture save ===========");
         //5. 메인 사진 변경
         List<Picture> pictureList = this.getPictureListByAlbumId(album.getId());
         int idx = 0;
@@ -310,6 +315,7 @@ public class AlbumService {
             picture.updateIsMain(idx == albumUpdateReqDto.getMainIndex());
             idx++;
         }
+        System.out.println("done main picutre update ===========");
         pictureRepository.saveAll(pictureList);
     }
 
