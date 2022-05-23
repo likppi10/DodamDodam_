@@ -39,7 +39,7 @@ public class ChattingController {
     @GetMapping(value = "")
     public ListResult<ChattingMemberResDto> getChattingMemberProfile(Authentication authentication) {
 
-        long userPk = Long.parseLong(authentication.getName());
+        Long userPk = Long.parseLong(authentication.getName());
         return responseService.getListResult(profileService.getProfileListByUserPk(userPk));
     }
 

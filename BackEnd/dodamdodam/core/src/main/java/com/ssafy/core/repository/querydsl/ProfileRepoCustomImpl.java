@@ -113,7 +113,7 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
                 .select(Projections.fields(ChattingMemberResDto.class,
                         profile.id.as("profileId"),
                         profile.imagePath.as("profileImage"),
-                        profile.nickname))
+                        profile.role))
                 .from(profile)
                 .where(profile.id.in(ids))
                 .fetch();

@@ -25,7 +25,7 @@ class ChattingControllerTest extends ControllerTestSupport {
     private final List<ChattingMemberResDto> givenListChattingDto = List.of(
             ChattingMemberResDto.builder()
                     .profileId(1L)
-                    .nickname("test")
+                    .role("아들")
                     .profileImage("/image/test.jpg")
                     .build()
     );
@@ -50,7 +50,7 @@ class ChattingControllerTest extends ControllerTestSupport {
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.data[0].profileId").value(1));
         result.andExpect(jsonPath("$.data[0].profileImage").value("/image/test.jpg"));
-        result.andExpect(jsonPath("$.data[0].nickname").value("test"));
+        result.andExpect(jsonPath("$.data[0].role").value("아들"));
     }
 
 //    @Test
