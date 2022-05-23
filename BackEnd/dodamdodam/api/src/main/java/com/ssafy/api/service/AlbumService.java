@@ -270,26 +270,22 @@ public class AlbumService {
 
         //3. 삭제할 사진 삭제
         int[] deleteIndexList = albumUpdateReqDto.getPictureIdList();
-        System.out.println(deleteIndexList.length);
-        if (deleteIndexList != null) {
-            System.out.println("Index is not null!");
-            List<Picture> pictureList = pictureRepository.findPictureListByAlbumId(album.getId());
 
-            System.out.println("picture list index");
+        if (deleteIndexList != null) {
+            List<Picture> pictureList = pictureRepository.findPictureListByAlbumId(album.getId());
+            for(int id : deleteIndexList) {
+                System.out.println(id);
+                System.out.println(pictureList.get(id).getId());
+            }
+
             for(Picture p : pictureList){
                 System.out.println(p.getId());
             }
 
+            System.out.println("어디까지 오는거야..");
             List<Long> deleteIdList = new ArrayList<>();
             for(int id : deleteIndexList){
-                System.out.println(id);
                 deleteIdList.add(pictureList.get(id).getId());
-                System.out.println(pictureList.get(id).getId());
-                System.out.println(deleteIdList.size());
-            }
-
-            for(Long i : deleteIdList){
-                System.out.println(i);
             }
 
             List<Picture> deletePictureList =

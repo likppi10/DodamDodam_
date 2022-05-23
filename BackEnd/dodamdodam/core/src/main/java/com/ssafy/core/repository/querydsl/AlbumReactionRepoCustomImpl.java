@@ -57,6 +57,4 @@ public class AlbumReactionRepoCustomImpl implements AlbumReactionRepoCustom {
                 .where(albumReaction.album.id.eq(albumId))
                 .fetch();
     }
-
-
 }
