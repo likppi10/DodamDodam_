@@ -213,14 +213,15 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChattingMemberResDto> getProfileListByUserPk(long userPk) {
+    public List<ChattingMemberResDto> getProfileListByUserPk(Long userPk) {
 
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
-        if (profileRepository.findChattingMemberListByFamilyId(familyId) == null) {
+        List<ChattingMemberResDto> chattingProfileList = profileRepository.findChattingMemberListByFamilyId(familyId);
+        if (chattingProfileList == null) {
             throw new CustomException(INVALID_REQUEST);
         }
-        return profileRepository.findChattingMemberListByFamilyId(familyId);
+        return chattingProfileList;
     }
 
     @Transactional(readOnly = true)

@@ -17,6 +17,6 @@ public class ChattingMemberResDto {
     @Schema(description = "프로필 사진 경로", example = "image.png")
     private String profileImage;
 
-    @Schema(description = "프로필 닉네임", example = "호랑이")
-    private String nickname;
+    @Schema(description = "프로필 역할", example = "아들")
+    private String role;
 }
