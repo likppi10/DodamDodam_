@@ -2,7 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.core.common.FileUtil;
 import com.ssafy.core.common.KoreanUtil;
-import com.ssafy.core.common.MissionList;
+import com.ssafy.core.common.MissionListUtil;
 import com.ssafy.core.dto.req.ProfileReqDto;
 import com.ssafy.core.dto.req.StatusReqDto;
 import com.ssafy.core.dto.res.ChattingMemberResDto;
@@ -40,7 +40,7 @@ public class ProfileService {
     private final FileService fileService;
     private final MainService mainService;
     private final Random random = new SecureRandom();
-    static final Map<String, String[][]> missionList = MissionList.missionList;
+    static final Map<String, String[][]> missionList = MissionListUtil.missionList;
 
     //[나][대상]
     final String[][] call = {
@@ -57,28 +57,27 @@ public class ProfileService {
     public Profile updateProfile(Long userPK, ProfileReqDto profileDto, MultipartFile multipartFile, String characterPath) {
         Profile profile = profileRepository.findProfileByUserPk(userPK);
 
-        if(characterPath != null){
-            String originFileName = characterPath.substring(characterPath.lastIndexOf("/")+1).toLowerCase();
+        if (characterPath != null) {
+            String originFileName = characterPath.substring(characterPath.lastIndexOf('/') + 1).toLowerCase();
 
             profile.updateImageName(originFileName);
             profile.updateImagePath(characterPath);
 
-        }else if(multipartFile != null){
+        } else if (multipartFile != null) {
             String originFileName = multipartFile.getOriginalFilename();
             String filePath = fileService.uploadFileV1("profile", multipartFile);
 
             profile.updateImageName(originFileName);
             profile.updateImagePath(filePath);
             if (multipartFile.getSize() > FileUtil.FILE_MAX_SIZE) {
-                fileService.resizeImage("profile", multipartFile, profile);
+                fileService.resizeImage(multipartFile, profile);
             }
 
-        }else{
+        } else {
             profile.updateImageName(null);
             profile.updateImagePath(null);
         }
 
-//        updateImage(multipartFile, profile, request);
         profile.updateRole(profileDto.getRole());
         profile.updateNickname(profileDto.getNickname());
 
@@ -94,6 +93,7 @@ public class ProfileService {
         //본인 가족 Id
         Long familyId = familyRepository.findFamilyIdByUserPk(userPk);
 
+        //아직 Mission Target이 없으면 mission 생성
         if (profile.getMission_target() == null) {
             //본인을 제외한 가족 profiles 가져오기
             List<Profile> familyProfiles = profileRepository.findProfilesByFamilyIdExceptMe(familyId, profile.getId());
@@ -116,37 +116,23 @@ public class ProfileService {
             //미션 대상에 맞는 미션 선정
             String[][] missions = missionList.get(targetRole);
 
-            String missionTargetCall = "";
-            //본인, 미션 대상이 엄마 아빠가 아니라면
-            if (!(profile.getRole().equals("엄마") || profile.getRole().equals("아빠")
-                    || targetRole.equals("엄마") || targetRole.equals("아빠"))) {
-                LocalDate targetBirthday = userRepository.findBirthdayByProfileId(missionTarget.getId());
-                LocalDate myBirthday = userRepository.findBirthdayByProfileId(profile.getId());
+            String missionTargetCall = this.missionTargetCall(profile, missionTarget, targetRole);
 
-                if (targetBirthday.isAfter(myBirthday)) {
-                    int myGender = profile.getRole().equals("아들") ? 0 : 1;
-                    int targetGender = targetRole.equals("아들") ? 0 : 1;
-                    targetRole = call[myGender][targetGender];
-                } else {
-                    targetRole = "동생";
-                }
-                missionTargetCall = missionTargetCall.concat(targetRole + "(" + missionTarget.getNickname() + ")");
-            } else {
-                missionTargetCall = missionTargetCall.concat(targetRole);
-            }
-
-            //0번인지 1번인지 정하기
-            int randomIndex = random.nextInt(2);
+            //미션 정하기 : 1번 -> 에게, 2번 -> 을/를, 3번 -> 와
+            int randomIndex = random.nextInt(3);
             String missionSelect = missions[randomIndex][random.nextInt(missions[randomIndex].length)];
 
             StringBuilder missionContent = new StringBuilder();
 
             //미션 대상 호칭 선택
-            if (randomIndex == 0) {
+            if (randomIndex == 1) {
                 missionContent.append(missionTargetCall);
                 missionContent.append("에게 ");
-            } else if (randomIndex == 1) {
+            } else if (randomIndex == 2) {
                 String caseParticle = KoreanUtil.getCompleteWord(targetRole, "을 ", "를 ");
+                missionContent.append(caseParticle);
+            }else{
+                String caseParticle = KoreanUtil.getCompleteWord(targetRole, "과 ", "와 ");
                 missionContent.append(caseParticle);
             }
 
@@ -154,6 +140,37 @@ public class ProfileService {
             profile.updateMissionContent(missionContent.toString());
         }
         return profile;
+    }
+
+    private String missionTargetCall(Profile profile, Profile missionTarget, String targetRole) {
+
+        //본인, 미션 대상이 엄마 아빠가 아니라면
+        if (!(profile.getRole().equals("엄마") || profile.getRole().equals("아빠")
+                || targetRole.equals("엄마") || targetRole.equals("아빠"))) {
+            LocalDate targetBirthday = userRepository.findBirthdayByProfileId(missionTarget.getId());
+            LocalDate myBirthday = userRepository.findBirthdayByProfileId(profile.getId());
+
+            if (targetBirthday.isAfter(myBirthday)) {
+                int myGender;
+                int targetGender;
+                if (profile.getRole().equals("아들")) {
+                    myGender = 0;
+                } else {
+                    myGender = 1;
+                }
+                if (targetRole.equals("아들")) {
+                    targetGender = 0;
+                } else {
+                    targetGender = 1;
+                }
+                targetRole = call[myGender][targetGender];
+            } else {
+                targetRole = "동생";
+            }
+            return targetRole + "(" + missionTarget.getNickname() + ")";
+        } else {
+            return targetRole;
+        }
     }
 
 
@@ -173,7 +190,7 @@ public class ProfileService {
 
     @Transactional
     public Profile findProfileByUserPk(Long userPk) {
-        return  profileRepository.findProfileByUserPk(userPk);
+        return profileRepository.findProfileByUserPk(userPk);
     }
 
 

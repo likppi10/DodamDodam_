@@ -66,8 +66,9 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
     public Long checkRoleByFamilyIdExceptMe(Long familyId, String role, Long profileId) {
         return queryFactory.select(profile.id.count())
                 .from(profile)
-                .where(profile.family.id.eq(familyId).and(profile.role.eq(role))
-                        , profileIdNotEquals(profileId))
+                .where(profile.family.id.eq(familyId),
+                        profile.role.eq(role),
+                        profileIdNotEquals(profileId))
                 .fetchFirst();
     }
 
@@ -75,8 +76,9 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
     public Long checkNicknameByFamilyIdExceptMe(Long familyId, String nickname, Long profileId) {
         return queryFactory.select(profile.id.count())
                 .from(profile)
-                .where(profile.family.id.eq(familyId).and(profile.nickname.eq(nickname))
-                        , profileIdNotEquals(profileId))
+                .where(profile.family.id.eq(familyId),
+                        profile.nickname.eq(nickname),
+                        profileIdNotEquals(profileId))
                 .fetchFirst();
     }
 
@@ -84,8 +86,8 @@ public class ProfileRepoCustomImpl implements ProfileRepoCustom {
     public List<Profile> findProfilesByFamilyIdExceptMe(Long familyId, Long profileId) {
         return queryFactory.select(profile)
                 .from(profile)
-                .where(profile.family.id.eq(familyId)
-                        .and(profile.id.ne(profileId)))
+                .where(profile.family.id.eq(familyId),
+                        profile.id.ne(profileId))
                 .fetch();
     }
 
