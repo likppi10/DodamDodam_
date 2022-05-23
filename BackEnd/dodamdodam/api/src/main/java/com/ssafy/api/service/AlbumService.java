@@ -253,13 +253,12 @@ public class AlbumService {
 
     @Transactional
     public void updateAlbum(AlbumUpdateReqDto albumUpdateReqDto) {
-        System.out.println("updateAlbum Start ===========");
+
         //1. 앨범 날짜 업데이트
         Album album = getAlbumByAlbumId(albumUpdateReqDto.getAlbumId());
         album.updateAlbumDate(albumUpdateReqDto.getDate());
         album = albumRepository.save(album);
 
-        System.out.println("done update date ===========");
         //2. 해시태그 업데이트
         List<HashTag> hashTagList = hashTagRepository.findHashTagsByAlbumId(album.getId());
         List<String> updateHashTagList = albumUpdateReqDto.getHashTags()
@@ -268,19 +267,33 @@ public class AlbumService {
                 .collect(Collectors.toList());
 
         this.updateHashTag(hashTagList, updateHashTagList, album);
-        System.out.println("done hashtag update ===========");
 
         //3. 삭제할 사진 삭제
-        Integer[] deletePictureListIndex = albumUpdateReqDto.getPictureIdList();
-        if (deletePictureListIndex != null) {
+        Integer[] deleteIndexList = albumUpdateReqDto.getPictureIdList();
+        if (deleteIndexList != null) {
+            System.out.println("Index is not null!");
             List<Picture> pictureList = pictureRepository.findPictureListByAlbumId(album.getId());
-            List<Long> deletePictureIdList = new ArrayList<>();
-            for(int id : deletePictureListIndex){
-                deletePictureIdList.add(pictureList.get(id).getId());
+
+            System.out.println("picture list index");
+            for(Picture p : pictureList){
+                System.out.println(p.getId());
+            }
+
+            List<Long> deleteIdList = new ArrayList<>();
+            for(int id : deleteIndexList){
+                deleteIdList.add(pictureList.get(id).getId());
+                System.out.println(deleteIdList.size());
+            }
+
+            for(Long i : deleteIdList){
+                System.out.println(i);
             }
 
             List<Picture> deletePictureList =
-                    pictureRepository.findPictureListByPictureIdList(deletePictureIdList);
+                    pictureRepository.findPictureListByPictureIdList(deleteIdList);
+
+            System.out.println("delete picutre list");
+            System.out.println(deletePictureList.size());
 
             pictureRepository.deleteAll(deletePictureList);
         }

@@ -109,7 +109,6 @@ public class AlbumController {
             @ModelAttribute
             @Valid AlbumUpdateReqDto albumUpdateReqDto) {
 
-        System.out.println("album controller success ===========");
         albumService.updateAlbum(albumUpdateReqDto);
         return responseService.getSuccessResult();
     }
