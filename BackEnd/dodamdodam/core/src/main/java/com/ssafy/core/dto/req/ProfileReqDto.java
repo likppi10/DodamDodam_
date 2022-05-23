@@ -19,9 +19,6 @@ import java.time.LocalDate;
 @Schema(description = "DTO Model : ProfileReqDto")
 public class ProfileReqDto {
 
-//    @Schema(value = "프로필이미지", required = false, example = "")
-//    private MultipartFile profileImage;
-
     @NotBlank
     @Size(max = 10, min = 1)
     @Schema(description = "역할", required = true, example = "아들")

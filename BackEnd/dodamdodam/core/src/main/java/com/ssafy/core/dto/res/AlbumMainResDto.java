@@ -14,13 +14,13 @@ import java.time.LocalDate;
 public class AlbumMainResDto {
 
     @Schema(description = "앨범ID", example = "예시입니다.")
-    private long albumId;
+    private Long albumId;
 
 
     @Schema(description = "앨범등록날짜", example = "예시입니다.")
     private LocalDate date;
 
 
-    @Schema(description = "사진경로", example = "")
+    @Schema(description = "사진경로", example = "/image/image.jpg")
     private String imagePath;
 }

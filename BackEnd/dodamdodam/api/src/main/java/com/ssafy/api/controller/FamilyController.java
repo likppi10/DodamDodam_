@@ -7,11 +7,7 @@ import com.ssafy.core.dto.res.ProfileIdAndFamilyIdResDto;
 import com.ssafy.core.dto.res.FamilyIdResDto;
 import com.ssafy.core.dto.res.FamilyPictureResDto;
 import com.ssafy.core.entity.Family;
-import com.ssafy.core.entity.Profile;
-import com.ssafy.core.entity.User;
 import com.ssafy.api.service.FamilyService;
-import com.ssafy.api.service.ProfileService;
-import com.ssafy.api.service.UserService;
 import com.ssafy.api.service.common.CommonResult;
 import com.ssafy.api.service.common.ResponseService;
 import com.ssafy.api.service.common.SingleResult;
@@ -38,8 +34,6 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 public class FamilyController {
 
     private final FamilyService familyService;
-    private final UserService userService;
-    private final ProfileService profileService;
     private final ResponseService responseService;
 
     @Operation(summary = "가족 그룹 생성", description = "<strong>가족 그룹</strong>을 생성한다.",
@@ -52,17 +46,7 @@ public class FamilyController {
             Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-        User user = userService.getUserByUserPk(userPk);
-        familyService.familyExistCheck(userPk);
-        userService.updateBirthdayByUserPk(userPk, familyReq.getBirthday());
-        Family family = familyService.createFamily();
-//        String[] imageInfo = profileService.enrollImage(familyReq.getImage()).split("#");
-        Profile profile = familyService.createProfileForFirst(family, user, familyReq, familyReq.getImage(), familyReq.getCharacterPath());
-        ProfileIdAndFamilyIdResDto res = ProfileIdAndFamilyIdResDto.builder()
-                .familyId(family.getId())
-                .profileId(profile.getId())
-                .build();
-        return responseService.getSingleResult(res);
+        return responseService.getSingleResult(familyService.createFamily(familyReq, userPk));
     }
 
     @Operation(summary = "가족 그룹 가입", description = "<strong>가족 그룹<strong>을 가입한다.",
@@ -76,23 +60,7 @@ public class FamilyController {
             Authentication authentication) {
 
         Long userPk = Long.parseLong(authentication.getName());
-        User user = userService.getUserByUserPk(userPk);
-        familyService.familyExistCheck(userPk);
-
-        //Role 중복 검사
-        profileService.checkRoleByFamilyIdExceptMe(familyRequest.getFamilyId(), familyRequest.getRole(), userPk);
-        //NickName 중복 검사
-        profileService.checkNicknameByFamilyIdExceptMe(familyRequest.getFamilyId(), familyRequest.getNickname(), userPk);
-
-        userService.updateBirthdayByUserPk(userPk, familyRequest.getBirthday());
-        Family family = familyService.getFamily(familyRequest.getFamilyId());
-//        String[] imageInfo = profileService.enrollImage(familyRequest.getImage()).split("#");
-        Profile profile = familyService.createProfileForJoin(family, user, familyRequest, familyRequest.getImage(), familyRequest.getCharacterPath());
-        ProfileIdAndFamilyIdResDto res = ProfileIdAndFamilyIdResDto.builder()
-                .familyId(family.getId())
-                .profileId(profile.getId())
-                .build();
-        return responseService.getSingleResult(res);
+        return responseService.getSingleResult(familyService.joinFamily(familyRequest, userPk));
     }
 
     @Operation(summary = "가족 코드 검사", description = "<strong>가족 코드<strong>를 받아 가족 id를 조회한다.",

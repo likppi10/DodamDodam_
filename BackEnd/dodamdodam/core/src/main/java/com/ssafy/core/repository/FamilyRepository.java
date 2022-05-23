@@ -8,5 +8,5 @@ public interface FamilyRepository extends JpaRepository<Family, Long>, FamilyRep
 
     Family findFamilyByCode(String code);
 
-    Family findFamilyById(long id);
+    Family findFamilyById(Long id);
 }

@@ -38,7 +38,7 @@ class MainControllerTest extends ControllerTestSupport {
                     .build()
     );
 
-    final SuggestionReactionListResDto expectReactionListDto = SuggestionReactionListResDto.builder()
+    final SuggestionReactionResDto expectReactionListDto = SuggestionReactionResDto.builder()
             .isLike(true)
             .profileId(1L)
             .build();

@@ -35,15 +35,6 @@ public class ResponseService {
         return result;
     }
 
-    // 단일건 결과를 처리하는 메소드 + 리스트 조회 시 필요한 limit 함께 세팅
-    public <T> SingleResult<T> getSingleResult(T data, int limit) {
-        SingleResult<T> result = new SingleResult<>();
-        result.setData(data);
-//        result.setOutput(limit);
-        setSuccessResult(result);
-        return result;
-    }
-
 
     public <T> SingleResult<T> getSingleResult(T data, String msg, int code) {
         SingleResult<T> result = new SingleResult<>();
@@ -105,6 +96,7 @@ public class ResponseService {
 
     public <T> SingleResult<T> getFailResult(int code, String msg, T data) {
         SingleResult<T> result = new SingleResult<>();
+        result.setOutput(code);
         result.setData(data);
         result.setMsg(msg);
         setSuccessResult(result);

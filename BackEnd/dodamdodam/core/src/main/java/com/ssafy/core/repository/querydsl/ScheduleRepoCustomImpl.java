@@ -33,14 +33,10 @@ public class ScheduleRepoCustomImpl implements ScheduleRepoCustom{
                                 .and(schedule.endDate.month().goe(month)))
                 )
                 .fetch();
-
-
     }
 
     @Override
     public List<ScheduleDetailResDto> findScheduleByDay(LocalDate day, Family family) {
-        System.out.println(day.getClass().getName());
-        System.out.println(schedule.endDate.getClass().getName());
         return queryFactory
                 .select(Projections.fields(ScheduleDetailResDto.class,
                         schedule.id.as("scheduleId"),

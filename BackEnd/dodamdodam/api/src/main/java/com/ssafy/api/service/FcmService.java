@@ -43,11 +43,7 @@ public class FcmService {
                 .build();
         Response response = client.newCall(request)
                 .execute();
-        if (!response.isSuccessful()) {
-            response.close();
-        }else{
-            response.close();
-        }
+        response.close();
     }
 
     private String makeMessage(String token, String title, String body)

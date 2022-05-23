@@ -27,13 +27,9 @@ public class AlbumReqDto {
     private LocalDate date;
 
 
-//    @NotEmpty
-//    @Schema(value = "앨범 사진", required = true, example = "")
-//    private List<MultipartFile> multipartFiles;
-
     @NotNull
-    @Schema(description = "메인사진 index", required = true, example = "")
-    private int mainIndex;
+    @Schema(description = "메인사진 index", required = true, example = "1")
+    private Long mainIndex;
 
     private List<MultipartFile> multipartFiles;
 }

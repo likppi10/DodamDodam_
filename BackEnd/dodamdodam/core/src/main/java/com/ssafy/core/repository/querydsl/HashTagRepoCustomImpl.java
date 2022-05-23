@@ -17,7 +17,7 @@ public class HashTagRepoCustomImpl implements HashTagRepoCustom{
     QAlbum album = QAlbum.album;
 
     @Override
-    public List<HashTag> findHashTagsByAlbumId(long albumId) {
+    public List<HashTag> findHashTagsByAlbumId(Long albumId) {
         return jpaQueryFactory.select(hashTag)
                 .from(hashTag)
                 .where(hashTag.album.id.eq(albumId))

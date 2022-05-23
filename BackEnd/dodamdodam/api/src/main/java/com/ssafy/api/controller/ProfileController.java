@@ -19,8 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;

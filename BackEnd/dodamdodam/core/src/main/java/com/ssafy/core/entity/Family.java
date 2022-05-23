@@ -1,6 +1,5 @@
 package com.ssafy.core.entity;
 
-import com.ssafy.core.dto.res.AlbumPictureListResDto;
 import lombok.*;
 
 import javax.persistence.*;

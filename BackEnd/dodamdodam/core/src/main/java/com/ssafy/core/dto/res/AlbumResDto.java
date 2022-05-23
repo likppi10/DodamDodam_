@@ -12,10 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AlbumResDto {
-    @Schema(description = "해시태그", example = "")
-    private List<AlbumHashTagListResDto> hashTags;
+    @Schema(description = "해시태그")
+    private List<HashTagResDto> hashTags;
 
-    @Nullable
-    @Schema(description = "메인사진", example = "")
+    @Schema(description = "메인사진")
     private AlbumMainResDto mainPicture;
 }

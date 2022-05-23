@@ -4,7 +4,6 @@ import com.ssafy.core.dto.req.AlbumReactionReqDto;
 import com.ssafy.core.dto.req.AlbumReqDto;
 import com.ssafy.core.dto.req.AlbumUpdateReqDto;
 import com.ssafy.core.dto.res.*;
-import com.ssafy.core.entity.*;
 import com.ssafy.api.service.AlbumService;
 import com.ssafy.api.service.common.CommonResult;
 import com.ssafy.api.service.common.ListResult;
@@ -20,8 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 
@@ -42,23 +39,9 @@ public class AlbumController {
             })
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ListResult<AlbumResDto> getAlbums(Authentication authentication) {
-        Long userPK = Long.parseLong(authentication.getName());
-        Family family = albumService.findFamilyByUserPK(userPK);
-        List<Album> albums = albumService.findAlbumsByFamilyId(family.getId());
-        List<AlbumResDto> albumList = new ArrayList<>();
 
-        for (int i = 0; i < albums.size(); i++) {
-            Long albumId = albums.get(i).getId();
-            AlbumMainResDto main = albumService.findMainPictureByAlbumId(albumId);
-            List<HashTag> hashTags = albumService.findHashTagsByAlbumId(albumId);
-            AlbumHashTagListResDto albumHashTagListResDto = AlbumHashTagListResDto.builder().build();
-            AlbumResDto albumResDto = AlbumResDto.builder()
-                    .hashTags(albumHashTagListResDto.fromEntity(hashTags))
-                    .mainPicture(main)
-                    .build();
-            albumList.add(albumResDto);
-        }
-        return responseService.getListResult(albumList);
+        Long userPk = Long.parseLong(authentication.getName());
+        return responseService.getListResult(albumService.findAlbumList(userPk));
     }
 
 
@@ -67,24 +50,9 @@ public class AlbumController {
                     @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
             })
     @GetMapping(value = "{albumId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public SingleResult<AlbumDetailResDto> getAlbum(@PathVariable Long albumId, Authentication authentication) {
-        Long userPK = Long.parseLong(authentication.getName());
-        AlbumPictureListResDto albumPictureListResDto = AlbumPictureListResDto.builder().build();
-        AlbumHashTagListResDto albumHashTagListResDto = AlbumHashTagListResDto.builder().build();
+    public SingleResult<AlbumDetailResDto> getAlbum(@PathVariable Long albumId) {
 
-        Album album = albumService.findByAlbum(albumId);
-        List<AlbumReactionListResDto> albumReactions = albumService.findAlbumReactionListResDtoByAlbumId(albumId);
-        List<HashTag> hashTags = albumService.findHashTagsByAlbumId(albumId);
-        List<Picture> pictures = albumService.findPicturesByAlbumId(albumId);
-
-        AlbumDetailResDto albumDetailResDto = AlbumDetailResDto.builder()
-                .date(album.getDate().toString())
-                .pictures(albumPictureListResDto.fromEntity(pictures))
-                .hashTags(albumHashTagListResDto.fromEntity(hashTags))
-                .albumReactions(albumReactions)
-                .build();
-
-        return responseService.getSingleResult(albumDetailResDto);
+        return responseService.getSingleResult(albumService.getAlbumDetail(albumId));
     }
 
 
@@ -93,19 +61,11 @@ public class AlbumController {
     })
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult createAlbum(@ModelAttribute
-                                    @Valid final AlbumReqDto albumReqDto,
+                                    @Valid AlbumReqDto albumReqDto,
                                     Authentication authentication) {
 
-        Long userPK = Long.parseLong(authentication.getName());
-
-        Family family = albumService.findFamilyByUserPK(userPK);
-
-        Album album = Album.builder()
-                .family(family)
-                .date(albumReqDto.getDate())
-                .build();
-        albumService.createAlbum(albumReqDto, family, album, albumReqDto.getMultipartFiles());
-
+        Long userPk = Long.parseLong(authentication.getName());
+        albumService.createAlbum(albumReqDto, userPk);
         return responseService.getSuccessResult();
 
     }
@@ -122,9 +82,8 @@ public class AlbumController {
                     AlbumReactionReqDto albumReactionReqDto,
             Authentication authentication) {
 
-        Long userPK = Long.parseLong(authentication.getName());
-        Album album = albumService.findByAlbum(albumReactionReqDto.getAlbumId());
-        albumService.manageAlbumReaction(userPK, album, albumReactionReqDto);
+        Long userPk = Long.parseLong(authentication.getName());
+        albumService.manageAlbumReaction(albumReactionReqDto, userPk);
         return responseService.getSuccessResult();
     }
 
@@ -137,7 +96,6 @@ public class AlbumController {
     public CommonResult deleteReaction(@PathVariable Long reactionid, Authentication authentication) {
 
         Long userPK = Long.parseLong(authentication.getName());
-
         albumService.deleteAlbumReaction(userPK, reactionid);
         return responseService.getSuccessResult();
     }
@@ -149,69 +107,10 @@ public class AlbumController {
     @PatchMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CommonResult updateAlbum(
             @ModelAttribute
-            @Valid AlbumUpdateReqDto albumUpdateReqDto,
-            Authentication authentication) {
+            @Valid AlbumUpdateReqDto albumUpdateReqDto) {
 
-        Long userPK = Long.parseLong(authentication.getName());
-        Album album = albumService.findByAlbum(albumUpdateReqDto.getAlbumId());
-        albumService.updateAlbum(userPK, album, albumUpdateReqDto);
+        albumService.updateAlbum(albumUpdateReqDto);
         return responseService.getSuccessResult();
-    }
-
-    @GetMapping(value = "/search/{keyword}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "앨범 검색", description = "<strong>앨범 검색</strong>",
-            parameters = {
-                    @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
-            }
-    )
-    public ListResult<AlbumResDto> searchAlbum(@PathVariable String keyword, Authentication authentication) {
-        Long userPK = Long.parseLong(authentication.getName());
-        Family family = albumService.findFamilyByUserPK(userPK);
-        List<Album> albums = albumService.findAlbumsByHashTag(keyword, family.getId());
-        List<AlbumResDto> albumList = new ArrayList<>();
-
-        for (int i = 0; i < albums.size(); i++) {
-            Long albumId = albums.get(i).getId();
-            AlbumMainResDto main = albumService.findMainPictureByAlbumId(albumId);
-            List<HashTag> hashTags = albumService.findHashTagsByAlbumId(albumId);
-            AlbumHashTagListResDto albumHashTagListResDto = AlbumHashTagListResDto.builder().build();
-            AlbumResDto albumResDto = AlbumResDto.builder()
-                    .hashTags(albumHashTagListResDto.fromEntity(hashTags))
-                    .mainPicture(main)
-                    .build();
-            albumList.add(albumResDto);
-        }
-
-
-        return responseService.getListResult(albumList);
-    }
-
-    @GetMapping(value = "/searchDate/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "앨범 날짜 검색", description = "<strong>앨범 날짜 검색</strong>",
-            parameters = {
-                    @Parameter(name = "X-Auth-Token", description = "JWT Token", required = true, in = HEADER)
-            }
-    )
-    public ListResult<AlbumResDto> searchAlbumByDate(@PathVariable String date, Authentication authentication) {
-        Long userPK = Long.parseLong(authentication.getName());
-        Family family = albumService.findFamilyByUserPK(userPK);
-        List<Album> albums = albumService.findAlbumsByDate(date, family.getId());
-        List<AlbumResDto> albumList = new ArrayList<>();
-
-        for (int i = 0; i < albums.size(); i++) {
-            Long albumId = albums.get(i).getId();
-            AlbumMainResDto main = albumService.findMainPictureByAlbumId(albumId);
-            List<HashTag> hashTags = albumService.findHashTagsByAlbumId(albumId);
-            AlbumHashTagListResDto albumHashTagListResDto = AlbumHashTagListResDto.builder().build();
-            AlbumResDto albumResDto = AlbumResDto.builder()
-                    .hashTags(albumHashTagListResDto.fromEntity(hashTags))
-                    .mainPicture(main)
-                    .build();
-            albumList.add(albumResDto);
-        }
-
-
-        return responseService.getListResult(albumList);
     }
 
     @DeleteMapping(value = "deleteAlbum/{albumId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -221,9 +120,9 @@ public class AlbumController {
             }
     )
     public CommonResult deleteAlbum(@PathVariable Long albumId, Authentication authentication) {
+
         Long userPK = Long.parseLong(authentication.getName());
         albumService.deleteAlbum(albumId, userPK);
-
         return responseService.getSuccessResult();
     }
 

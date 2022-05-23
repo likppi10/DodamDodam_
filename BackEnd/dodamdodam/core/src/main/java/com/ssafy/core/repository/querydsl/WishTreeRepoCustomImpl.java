@@ -15,7 +15,6 @@ public class WishTreeRepoCustomImpl implements WishTreeRepoCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
     QWishTree wishTree = QWishTree.wishTree;
-    QProfile profile = QProfile.profile;
 
     @Override
     public WishTree findWishTreeByProfile(Profile profile) {
@@ -34,7 +33,6 @@ public class WishTreeRepoCustomImpl implements WishTreeRepoCustom {
 
     @Override
     public List<WishTreeResDto.WishTreeDetail> findWishTreeListByFamily(Family family) {
-        System.out.println("3");
         return jpaQueryFactory.select(Projections.fields(WishTreeResDto.WishTreeDetail.class,
                 wishTree.id.as("wishTreeId"),
                 wishTree.content,

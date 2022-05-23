@@ -1,16 +1,16 @@
 package com.ssafy.core.repository.querydsl;
 
+import com.ssafy.core.dto.res.AlbumResDto;
 import com.ssafy.core.entity.Album;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AlbumRepoCustom {
 
-    List<Album> findAlbumByFamilyId(long familyId);
-    Album findAlbumByAlbumId(long albumId);
-    List<Album> findAlbumByHashTag(String hashTag, long familyId);
+    Album findAlbumByAlbumId(Long albumId);
 
-    List<Album> findAlbumByDate(String date, long familyId);
+    List<AlbumResDto> findAlbumListByFamilyId(Long familyId);
 
-
+    LocalDate findAlbumDateByAlbumId(Long albumId);
 }

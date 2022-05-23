@@ -14,5 +14,4 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepoCusto
 
     Boolean existsUserByUserId(String userId);
 
-    User getUserByUserPk(Long parseLong);
 }

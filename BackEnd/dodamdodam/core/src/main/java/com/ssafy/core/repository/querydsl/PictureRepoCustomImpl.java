@@ -12,23 +12,20 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class PictureRepoCustomImpl implements PictureRepoCustom{
+public class PictureRepoCustomImpl implements PictureRepoCustom {
     private final JPAQueryFactory jpaQueryFactory;
     QAlbum album = QAlbum.album;
-    QFamily family = QFamily.family;
-    QHashTag hashTag = QHashTag.hashTag;
     QPicture picture = QPicture.picture;
+
     @Override
-    public List<Picture> findPicturesByAlbumId(long albumId) {
-        return jpaQueryFactory.select(picture)
-                .from(picture)
+    public List<Picture> findPictureListByAlbumId(Long albumId) {
+        return jpaQueryFactory.selectFrom(picture)
                 .where(picture.album.id.eq(albumId))
-                .leftJoin(picture.album, album)
                 .fetch();
     }
 
     @Override
-    public Picture findPictureByPictureId(long pictureId) {
+    public Picture findPictureByPictureId(Long pictureId) {
         return jpaQueryFactory.select(picture)
                 .from(picture)
                 .where(picture.id.eq(pictureId))
@@ -36,17 +33,25 @@ public class PictureRepoCustomImpl implements PictureRepoCustom{
     }
 
     @Override
-    public AlbumMainResDto findMainPictureByAlbumId(long albumId) {
-        AlbumMainResDto result = jpaQueryFactory.select(Projections.fields(AlbumMainResDto.class,
+    public AlbumMainResDto findMainPictureByAlbumId(Long albumId) {
+        return jpaQueryFactory.select(Projections.fields(
+                        AlbumMainResDto.class,
                         picture.album.id.as("albumId"),
                         picture.album.date,
                         picture.path_name.as("imagePath")))
                 .from(picture)
-                .join(picture.album,album)
+                .join(picture.album, album)
                 .on(picture.album.id.eq(album.id))
                 .where(picture.album.id.eq(albumId).and(picture.is_main.eq(true)))
                 .fetchOne();
 
-        return result;
+    }
+
+    @Override
+    public List<Picture> findPictureListByPictureIdList(List<Long> deletePictureIdList) {
+        return jpaQueryFactory.select(picture)
+                .from(picture)
+                .where(picture.id.in(deletePictureIdList))
+                .fetch();
     }
 }

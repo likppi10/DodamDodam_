@@ -28,11 +28,16 @@ public enum ErrorCode {
     FILE_DOWNLOAD_FAIL(400, "A103", "파일 다운로드에 실패했습니다."),
     FILE_UPLOAD_FAIL(400, "A104", "파일 업로드에 실패했습니다."),
     FILE_COUNT_EXCEED(400, "A105", "업로드 가능한 파일의 갯수를 초과했습니다."),
+    ALBUM_DOES_NOT_EXIST(404, "A106", "해당 앨범을 찾을 수 없습니다."),
+    PICTURE_DOES_NOT_EXIST(404, "A107", "해당 앨범의 사진을 찾을 수 없습니다."),
+    HASHTAG_DOES_NOT_EXIST(404, "A106", "해당 앨범의 해시태그를 찾을 수 없습니다."),
+    REACTION_DOES_NOT_EXIST(404, "A107", "해당 리엑션을 찾을 수 없습니다."),
 
     //Common
     INTERVAL_SERVER_ERROR(500, "C101", "서버에 오류가 발생했습니다."),
     INVALID_REQUEST(400, "C102", "잘못된 요청입니다."),
     INVALID_TOKEN(400, "C103", "유효하지 않은 토큰입니다."),
+    NO_PERMISSION(400, "C104", "해당 요청의 권한이 없습니다."),
 
     //File
     WRONG_FILE_EXTENSION(400, "A106", "잘못된 파일 확장자명입니다.");

@@ -3,7 +3,7 @@ package com.ssafy.core.repository.querydsl;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.core.dto.res.SuggestionReactionListResDto;
+import com.ssafy.core.dto.res.SuggestionReactionResDto;
 import com.ssafy.core.dto.res.SuggestionResDto;
 import com.ssafy.core.entity.QSuggestion;
 import com.ssafy.core.entity.QSuggestionReaction;
@@ -40,7 +40,7 @@ public class SuggestionRepoCustomImpl implements SuggestionRepoCustom {
                                         suggestion.dislikeCount,
                                         GroupBy.list(
                                                 Projections.fields(
-                                                        SuggestionReactionListResDto.class,
+                                                        SuggestionReactionResDto.class,
                                                         suggestionReaction.profile.id.as("profileId"),
                                                         suggestionReaction.isLike
                                                 ).skipNulls()

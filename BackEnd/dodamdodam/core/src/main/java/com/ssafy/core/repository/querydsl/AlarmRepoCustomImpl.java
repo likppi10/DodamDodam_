@@ -29,8 +29,6 @@ public class AlarmRepoCustomImpl implements AlarmRepoCustom{
 
     @Override
     public List<AlarmResDto> findAlarmByProfileAndTargetOrderByCount(Profile me, Profile target) {
-        System.out.println(me);
-        System.out.println(target);
         return jpaQueryFactory.select(Projections.fields(AlarmResDto.class,
                 alarm.content))
                 .from(alarm)
