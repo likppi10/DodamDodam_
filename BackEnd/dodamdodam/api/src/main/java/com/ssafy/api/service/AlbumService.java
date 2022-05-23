@@ -270,6 +270,7 @@ public class AlbumService {
 
         //3. 삭제할 사진 삭제
         int[] deleteIndexList = albumUpdateReqDto.getPictureIdList();
+        System.out.println(deleteIndexList.length);
         if (deleteIndexList != null) {
             System.out.println("Index is not null!");
             List<Picture> pictureList = pictureRepository.findPictureListByAlbumId(album.getId());
@@ -281,7 +282,9 @@ public class AlbumService {
 
             List<Long> deleteIdList = new ArrayList<>();
             for(int id : deleteIndexList){
+                System.out.println(id);
                 deleteIdList.add(pictureList.get(id).getId());
+                System.out.println(pictureList.get(id).getId());
                 System.out.println(deleteIdList.size());
             }
 
