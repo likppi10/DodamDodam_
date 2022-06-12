@@ -1,0 +1,381 @@
+= Rest Docs Sample API Document
+Dodamdodam Project by hanjibung team
+:snippets: build/generated-snippets
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[introduction]]
+== 1. 소개
+
+Dodamdodam Project Spring Rest Docs API
+
+[[common]]
+== 2. 공통 사항
+
+=== Domain
+
+|===
+| 환경 | domain
+
+| 개발서버
+| `localhost:8080.com`
+
+| 운영서버
+| `happydodam.com`
+|===
+
+
+=== Header
+
+|===
+| name | 설명
+
+| `X-AUTH-TOKEN`
+| API를 사용하기 위한 인증 키
+
+| X-AUTH-REFRESH-TOKEN
+| 토큰 만료시 재발급에 필요한 인증 키
+
+|===
+
+=== 공통 Response Body
+
+|===
+| field | 설명
+
+| `output`
+| 응답 개수
+
+| `message`
+| 예외사항 내용 등 응답 메세지
+
+| `data`
+| 실제 반환될 데이터
+
+| `code`
+| 에러 구분을 위한 코드
+
+| `status`
+| 에러 상태 코드
+
+| `errors`
+| 다중 에러 발생 정보 (기본값 : [] )
+
+| `localDateTime`
+| 에러 발생 시간
+
+|===
+
+[[UserController]]
+== 3. UserController
+
+[[userId-중복-검사]]
+=== 1) userId 중복 검사
+==== success (사용가능한 아이디)
+CURL:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/httpie-request.adoc[]
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/id-check_사용가능한_아이디/http-response.adoc[]
+
+==== fail (아이디 공백포함)
+CURL:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/id-check_아이디_공백포함/http-response.adoc[]
+
+==== fail (아이디 특수문자 포함)
+CURL:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/id-check_아이디_특수문자_포함/http-response.adoc[]
+
+
+[[회원가입]]
+=== 2) 회원가입
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_정상입력/http-response.adoc[]
+
+==== fail (특수문자 입력안함)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_비밀번호_특수문자_입력안함/http-response.adoc[]
+
+==== fail (이름 입력안함)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_이름_입력안함/http-response.adoc[]
+
+==== fail (한글 아이디 사용)
+CURL:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-up_한글_아이디_사용/http-response.adoc[]
+
+[[로그인]]
+=== 3) 로그인
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-in_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-in_정상입력/http-response.adoc[]
+
+==== fail (비밀번호 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-in_비밀번호_형식_틀림/http-response.adoc[]
+
+==== fail (아이디 공백)
+CURL:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/httpie-request.adoc[]
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/user-sign-in_아이디_공백/http-response.adoc[]
+
+[[토큰_재발급]]
+=== 4) 토큰 재발급
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/reissue-access-token_정상입력/http-response.adoc[]
+
+[[아이디_찾기]]
+=== 5) 아이디 찾기
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_정상입력/http-response.adoc[]
+
+==== fail (날짜 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_날짜_형식_틀림/http-response.adoc[]
+
+==== fail (가족코드 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/find-user-id-with-user-info_가족코드_형식_틀림/http-response.adoc[]
+
+[[비밀번호_변경]]
+=== 6) 비밀번호 변경
+==== success (정상 입력)
+CURL:
+include::{snippets}/user-controller-test/update-password_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/update-password_정상입력/httpie-request.adoc[]
+include::{snippets}/user-controller-test/update-password_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/update-password_정상입력/http-response.adoc[]
+
+==== fail (아이디 공백)
+CURL:
+include::{snippets}/user-controller-test/update-password_아이디_공백/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/update-password_아이디_공백/httpie-request.adoc[]
+include::{snippets}/user-controller-test/update-password_아이디_공백/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/update-password_아이디_공백/http-response.adoc[]
+
+==== fail (비밀번호 형식 틀림)
+CURL:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/httpie-request.adoc[]
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/http-request.adoc[]
+Response Fields:
+include::{snippets}/user-controller-test/update-password_비밀번호_형식_틀림/http-response.adoc[]
+
+[[MainController]]
+== 4. MainController
+
+[[suggestion_생성]]
+=== 1) suggestion 생성
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/create-suggestion_정상작동/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/create-suggestion_정상작동/httpie-request.adoc[]
+include::{snippets}/main-controller-test/create-suggestion_정상작동/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/create-suggestion_정상작동/http-response.adoc[]
+
+==== fail (공백 입력)
+CURL:
+include::{snippets}/main-controller-test/create-suggestion_공백입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/create-suggestion_공백입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/create-suggestion_공백입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/create-suggestion_공백입력/http-response.adoc[]
+
+[[suggestion_삭제]]
+=== 2) suggestion 삭제
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/delete-suggestion_정상작동/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/delete-suggestion_정상작동/httpie-request.adoc[]
+include::{snippets}/main-controller-test/delete-suggestion_정상작동/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/delete-suggestion_정상작동/http-response.adoc[]
+
+==== fail (suggestion id값 공백 입력)
+CURL:
+include::{snippets}/main-controller-test/delete-suggestion_id값_공백/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/delete-suggestion_id값_공백/httpie-request.adoc[]
+include::{snippets}/main-controller-test/delete-suggestion_id값_공백/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/delete-suggestion_id값_공백/http-response.adoc[]
+
+==== fail (suggestion id값 문자 입력)
+CURL:
+include::{snippets}/main-controller-test/delete-suggestion_id값_문자/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/delete-suggestion_id값_문자/httpie-request.adoc[]
+include::{snippets}/main-controller-test/delete-suggestion_id값_문자/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/delete-suggestion_id값_문자/http-response.adoc[]
+
+
+[[profile_list_조회]]
+=== 3) profile list 조회
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/get-profile-list_정상작동/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/get-profile-list_정상작동/httpie-request.adoc[]
+include::{snippets}/main-controller-test/get-profile-list_정상작동/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/get-profile-list_정상작동/http-response.adoc[]
+
+[[suggestion_list_조회]]
+=== 4) suggestion list 조회
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/get-suggestion-list_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/get-suggestion-list_정상입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/get-suggestion-list_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/get-suggestion-list_정상입력/http-response.adoc[]
+
+[[today_mission_조회]]
+=== 5) today mission 조회
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/get-today-mission_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/get-today-mission_정상입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/get-today-mission_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/get-today-mission_정상입력/http-response.adoc[]
+
+[[today_schedule_list_조회]]
+=== 6) today schedule list 조회
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/get-today-schedule-list_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/get-today-schedule-list_정상입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/get-today-schedule-list_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/get-today-schedule-list_정상입력/http-response.adoc[]
+
+[[suggestion_reaction_입력_및_변경]]
+=== 7) suggestion reaction 입력 및 변경
+==== success (정상 입력)
+CURL:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_정상입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_정상입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/manage-suggestion-reaction_정상입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_정상입력/http-response.adoc[]
+
+==== fail (isLike값 형식 틀림)
+CURL:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_-is-like_잘못입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_-is-like_잘못입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/manage-suggestion-reaction_-is-like_잘못입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_-is-like_잘못입력/http-response.adoc[]
+
+==== fail (suggestion id 문자 입력)
+CURL:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_의견id_문자입력/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_의견id_문자입력/httpie-request.adoc[]
+include::{snippets}/main-controller-test/manage-suggestion-reaction_의견id_문자입력/http-request.adoc[]
+Response Fields:
+include::{snippets}/main-controller-test/manage-suggestion-reaction_의견id_문자입력/http-response.adoc[]
+
+
+[[ChattingController]]
+== 5. ChattingController
+
+[[chatting_member_profile_list_조회]]
+=== 1) chatting member profile list 조회
+==== success (정상 입력)
+CURL:
+include::{snippets}/chatting-controller-test/get-chatting-member-profile_정상동작/curl-request.adoc[]
+Request Parameters:
+include::{snippets}/chatting-controller-test/get-chatting-member-profile_정상동작/httpie-request.adoc[]
+include::{snippets}/chatting-controller-test/get-chatting-member-profile_정상동작/http-request.adoc[]
+Response Fields:
+include::{snippets}/chatting-controller-test/get-chatting-member-profile_정상동작/http-response.adoc[]

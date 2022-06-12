@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.EntranceFragment">
+
+    <TextView
+        android:id="@+id/entrance_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spoqahansans"
+        android:text="@string/app_name"
+        android:textColor="@color/pink01"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="114dp"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/entrance_animation"
+        android:layout_width="310dp"
+        android:layout_height="310dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="210dp"
+        app:lottie_rawRes="@raw/entrance_animation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

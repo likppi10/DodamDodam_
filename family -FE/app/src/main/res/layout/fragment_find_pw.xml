@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.FindPwFragment">
+
+    <include
+        android:id="@+id/findId_page_top"
+        layout="@layout/schedule_top_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/findID_page_logo"
+        android:layout_width="250dp"
+        android:layout_height="300dp"
+        android:foregroundGravity="center_horizontal"
+        android:src="@drawable/main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/findID_page_form_box"
+        android:layout_width="295dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-45dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/form_white_bg"
+        android:elevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findID_page_logo" />
+
+    <TextView
+        android:id="@+id/findID_page_welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/spoqahansans"
+        android:text="@string/FindPW"
+        android:textColor="@color/pink01"
+        android:textSize="36sp"
+        android:elevation="5dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toTopOf="@+id/findID_page_form_box" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayout_show_userID"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/findID_page_welcome_text">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="아이디는"
+            android:textColor="@color/pink01"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/findPW_textView_show_userID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#50FFC7C7"
+            android:gravity="center"
+            android:text="Example"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:text="입니다."
+            android:textColor="@color/pink01"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_findPWF_PW_new"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:elevation="5dp"
+        android:hint="@string/PW_new"
+        app:boxStrokeColor="@color/pink01"
+        app:hintTextColor="@color/pink01"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_show_userID">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/findPW_page_input_PW_new"
+            style="@style/TextInputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/pink01"
+            android:textStyle="bold"
+            android:maxLength="20"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_findPWF_PW_confirm_new"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:elevation="5dp"
+        android:hint="@string/PW_confirm_new"
+        app:boxStrokeColor="@color/pink01"
+        app:hintTextColor="@color/pink01"
+        app:layout_constraintEnd_toEndOf="@+id/findID_page_form_box"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/findID_page_form_box"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findPWF_PW_new">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/findPW_page_input_PW_confirm_new"
+            style="@style/TextInputStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/pink01"
+            android:textStyle="bold"
+            android:maxLength="20"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/findPW_page_findPW_btn"
+        android:layout_width="233dp"
+        android:layout_height="55dp"
+        android:background="@drawable/box_roulette"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:text="@string/confirm_change"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_findPWF_PW_confirm_new"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout_findPWF_PW_confirm_new"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_findPWF_PW_confirm_new" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_loginF_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

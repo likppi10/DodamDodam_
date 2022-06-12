@@ -1,0 +1,5 @@
+rootProject.name = 'dodamdodam'
+include 'core'
+include 'api'
+include 'batch'
+

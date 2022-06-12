@@ -1,0 +1,173 @@
+<resources>
+    <string name="app_name">도담도담</string>
+
+    <string name="kakao_native_key">a1f1fa77f90e70af62243eda95593018</string>
+    <string name="kakao_manifest_key">kakaoa1f1fa77f90e70af62243eda95593018</string>
+
+    <string name="bot_settingfragment">설정</string>
+    <string name="bot_albumfragment">앨범</string>
+    <string name="bot_calendarfragment">캘린더</string>
+    <string name="bot_chattingfragment">채팅</string>
+    <string name="bot_main_familyfragment">홈</string>
+    <string name="before">이전</string>
+    <string name="next">다음</string>
+    <string name="search">검색</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+
+    <string name="tab_family">Family</string>
+    <string name="tab_event">Event</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_today_expression">표현하기</string>
+    <string name="main_today_status">우리가족</string>
+    <string name="main_today_schedule">오늘의 일정</string>
+    <string name="main_add_schedule">등록하기</string>
+    <string name="main_opinion">의견 제시</string>
+    <string name="main_add_opinion">등록</string>
+    <string name="main_event">가족 이벤트 만들기</string>
+    <string name="main_roulette">당번뽑기</string>
+    <string name="main_wishtree">소원나무</string>
+    <string name="main_surprise">서프라이즈 파티</string>
+
+    <string name="father">아빠</string>
+    <string name="mother">엄마</string>
+    <string name="son">아들</string>
+    <string name="daughter">딸</string>
+
+    <string name="chatting_submit">전송</string>
+    <string name="album_search">검색</string>
+
+    <string name="setting_info_edit">개인정보 변경</string>
+    <string name="setting_status_edit">가족 사진 변경</string>
+    <string name="setting_family_code">가족 코드</string>
+    <string name="setting_exit_group">가족 나가기</string>
+    <string name="setting_logout">로그아웃</string>
+
+
+    <string name="logout">로그아웃</string>
+
+    <string name="Welcome">Welcome</string>
+    <string name="SignUp">Sign Up</string>
+    <string name="FindID">Find ID</string>
+    <string name="FindPW">Find PW</string>
+    <string name="login">로그인</string>
+    <string name="ID">아이디</string>
+    <string name="duplication_check">중복확인</string>
+    <string name="password">password</string>
+    <string name="PW">비밀번호</string>
+    <string name="PW_confirm">비밀번호 확인</string>
+    <string name="name">이름</string>
+    <string name="find_user">계정찾기</string>
+    <string name="sign">회원가입</string>
+    <string name="birthday">생년월일</string>
+    <string name="family_code">가족 코드</string>
+    <string name="family_code_input">가족 코드 입력</string>
+    <string name="PW_new">새 비밀번호</string>
+    <string name="PW_confirm_new">새 비밀번호 확인</string>
+    <string name="confirm_change">수정 완료</string>
+    <string name="default_status_message">오늘 기분 최고!</string>
+
+    <string name="idErrorMessage">올바르지 않은 아이디이에요.</string>
+    <string name="nameErrorMessage">올바르지 않은 이름이에요. \n (공백은 안돼요, 10자 미만)</string>
+    <string name="nickNameErrorMessage">올바르지 않은 별명이에요.</string>
+    <string name="passwordErrorMessage">올바르지 않은 비밀번호이에요. \n (숫자,특수문자 포함 8자리 이상)</string>
+    <string name="passwordCheckErrorMessage">입력한 비밀번호와 달라요.</string>
+    <string name="phoneNumberErrorMessage">올바르지 않은 휴대전화번호이에요.</string>
+    <string name="birthdayErrorMessage">올바르지 않은 생년월일이에요.</string>
+    <string name="emailNotCheckedErrorMessage">이메일 중복 검사를 눌러주세요.</string>
+    <string name="genderNotCheckedErrorMessage">성별을 선택해주세요.</string>
+    <string name="networkErrorMessage">네트워크 연결이 불안정해요.</string>
+    <string name="unknownErrorMessage">알 수 없는 에러에요.</string>
+    <string name="sameIdErrorMessage">중복된 아이디에요.</string>
+    <string name="sameIdSuccesMessage">사용할 수 있는 아이디에요.</string>
+    <string name="familyCodeErrorMessage">가족코드는 알파벳과 숫자 15자리로 구성되어 있어요.</string>
+    <string name="askDelete">삭제하시겠어요?</string>
+
+    <string name="edit_status_guide">오늘 나의 상태를 표현해주세요.</string>
+    <string name="select_family_picture_guide">변경할 가족 사진을 선택해주세요.</string>
+    <string name="todays_condition">오늘의 기분</string>
+    <string name="todays_message">오늘의 한마디</string>
+    <string name="confirm">확인</string>
+    <string name="sample_message">Sample Message</string>
+    <string name="save_yourself">\'나\'를 저장하세요!</string>
+    <string name="ask_family_code">가족 코드를 갖고 계신가요?</string>
+    <string name="please_input_family_code">가족 코드를 입력해주세요!</string>
+    <string name="nickname">나의 애칭</string>
+    <string name="wishtree_top_message">나만의 소원을 등록해보세요!</string>
+    <string name="wishtree_create_guide_message">당신의 소원은 무엇인가요?</string>
+    <string name="wishtree">소원 나무</string>
+    <string name="add_wish">소원 생성</string>
+    <string name="update_wish">소원 수정</string>
+    <string name="my_wish">나의 소원</string>
+
+    <string name="statusisnull">아직 오늘의 상태를 등록하지 않았어요</string>
+    <string-array name="expression">
+        <item>표현1</item>
+        <item>표현2</item>
+        <item>표현3</item>
+        <item>표현4</item>
+        <item>표현5</item>
+        <item>표현6</item>
+        <item>표현7</item>
+        <item>표현8</item>
+    </string-array>
+    <string-array name="emoticon">
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/tongue_1651796200157.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/sweat_1651796229546.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/sunglasses_1651796248926.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/smiling_1651796259441.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/determined_1651797027613.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/sleepy_1651796273416.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/worried_1651796157938.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/relieved_1651796300873.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/pouting_1651796318280.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/mask_1651796329279.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/thinking_1651796217293.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/laughing_1651796988741.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/kiss_1651796999956.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/hushed_1651797014053.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/rolling%20eyes_1651796286143.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/crying_1651797037512.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/astonished_1651797046845.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/amusing_1651797058209.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/3099549_face_expressionless_1651797073670.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/emoticon/3099548_face_confused_1651797084596.png</item>
+    </string-array>
+
+    <string-array name="characters">
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231118_lady_cartoon_woman_family_person_aunt.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231119_son_family_kid_cartoon_baby_child.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231120_kid_cartoon_girl_child_young_sister.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231121_grandfather_grandparents_grandpa_family_man.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231122_family_mother_mommy_female_mom.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231123_senior_grandma_family_woman_grandparents_grandmother_women_senior_grandma_grandmother_grandparents_family.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231124_kid_cartoon_child_brother_family_boy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231125_man_daddy_father_family_dad_parent.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231126_kid_cartoon_baby_family_daughter_cute.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/3231127_man_family_cartoon_uncle_male.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267440_attendant_flight_travel_cartoon_tourism_person_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267441_hand drawn_raindow_guy_person_male_gay_avatar.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267442_young_avatar_education_hand drawn_african american_student_girl.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267443_businessman_avatar_person_teacher_hand drawn_salesman_man.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267444_young_avatar_person_african american_hand drawn_teenager_boy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267445_woman_admin_avatar_education_hand drawn_teacher_professor.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267446_avatar_scientist_hand drawn_woman_person.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267447_woman_law enforcement_avatar_law_police_person_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267448_travel_hand drawn_person_indian_avatar_captain_pilot.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267449_gamer_hand drawn_avatar_teenage_young_gaming_boy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267450_avatar_hand drawn_fashion_person_beard_style_hipster.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267451_asian_hand drawn_avatar_man_person_guy.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267452_girl_hand drawn_person_avatar_female_agriculture_farmer.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267453_avatar_doctor_medicine_stethoscope_healthcare_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267454_person_hand drawn_avatar_painter_female_artist_designer_creative.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267455_hand drawn_cook_male_avatar_chef_apron.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267456_woman_hand drawn_avatar_business.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267457_bartender_barman_hand drawn_avatar_man.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267458_hand drawn_astronaut_avatar_science_space.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267459_male_culture_bboy_avatar_hip hop_boy_hand drawn.png</item>
+        <item>https://s3-dodamdodam.s3.ap-northeast-2.amazonaws.com/profileSamples/5267460_worker_construction_hand drawn_avatar_hard hat_building.png</item>
+    </string-array>
+
+</resources>
+

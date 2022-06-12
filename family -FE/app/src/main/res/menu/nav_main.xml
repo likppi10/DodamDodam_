@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/selector_bottom_main"
+        android:title="@string/bot_main_familyfragment" />
+
+    <item
+        android:id="@+id/chattingFragment"
+        android:icon="@drawable/selector_bottom_chatting"
+        android:title="@string/bot_chattingfragment" />
+
+    <item
+        android:id="@+id/calendarFragment"
+        android:icon="@drawable/selector_bottom_calendar"
+        android:title="@string/bot_calendarfragment" />
+
+    <item
+        android:id="@+id/albumFragment"
+        android:icon="@drawable/selector_bottom_album"
+        android:title="@string/bot_albumfragment" />
+
+    <item
+        android:id="@+id/settingFragment"
+        android:icon="@drawable/selector_bottom_setting"
+        android:title="@string/bot_settingfragment" />
+</menu>

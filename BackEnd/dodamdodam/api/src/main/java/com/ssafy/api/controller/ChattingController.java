@@ -1,0 +1,68 @@
+package com.ssafy.api.controller;
+
+import com.ssafy.api.service.FcmService;
+import com.ssafy.api.service.MainService;
+import com.ssafy.api.service.ProfileService;
+import com.ssafy.api.service.common.CommonResult;
+import com.ssafy.api.service.common.ListResult;
+import com.ssafy.api.service.common.ResponseService;
+import com.ssafy.core.dto.res.ChattingMemberResDto;
+import com.ssafy.core.dto.res.MainProfileResDto;
+import com.ssafy.core.entity.Profile;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/chatting")
+@Tag(name = "ChattingController", description = "채팅 컨트롤러")
+public class ChattingController {
+
+    private final ProfileService profileService;
+    private final ResponseService responseService;
+    private final MainService mainService;
+    private final FcmService fcmService;
+
+    @Operation(summary = "채팅 맴버들 프로필 조회", description = "<strong>채팅 맴버들<strong>의 프로필을 조회한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @GetMapping(value = "")
+    public ListResult<ChattingMemberResDto> getChattingMemberProfile(Authentication authentication) {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        return responseService.getListResult(profileService.getProfileListByUserPk(userPk));
+    }
+
+    @Operation(summary = "채팅 발송", description = "<strong>채팅 맴버들<strong>에게 FCM 알람을 발송한다.",
+            parameters = {
+                    @Parameter(name = "X-AUTH-TOKEN", description = "JWT Token", required = true, in = HEADER)
+            })
+    @PostMapping(value = "/send")
+    public CommonResult send(@RequestParam String text, Authentication authentication) throws  IOException {
+
+        Long userPk = Long.parseLong(authentication.getName());
+        Profile me = mainService.getProfileByUserPk(userPk);
+        List<MainProfileResDto> familyList = mainService.getProfileListExceptMe(userPk);
+
+        //본인 뿐이 없을때는 그냥 성공만 보냄.
+        for (MainProfileResDto pf : familyList) {
+
+            String targetFcmToken = fcmService.findFcmTokenByProfileId(pf.getProfileId());
+            if(targetFcmToken != null) {
+                fcmService.sendMessageTo(targetFcmToken, "채팅 알림", me.getNickname() + " : " + text);
+            }
+        }
+
+        return responseService.getSuccessResult();
+    }
+}

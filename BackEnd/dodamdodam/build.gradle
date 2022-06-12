@@ -1,0 +1,126 @@
+//build 되기 전 실행되는 설정
+buildscript {
+    ext {
+        springBootVersion = '2.6.6'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+    }
+}
+
+//전체 서브모듈에 해당하는 설정
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+
+    group = 'com.ssafy'
+    version '0.0.1'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    task initSourceFolders {
+        sourceSets*.java.srcDirs*.each {
+            if( !it.exists() ) {
+                it.mkdirs()
+            }
+        }
+
+        sourceSets*.resources.srcDirs*.each {
+            if( !it.exists() ) {
+                it.mkdirs()
+            }
+        }
+    }
+
+    dependencies {
+
+        //webMvc
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+        //test
+        testImplementation 'org.springframework.security:spring-security-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        api('org.springframework.boot:spring-boot-starter-test')
+
+        //lombok 설정
+        compileOnly  'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        //warning 해결용.
+        implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+        //yml파일 작성 용이
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    }
+
+}
+
+project(':api') {
+
+    bootJar { enabled = true }
+    jar { enabled = false }
+
+    dependencies {
+        implementation project(':core')
+
+        //metadata extractor
+        implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.18.0'
+
+        //image rotate
+        implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
+
+        // WebClient
+        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+        implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+
+        //restdocs
+        testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+        //health check
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+        //S3
+        implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.1'
+
+        //validation
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+        //firebase sdk, okhttp
+        implementation 'com.google.firebase:firebase-admin:8.1.0'
+        implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.3'
+
+        // marvin
+        implementation 'com.github.downgoon:marvin:1.5.5'
+        implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+
+        //web
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    }
+}
+
+project(':batch') {
+
+    dependencies {
+        implementation project(':core')
+        implementation 'org.springframework.boot:spring-boot-starter-batch'
+        testImplementation 'org.springframework.batch:spring-batch-test'
+    }
+}
+

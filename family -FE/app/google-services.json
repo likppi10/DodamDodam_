@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "714396237098",
+    "project_id": "dodam-dodam",
+    "storage_bucket": "dodam-dodam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:714396237098:android:e33af3d655830b1c65f253",
+        "android_client_info": {
+          "package_name": "com.ssafy.family"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "714396237098-gm34chb87coi8slj12tc44po4r3s83qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2zyLt0R1kI4E9Q0ZvMTTVVxbo-9Qv9Nk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "714396237098-gm34chb87coi8slj12tc44po4r3s83qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

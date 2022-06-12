@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/spinner_album_update"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        android:fontFamily="@font/spoqahansans"
+        android:gravity="center"
+        android:text="앨범 수정"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/spinner_album_delete"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:elevation="5dp"
+        android:fontFamily="@font/spoqahansans"
+        android:gravity="center"
+        android:text="앨범 삭제"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+</LinearLayout>

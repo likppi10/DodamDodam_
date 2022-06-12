@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/gift_box_img"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/wishtree_icon"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/wish_delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="-10dp"
+        android:background="@drawable/delete_btn_sm_circle"
+        android:src="@drawable/ic_baseline_close_24"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/gift_box_img"
+        app:layout_constraintTop_toTopOf="@id/gift_box_img" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/gift_box_text"
+        android:layout_width="95dp"
+        android:layout_height="30dp"
+        android:background="@drawable/round_bg"
+        android:fontFamily="@font/spoqahansans"
+        android:gravity="center"
+        android:textColor="@color/pink01"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/gift_box_img"
+        app:layout_constraintStart_toStartOf="@+id/gift_box_img"
+        app:layout_constraintTop_toBottomOf="@id/gift_box_img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
