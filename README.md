@@ -1,81 +1,186 @@
-# Git 컨벤션
-
-### 1. 커밋 (ex : [S06P22D205-117] Feat/FE/Add : 변경 내용)
-
-1. ##### 지라 번호
-
-  - [S06P22D205-117] 해당하는 번호 달기.
-
-2. ##### 명령어
-
-  - Feat : 새로운 기능 추가
-  - Fix : 버그 수정
-  - Comment : 필요한 주석 추가 및 변경
-  - Style : 코드 포맷 변경, 세미 콜론 누락, 코드 수정이 없는 경우
-  - Del : 파일 삭제
-  - Docs : 문서 수정
-  - Test : 테스트 코드, 리펙토링 테스트 코드 추가
-  - Chore : 빌드 업무 수정, 패키지 매니저 수정 - ex) .gitignore 수정
-  - Refactor : 프로덕션 코드 리팩토링, 새로운 기능이나 버그 수정 없이 현재 구현을 개선
-  - Rename : 파일 혹은 폴더명 수정
-
-3. ##### Commit Message
-
-  - 첫 글자는 대문자로 작성
-  - Feat만 해당
-    - ‘Change’, ‘Add’ 로 시작(코드 수정, 추가)
-    - 형식 : 명령어 + 수정/추가/변경사항 + 파일명
-    - ex) Feat/BE/Add : login function in main
-  - 그 외(BE/FE 구분 필요없을 시, 안붙여도 됨)
-    - ex) Rename/BE : login to sign in
-    - ex) Docs : write git, jira convention in README.md
-
-### 2. Branch
-
-- ##### Feature/FE/기능
-
-- ##### 예시 ) Feature/FE/Login | Feature/BE/LoginAPI
-
-### 3. Git 참조 명령어
-
-- ##### GIT add/commit/push 취소하기
-
-  참조 : https://gmlwjd9405.github.io/2018/05/25/git-add-cancle.html
-
-  - add 취소
-    - git reset HEAD : 전체 취소
-    - git reset HEAD filename : 해당 파일만 취소
-  - commit 취소
-    - git reset HEAD^ : 가장 최근 커밋 취소 + add도 취소
-    - git reset —soft HEAD^ : 가장 최근 커밋만 취소
-    - git reset —hard HEAD^ : commit, add 취소 + 만들었던 파일도 이전 커밋상태로 초기화
-    - git commit —amend : commit 메세지 수정
-  - push 취소
-    - push 취소는 팀원과의 버젼관리가 꼬일 수 있음으로 사용을 지양한다.
-    - push의 취소는 다소 복잡함으로 참조한 블로그를 참고
-
-- ##### Git remote에 잘못 push 파일 삭제하기(.gitignore 누락한 경우)
-
-  참조 : https://gmlwjd9405.github.io/2018/05/17/git-delete-incorrect-files.html
-
-  - 간단함으로 참조한 블로그를 참고하여 실행
-
-- ##### 알아두면 좋은 키워드
-
-  1. Rebase : branch 가지가 갈라지지 않고 merge하고 싶을 때
-  2. Amend : Commit 메시지 수정, commit 내용 수정.
-  3. Reset : 과거의 커밋으로 돌아가기(--hard옵션 사용시 저장 내용 다 날라가므로 커밋 먼저 하고, git log로 커밋 번호 알아둬야 함!!)
-  4. Stash : temp commit이 필요할 때 사용! (git checkout으로 이동할 때 매우 유용하다.) + git stash apply로 최신 저장 stash불러 올 수 있음. Or git stash list로 확인 후 불러온다.
+<img src="Images/dodamdodam.gif" alt="banner" style="zoom:50%;" />
+<br>
 
 
+# :houses: 도담도담
 
-# Jira 컨벤션
+가족간의 부드러운 소통을 유도하는 FNS(Family Network Service)
 
-- Epic은 유저에게 제공하는 서비스 단위
-- Story는 기능 단위
-- Sub-task로 작은 단위로 나누어 등록
-- Jira 관리는 철저히
-- 프로젝트 관련 이슈만 작성
+<br>
+
+## 👨‍👩‍👦팀원 소개
+
+
+|순번|이름|담당 역할|깃허브|
+|:--:|:---:|:---:|:---:|
+|1|**전창기(Chang Gi Jeon)**|팀장, 백엔드, 서버|[@ChanggiJeon](https://github.com/ChanggiJeon)|
+|2|**이석규(SEOK GYU LEE)**|부팀장, 안드로이드|[@likppi10](https://github.com/likppi10)|
+|3|**윤재성(Yoon Jae Sung)**|백엔드|[@Jaeseed](https://github.com/Jaeseed)|
+|4|**김종현(Jong Hyeon Kim)**|안드로이드, 발표|[@Jhon-Kim93](https://github.com/Jhon-Kim93)|
+|5|**박명우(Myoung woo Park)**|백엔드|[@myeongki](https://github.com/myeongki)|
+|6|**이수형(Suh Yeong Lee)**|안드로이드|[@eel0511](https://github.com/eel0511)|
+ 
+
+<br>
+
+## :film_projector: 프로젝트 개요
+
+<img src ="https://img.shields.io/badge/Platform-Mobile-red"></img>
+<img src ="https://img.shields.io/badge/BackEnd-SpringBoot-green"></img>
+<img src ="https://img.shields.io/badge/FrontEnd-Android-skyblue"></img>
+<img src ="https://img.shields.io/badge/database-MariaDB-silver"></img> 
+<img src ="https://img.shields.io/badge/server-AWS-gold"></img>
+<img src ="https://img.shields.io/badge/language-Java%2C%20Kotlin-purple"></img>
+
+- **진행 기간**: 2022.04.11 ~ 2022.05.20
+- **목표**
+  - 가족 간의 소통을 부드럽게 유도하는 '**넛지**'스러움을 추구합니다.
+  - 채팅, 앨범, 일정 공유, 의견 제시, 룰렛, 소원나무 기능 등 가족끼리 사용할 수 있는 '**다양한 기능**'을 제공합니다.
+  - 가족 간에 소통이 어렵거나 어색한 이용자를 위하여 이모티콘 리액션, 프로필 기본 이미지 제공, 자주 사용하는 푸시 알람 제공 등 가족 간 '**소통의 장벽**'을 낮췄습니다.
+- **:interrobang: 용어 정리**
+  - **넛지(Nudge)**
+    - '타인의 선택을 유도하는 부드러운 개입'을 뜻합니다.
+    - 대표적인 예시로는 소변기에 붙어있는 파리 스티커 등이 있습니다.
+  - **도담도담**
+    - (어린아이가) 잘 자라나는 모습을 의미하는 순 우리말
+- **✏기획서**
+  - <a href="Documentation/프로젝트_기획안_구미2반_D203.docx">기획안</a>
+- **🖼와이어프레임**
+  - <a href="https://www.figma.com/file/fbewMD0TU3fMgGss8TGRrN/Untitled?node-id=0%3A1">와이어프레임 확인하기</a>
+- **🎬UCC**
+  - <a href="https://www.youtube.com/watch?v=2hZqbMBpxUw">도담도담UCC</a>
+  <br>
+
+## ✨ 프로젝트 소개
+**도담도담**은 가족간의 부드러운 소통을 유도하는 FNS(Family Network Service)입니다.
+
+- 패밀리 네트워크 서비스 "**도담도담**"은 일반적인 사회 관계와는 다른 "**가족**"이라는 특별한 관계에 초점을 두고 만들어진 관계망 서비스입니다.
+
+- 도담도담은 "**넛지(Nudge)**"라는 전략을 채택하여 이용자가 부담스럽지 않은, 하지만 가족 유대에 긍정적인 효과를 기대할 수 있는 다양한 기능들을 제공합니다.
+
+- 혹시 매일같이 가족과 연락하시는 분이 계신가요? 바쁘고 힘든 일상에 치여서 소중한 가족과의 소통이 소원해졌다면, 저희 "**도담도담**"을 사용해보세요!
+- 도담도담은 "**다양한 기능**"을 제공합니다!
+
+<br>
+
+## ⭐️주요 기능
+
+### 소통 기능
+
+> 도담도담은 다양한 기능을 제공하여 '**넛지스럽게**' 가족간의 소통을 유도합니다.
+
+- 알림 기능 
+  - 일일이 채팅으로 안부를 물으셨나요? 오늘의 인사를 클릭한 번으로 해보세요!
+
+- 오늘의 기분, 상태
+
+  - 매일매일 가족들의 기분, 상태를 한눈에 볼 수 있습니다!
+
+- 의견 제시 기능
+
+  - 여름에 가는 가족 여행으로 계곡이 좋을지 바다가 좋을지 고민이신가요? 의견을 등록하고 가족들의 리액션을 받아서 결정해 보시는 것은 어떨까요?
+
+- 데일리 미션
+
+  - 가족과의 소통이 어려우신가요? 어떤 말을 걸지 망설여지시나요? 매일 초기화되는 오늘의 미션을 수행하며, 가족과 소통을 해보세요!
+
+- 일정 기능
+
+  - 내 일정을 등록하고 가족과 공유해 보세요!
+
+- 채팅 기능
+
+  - 알람 기능이 있다고 해도 채팅은 필요하죠? 걱정 마세요! 도담도담은 채팅 기능도 갖추고 있습니다!
+  
+<br>
+
+- Sample UI
+
+|알람 기능|오늘의 기분,상태|의견 제시|
+|:---:|:---:|:---:|
+|<img src="Images/알람창.jpg" alt="function" style="zoom: 15%;" />|<img src="Images/오늘의상태.jpg" alt="function" style="zoom: 15%;" />|<img src="Images/홈(이벤트).jpg" alt="function" style="zoom: 15%;" />|
+
+|데일리 미션|일정기능|채팅 기능|
+|:---:|:---:|:---:|
+|<img src="Images/홈(패밀리).jpg" alt="function" style="zoom: 15%;" />|<img src="Images/일정 등록.jpg" alt="function" style="zoom: 15%;" />|<img src="Images/채팅.jpg" alt="function" style="zoom: 15%;" />|
+
+
+### 부가 기능
+
+> 가족들의 추억 저장소 앨범기능부터~ 오늘의 당번을 뽑는 룰렛기능까지!
+
+- 소원 나무 기능
+  - 평소에 가족이 무엇을 원하는지 궁금하지 않으신가요? 혹시 내 생일날 받고 싶은 선물을 가족에게 살짝 쿵 알리고 싶지는 않으신가요? 가족만을 위한 트리가 도와드립니다!
+
+- 룰렛 기능
+
+  - 오늘의 당번을 뽑아보자! 
+
+- 앨범 기능
+
+  - 가족과의 추억 저장소! 이모티콘으로 리액션을 편하게 등록해 보세요!
+
+<br>
+
+- Sample UI
+
+|소원나무|당번뽑기|앨범 기능|
+|:---:|:---:|:---:|
+|<img src="Images/소원나무.jpg" alt="function" style="zoom: 15%;" />|<img src="Images/룰렛.jpg" alt="function" style="zoom: 15%;" />|<img src="Images/앨범.jpg" alt="function" style="zoom: 15%;" />|
+
+  
+
+<br>
+
+## 📐 서비스 아키텍쳐
+
+<br>
+
+<img src="Images/자율_아키텍처.PNG" alt="statistics" style="zoom:100%;" />
+
+<br>
+
+## ⚙​ 개발 환경 및 IDE
+
+- ### DevOps
+
+  - AWS EC2 Server(AWS amazon-linux-2)
+  - Jenkins Server(Ubuntu: 20.04.4 LTS)
+
+- ### Android
+
+  - Kakao Login (v2) API : 2.9.1 
+  - Firebase (푸시알림) : 21.1.1
+  - Hilt (의존성 주입) : 2.41 
+  - Android JetPack Calendar : 1.0.4 
+  - Retrofit : 2.9.0 
+  - Roulette : 1.0.0
+
+- ### BE
+
+  - Spring Boot: 2.6.6
+  - openJdk 11
+  - gradle 7.1
+
+- ### DB
+
+  - mariaDB: 10.3.34
+
+- ### IDE
+
+  - IntelliJ Ultimate 21.3.1
+  - Android Studio
+
+<br>
+
+
+
+## 🎞 최종산출물
+
+<a href="https://www.youtube.com/watch?v=2hZqbMBpxUw">도담도담 UCC 영상</a>
+
+<br>
+<a href="Documentation/D203_최종발표.pdf">도담도담 최종발표 pdf</a>
 
 
 
